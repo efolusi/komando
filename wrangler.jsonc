@@ -11,8 +11,8 @@
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "none"
   },
-  // The custom domain (owner's yes for the cut-over, 2026-11-19); workers.dev stays for checks.
+  // The custom domain only (owner's yes for the cut-over, 2026-11-19); no workers.dev URL.
   "routes": [{ "pattern": "komando.efolusi.com", "custom_domain": true }],
-  "workers_dev": true,
+  "workers_dev": false,
   "preview_urls": false
 }

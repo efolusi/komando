@@ -1,5 +1,5 @@
 """Tests for build_dist.py and wrangler.jsonc: a symbolic link in the site is never followed or published,
-and the Worker serves only the build output, on workers.dev until the cut-over.
+and the Worker serves only the build output, on komando.efolusi.com only.
 
 Run from the repository root:
 
@@ -133,7 +133,7 @@ class WorkerConfigTests(unittest.TestCase):
     def test_serves_the_custom_domain(self):
         self.assertEqual(self.config["name"], "komando")  # the Worker has the repo's name
         self.assertEqual(self.config["routes"], [{"pattern": "komando.efolusi.com", "custom_domain": True}])
-        self.assertTrue(self.config["workers_dev"])
+        self.assertFalse(self.config["workers_dev"])
         self.assertFalse(self.config["preview_urls"])
 
 
