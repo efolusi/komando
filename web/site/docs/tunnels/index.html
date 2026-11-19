@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Private servers and tunnels · komando docs</title>
+<meta name="description" content="Reach servers and services that are not on the internet, and open them in the apps on your computer.">
+<link rel="canonical" href="https://komando.efolusi.com/docs/tunnels/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Docs"><details class="g-side__fold" open><summary>All docs pages</summary><p class="g-side__home"><a href="../">Docs home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../getting-started/">Getting started</a></li><li><a href="../switch-from-termius/">Switch from Termius</a></li></ul><p class="t-label g-side__group">Features</p><ul><li><a href="../install/">Install, update, remove</a></li><li><a href="../servers/">Servers</a></li><li><a href="../secrets/">Secrets</a></li><li><a href="../windows/">Windows servers</a></li><li><a href="../import/">Moving in and moving computers</a></li><li><a href="../targets/">Targets</a></li><li><a href="../commands/">Running commands</a></li><li><a href="../health/">Health and network checks</a></li><li><a href="../files/">Files</a></li><li><a href="../system/">Services, logs, Docker, packages, users</a></li><li><a href="../tunnels/" aria-current="page">Private servers and tunnels</a></li><li><a href="../vpn/">VPNs</a></li><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../queues/">Queues</a></li><li><a href="../storage/">Storage: buckets and file servers</a></li><li><a href="../cluster/">Clusters (Kubernetes and Docker Swarm)</a></li><li><a href="../cloud/">Cloud logins</a></li><li><a href="../registry/">Container registries</a></li><li><a href="../rotate/">Rotate keys and passwords, and when someone leaves</a></li><li><a href="../safety/">Safety</a></li><li><a href="../security-standards/">Security standards</a></li><li><a href="../output/">Results and errors</a></li><li><a href="../error-codes/">Error codes</a></li><li><a href="../settings/">Settings and files</a></li><li><a href="../glossary/">Glossary</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Docs</a> · Features</p><h1>Private servers and tunnels</h1><p class="g-lead t-lead">Reach servers and services that are not on the internet, and open them in the apps on your computer.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#reach-private-servers-through-a-bastion">Reach private servers through a bastion</a></li><li><a href="#open-a-private-database-in-your-own-app">Open a private database in your own app</a></li><li><a href="#forward-any-port">Forward any port</a></li><li><a href="#see-and-stop-tunnels">See and stop tunnels</a></li><li><a href="#behind-a-company-proxy">Behind a company proxy</a></li><li><a href="#limits">Limits</a></li><li><a href="#troubleshooting">Troubleshooting</a></li></ul></nav><div class="g-body"><h2 id="reach-private-servers-through-a-bastion">Reach private servers through a bastion</h2>
+<p>Many private servers can only be reached through one public gateway server, called a bastion or jump host. Tell komando once with <code>--via</code>, and every command goes through it by itself:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando host add bastion ubuntu@203.0.113.10
+komando host add db1 admin@10.0.0.5 --via bastion          # one step
+komando exec db1 -- uptime                                 # goes through bastion</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando host add web2 admin@10.1.0.7 --via bastion,db1     # a chain: bastion, then db1
+komando conn add prod-db postgres://app@10.0.0.9/app --via bastion   # a database behind it</code></pre>
+<ul class="g-list g-list--ul"><li>A chain lists the steps in order, from your computer to the target.</li><li><code>--via</code> works the same for servers and conns (databases, caches, storage). It can also start with a VPN: see <a href="../vpn/">VPNs</a>.</li><li>komando opens the connection through the bastion inside its own process. No port opens on your computer, and your network settings do not change.</li><li>Servers behind the same bastion share one connection to it within a command (see <a href="../servers/#add-a-server">Servers</a>).</li></ul>
+<h2 id="open-a-private-database-in-your-own-app">Open a private database in your own app</h2>
+<p>To use TablePlus, DBeaver, psql or another app on a database behind a bastion, start a tunnel by the conn&#39;s name. komando picks a free local port and prints it:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando tunnel start prod-db</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>tunnel t1108-195255-ab12cd34 is up: 127.0.0.1:53412 (this computer) -&gt; prod-db (10.0.0.9:5432), through bastion
+stop it with: komando tunnel stop t1108-195255-ab12cd34</code></pre>
+<p>Typed alone at your terminal, <code>komando tunnel start</code> asks which server or conn it goes to.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando tunnel start prod-db --port 15432     # choose the port yourself</code></pre>
+<p>Point the app at that address, with the database&#39;s user name and password. The password is in komando&#39;s vault: at your terminal, <code>komando secret show prod-db-pass --reveal | pbcopy</code> copies it (macOS; <code>xclip</code> on Linux) without showing it. AI agents never get it; they use <code>komando db query</code> instead. The tunnel runs in the background until you stop it with <code>komando tunnel stop</code>.</p>
+<h2 id="forward-any-port">Forward any port</h2>
+<p>A tunnel makes a service on a server appear on your own computer (or the other way round). There are three kinds:</p>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Flag</th><th scope="col">Direction</th><th scope="col">Example</th><th scope="col">Meaning</th></tr></thead><tbody><tr><td><code>-L</code></td><td>server → your computer</td><td><code>-L 15432:localhost:5432</code></td><td>port 15432 on <i>your</i> computer leads to port 5432 as seen from the server</td></tr><tr><td><code>-R</code></td><td>your computer → server</td><td><code>-R 9000:localhost:3000</code></td><td>port 9000 <i>on the server</i> leads to port 3000 on your computer</td></tr><tr><td><code>-D</code></td><td>SOCKS5 proxy</td><td><code>-D 1080</code></td><td>apps set to proxy <code>localhost:1080</code> connect through the server</td></tr></tbody></table></div>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando tunnel start db1 -L 15432:localhost:5432    # then connect to localhost:15432
+komando tunnel start web1 -L 8080:localhost:80      # a web app on web1, at localhost:8080
+komando tunnel start web1 -R 9000:localhost:3000    # show your local app to web1
+komando tunnel start bastion -D 1080                # browse through the bastion
+komando tunnel start office -D 1080                 # browse through the VPN office (-L works too; -R needs a server)</code></pre>
+<p>IPv6 addresses go in brackets, as with ssh: <code>-L 8080:[::1]:80</code>, or <code>-L [::1]:8080:[fd00::5]:5432</code> to listen on the IPv6 loopback.</p>
+<ul class="g-list g-list--ul"><li>A port of <code>0</code> picks a free one. The result shows the address that was used.</li><li>For <code>-R</code>, the listening address is on the server. The result says so (<code>remote_listen</code>, <code>listen_on</code>).</li><li>Ctrl-C while a tunnel starts stops it and forgets it (<code>CANCELLED</code>).</li></ul>
+<h2 id="see-and-stop-tunnels">See and stop tunnels</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando tunnel list                                 # tunnels and whether they still run
+komando tunnel stop t1108-195255-ab12cd34           # stop one by its ID
+komando tunnel stop --all</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>ID                     HOST     KIND   LISTEN           TO                         STATE  AGE
+t1108-195255-ab12cd34  bastion  local  127.0.0.1:53412  prod-db (10.0.0.9:5432)    up     2h</code></pre>
+<ul class="g-list g-list--ul"><li><code>tunnel list</code> removes entries for tunnels that are no longer running.</li><li><code>tunnel stop</code> takes IDs or <code>--all</code>, not both.</li><li>A tunnel whose process is gone, or whose process ID now belongs to another program, shows as down and is never signalled.</li><li><code>komando status</code> shows tunnels together with VPNs, logins and jobs (<a href="../commands/#see-what-is-still-running">What is still running</a>).</li></ul>
+<h2 id="behind-a-company-proxy">Behind a company proxy</h2>
+<p>Some networks reach the internet only through a company proxy. Set it the way <code>curl</code>, <code>kubectl</code> and <code>docker</code> read it, for example in <code>~/.zshrc</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>export HTTPS_PROXY=http://proxy.example.com:3128
+export NO_PROXY=.internal,10.0.0.0/8     # names and networks reached directly</code></pre>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">What</th><th scope="col">How it gets out</th></tr></thead><tbody><tr><td>Web APIs: Kubernetes clusters (also <code>cluster exec</code>, <code>cluster forward</code>, <code>cluster shell</code>), registries, S3 storage, secret stores (Vault, 1Password, Bitwarden, AWS, GCP, Azure), the logins and tunnels of AnyConnect, Fortinet, GlobalProtect, F5 and Pulse VPNs, and <code>komando update</code></td><td>through <code>HTTPS_PROXY</code> (and <code>HTTP_PROXY</code> for <code>http://</code> addresses), except what <code>NO_PROXY</code> names</td></tr><tr><td>Servers (SSH), databases, caches, FTP and SFTP</td><td>not through <code>HTTPS_PROXY</code>: <code>ssh</code> and <code>psql</code> do not read it either, and a company proxy usually lets only web traffic out. Reach them through the proxy added as a VPN, then <code>--via NAME</code>: an HTTP proxy with <code>komando vpn add NAME proxy --proxy-address HOST:PORT</code>, a SOCKS proxy with <code>komando vpn add NAME socks --proxy-address HOST:PORT</code>; or through a bastion</td></tr><tr><td>WireGuard, L2TP/IPsec, IPsec and IKEv2 VPNs</td><td>not through a proxy: they use UDP, which a web proxy cannot carry</td></tr></tbody></table></div>
+<ul class="g-list g-list--ul"><li><code>HTTPS_PROXY</code>, <code>HTTP_PROXY</code> and <code>NO_PROXY</code> count only when a person runs komando. When an AI agent runs it, its environment is the agent&#39;s, and komando takes no proxy from it: otherwise the agent could send every login through a proxy of its own. If an agent&#39;s commands must go through the company proxy, add the proxy as a VPN and use <code>--via</code>, or for a cluster put <code>proxy-url</code> in its kubeconfig.</li><li>komando checks certificates against the computer&#39;s own CAs (and a conn&#39;s <code>?ca=</code>, a VPN&#39;s <code>--ca</code> or a kubeconfig&#39;s CA). <code>SSL_CERT_FILE</code> and <code>SSL_CERT_DIR</code> are ignored, on Linux, macOS and Windows: a proxy that inspects TLS needs its CA in the system&#39;s trust store, or given as <code>?ca=</code> / <code>--ca</code>.</li><li>A kubeconfig&#39;s <code>proxy-url</code> wins over <code>HTTPS_PROXY</code> for that cluster, as with <code>kubectl</code>. It may be <code>http://</code>, <code>https://</code> or <code>socks5://</code>.</li><li>A server or conn reached with <code>--via</code> goes out through its path, never through these proxies.</li><li>An HTTP proxy as a VPN (<code>proxy</code> kind) tunnels each connection with CONNECT. <code>host ssh-command</code> turns it into an OpenSSH <code>ProxyCommand</code> (<code>nc -X connect</code>) when the proxy needs no login.</li><li>Addresses on this computer (<code>localhost</code>, a tunnel&#39;s <code>127.0.0.1</code> port) never use a proxy.</li><li>A user name and password in the proxy URL (<code>http://user:password@proxy:3128</code>) are sent to the proxy. Errors show the URL with the password hidden.</li></ul>
+<h2 id="limits">Limits</h2>
+<ul class="g-list g-list--ul"><li>Tunnels listen on <code>127.0.0.1</code>, so only your computer can use them. To listen on another address (<code>-L 0.0.0.0:8080:...</code>), add <code>--yes</code>; an AI agent adds it only after a person agrees (<a href="../safety/">Safety</a>). Anyone on that network can then use the tunnel without logging in.</li><li><code>-R</code> needs a server at the end of the path: a VPN cannot listen for you.</li><li>One tunnel takes exactly one of <code>-L</code>, <code>-R</code> and <code>-D</code>.</li><li>Many company proxies let only port 443 through.</li><li>WireGuard, L2TP/IPsec, IPsec and IKEv2 VPNs cannot go through a web proxy.</li><li>Over WinRM, a Windows server takes no tunnels (<a href="../windows/">Windows servers</a>).</li></ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Error code</th><th scope="col">What it means</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><code>OPEN_BIND</code></td><td>the tunnel would listen on an address other computers can reach (exit 6)</td><td>keep the default <code>127.0.0.1</code>, or add <code>--yes</code> when you mean it</td></tr><tr><td><code>PORT_IN_USE</code></td><td>the local port is taken (exit 8); for <code>-R</code>, sshd on the server may have <code>AllowTcpForwarding</code> off</td><td>pick another port, or <code>0</code> for a free one</td></tr><tr><td><code>CANCELLED</code></td><td>Ctrl-C stopped the tunnel before it came up; nothing is left running</td><td>start it again</td></tr><tr><td><code>TUNNEL_NOT_FOUND</code></td><td>no tunnel with that ID</td><td>see them with <code>komando tunnel list</code></td></tr><tr><td><code>VPN_DOWN</code></td><td>the VPN or proxy on the path did not come up, or a proxy refused the port</td><td>read the message; <code>komando vpn test NAME</code> tries again</td></tr><tr><td><code>HOST_IN_USE</code></td><td>a server you want to remove is still a step on another one&#39;s <code>--via</code> path</td><td>change their <code>--via</code> first</td></tr></tbody></table></div></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../system/"><span class="t-label muted">Previous</span>Services, logs, Docker, packages, users</a><a class="g-pn g-pn--next" href="../vpn/"><span class="t-label muted">Next</span>VPNs</a></nav><p class="g-path t-small muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/tunnels.md">docs/features/tunnels.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../docs/">komando docs</a> · <a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Komando on iPhone and iPad · Komando guide</title>
+<meta name="description" content="Pair the phone with komando, see findings and fix them with Face ID.">
+<link rel="canonical" href="https://komando.efolusi.com/guide/iphone-and-ipad/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary><p class="g-side__home"><a href="../">Guide home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../first-ten-minutes/">Your first ten minutes</a></li><li><a href="../add-a-host/">Add a server</a></li><li><a href="../log-in/">Log in with a key or a password</a></li><li><a href="../add-a-connection/">Add a database, cache or anything else</a></li><li><a href="../home-and-findings/">Home and findings</a></li><li><a href="../the-window/">Find your way around the window</a></li></ul><p class="t-label g-side__group">Servers</p><ul><li><a href="../open-a-terminal/">Open a terminal</a></li><li><a href="../files/">Files and copying between servers</a></li><li><a href="../services/">Services</a></li><li><a href="../logs/">Logs</a></li><li><a href="../updates/">Updates</a></li><li><a href="../containers/">Containers</a></li><li><a href="../jobs/">Jobs</a></li></ul><p class="t-label g-side__group">Data and networks</p><ul><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../port-forwarding/">Port forwarding</a></li><li><a href="../vpn/">VPNs</a></li></ul><p class="t-label g-side__group">Tools</p><ul><li><a href="../keychain/">Keychain</a></li><li><a href="../recipes/">Recipes</a></li><li><a href="../agent/">The agent</a></li></ul><p class="t-label g-side__group">Safety</p><ul><li><a href="../touch-id-and-safety/">Touch ID and safety</a></li><li><a href="../edit-or-remove/">Edit, protect or remove</a></li></ul><p class="t-label g-side__group">iPhone and iPad</p><ul><li><a href="../iphone-and-ipad/" aria-current="page">Komando on iPhone and iPad</a></li></ul><p class="t-label g-side__group">About this guide</p><ul><li><a href="../coming/">What is coming</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Guide</a> · iPhone and iPad</p><h1>Komando on iPhone and iPad</h1><p class="g-lead t-lead">Pair the phone with komando, see findings and fix them with Face ID.</p><p class="g-status"><span class="g-pill g-pill--static">Not released</span> The Komando apps are not released yet. This guide describes them as they will ship. The command line works today: see <a href="../../docs/getting-started/">Getting started</a>.</p><p class="g-status"><span class="g-pill g-pill--static">Coming</span> Parts of this page are not built yet; they are marked. <a href="../coming/">What is coming</a></p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#pair-the-phone">Pair the phone</a></li><li><a href="#the-read-key-and-network-checks">The read key and Network checks</a></li><li><a href="#home">Home</a></li><li><a href="#targets">Targets</a></li><li><a href="#agent">Agent</a></li><li><a href="#settings">Settings</a></li><li><a href="#ipad">iPad</a></li><li><a href="#what-stays-on-the-mac">What stays on the Mac</a></li><li><a href="#if-something-goes-wrong">If something goes wrong</a></li></ul></nav><div class="g-body"><p>Komando for iPhone and iPad is for when you are away from your desk: see what needs attention, fix it with Face ID, run quick checks, follow jobs and ask the agent. It is free, like the Mac app.</p>
+<p>The phone does not run komando itself. It talks to the machine where komando lives, over SSH: a server, or your Mac with Remote Login turned on.</p>
+<h2 id="pair-the-phone">Pair the phone</h2>
+<ol class="g-list g-list--ol"><li>Open the app. It says "Komando on call".</li><li>The phone makes two keys, kept in its secure chip: one that "Reads, without Face ID" and one for "Changes, after Face ID". Leave <b>Network checks</b> off unless you need it (see <a href="#the-read-key-and-network-checks">The read key and Network checks</a>). Tap <b>Copy Both Lines</b>.</li><li>Add the two lines to <code>~/.ssh/authorized_keys</code> on the machine that runs komando. Each line lets komando decide what that key may run.</li><li>Under "2. Where komando lives", type its <code>user@address</code> and tap <b>Connect</b>.</li><li>The first time, the phone shows the machine's identity. Run the command it shows on that machine, compare, and tap <b>It Matches, Trust This Host</b>.</li></ol>
+<p>The phone needs a passcode. Without one it says "Set a passcode first: Settings → Face ID &amp; Passcode." komando on that machine must be version 0.13.0 or newer; the phone says so plainly when it is older. The read key's network rule below needs komando 0.15.0.</p>
+<p>To look around first, tap <b>Try the Demo</b>. It shows sample servers and findings, nothing real.</p>
+
+<h2 id="the-read-key-and-network-checks">The read key and Network checks</h2>
+<p>The phone uses two keys, both in its secure chip:</p>
+<ul class="g-list g-list--ul"><li>The <b>read key</b> works without Face ID. It can only read.</li><li>The <b>change key</b> works only after Face ID. It is used when you change something.</li></ul>
+<p>With komando 0.15.0 and newer, the read key also stays off the network. It can read how your servers are doing, but it cannot make a server or the komando computer reach out to another address. So a stolen or tricked read key cannot send your data somewhere else.</p>
+<h3 id="what-works-without-network-checks">What works without Network checks</h3>
+<ul class="g-list g-list--ul"><li>Home, Targets, Activity and Jobs.</li><li><b>Right now</b> on a server: CPU, memory and disk.</li><li>The <b>Health</b> and <b>Disk</b> quick checks, in plain sentences. Health read this way does not list failed services: tap <b>Services</b> for those.</li><li><b>Services</b> and <b>Test Connection</b>.</li></ul>
+<h3 id="what-needs-network-checks">What needs Network checks</h3>
+<ul class="g-list g-list--ul"><li><b>Certificates</b> (<code>komando cert check</code>) and network checks (<code>komando net</code>), which reach the network from the server.</li><li>Running a recipe other than health and disk from Shortcuts.</li></ul>
+<p>Without Network checks, such a check stops and says so, with komando's own message. Nothing runs.</p>
+<h3 id="turn-network-checks-on">Turn Network checks on</h3>
+<p>Network checks is a switch on Welcome, above <b>Copy Both Lines</b>. It is off at first.</p>
+<ol class="g-list g-list--ol"><li>In Settings, tap <b>Forget This Computer</b> (<b>Forget This Mac</b> when komando runs on your Mac), or start on Welcome.</li><li>Turn <b>Network checks</b> on.</li><li>Tap <b>Copy Both Lines</b>.</li><li>On the komando computer, open <code>~/.ssh/authorized_keys</code>. Delete the phone's old read line, then paste the new lines.</li><li>On the phone, type the address and tap <b>Connect</b>.</li></ol>
+<p>Settings then says what the read key may do: "Reads only, no network" or "Reads, with network checks".</p>
+<h3 id="when-the-line-and-the-switch-differ">When the line and the switch differ</h3>
+<p>Pairing checks that the read key's line on the komando computer matches the switch. When they differ it pairs nothing and says, for example, "The read key's line on mac-mini does not allow network checks, but Network checks is on here." This happens when an older line for the same key is still in <code>authorized_keys</code> (the first line wins), or when you changed the switch after copying the lines.</p>
+<p>Delete the old line and paste the lines again, or turn the switch to match the line you want to keep.</p>
+<h3 id="after-you-update-komando">After you update komando</h3>
+<p>Pull down to refresh on the phone. It reads komando's version again on every refresh, so you do not need to pair again.</p>
+<p>With a komando older than 0.15.0 nothing changes: the read key reads as before, the switch has no effect, and Settings says "Reads only".</p>
+<h2 id="home">Home</h2>
+<p>Home lists <b>Needs attention</b>, <b>Running now</b> and <b>Recent activity</b>, like the Mac.</p>
+<ul class="g-list g-list--ul"><li>A fix that acts on a server asks first. The dialog says "This runs:" and shows the exact komando command, each word as it will run, with any hidden character spelled out. Then Face ID.</li><li>A fix that needs komando's extra yes (<code>--yes</code> or <code>--allow-dangerous</code>), such as one on a protected target, has no <b>Fix</b> button on the phone. Do it in Komando on the Mac.</li><li>A fix that changes komando's own settings, such as Protect or Add Password, says to do it in Komando on the Mac.</li><li><b>Running now</b> links to background jobs, with their state and log. <b>Stop Job</b> and <b>Remove Job</b> ask first, then Face ID.</li><li>When Face ID is cancelled, or a change fails, the reason shows right under the button you tapped.</li><li><b>All Activity</b>, and the <b>Activity</b> tab, open the audit log, with the <b>Changes</b>, <b>Failed</b> and <b>Agent</b> filters and <b>Check the Record</b>.</li></ul>
+<h2 id="targets">Targets</h2>
+<p>The <b>Targets</b> tab lists every target by family; <b>Find a target</b> searches. Touch and hold a target, or swipe its row, for <b>Test Connection</b> and Copy; a copy says "Copied". A server has quick checks such as <b>Disk</b> and <b>Services</b>, which only read. Queues have their own read-only checks.</p>
+<p>A very large answer, over 16 MB, is cut off so it does not fill the phone's memory. The screen says it was cut. Ask for less, such as fewer log lines, or read it on your Mac.</p>
+<h2 id="agent">Agent</h2>
+<p>The <b>Agent</b> tab works as on the Mac (see <a href="../agent/">The agent</a>), with ☐ <b>Allow changes</b>. <b>Allow Once</b> asks for Face ID first. <b>Stop</b> ends the agent's turn, and the newest message stays in view. Until you save a key in Settings it says "Add your Anthropic API key in Settings first."</p>
+<p>Some reads can reach other addresses on the internet: <code>komando net</code>, <code>komando cert check</code>, and a server command that uses a network tool such as <code>curl</code>. The agent asks before it runs one of them, with the same card as a change. With ☐ <b>Allow changes</b> off, it does not run them.</p>
+<h2 id="settings">Settings</h2>
+<p>Settings has the komando machine's address and version, <b>Forget This Computer</b> (<b>Forget This Mac</b> when komando runs on your Mac; <b>Leave the Demo</b> in the demo), <b>Import from a Computer…</b>, <b>Remove Imported Inventory</b> once you have imported something, <b>Upgrade</b>, and the agent's Anthropic API key (<b>Save Key</b>).</p>
+<p><b>Forget This Computer</b> takes you back to Welcome. It also deletes the keys this phone made for that machine. Use it too when that machine was rebuilt and its identity changed.</p>
+<h3 id="notifications">Notifications</h3>
+<p>Turn on <b>Notify Me</b> in Settings to hear when a background job finishes or a forward stops, while the app is open. A notification names the server and what happened, such as "A job on backup-1 finished.". It never shows the command. When the lock screen hides previews (<b>Show Previews</b> in the iPhone's Settings › Notifications), it says only "Open Komando to see what changed."</p>
+<h3 id="bring-your-inventory-over">Bring your inventory over</h3>
+<p><b>Import from a Computer…</b> brings in what komando knows on a computer, sealed so only this phone can open it.</p>
+<ol class="g-list g-list--ol"><li>Tap <b>Make a New Key</b>, then <b>Copy Key</b> or <b>Share Key File…</b>.</li><li>On the computer, run <code>komando export --for-phone --to phone.kmdseal</code>. It asks for the key and prints six words.</li><li>On the phone, tap <b>Choose File…</b> and pick the file. Compare the six words with the ones the computer printed. If they match, tap <b>Words Match, Import</b>. If they differ, it is not the file you made: do not import it.</li></ol>
+<p>To take it off the phone again, tap <b>Remove Imported Inventory</b> in Settings. It asks "Remove the imported inventory?" first. The servers, connections, passwords and keys you imported leave the phone, with the key that sealed them. komando on the computer keeps its own copy, and you can import again any time.</p>
+<h2 id="ipad">iPad</h2>
+<p>On iPad, the tabs become a sidebar, with <b>Jobs</b> in it, and Targets shows the list beside the chosen target. Drag the edge of the Targets list to make it wider or narrower; the iPad remembers the width. With a keyboard: ⌘1 to ⌘4 open the places, ⌘R refreshes, ⌘F finds a target, and ⌘N starts a new conversation with the agent.</p>
+<h2 id="what-stays-on-the-mac">What stays on the Mac</h2>
+<p>The terminal, the SQL editor, Files, Protect, and anything past komando's own safety stop stay on the Mac. A change to a protected server says "change it from Komando on your Mac".</p>
+<p>Files on the phone <a class="g-pill" href="../coming/#phone-files" title="Files on iPhone and iPad: not built yet">Coming</a> and recipes on the phone <a class="g-pill" href="../coming/#phone-recipes" title="Recipes on iPhone and iPad: not built yet">Coming</a> are coming.</p>
+<h2 id="if-something-goes-wrong">If something goes wrong</h2>
+<ul class="g-list g-list--ul"><li>The machine does not accept the phone's key: add the lines again, exactly as copied.</li></ul></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../edit-or-remove/"><span class="t-label muted">Previous</span>Edit, protect or remove</a><a class="g-pn g-pn--next" href="../coming/"><span class="t-label muted">Next</span>What is coming</a></nav><p class="g-path t-small muted">Help link for this page: <code>/guide/iphone-and-ipad/</code></p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

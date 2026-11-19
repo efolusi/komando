@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Windows servers · komando docs</title>
+<meta name="description" content="Manage Windows servers next to your Linux ones: run PowerShell, read and write files, copy files, and start and stop services.">
+<link rel="canonical" href="https://komando.efolusi.com/docs/windows/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Docs"><details class="g-side__fold" open><summary>All docs pages</summary><p class="g-side__home"><a href="../">Docs home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../getting-started/">Getting started</a></li><li><a href="../switch-from-termius/">Switch from Termius</a></li></ul><p class="t-label g-side__group">Features</p><ul><li><a href="../install/">Install, update, remove</a></li><li><a href="../servers/">Servers</a></li><li><a href="../secrets/">Secrets</a></li><li><a href="../windows/" aria-current="page">Windows servers</a></li><li><a href="../import/">Moving in and moving computers</a></li><li><a href="../targets/">Targets</a></li><li><a href="../commands/">Running commands</a></li><li><a href="../health/">Health and network checks</a></li><li><a href="../files/">Files</a></li><li><a href="../system/">Services, logs, Docker, packages, users</a></li><li><a href="../tunnels/">Private servers and tunnels</a></li><li><a href="../vpn/">VPNs</a></li><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../queues/">Queues</a></li><li><a href="../storage/">Storage: buckets and file servers</a></li><li><a href="../cluster/">Clusters (Kubernetes and Docker Swarm)</a></li><li><a href="../cloud/">Cloud logins</a></li><li><a href="../registry/">Container registries</a></li><li><a href="../rotate/">Rotate keys and passwords, and when someone leaves</a></li><li><a href="../safety/">Safety</a></li><li><a href="../security-standards/">Security standards</a></li><li><a href="../output/">Results and errors</a></li><li><a href="../error-codes/">Error codes</a></li><li><a href="../settings/">Settings and files</a></li><li><a href="../glossary/">Glossary</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Docs</a> · Features</p><h1>Windows servers</h1><p class="g-lead t-lead">Manage Windows servers next to your Linux ones: run PowerShell, read and write files, copy files, and start and stop services.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#add-a-windows-server">Add a Windows server</a></li><li><a href="#run-powershell">Run PowerShell</a></li><li><a href="#files">Files</a></li><li><a href="#services">Services</a></li><li><a href="#what-works-on-windows">What works on Windows</a></li><li><a href="#limits">Limits</a></li><li><a href="#troubleshooting">Troubleshooting</a></li></ul></nav><div class="g-body"><p>This page is about Windows servers that komando manages. To run komando itself on a Windows computer, see <a href="../install/#install-on-windows">Install on Windows</a>.</p>
+<h2 id="add-a-windows-server">Add a Windows server</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando host add win1 Administrator@10.0.0.9 --os windows --ask-password
+komando test win1                                   # can komando log in? is it an administrator?
+komando facts win1                                  # Windows version, support, updates, ports</code></pre>
+<p>Typed alone at your terminal, <code>komando host add</code> asks for each part, including what the server runs and, for Windows, whether komando reaches it over OpenSSH or WinRM.</p>
+<p>komando reaches Windows over OpenSSH or WinRM. Both give the same commands; pick WinRM when the server already has it on, for example for Ansible.</p>
+<h3 id="over-openssh">Over OpenSSH</h3>
+<p>OpenSSH is built into Windows Server 2019 and later. Turn it on once on the server (as an administrator, in PowerShell):</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd; Set-Service sshd -StartupType Automatic</code></pre>
+<p>Then add the server with <code>--os windows</code>. Everything else is as for Linux servers: a key (<code>--key</code>), a password (<code>--ask-password</code> or <code>--password-ref</code>), <code>--via</code> a bastion, <code>--protected</code>.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando host add win3 deploy@corp.local@10.0.0.10 --os windows --key deploy --via bastion
+komando host edit win3 --os windows        # a server you added before</code></pre>
+<p>A domain user is written <code>user@domain</code>, for example <code>deploy@corp.local@10.0.0.10</code>.</p>
+<h3 id="over-winrm">Over WinRM</h3>
+<p>Give the address as <code>winrm://USER@HOST</code> and a password. komando uses HTTPS (port 5986), checks the server&#39;s certificate, and logs in with NTLM, which never sends the password itself.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando host add win2 winrm://Administrator@10.0.0.9 --ask-password
+komando host add win3 &#39;winrm://deploy@corp.local@win3.corp.local&#39; --password-ref secret:win3-pass --via bastion
+komando host edit win2 --address &#39;winrm://10.0.0.9?ca=secret:corp-ca&#39;   # the server&#39;s certificate is from your own CA</code></pre>
+<p>Options go after <code>?</code>, joined with <code>&amp;</code>:</p>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Option</th><th scope="col">Means</th></tr></thead><tbody><tr><td><code>ca=secret:NAME</code></td><td>the certificate comes from your own CA: store its PEM with <code>komando secret set NAME &lt; ca.crt</code> (the check stays on)</td></tr><tr><td><code>auth=basic</code></td><td>Basic login (local accounts only) instead of NTLM; over plain HTTP (<code>tls=off</code>) it is refused (<code>WINRM_INSECURE</code>)</td></tr><tr><td><code>tls=skip-verify</code></td><td>do not check the certificate (komando warns: anyone in between can pose as the server)</td></tr><tr><td><code>tls=off</code></td><td>plain HTTP on port 5985: commands and output travel unencrypted, and the server must allow it</td></tr><tr><td><code>:PORT</code></td><td>another port than 5986 (5985 with <code>tls=off</code>)</td></tr></tbody></table></div>
+<p><code>auth=basic</code>, <code>tls=skip-verify</code> and <code>tls=off</code> give up a protection of the password or of the server check, so an AI agent that sets one (with <code>host add</code>, <code>host edit --address</code> or <code>import</code>) needs your yes in komando&#39;s window (<code>SAFETY_SETTING</code> without it). A server that has the setting already asks nothing again.</p>
+<p><code>--via</code> works: the connection goes through the bastion or VPN. WinRM carries commands only, so <code>shell</code>, tunnels, <code>host trust</code>, <code>login</code> and <code>host ssh-command</code> need OpenSSH. To switch a server back to SSH: <code>komando host edit win2 --unset transport</code>. Use NTLM with a domain user, over HTTPS (see <a href="#limits">Limits</a> for what WinRM does not do).</p>
+<p>On the server, <code>winrm quickconfig -transport:https</code> (as an administrator) turns on WinRM over HTTPS.</p>
+<h3 id="pick-windows-servers">Pick Windows servers</h3>
+<p>To pick only Windows servers, or everything else, use <code>os:windows</code> and <code>os:linux</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando facts os:windows
+komando exec &#39;all,!os:windows&#39; --read-only -- uptime</code></pre>
+<h2 id="run-powershell">Run PowerShell</h2>
+<p>On a Windows server, <code>exec</code> and <code>exec --script</code> run PowerShell (Windows PowerShell, <code>powershell.exe</code>, which every Windows Server has).</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando exec win1 --read-only -- &#39;Get-Service | Where-Object Status -eq Running&#39;</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando exec win1 -e APP_ENV=prod -C &#39;C:\app&#39; -- &#39;.\migrate.exe&#39;
+komando exec win1 --script ./deploy.ps1 --arg staging  # --arg values go to param( ) or $args</code></pre>
+<ul class="g-list g-list--ul"><li>The exit code works as in sh: <code>exit 3</code> gives 3, and a failed last command (an error, or a program that exited non-zero) makes it non-zero.</li><li><code>--read-only</code> accepts only simple read commands on Windows (see below).</li><li>Input from <code>--stdin-file</code> is read with <code>[Console]::In.ReadToEnd()</code>.</li><li>Windows has no sudo: <code>--sudo</code> and <code>--pty</code> are refused. Log in as a user with the rights the work needs (an administrator for services).</li><li>One command is written for one shell, so a target that picks Windows and Linux servers at once is refused (<code>MIXED_OS</code>). Run it twice, with <code>TARGET,os:windows</code> and <code>TARGET,!os:windows</code>.</li></ul>
+<h3 id="--read-only-on-windows"><code>--read-only</code> on Windows</h3>
+<p><code>--read-only</code> on a Windows server fails closed: komando accepts only a small part of PowerShell that it reads exactly as PowerShell does, and refuses everything else, even a command that would only read. A command it accepts never changes anything, so a protected server does not ask for <code>--yes</code>.</p>
+<p>What it accepts:</p>
+<ul class="g-list g-list--ul"><li>Commands from a fixed list, joined with <code>|</code> and separated by <code>;</code> or new lines:<ul class="g-list g-list--ul"><li>files and the registry: <code>Get-ChildItem</code>, <code>Get-Item</code>, <code>Get-ItemProperty</code>, <code>Get-ItemPropertyValue</code>, <code>Get-Content</code>, <code>Get-Location</code>, <code>Get-PSDrive</code>, <code>Get-PSProvider</code>, <code>Get-Acl</code>, <code>Get-FileHash</code>, <code>Test-Path</code>, <code>Select-String</code>, <code>Set-Location</code>, <code>Push-Location</code>, <code>Pop-Location</code>;</li><li>the system: <code>Get-Process</code>, <code>Get-Service</code>, <code>Get-EventLog</code>, <code>Get-WinEvent</code>, <code>Get-HotFix</code>, <code>Get-ComputerInfo</code>, <code>Get-Date</code>, <code>Get-TimeZone</code>, <code>Get-Culture</code>, <code>Get-Uptime</code>, <code>Get-Counter</code>, <code>Get-CimInstance</code>, <code>Get-CimClass</code>, <code>Get-WmiObject</code>, <code>Get-ScheduledTask</code>, <code>Get-ScheduledTaskInfo</code>, <code>Get-WindowsFeature</code>, <code>Get-LocalUser</code>, <code>Get-LocalGroup</code>, <code>Get-LocalGroupMember</code>, <code>Get-Disk</code>, <code>Get-Volume</code>, <code>Get-Partition</code>, <code>Get-PhysicalDisk</code>, <code>Get-SmbShare</code>, <code>Get-Website</code>, <code>Get-WebBinding</code>, <code>Get-IISSite</code>, <code>Get-IISAppPool</code>;</li><li>the network: <code>Get-NetTCPConnection</code>, <code>Get-NetUDPEndpoint</code>, <code>Get-NetIPAddress</code>, <code>Get-NetIPConfiguration</code>, <code>Get-NetAdapter</code>, <code>Get-NetRoute</code>, <code>Get-NetFirewallRule</code>, <code>Get-NetFirewallProfile</code>, <code>Get-DnsClientServerAddress</code>, <code>Get-DnsClientCache</code>, <code>Resolve-DnsName</code>, <code>Test-Connection</code>, <code>Test-NetConnection</code>;</li><li>PowerShell itself: <code>Get-Command</code>, <code>Get-Member</code>, <code>Get-Alias</code>, <code>Get-Module</code>, <code>Get-ExecutionPolicy</code>, <code>Get-Host</code>, <code>Get-History</code>;</li><li>shaping the output: <code>Select-Object</code>, <code>Where-Object</code>, <code>ForEach-Object</code>, <code>Sort-Object</code>, <code>Group-Object</code>, <code>Measure-Object</code>, <code>Get-Unique</code>, <code>Format-Table</code>, <code>Format-List</code>, <code>Format-Wide</code>, <code>Out-String</code>, <code>Out-Host</code>, <code>Out-Null</code>, <code>ConvertTo-Json</code>, <code>ConvertTo-Csv</code>, <code>Write-Output</code>, <code>Write-Host</code>;</li><li>their usual aliases (<code>gci</code>, <code>ls</code>, <code>dir</code>, <code>gc</code>, <code>cat</code>, <code>gsv</code>, <code>gps</code>, <code>select</code>, <code>where</code>, <code>?</code>, <code>%</code>, <code>sort</code>, <code>ft</code>, <code>fl</code>, ...);</li><li><code>hostname</code>, <code>quser</code>, and <code>whoami</code>, <code>ipconfig</code>, <code>systeminfo</code>, <code>tasklist</code>, <code>netstat</code> with the switches that only show something (<code>ipconfig /all</code>, <code>netstat -ano</code>, <code>whoami /groups</code>).</li></ul></li><li>Arguments that are plain values: words such as <code>C:\inetpub</code>, <code>W3SVC</code>, <code>*.log</code> or <code>50</code>; <code>&#39;...&#39;</code> and <code>&#34;...&#34;</code> strings with no <code>$</code> inside; commas between values (<code>Select-Object Name, Status</code>); parameters written in full from a list of safe ones (<code>-Recurse</code>, <code>-Tail</code>, <code>-First</code>, <code>-Property</code>, <code>-LogName</code>, <code>-Filter</code>, <code>-Force</code>, <code>-eq</code>, ...).</li><li>Two kinds of script block: <code>Where-Object { $_.Status -eq &#39;Running&#39; }</code> (properties of <code>$_</code> compared with a value, joined with <code>-and</code> or <code>-or</code>) and <code>ForEach-Object { $_.Name }</code>.</li></ul>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando exec win1 --read-only -- &#39;Get-Process | Sort-Object CPU -Descending | Select-Object -First 5&#39;
+komando exec win1 --read-only -- &#39;Get-Content C:\app\web.config -Tail 50&#39;
+komando exec win1 --read-only -- &#39;Get-WinEvent -LogName System -MaxEvents 20 | Format-List&#39;
+komando exec win1 --read-only -- &#39;Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion&#39;</code></pre>
+<p>What it refuses (<code>READ_ONLY_VIOLATION</code>, with the reason): any <code>$</code> (variables, <code>$( )</code>), backtick, <code>@</code> (here-strings, splatting), <code>&amp;</code>, redirection (<code>&gt;</code>, <code>2&gt;$null</code>), comments, <code>( )</code>, <code>[ ]</code> and .NET calls, <code>=</code>, keywords (<code>if</code>, <code>foreach</code>, <code>exit</code>), <code>.\script.ps1</code> and programs by path, commands, aliases and parameters not on the lists (also shortened parameter names, <code>-Name:value</code>, <code>-ComputerName</code>, <code>-Credential</code>, <code>-ScriptBlock</code>), <code>ForEach-Object Name</code> (a name may call a method), paths to another computer (<code>\\server\share</code>), and any character outside plain ASCII (typographic quotes and dashes).</p>
+<p>When a command is refused, run it without <code>--read-only</code>: komando then treats it as a change, so a protected server asks before it runs.</p>
+<p>The safety rules have Windows forms: <code>Remove-Item -Recurse C:\</code>, <code>Format-Volume</code>, <code>Stop-Computer</code>, <code>Restart-Computer</code>, <code>Stop-Service sshd</code> (or WinRM) and more need <code>--allow-dangerous</code>, as <code>rm -rf /</code> does.</p>
+<h2 id="files">Files</h2>
+<p>Paths are Windows paths: <code>C:\inetpub\app.config</code> or <code>C:/inetpub/app.config</code>. <code>~</code> and an empty path are the login user&#39;s profile folder. Put a path with backslashes in single quotes in your shell.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando fs list win1 &#39;C:\inetpub\logs&#39; -r --limit 200
+komando fs stat win1 &#39;C:\app\web.config&#39; --sha256
+komando fs cat win1 &#39;C:\app\app.log&#39; --tail 50
+komando fs write win1 &#39;C:\app\web.config&#39; --from ./web.config --backup --if-changed
+komando upload os:windows ./tool.exe &#39;C:\tools\&#39;
+komando download win1 &#39;C:\app\app.log&#39; --to ./logs/</code></pre>
+<ul class="g-list g-list--ul"><li><code>fs list</code> leaves out hidden files unless <code>--all</code>.</li><li><code>fs write</code> writes a new file next to the old one, then swaps it in one step, so the file keeps its permissions (ACL). <code>--backup</code>, <code>-p</code>, <code>--append</code>, <code>--if-changed</code>, <code>--no-follow</code> and <code>--validate</code> work. <code>--validate</code> takes PowerShell, with <code>%s</code> for the new file, and runs in a PowerShell of its own: <code>--validate &#39;Test-Json (Get-Content %s -Raw)&#39;</code>. To undo, copy the <code>.bak</code> back with <code>komando exec win1 -- Copy-Item ...</code>; <code>fs restore</code> does not work on Windows yet.</li><li><code>upload</code>, <code>download</code> and <code>cp</code> copy single files. Folders (<code>-r</code>), <code>--sudo</code>, <code>--mode</code> and <code>--owner</code> do not work on Windows yet.</li></ul>
+<h2 id="services">Services</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando svc list win1 --state running         # running, stopped, or --failed
+komando svc status win1 W3SVC sshd
+komando svc restart win1 W3SVC --wait 10s     # fails unless it runs within 10s
+komando svc enable win1 MyApp --now           # start automatically, and start now</code></pre>
+<p>The name is the service name (<code>W3SVC</code>) or its display name. <code>--failed</code> lists services that should start automatically but stopped with an error. <code>svc reload</code>, <code>svc daemon-reload</code> and <code>svc logs</code> have no Windows form.</p>
+<h2 id="what-works-on-windows">What works on Windows</h2>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Works</th><th scope="col">Not yet</th></tr></thead><tbody><tr><td><code>test</code>, <code>facts</code>, <code>exec</code> (also <code>--script</code>), <code>shell</code></td><td><code>pkg</code>, <code>user</code>, <code>cron</code>, <code>logs</code>, <code>docker</code>, <code>net</code>, <code>cert check</code>, <code>recipe run</code>, <code>reboot</code></td></tr><tr><td><code>fs list</code>, <code>stat</code>, <code>cat</code>, <code>write</code></td><td><code>fs replace</code>, <code>fs restore</code>, <code>fs rm</code>, <code>mkdir</code>, <code>mv</code>, <code>chmod</code>, <code>sync</code></td></tr><tr><td><code>upload</code>, <code>download</code>, <code>cp</code> (single files)</td><td><code>job</code>, <code>cp -r</code>, <code>svc reload</code>, <code>svc daemon-reload</code>, <code>svc logs</code></td></tr><tr><td><code>svc status</code>, <code>list</code>, <code>start</code>, <code>stop</code>, <code>restart</code>, <code>enable</code>, <code>disable</code></td><td><code>--sudo</code>, <code>--pty</code>, <code>--mode</code>, <code>--owner</code></td></tr><tr><td><code>host trust</code>, <code>login</code>, <code>tunnel</code>, <code>--via</code> through a Windows server (SSH only)</td><td><code>shell</code>, tunnels, <code>host trust</code> over WinRM</td></tr></tbody></table></div>
+<p>A command that is not there yet stops with <code>NOT_SUPPORTED</code> before anything runs; <code>fs restore</code> stops with a usage error (<code>USAGE</code>) that names <code>Copy-Item</code>. Instead, run PowerShell with <code>exec</code>, for example <code>Get-WinEvent -LogName System -MaxEvents 50</code> for logs, or <code>Restart-Computer</code> (with <code>--allow-dangerous</code>) for a restart.</p>
+<h2 id="limits">Limits</h2>
+<ul class="g-list g-list--ul"><li>komando&#39;s PowerShell scripts are tested with PowerShell 7 on Linux, not on a real Windows server: Windows PowerShell 5.1, Windows OpenSSH, WinRM with NTLM, services and Windows Update have not been run there. Please report anything that does not work.</li><li>WinRM logs in with a password only: <code>--key</code>, <code>--identity</code> and <code>--proxy-command</code> are refused. Use <code>--via</code> to go through a bastion.</li><li><code>fs write --backup</code> keeps a backup, but <code>fs restore</code> does not work on Windows: copy the backup back with <code>komando exec SERVER -- Copy-Item ...</code>.</li><li>Kerberos, CredSSP, client certificates and WinRM&#39;s own message encryption over plain HTTP are not supported.</li><li>WinRM carries commands only: <code>shell</code>, tunnels, <code>host trust</code>, <code>login</code> and <code>host ssh-command</code> need OpenSSH.</li><li>Windows has no sudo: <code>--sudo</code> and <code>--pty</code> are refused.</li><li>A target that picks Windows and other servers at once is refused for <code>exec</code> (<code>MIXED_OS</code>).</li><li><code>--read-only</code> accepts only the small part of PowerShell listed above.</li><li>komando runs PowerShell without your profile (<code>-NoProfile</code>).</li></ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Error code</th><th scope="col">What it means</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><code>NOT_SUPPORTED</code></td><td>the command does not work on Windows servers yet</td><td>run PowerShell with <code>komando exec SERVER -- ...</code>, or leave them out: <code>TARGET,!os:windows</code></td></tr><tr><td><code>MIXED_OS</code></td><td>the target picks Windows and other servers</td><td>run it twice, with <code>TARGET,os:windows</code> and <code>TARGET,!os:windows</code></td></tr><tr><td><code>READ_ONLY_VIOLATION</code></td><td>the PowerShell is not in the small part <code>--read-only</code> accepts</td><td>drop <code>--read-only</code>; a protected server then asks first</td></tr><tr><td><code>POWERSHELL_FAILED</code></td><td>komando could log in but PowerShell did not answer</td><td>check that <code>powershell.exe</code> is on the login user&#39;s PATH</td></tr><tr><td><code>WINRM_TLS</code></td><td>the server&#39;s WinRM certificate is not trusted</td><td>from your company&#39;s CA: add <code>?ca=secret:NAME</code> to the address</td></tr><tr><td><code>WINRM_INSECURE</code></td><td>Basic login over plain HTTP would send the password unencrypted</td><td>use HTTPS, or NTLM (leave <code>auth=basic</code> out)</td></tr><tr><td><code>AUTH_FAILED</code> over WinRM</td><td>wrong user or password, or the user may not use WinRM</td><td>check them; Basic login works for local accounts only, and the user must be an administrator or in Remote Management Users</td></tr><tr><td><code>USAGE</code> from <code>fs restore</code></td><td><code>fs restore</code> does not work on Windows</td><td><code>komando exec SERVER -- Copy-Item ...</code></td></tr></tbody></table></div>
+<ul class="g-list g-list--ul"><li><b><code>pending updates unknown</code></b> in <code>facts</code>: Windows does not let many remote logins search Windows Update. The last installed update is still shown.</li><li><b>A command works in your own PowerShell but not through komando</b>: komando runs PowerShell without your profile (<code>-NoProfile</code>), so aliases and modules from your profile are not there.</li></ul></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../secrets/"><span class="t-label muted">Previous</span>Secrets</a><a class="g-pn g-pn--next" href="../import/"><span class="t-label muted">Next</span>Moving in and moving computers</a></nav><p class="g-path t-small muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/windows.md">docs/features/windows.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../docs/">komando docs</a> · <a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

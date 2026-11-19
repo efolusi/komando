@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Install, update, remove · komando docs</title>
+<meta name="description" content="komando is one program file. This page shows how to install it on macOS, Linux and Windows, keep it up to date, turn on tab completion, and remove it again.">
+<link rel="canonical" href="https://komando.efolusi.com/docs/install/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Docs"><details class="g-side__fold" open><summary>All docs pages</summary><p class="g-side__home"><a href="../">Docs home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../getting-started/">Getting started</a></li><li><a href="../switch-from-termius/">Switch from Termius</a></li></ul><p class="t-label g-side__group">Features</p><ul><li><a href="../install/" aria-current="page">Install, update, remove</a></li><li><a href="../servers/">Servers</a></li><li><a href="../secrets/">Secrets</a></li><li><a href="../windows/">Windows servers</a></li><li><a href="../import/">Moving in and moving computers</a></li><li><a href="../targets/">Targets</a></li><li><a href="../commands/">Running commands</a></li><li><a href="../health/">Health and network checks</a></li><li><a href="../files/">Files</a></li><li><a href="../system/">Services, logs, Docker, packages, users</a></li><li><a href="../tunnels/">Private servers and tunnels</a></li><li><a href="../vpn/">VPNs</a></li><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../queues/">Queues</a></li><li><a href="../storage/">Storage: buckets and file servers</a></li><li><a href="../cluster/">Clusters (Kubernetes and Docker Swarm)</a></li><li><a href="../cloud/">Cloud logins</a></li><li><a href="../registry/">Container registries</a></li><li><a href="../rotate/">Rotate keys and passwords, and when someone leaves</a></li><li><a href="../safety/">Safety</a></li><li><a href="../security-standards/">Security standards</a></li><li><a href="../output/">Results and errors</a></li><li><a href="../error-codes/">Error codes</a></li><li><a href="../settings/">Settings and files</a></li><li><a href="../glossary/">Glossary</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Docs</a> · Features</p><h1>Install, update, remove</h1><p class="g-lead t-lead">komando is one program file. This page shows how to install it on macOS, Linux and Windows, keep it up to date, turn on tab completion, and remove it again.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#install-on-macos-or-linux">Install on macOS or Linux</a></li><li><a href="#install-on-windows">Install on Windows</a></li><li><a href="#other-ways-to-install">Other ways to install</a></li><li><a href="#update">Update</a></li><li><a href="#tab-completion">Tab completion</a></li><li><a href="#remove-komando">Remove komando</a></li><li><a href="#troubleshooting">Troubleshooting</a></li></ul></nav><div class="g-body"><h2 id="install-on-macos-or-linux">Install on macOS or Linux</h2>
+<p>Open a terminal (on macOS the <b>Terminal</b> app) and paste:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>curl --proto &#39;=https&#39; --tlsv1.2 -fsSL https://raw.githubusercontent.com/sgnd/komando/main/install.sh | sh</code></pre>
+<p>Then check that it works:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando version</code></pre>
+<p>It says <code>command not found</code>? The installer put komando in a folder your terminal does not look in yet. Run the <code>export PATH=...</code> line it printed, and add that line to <code>~/.zshrc</code> (macOS) or <code>~/.bashrc</code> (Linux) so it stays.</p>
+<p>Want to read the script first? Download it, read it, then run it:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>curl --proto &#39;=https&#39; --tlsv1.2 -fsSLO https://raw.githubusercontent.com/sgnd/komando/main/install.sh
+sh install.sh</code></pre>
+<p><code>KOMANDO_INSTALL_DIR=DIR</code> picks the folder, and <code>KOMANDO_VERSION=v0.14.1</code> picks one version (<code>KOMANDO_VERSION=v0.14.1 sh install.sh</code>).</p>
+<p>The installer installs a release only when it is signed with the komando project&#39;s key, the check <code>komando update</code> makes: someone who replaced a release&#39;s files cannot make it install them. It checks the signature with OpenSSL 3, or with perl where there is none (macOS has perl; its own <code>openssl</code> cannot check this kind of signature). A computer with neither gets nothing installed and is told to install one. Releases up to 0.13.0 have no signature: the installer knows the checksums each of them was released with, installs one (asked for with <code>KOMANDO_VERSION</code>) only when its files match them, and says so.</p>
+<h2 id="install-on-windows">Install on Windows</h2>
+<ol class="g-list g-list--ol"><li>Download <code>komando_windows_amd64.zip</code> (or <code>komando_windows_arm64.zip</code> on an ARM computer) from <a href="https://github.com/sgnd/komando/releases">Releases</a>.</li><li>Unpack <code>komando.exe</code> into a folder on your <code>PATH</code>.</li><li>Open PowerShell and run <code>komando version</code>.</li></ol>
+<p>What is different on Windows:</p>
+<ul class="g-list g-list--ul"><li>komando keeps its data in <code>%USERPROFILE%\.komando</code>. It gives that folder an access list of its own: only your user and the system can open it. <code>komando doctor</code> warns when a file inside lets anyone else in.</li><li>The vault key goes into Windows Credential Manager (see <a href="../settings/#where-komando-keeps-its-data">Where komando keeps its data</a>).</li><li>Paths use Windows form, for example a SQLite file <code>sqlite://C:\data\app.db</code>.</li><li>Browser sign-ins (VPN and cloud logins) open your default browser, as on macOS and Linux.</li></ul>
+<p>You can also run the Linux version inside <a href="https://learn.microsoft.com/windows/wsl/install">WSL</a>, with the macOS and Linux steps above.</p>
+<h2 id="other-ways-to-install">Other ways to install</h2>
+<ul class="g-list g-list--ul"><li>With Go installed: <code>go install github.com/sgnd/komando/cmd/komando@latest</code>.</li><li>Check that a downloaded archive was built by komando&#39;s release workflow:<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>gh attestation verify komando_linux_amd64.tar.gz --repo sgnd/komando</code></pre></li></ul>
+<h2 id="update">Update</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando update --dry-run   # is there a newer version? (changes nothing)
+komando update             # install the newest release</code></pre>
+<p><code>update</code> checks that the release is signed by the komando project, downloads the release for this computer, checks it against the release&#39;s signed checksums, runs the new program once to make sure it works here, and only then puts it in place. If anything fails, the old komando stays. Your servers, secrets and history in <code>~/.komando</code> stay as they are.</p>
+<p>After an update, run <code>komando guide install</code> again (without <code>sudo</code>), so your AI agents get the skill of the new version. Until then <code>komando doctor</code> says the skill is from another version.</p>
+<ul class="g-list g-list--ul"><li>komando is in a folder only root may change, such as <code>/usr/local/bin</code>? Run <code>sudo komando update</code>. As root it writes nothing in <code>~/.komando</code>.</li><li>On Windows the running <code>komando.exe</code> is renamed aside (Windows does not let a running program be replaced) and the new one takes its name.</li><li><code>komando update v0.14.1</code> installs that version (only releases after 0.13.0 are signed; see below for older ones). Going back to an older version asks you first, because an older komando may lack safety checks the newer one has. An AI agent needs <code>--yes</code> and your &#34;Allow once&#34;.</li><li><code>update</code> takes only a komando version. <code>komando update web1</code> is an error that points at <code>komando pkg upgrade web1</code>, which updates the packages on that server.</li><li>Without a version, <code>update</code> never goes back, even when the newest release is older than the komando you run.</li><li>A komando you built yourself from a commit between releases is not replaced (<code>SOURCE_BUILD</code>): build it again instead. One built at a release tag (<code>go install ...@v0.14.1</code>) counts as that release.</li><li>Run as you, the update is written to the audit log like any other change.</li><li><code>update</code> installs only a release signed with the komando project&#39;s key, which is built into komando. The release workflow signs <code>checksums.txt</code> (as <code>checksums.txt.sig</code>), so someone who replaced a release&#39;s files cannot make <code>update</code> install them. An unsigned release stops with <code>RELEASE_SIGNATURE_NOT_FOUND</code>, a wrong signature with <code>RELEASE_SIGNATURE_INVALID</code>; nothing is changed. Do not work around either for a new release: report it (<a href="https://github.com/sgnd/komando/blob/main/docs/features/../../SECURITY.md">SECURITY.md</a>). Releases up to 0.13.0 have no signature, so <code>komando update v0.13.0</code> stops too; to go back to one of them, use the install line with <code>KOMANDO_VERSION=v0.13.0</code>.</li><li>The signature covers the version too. From 0.15.0 on, the first line of <code>checksums.txt</code> names the release and the day it was made (<code>komando-release v0.15.0 2026-11-20</code>). <code>update</code> and the install line install a release only as the version that line names, so the signed files of an older release cannot pass as a newer one (<code>RELEASE_SIGNATURE_INVALID</code>). 0.14.0 and 0.14.1 were signed before the line: they install only when asked for by version. Checking by hand with <code>sha256sum -c checksums.txt</code> warns about this one line; the files still check.</li><li>Known limit: someone who controls the download could serve a real, older release as the newest. <code>update</code> then says komando is up to date (it never goes back on its own), and the install line installs that release and prints its version and date. Check them against the <a href="https://github.com/sgnd/komando/releases">releases page</a>.</li><li>To check the signed build provenance of a download as well, use <code>gh attestation verify</code> (see <a href="#other-ways-to-install">Other ways to install</a>).</li><li>It uses <code>HTTPS_PROXY</code>. <code>sudo</code> drops that variable; keep it with <code>sudo --preserve-env=HTTPS_PROXY komando update</code>.</li><li><code>--timeout</code> (default 10 minutes) limits the whole update. When GitHub answers with an error, it tries twice more.</li></ul>
+<p>Installed with <code>sudo</code> and the install line? Update the same way: <code>curl --proto &#39;=https&#39; --tlsv1.2 -fsSL https://raw.githubusercontent.com/sgnd/komando/main/install.sh | sudo sh</code>. Without <code>sudo</code> the installer cannot write there, puts the new version in <code>~/.local/bin</code>, and your terminal may keep running the old one. <code>komando version</code> shows which one runs.</p>
+<h2 id="tab-completion">Tab completion</h2>
+<p>Press Tab to complete commands, flags and the names of your servers, conns, groups and tags. Turn it on once, then open a new terminal:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>echo &#39;source &lt;(komando completion zsh)&#39; &gt;&gt; ~/.zshrc          # zsh (macOS)
+echo &#39;eval &#34;$(komando completion bash)&#34;&#39; &gt;&gt; ~/.bashrc        # bash (Linux)
+echo &#39;eval &#34;$(komando completion bash)&#34;&#39; &gt;&gt; ~/.bash_profile  # bash on macOS</code></pre>
+<p>For fish and PowerShell, see <code>komando completion --help</code>.</p>
+<h2 id="remove-komando">Remove komando</h2>
+<ol class="g-list g-list--ol"><li>Stop what komando still runs. <code>komando status</code> lists it; <code>komando vpn down --all</code> and <code>komando tunnel stop --all</code> stop it.</li><li>Take the skill and the guard out of your AI agents: <code>komando guide uninstall</code> (add <code>--project</code> in a folder where you ran <code>guide install --project</code>).</li><li>Keep a copy of <code>~/.komando</code> if you may need your servers or secrets again (see <a href="../import/#move-to-another-computer">Move to another computer</a>), then delete the folder. Is the vault key in the system keychain? If you keep the copy, first run <code>komando secret keychain --off</code>, or the copy cannot be opened later. Otherwise remove the keychain item named <code>komando vault ...</code> (macOS: the Keychain Access app; Windows: Credential Manager).</li><li>Delete the program: <code>rm &#34;$(command -v komando)&#34;</code> (with <code>sudo</code> when it is in <code>/usr/local/bin</code>; on Windows delete <code>komando.exe</code>), and the <code>export PATH=...</code> line you added, if any.</li></ol>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Error</th><th scope="col">What it means</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><code>NOT_WRITABLE</code> (exit 8)</td><td>komando&#39;s folder belongs to root</td><td>run the <code>sudo</code> command the hint gives</td></tr><tr><td><code>VERSION_NOT_FOUND</code> (exit 3)</td><td>no such release, or none for this computer</td><td>see the <a href="https://github.com/sgnd/komando/releases">list of releases</a></td></tr><tr><td><code>CONN_UNREACHABLE</code> (exit 4)</td><td>GitHub cannot be reached</td><td>check the internet connection and <code>HTTPS_PROXY</code></td></tr><tr><td><code>TIMEOUT</code> (exit 7)</td><td>the download took longer than <code>--timeout</code>; nothing changed</td><td><code>komando update --timeout 30m</code></td></tr><tr><td><code>CHECKSUM_MISMATCH</code>, <code>BAD_RELEASE</code> (exit 1)</td><td>the download is damaged or does not run here; nothing changed</td><td>try again; report it if it happens again</td></tr><tr><td><code>SOURCE_BUILD</code></td><td>this komando was built from source between releases</td><td>build it again from source</td></tr></tbody></table></div></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../switch-from-termius/"><span class="t-label muted">Previous</span>Switch from Termius</a><a class="g-pn g-pn--next" href="../servers/"><span class="t-label muted">Next</span>Servers</a></nav><p class="g-path t-small muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/install.md">docs/features/install.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../docs/">komando docs</a> · <a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

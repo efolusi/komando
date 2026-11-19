@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caches · komando docs</title>
+<meta name="description" content="Read and change keys in Redis-compatible caches (Redis, Valkey, KeyDB, Dragonfly) and memcached safely.">
+<link rel="canonical" href="https://komando.efolusi.com/docs/caches/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Docs"><details class="g-side__fold" open><summary>All docs pages</summary><p class="g-side__home"><a href="../">Docs home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../getting-started/">Getting started</a></li><li><a href="../switch-from-termius/">Switch from Termius</a></li></ul><p class="t-label g-side__group">Features</p><ul><li><a href="../install/">Install, update, remove</a></li><li><a href="../servers/">Servers</a></li><li><a href="../secrets/">Secrets</a></li><li><a href="../windows/">Windows servers</a></li><li><a href="../import/">Moving in and moving computers</a></li><li><a href="../targets/">Targets</a></li><li><a href="../commands/">Running commands</a></li><li><a href="../health/">Health and network checks</a></li><li><a href="../files/">Files</a></li><li><a href="../system/">Services, logs, Docker, packages, users</a></li><li><a href="../tunnels/">Private servers and tunnels</a></li><li><a href="../vpn/">VPNs</a></li><li><a href="../databases/">Databases</a></li><li><a href="../caches/" aria-current="page">Caches</a></li><li><a href="../queues/">Queues</a></li><li><a href="../storage/">Storage: buckets and file servers</a></li><li><a href="../cluster/">Clusters (Kubernetes and Docker Swarm)</a></li><li><a href="../cloud/">Cloud logins</a></li><li><a href="../registry/">Container registries</a></li><li><a href="../rotate/">Rotate keys and passwords, and when someone leaves</a></li><li><a href="../safety/">Safety</a></li><li><a href="../security-standards/">Security standards</a></li><li><a href="../output/">Results and errors</a></li><li><a href="../error-codes/">Error codes</a></li><li><a href="../settings/">Settings and files</a></li><li><a href="../glossary/">Glossary</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Docs</a> · Features</p><h1>Caches</h1><p class="g-lead t-lead">Read and change keys in Redis-compatible caches (Redis, Valkey, KeyDB, Dragonfly) and memcached safely.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#add-a-cache">Add a cache</a></li><li><a href="#look-at-data">Look at data</a></li><li><a href="#change-data">Change data</a></li><li><a href="#any-other-redis-command">Any other Redis command</a></li><li><a href="#check-change-rename-or-remove-a-cache">Check, change, rename or remove a cache</a></li><li><a href="#memcached">memcached</a></li><li><a href="#limits">Limits</a></li><li><a href="#troubleshooting">Troubleshooting</a></li><li><a href="#reference">Reference</a></li></ul></nav><div class="g-body"><h2 id="add-a-cache">Add a cache</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache add prod-redis redis://default@10.0.0.7:6379/0 --via web1 --ask-password
+komando test prod-redis                       # can komando reach it and log in?</code></pre>
+<p>Typed alone, <code>komando cache add</code> asks for each part step by step.</p>
+<p>The URL is <code>redis://USER@HOST:PORT/DB</code>; use <code>rediss://</code> for TLS. The password goes in the vault, never in the URL: <code>--ask-password</code> asks for it (hidden), or store it first and point at it:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando secret set prod-redis-pass            # each password once, typed hidden
+komando cache add prod-redis redis://default@10.0.0.7:6379/0 --via web1 --password-ref secret:prod-redis-pass</code></pre>
+<p><code>--via</code> reaches a cache through a bastion or a VPN, like any other conn (see <a href="../tunnels/">Tunnels</a> and <a href="../vpn/">VPNs</a>).</p>
+<p>At a terminal, a command with the cache or the key left out asks for just that, with a list of your caches to pick from, then shows the full command. Typed alone, <code>komando cache get</code> asks which cache, then the key. An AI agent, a script or a pipe never gets a question: the same command stops with <code>USAGE</code> (exit 2) and a hint with an example (<code>komando cache get prod-redis session:42</code>).</p>
+<h3 id="encryption-tls">Encryption (TLS)</h3>
+<p><code>redis://</code> straight over the network (no <code>--via</code>, not to this computer) sends the password and the data unencrypted, so <code>cache add</code> (and <code>conn edit --url</code>) refuses it with <code>INSECURE_PROTOCOL</code>: use <code>rediss://</code> or <code>--via</code>, or add <code>?insecure=1</code> to accept that the traffic is readable on the way (for an AI agent that needs a person&#39;s yes). The same goes for <code>memcached://</code>. A conn like that that is already in your list keeps working; <code>komando doctor</code> warns about it and prints the line that changes it.</p>
+<p><code>rediss://</code> and <code>memcacheds://</code> check the server&#39;s certificate against your computer&#39;s trusted CAs, or against your own with <code>?ca=secret:NAME</code> (a private CA, or a cloud&#39;s own):</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando secret set prod-redis-ca &lt; ca.pem
+komando cache add prod-redis &#39;rediss://default@cache.internal:6380/1?ca=secret:prod-redis-ca&#39; --password-ref secret:prod-redis-pass</code></pre>
+<h3 id="redis-cluster-and-sentinel">Redis Cluster and Sentinel</h3>
+<p>Add a Redis Cluster (or a Valkey cluster, or ElastiCache and MemoryDB in cluster mode) by one node&#39;s address with <code>?cluster=1</code>: komando finds the other nodes from it. Behind Sentinels, add a Sentinel&#39;s address with <code>?sentinel=</code> and the master&#39;s name: komando asks the Sentinels where the master is now, so a failover needs no change.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache add sessions &#39;rediss://default@clustercfg.sessions.abc123.cache.amazonaws.com:6379?cluster=1&#39; --password-ref secret:sessions-pass
+komando cache add jobs-redis &#39;redis://default@sentinel1:26379/0?sentinel=mymaster&amp;sentinels=sentinel2,sentinel3&#39; --via web1 --password-ref secret:jobs-redis-pass</code></pre>
+<ul class="g-list g-list--ul"><li>In a Cluster, <code>cache keys</code> scans every master and <code>cache info</code> adds up memory, clients and keys over them, with the cluster&#39;s state (<code>cluster_state</code>, <code>masters</code>). A command for one key goes to the node that holds it, and <code>cache rm</code> deletes keys of different slots one by one. <code>cache run -- DBSIZE</code> adds up every master.</li><li>Sentinels listen on 26379 when the URL names no port. More Sentinels go in <code>sentinels=HOST[:PORT],...</code>. The password is for Redis; when the Sentinels want it too, add <code>&amp;sentinel_auth=same</code>.</li><li>Through <code>--via</code>, every node and Sentinel is reached through the same bastion or VPN, with TLS for <code>rediss://</code>.</li></ul>
+<p>What a Cluster cannot do is under <a href="#limits">Limits</a>.</p>
+<h2 id="look-at-data">Look at data</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache get prod-redis session:42       # any type: string, hash, list, set, sorted set</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>key:   session:42
+type:  string
+ttl:   1740s
+size:  9 bytes
+value: logged-in</code></pre>
+<p>These commands only read:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache info prod-redis                 # a summary
+komando cache info prod-redis memory          # one raw INFO section
+komando cache info prod-redis --all           # every field of the default INFO sections
+komando cache keys prod-redis &#39;session:*&#39;     # keys matching a pattern (up to 100; --limit 1000)
+komando cache get prod-redis leaderboard --limit 10   # at most 10 items of a big hash or list</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>version:   7.2.4 (standalone)
+role:      master
+uptime:    12d
+memory:    1.2 GiB used of 4.0 GiB (eviction: allkeys-lru)
+clients:   37
+keys db0:  48210 (31002 with a ttl)
+hit rate:  94.1% (1830211 hits, 114502 misses)
+(all fields: --all, or a section such as memory or stats)</code></pre>
+<p><code>cache keys</code> uses <code>SCAN</code>, so it is safe on big caches. Never use <code>KEYS</code>. Each key shows its type and time to live, never its value:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>KEY        TYPE    TTL
+queue      list    2s
+session:1  string  1h
+session:2  hash    none</code></pre>
+<p>In JSON, <code>items</code> lists the same keys as <code>keys</code>, in the same order, each as <code>{&#34;key&#34;, &#34;type&#34;, &#34;ttl_seconds&#34;}</code>: <code>ttl_seconds</code> is -1 for no expiry and null when unknown, and <code>type</code> is null when the server refuses <code>TYPE</code> (an ACL without it). Redis reads <code>TYPE</code> and <code>PTTL</code> of the whole page in one round trip (one per master in a Cluster). On memcached every type is <code>string</code> and the time to live comes from the LRU crawler&#39;s listing. A <code>--limit</code> below 1 is a <code>USAGE</code> error. When more keys match, the list ends with <code>(first 100 keys; more match: narrow the pattern or raise --limit)</code>.</p>
+<h2 id="change-data">Change data</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache set prod-redis maintenance on --ttl 30m       # --ttl takes 30m, 24h, 7d
+komando cache set prod-redis feature:dark-mode on           # no --ttl: never expires</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>set maintenance (expires in 30m)</code></pre>
+<ul class="g-list g-list--ul"><li><code>cache set</code> stores a string and replaces any old value. <code>--ttl</code> must be positive. <code>set</code> and <code>get</code> both report <code>ttl_seconds</code> (<code>null</code> when the key never expires).</li><li>A protected conn asks a person at a terminal before every change; an AI agent or a script adds <code>--yes</code> after a person agrees (<code>PROTECTED_TARGET</code>, exit 6, without it).</li><li>Redis cannot undo, so <code>--dry-run</code> sends no change at all: <code>cache set</code> says whether the key exists and would be replaced, <code>cache rm</code> which keys exist.</li></ul>
+<h3 id="delete-keys">Delete keys</h3>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache rm prod-redis session:42 session:43 --dry-run   # which of these keys exist
+komando cache rm prod-redis session:42 session:43</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>would delete 1 key:
+  session:42
+  session:43 (does not exist)</code></pre>
+<p><code>cache rm</code> deletes keys by exact name (no patterns), and a deleted key cannot come back. At your terminal komando asks you first: you type the key&#39;s name (for several keys, how many). An AI agent or a script adds <code>--allow-dangerous</code> after a person agrees; without it, it gets <code>POLICY_BLOCKED</code> (exit 6). See <a href="../safety/#what-needs-a-yes">Safety</a>.</p>
+<h2 id="any-other-redis-command">Any other Redis command</h2>
+<p><code>cache run</code> sends any command. It only reads unless you add <code>--write</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache run prod-redis -- HGETALL user:42
+komando cache run prod-redis -- ZREVRANGE leaderboard 0 9 WITHSCORES
+komando cache run prod-redis --write -- EXPIRE session:42 3600
+komando cache run prod-redis -- &#34;GET feature:dark-mode&#34;   # one quoted line, split like redis-cli</code></pre>
+<p>Commands that delete, wipe, block, run scripts or reconfigure the server (<code>DEL</code>, <code>FLUSHALL</code>, <code>KEYS</code>, <code>EVAL</code>, <code>CONFIG SET</code>, <code>SHUTDOWN</code>, ...) are destructive, so they ask as <code>cache rm</code> does (<code>--allow-dangerous</code> for an agent). The error tells you the safer command to use instead (<code>cache keys</code> for <code>KEYS</code>, <code>cache rm</code> for <code>DEL</code>).</p>
+<ul class="g-list g-list--ul"><li>Read-only scripts (<code>EVAL_RO</code>, <code>EVALSHA_RO</code>, <code>FCALL_RO</code>) count as scripts: they cannot write, but one that loops makes Redis answer <code>BUSY</code> to every client until someone sends <code>SCRIPT KILL</code> (<code>FUNCTION KILL</code> for <code>FCALL_RO</code>).</li><li>Module code counts too: Redis Stack functions (<code>TFCALL</code>, <code>TFCALLASYNC</code>) and RedisGears (<code>RG.PYEXECUTE</code>, <code>RG.TRIGGER</code>).</li><li>Cluster and Sentinel administration counts too: <code>CLUSTER MEET</code>, <code>ADDSLOTS</code>, <code>FLUSHSLOTS</code>, <code>REPLICATE</code> (the node drops its own data), <code>SENTINEL SET</code>, <code>FAILOVER</code>, <code>REMOVE</code>, <code>CONFIG SET</code> and the like. <code>CLUSTER NODES</code>, <code>CLUSTER REPLICAS</code>, <code>SENTINEL MASTERS</code>, <code>SENTINEL GET-MASTER-ADDR-BY-NAME</code> and <code>SENTINEL CONFIG GET</code> only read.</li><li>So do commands that delete keys another way: <code>FT.DROPINDEX ... DD</code>, <code>FT.DROP</code> without <code>KEEPDOCS</code>, and <code>SET</code> or <code>GETEX</code> with an <code>EXAT</code> or <code>PXAT</code> time already past.</li><li><code>FUNCTION LOAD REPLACE</code> and <code>TFUNCTION LOAD REPLACE</code> count too: they swap the code behind functions the application already calls. A plain <code>FUNCTION LOAD</code> only needs <code>--write</code>.</li><li><code>CONFIG GET</code> only reads. For AI agents, the values of password settings (<code>requirepass</code>, <code>masterauth</code>, <code>tls-key-file-pass</code>, ...) and the password hashes in <code>ACL LIST</code> and <code>ACL GETUSER</code> show as <code>[hidden]</code>, even when a password is a word like <code>yes</code>. A hash field named like a secret (<code>password</code>, <code>token</code>, ...) is hidden the same over RESP2 and RESP3.</li></ul>
+<h2 id="check-change-rename-or-remove-a-cache">Check, change, rename or remove a cache</h2>
+<p>A cache is a conn, so the conn commands work on it:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando test prod-redis                       # can komando reach it and log in?
+komando conn show prod-redis                  # its URL, way in and password reference
+komando conn edit prod-redis --via web2       # reach it another way
+komando conn edit prod-redis --protected      # every change then needs a person&#39;s yes
+komando conn rename prod-redis sessions-redis
+komando conn rm prod-redis                    # remove it from your list (the cache is untouched)</code></pre>
+<h3 id="back-up-a-cache">Back up a cache</h3>
+<p>komando has no backup command for caches. Redis saves its own snapshot, which you can then fetch from its server:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache run prod-redis --write -- BGSAVE
+komando download web1 /var/lib/redis/dump.rdb --sudo --to ./</code></pre>
+<h2 id="memcached">memcached</h2>
+<p>The same commands work with memcached. The URL is <code>memcached://HOST:11211</code>; use <code>memcacheds://</code> for TLS. For a server started with <code>memcached -Y</code>, give a user in the URL and the password as a reference:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cache add prod-memcached memcached://cache.internal:11211 --via web1
+komando cache add app-memcached memcached://app@cache.internal:11211 --via web1 --password-ref secret:app-memcached-pass
+komando cache get prod-memcached session:42   # the value, and on 1.6+ its time to live
+komando cache keys prod-memcached &#39;session:*&#39; # through memcached&#39;s LRU crawler
+komando cache info prod-memcached             # a summary of `stats`; `info prod-memcached items` for one section
+komando cache run prod-memcached -- stats slabs</code></pre>
+<ul class="g-list g-list--ul"><li><code>cache set</code> and <code>cache rm</code> work as for Redis, with the same safety rules.</li><li><code>cache run</code> sends one command line and only reads unless <code>--write</code>. <code>flush_all</code> and commands that change or stop the server are destructive. Store values with <code>cache set</code>.</li><li>The line is split at spaces the way memcached reads it, and the command word is sent in lower case.</li></ul>
+<h2 id="limits">Limits</h2>
+<ul class="g-list g-list--ul"><li><code>cache rm</code> takes exact key names, never a pattern.</li><li><code>cache run</code> prints one reply, so commands that never stop sending (<code>MONITOR</code>, <code>SUBSCRIBE</code>, <code>PSUBSCRIBE</code>, <code>XREAD ... BLOCK</code>) stop with <code>NOT_SUPPORTED</code>. On memcached, <code>watch</code> never returns, so it stops the same way.</li><li>On memcached, a newline or other control character in a <code>cache run</code> line stops with <code>USAGE</code> (it would start a second command).</li><li>A Cluster has only database 0.</li><li>In a Cluster, <code>SCAN</code>, <code>RANDOMKEY</code>, <code>KEYS</code>, <code>FLUSHALL</code>, <code>FLUSHDB</code> and <code>SWAPDB</code> would reach one master only, so they stop with <code>NOT_SUPPORTED</code> (use <code>cache keys</code>; to flush, add each master as its own conn). A command over several keys of different slots (<code>MGET a b</code>) fails with <code>CROSSSLOT</code>: use one command per key, or a common <code>{tag}</code> in the key names.</li><li><code>cache keys</code> on memcached needs the LRU crawler (on by default since memcached 1.5).</li><li>komando has no backup command for caches (see <a href="#back-up-a-cache">Back up a cache</a>).</li></ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Error</th><th scope="col">What it means</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><code>CACHE_CONNECT</code></td><td>komando cannot reach the cache, or cannot check its certificate</td><td><code>komando test prod-redis</code>; for a private CA add <code>?ca=secret:NAME</code>, or reach it <code>--via</code> a server</td></tr><tr><td><code>CACHE_AUTH</code></td><td>the cache refused the login</td><td>check the user in the URL and the password reference (<code>komando conn show prod-redis</code>)</td></tr><tr><td><code>CACHE_ERROR</code></td><td>memcached cannot list keys</td><td>start memcached with the LRU crawler on; <code>cache get</code> works without it</td></tr><tr><td><code>INSECURE_PROTOCOL</code></td><td><code>redis://</code> or <code>memcached://</code> crosses the network unencrypted</td><td>use <code>rediss://</code> or <code>memcacheds://</code>, or <code>--via</code>, or add <code>?insecure=1</code></td></tr><tr><td><code>NOT_FOUND</code></td><td><code>cache info</code> asked for a section the server does not have</td><td><code>komando cache info prod-redis --all</code></td></tr><tr><td><code>NOT_SUPPORTED</code></td><td>a command that never returns, or one a Cluster cannot run on all masters</td><td>the hint says what to use instead</td></tr><tr><td><code>POLICY_BLOCKED</code></td><td>a destructive command without <code>--allow-dangerous</code> (exit 6)</td><td>run it at a terminal, or add the flag after a person agrees</td></tr><tr><td><code>PROTECTED_TARGET</code></td><td>a change on a protected cache without <code>--yes</code> (exit 6)</td><td>run it at a terminal, or add the flag after a person agrees</td></tr><tr><td><code>USAGE</code></td><td>an argument is missing or wrong (exit 2)</td><td>the hint shows a full example</td></tr></tbody></table></div>
+<p>Every code is in <a href="../error-codes/">Error codes</a>.</p>
+<h2 id="reference">Reference</h2>
+<h3 id="output">Output</h3>
+<p>Text output (<code>-o text</code>) looks like <code>redis-cli</code>: one item per line, numbered, nested replies indented. Strings are quoted when they hold spaces, quotes or control characters (a newline shows as <code>\n</code>), so a value never breaks the layout. A hash or map entry shows as <code>name: value</code>.</p>
+<p>JSON keeps values exactly as they are; binary values come as <code>{&#34;base64&#34;: &#34;...&#34;}</code>.</p></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../databases/"><span class="t-label muted">Previous</span>Databases</a><a class="g-pn g-pn--next" href="../queues/"><span class="t-label muted">Next</span>Queues</a></nav><p class="g-path t-small muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/caches.md">docs/features/caches.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../docs/">komando docs</a> · <a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

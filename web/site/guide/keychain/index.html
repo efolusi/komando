@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keychain · Komando guide</title>
+<meta name="description" content="Give komando the passwords and keys it needs, and put a key on a server.">
+<link rel="canonical" href="https://komando.efolusi.com/guide/keychain/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary><p class="g-side__home"><a href="../">Guide home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../first-ten-minutes/">Your first ten minutes</a></li><li><a href="../add-a-host/">Add a server</a></li><li><a href="../log-in/">Log in with a key or a password</a></li><li><a href="../add-a-connection/">Add a database, cache or anything else</a></li><li><a href="../home-and-findings/">Home and findings</a></li><li><a href="../the-window/">Find your way around the window</a></li></ul><p class="t-label g-side__group">Servers</p><ul><li><a href="../open-a-terminal/">Open a terminal</a></li><li><a href="../files/">Files and copying between servers</a></li><li><a href="../services/">Services</a></li><li><a href="../logs/">Logs</a></li><li><a href="../updates/">Updates</a></li><li><a href="../containers/">Containers</a></li><li><a href="../jobs/">Jobs</a></li></ul><p class="t-label g-side__group">Data and networks</p><ul><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../port-forwarding/">Port forwarding</a></li><li><a href="../vpn/">VPNs</a></li></ul><p class="t-label g-side__group">Tools</p><ul><li><a href="../keychain/" aria-current="page">Keychain</a></li><li><a href="../recipes/">Recipes</a></li><li><a href="../agent/">The agent</a></li></ul><p class="t-label g-side__group">Safety</p><ul><li><a href="../touch-id-and-safety/">Touch ID and safety</a></li><li><a href="../edit-or-remove/">Edit, protect or remove</a></li></ul><p class="t-label g-side__group">iPhone and iPad</p><ul><li><a href="../iphone-and-ipad/">Komando on iPhone and iPad</a></li></ul><p class="t-label g-side__group">About this guide</p><ul><li><a href="../coming/">What is coming</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Guide</a> · Tools</p><h1>Keychain</h1><p class="g-lead t-lead">Give komando the passwords and keys it needs, and put a key on a server.</p><p class="g-status"><span class="g-pill g-pill--static">Not released</span> The Komando apps are not released yet. This guide describes them as they will ship. The command line works today: see <a href="../../docs/getting-started/">Getting started</a>.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#what-is-on-the-page">What is on the page</a></li><li><a href="#a-missing-password">A missing password</a></li><li><a href="#add-or-replace-a-secret">Add or replace a secret</a></li><li><a href="#more-for-a-secret">More for a secret</a></li><li><a href="#keys">Keys</a></li><li><a href="#on-the-command-line">On the command line</a></li></ul></nav><div class="g-body"><p>komando keeps the passwords and keys it needs in its own keychain, encrypted. You give it a value once, and you never have to see it again. The <b>Keychain</b> page, under <b>More</b> in the sidebar, lists them.</p>
+<h2 id="what-is-on-the-page">What is on the page</h2>
+<p><b>Secrets</b> are passwords and tokens, one line each, named like <code>secret:prod-db-pass</code>, with what uses them. <b>SSH keys</b> are the keys komando logs in to servers with.</p>
+<p>Values are never shown on the page. With the <a href="../touch-id-and-safety/#the-touch-id-lock">Touch ID lock</a> on, the page asks for Touch ID before it opens.</p>
+
+<h2 id="a-missing-password">A missing password</h2>
+<p>When komando cannot connect to a target because its password is missing, every place that says so has <b>Add Password</b>: Home, the Findings tab, the target's row ("Password missing") and the top of the Keychain.</p>
+<ol class="g-list g-list--ol"><li>Click <b>Add Password</b>. The sheet opens with the name filled in, such as <code>secret:prod-db-pass</code>.</li><li>Type the password under <b>Value</b>.</li><li>Click <b>Save Secret</b>. A banner says the secret is in the keychain. The finding on Home clears on the next check.</li></ol>
+<h2 id="add-or-replace-a-secret">Add or replace a secret</h2>
+<ul class="g-list g-list--ul"><li><b>New Secret</b> in the header adds one. Type a <b>Name</b> and the <b>Value</b>, then <b>Save Secret</b>.</li><li>Right-click a secret and choose <b>Replace Value…</b> to change it, for example after you changed a database's password.</li><li>Komando never replaces a value without asking. When the name already has a value, <b>Save Secret</b> asks "Replace secret:prod-db-pass?" and says who logs in with it, such as "prod-db logs in with the new value from then on." The old value cannot be brought back. <b>Replace Value</b> saves it; <b>Cancel</b> stores nothing.</li><li>Before it stores anything, <b>Save Secret</b> reads komando's own list of secrets again, not the list on the screen. If komando cannot list its secrets, nothing is stored.</li><li>When a protected target uses the secret, komando asks "This target is protected" as well.</li><li><b>Copy Reference</b> copies <code>secret:NAME</code>, to paste where a form asks for a password reference.</li></ul>
+<h2 id="more-for-a-secret">More for a secret</h2>
+<p>A secret's ⋯ also holds:</p>
+<ul class="g-list g-list--ul"><li><b>Check Value…</b>: type a value to learn whether it matches the saved one, without showing either.</li><li><b>Show Value</b>: komando asks first in its own window; the value hides again after a few seconds.</li><li><b>Rename…</b> and <b>Copy to New Name…</b>.</li><li><b>Remove…</b>: type the name to confirm. komando refuses while a target still uses the secret, and the sheet says which one.</li></ul>
+<p>A server's old password stays here after you give it a new one (the new one gets its own name, such as <code>secret:web-2-pass-2</code>). Remove the old one when nothing uses it.</p>
+<p>If your keychain opens with a passphrase, <b>Change Passphrase…</b> beside the Secrets title changes it. A Terminal tab opens where komando asks for the new passphrase twice; Komando never sees it.</p>
+<h2 id="keys">Keys</h2>
+<ul class="g-list g-list--ul"><li><b>New Key…</b> makes a new key or imports a key file. See <a href="../log-in/#make-or-import-a-key">Make or import a key</a>.</li><li>Right-click a key for <b>Copy Public Key</b> (the line to add to <code>~/.ssh/authorized_keys</code> on a server) and <b>Copy Fingerprint</b> (to compare with what a server shows).</li><li><b>Put on a Host…</b> adds the key to a server, so it logs in with it from now on.</li><li><b>Revoke from a Host…</b> takes it off a server. komando counts the lines that hold it first. If that is the key komando itself logs in with, you would lock yourself out, so the sheet says so and asks you to type the key's name.</li><li><b>Rename…</b> and <b>Remove…</b>. Remove refuses while a server still uses the key.</li></ul>
+<h2 id="on-the-command-line">On the command line</h2>
+<p><code>komando secret set prod-db-pass</code> saves a secret, and <code>komando key</code> makes, lists, deploys and revokes keys.</p></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../vpn/"><span class="t-label muted">Previous</span>VPNs</a><a class="g-pn g-pn--next" href="../recipes/"><span class="t-label muted">Next</span>Recipes</a></nav><p class="g-path t-small muted">Help link for this page: <code>/guide/keychain/</code></p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Services · Komando guide</title>
+<meta name="description" content="See a server&#x27;s services and restart, stop or start one.">
+<link rel="canonical" href="https://komando.efolusi.com/guide/services/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary><p class="g-side__home"><a href="../">Guide home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../first-ten-minutes/">Your first ten minutes</a></li><li><a href="../add-a-host/">Add a server</a></li><li><a href="../log-in/">Log in with a key or a password</a></li><li><a href="../add-a-connection/">Add a database, cache or anything else</a></li><li><a href="../home-and-findings/">Home and findings</a></li><li><a href="../the-window/">Find your way around the window</a></li></ul><p class="t-label g-side__group">Servers</p><ul><li><a href="../open-a-terminal/">Open a terminal</a></li><li><a href="../files/">Files and copying between servers</a></li><li><a href="../services/" aria-current="page">Services</a></li><li><a href="../logs/">Logs</a></li><li><a href="../updates/">Updates</a></li><li><a href="../containers/">Containers</a></li><li><a href="../jobs/">Jobs</a></li></ul><p class="t-label g-side__group">Data and networks</p><ul><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../port-forwarding/">Port forwarding</a></li><li><a href="../vpn/">VPNs</a></li></ul><p class="t-label g-side__group">Tools</p><ul><li><a href="../keychain/">Keychain</a></li><li><a href="../recipes/">Recipes</a></li><li><a href="../agent/">The agent</a></li></ul><p class="t-label g-side__group">Safety</p><ul><li><a href="../touch-id-and-safety/">Touch ID and safety</a></li><li><a href="../edit-or-remove/">Edit, protect or remove</a></li></ul><p class="t-label g-side__group">iPhone and iPad</p><ul><li><a href="../iphone-and-ipad/">Komando on iPhone and iPad</a></li></ul><p class="t-label g-side__group">About this guide</p><ul><li><a href="../coming/">What is coming</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Guide</a> · Servers</p><h1>Services</h1><p class="g-lead t-lead">See a server&#x27;s services and restart, stop or start one.</p><p class="g-status"><span class="g-pill g-pill--static">Not released</span> The Komando apps are not released yet. This guide describes them as they will ship. The command line works today: see <a href="../../docs/getting-started/">Getting started</a>.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#see-the-services">See the services</a></li><li><a href="#restart-stop-or-start-a-service">Restart, stop or start a service</a></li><li><a href="#if-something-goes-wrong">If something goes wrong</a></li><li><a href="#on-the-command-line">On the command line</a></li></ul></nav><div class="g-body"><p>A service is a program a server keeps running in the background, such as a web server (<code>nginx</code>) or a database. The <b>Services</b> tab lists them, says which are running, and lets you restart one.</p>
+<h2 id="see-the-services">See the services</h2>
+<ol class="g-list g-list--ol"><li>Open the server (⌘K and its name, or its row on <b>Hosts</b>).</li><li>Click the <b>Services</b> tab.</li></ol>
+<p>Each service has a dot and a word for its state. Chips filter the list: <b>All</b>, <b>Running</b>, <b>Stopped</b> and <b>Failed</b> (with a count when some failed). <b>Filter services</b> finds one by its name or description.</p>
+<p>Click a service to see its status on the right: its state, how long it has been running, its main process, memory, restarts, and its last log lines. Reading changes nothing on the server.</p>
+
+<h2 id="restart-stop-or-start-a-service">Restart, stop or start a service</h2>
+<ol class="g-list g-list--ol"><li>Tick ☐ <b>Allow changes</b>. Until you do, the buttons are dimmed with "Tick Allow changes first", and the tab says "Allow changes is off: the services stay as they are."</li><li>Pick the service and click <b>Restart</b>, <b>Stop</b> or <b>Start</b>.</li><li>Komando shows the exact command and asks first. Confirm to run it.</li></ol>
+<p>The ⋯ beside the buttons holds <b>Reload</b> (the service reads its settings again without stopping), <b>Start at Boot</b> or <b>Don't Start at Boot</b>, and <b>Copy Name</b>.</p>
+<p>On a protected server, komando asks "This target is protected" before anything runs.</p>
+<aside class="g-note"><p>Untick ☐ Allow changes when you are done. It starts off again each time you open the tab.</p></aside>
+<h2 id="if-something-goes-wrong">If something goes wrong</h2>
+<ul class="g-list g-list--ul"><li>The server does not answer: a red banner with komando's message, and <b>Read Again</b>.</li><li>A change fails: Komando shows the service's state and the lines it wrote to its log, so you can see why.</li></ul>
+<h2 id="on-the-command-line">On the command line</h2>
+<p><code>komando svc</code> lists, checks, starts, stops and restarts services, and <code>komando svc logs</code> reads one service's log.</p></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../files/"><span class="t-label muted">Previous</span>Files and copying between servers</a><a class="g-pn g-pn--next" href="../logs/"><span class="t-label muted">Next</span>Logs</a></nav><p class="g-path t-small muted">Help link for this page: <code>/guide/services/</code></p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

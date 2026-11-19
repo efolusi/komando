@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home and findings · Komando guide</title>
+<meta name="description" content="See what needs attention and fix it with one button.">
+<link rel="canonical" href="https://komando.efolusi.com/guide/home-and-findings/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary><p class="g-side__home"><a href="../">Guide home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../first-ten-minutes/">Your first ten minutes</a></li><li><a href="../add-a-host/">Add a server</a></li><li><a href="../log-in/">Log in with a key or a password</a></li><li><a href="../add-a-connection/">Add a database, cache or anything else</a></li><li><a href="../home-and-findings/" aria-current="page">Home and findings</a></li><li><a href="../the-window/">Find your way around the window</a></li></ul><p class="t-label g-side__group">Servers</p><ul><li><a href="../open-a-terminal/">Open a terminal</a></li><li><a href="../files/">Files and copying between servers</a></li><li><a href="../services/">Services</a></li><li><a href="../logs/">Logs</a></li><li><a href="../updates/">Updates</a></li><li><a href="../containers/">Containers</a></li><li><a href="../jobs/">Jobs</a></li></ul><p class="t-label g-side__group">Data and networks</p><ul><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../port-forwarding/">Port forwarding</a></li><li><a href="../vpn/">VPNs</a></li></ul><p class="t-label g-side__group">Tools</p><ul><li><a href="../keychain/">Keychain</a></li><li><a href="../recipes/">Recipes</a></li><li><a href="../agent/">The agent</a></li></ul><p class="t-label g-side__group">Safety</p><ul><li><a href="../touch-id-and-safety/">Touch ID and safety</a></li><li><a href="../edit-or-remove/">Edit, protect or remove</a></li></ul><p class="t-label g-side__group">iPhone and iPad</p><ul><li><a href="../iphone-and-ipad/">Komando on iPhone and iPad</a></li></ul><p class="t-label g-side__group">About this guide</p><ul><li><a href="../coming/">What is coming</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Guide</a> · Start here</p><h1>Home and findings</h1><p class="g-lead t-lead">See what needs attention and fix it with one button.</p><p class="g-status"><span class="g-pill g-pill--static">Not released</span> The Komando apps are not released yet. This guide describes them as they will ship. The command line works today: see <a href="../../docs/getting-started/">Getting started</a>.</p><p class="g-status"><span class="g-pill g-pill--static">Coming</span> Parts of this page are not built yet; they are marked. <a href="../coming/">What is coming</a></p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#the-three-sections">The three sections</a></li><li><a href="#fix-a-finding">Fix a finding</a></li><li><a href="#every-finding">Every finding</a></li><li><a href="#security-updates">Security updates</a></li><li><a href="#after-komando-updates-to-0-15-0">After komando updates to 0.15.0</a></li><li><a href="#on-the-command-line">On the command line</a></li></ul></nav><div class="g-body"><p>Home is the first place in the sidebar (⌘1). It tells you what needs attention, what is running, and what happened lately, so you do not have to read komando's output.</p>
+<h2 id="the-three-sections">The three sections</h2>
+<ul class="g-list g-list--ul"><li><b>Needs attention</b>: up to two findings, each one sentence ("web-1 allows root to log in with a password."), what the button does, and the button. A finding is something komando's health check, its doctor, found wrong.</li><li><b>Running now</b>: VPNs and forwards that are up, and a line such as "3 background jobs" with <b>View</b>.</li><li><b>Recent activity</b>: what happened lately, with a link to the <b>Audit Log</b>.</li></ul>
+<p>When nothing needs attention, the section says "Everything looks fine." with <b>Refresh</b>.</p>
+
+<h2 id="fix-a-finding">Fix a finding</h2>
+<p>Each finding has one button. What it does:</p>
+<ul class="g-list g-list--ul"><li><b>Fix</b>: komando changes the setting for you. It asks first, "Run the fix?", and shows what changes and the exact command, each word as it will run, with any hidden character spelled out. Click <b>Run the Fix</b>.</li><li><b>Protect Host</b> or <b>Protect Connection</b>: marks the target protected, so every change on it asks first. It asks "Protect staging-db?" first.</li><li><b>Remove Connection</b>, <b>Remove Host</b> or <b>Remove Group</b>: takes out what the finding names, such as a connection that copies another one. It asks first.</li><li><b>Add Password</b>: opens a sheet to save the missing password. See <a href="../keychain/#a-missing-password">Keychain</a>.</li><li><b>View</b>: opens the target's tab.</li><li><b>How to Fix</b>: for something komando cannot change for you, because it needs a file, a value or a decision only you have. It shows komando's own words and the command to run, with <b>Copy Command</b>, which copies one line and says "Copied". It changes nothing. Click <b>Close</b> when you are done.</li></ul>
+<p>A finding gets a one-click button only when its command changes komando's own setup on this Mac and needs no safety flag. A command that runs on a server, such as restarting a service, always shows under <b>How to Fix</b>, for you to run yourself.</p>
+<p>After a fix, a banner says "Done. web-1 is fixed; the finding clears on the next check."</p>
+<p><b>Cancel</b> on any question changes nothing. On a protected target the question also says komando will run it with <code>--yes</code>.</p>
+<h2 id="every-finding">Every finding</h2>
+<p>Click <b>View all</b> in Needs attention, or choose <b>Go</b> › <b>All Findings</b>. The Findings tab lists every finding, then <b>Passed</b> with the checks that are fine. <b>Refresh</b> runs the checks now.</p>
+<h2 id="security-updates">Security updates</h2>
+<p>A card for servers with security updates waiting is coming to Home. <a class="g-pill" href="../coming/#home-updates" title="Security updates on Home: not built yet">Coming</a> Today, open a server's <a href="../updates/">Updates</a> tab.</p>
+<h2 id="after-komando-updates-to-0-15-0">After komando updates to 0.15.0</h2>
+<p>komando 0.15.0 checks forwards, VPN connections and server logins more strictly. The ones an older komando started count as ended after the update.</p>
+<p>Once, after the update, Home shows a note at the top: "komando was updated. Forwards, VPN connections and server logins started before the update have ended. Start them again where you need them." Close it with ✕. On iPhone and iPad the note names the komando computer.</p>
+<h3 id="before-you-update">Before you update</h3>
+<p>End them yourself first, so nothing is left running in the background:</p>
+<p>``<code>bash komando vpn down --all </code>``</p>
+<p>``<code>bash komando tunnel stop --all </code>``</p>
+<p>``<code>bash komando logout SERVER </code>``</p>
+<p>Run the last line once for each server you logged in to with <code>komando login</code>. Then update:</p>
+<p>``<code>bash komando update </code>``</p>
+<p>After the update, start your forwards and VPN connections again where you need them.</p>
+<h3 id="if-you-already-updated">If you already updated</h3>
+<p>The old connections may still run in the background. A new VPN connection to the same network can then fail. Restart your Mac, or quit the old <code>komando</code> and <code>openconnect</code> processes in Activity Monitor, then connect again.</p>
+<p>This happens only once, for the update to 0.15.0. Later updates keep running connections.</p>
+<h2 id="on-the-command-line">On the command line</h2>
+<p><code>komando doctor</code> runs the same checks.</p></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../add-a-connection/"><span class="t-label muted">Previous</span>Add a database, cache or anything else</a><a class="g-pn g-pn--next" href="../the-window/"><span class="t-label muted">Next</span>Find your way around the window</a></nav><p class="g-path t-small muted">Help link for this page: <code>/guide/home-and-findings/</code></p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

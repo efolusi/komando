@@ -1,0 +1,100 @@
+/* The user guide: the site's system.css (nav, wrap, type, footer) plus the reading layout below.
+   Colours and spacing come from system.css tokens only. */
+
+.g-main { padding-top: calc(var(--nav) + var(--s-7)); padding-bottom: var(--s-9); }
+.g-grid { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: var(--s-8); align-items: start; }
+
+/* the list of every page, at the left; on a narrow screen it folds above the article */
+.g-side { position: sticky; top: calc(var(--nav) + var(--s-5)); max-height: calc(100vh - var(--nav) - var(--s-6)); overflow-y: auto; font-size: var(--t-small); }
+.g-side summary { display: none; }
+.g-side ul { display: grid; gap: 2px; margin-bottom: var(--s-4); }
+.g-side a { display: block; padding: 4px var(--s-2); margin-left: calc(-1 * var(--s-2)); border-radius: var(--r-sm); color: var(--muted); }
+.g-side a:hover { color: var(--ink); background: var(--surface); }
+.g-side a[aria-current="page"] { color: var(--ink); background: var(--surface); font-weight: 500; box-shadow: inset 2px 0 0 #1659ff; }
+.g-side__group { color: var(--ink); margin: 0 0 var(--s-2); }
+.g-side__home { margin-bottom: var(--s-4); }
+
+.g-article { max-width: 720px; min-width: 0; }
+.g-crumb { margin-bottom: var(--s-3); }
+.g-crumb a:hover { color: var(--ink); text-decoration: underline; }
+.g-article h1 { font-size: clamp(32px, 2vw + 22px, 48px); margin-bottom: var(--s-4); }
+.g-lead { color: var(--muted); max-width: 60ch; margin-bottom: var(--s-5); }
+.g-status { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); font-size: var(--t-small); color: var(--muted); margin-bottom: var(--s-5); }
+.g-status a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+
+.g-toc { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); padding: var(--s-4) var(--s-5); margin-bottom: var(--s-6); }
+.g-toc ul { display: grid; gap: var(--s-1); margin-top: var(--s-2); font-size: var(--t-small); }
+.g-toc a { text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
+.g-toc a:hover { text-decoration-color: currentColor; }
+
+/* the page text */
+.g-body { font-size: 17px; line-height: 1.65; }
+.g-body > * + * { margin-top: var(--s-4); }
+.g-body h2 { font-size: clamp(24px, 1vw + 18px, 30px); margin-top: var(--s-7); scroll-margin-top: calc(var(--nav) + var(--s-4)); }
+.g-body h3 { font-size: 20px; margin-top: var(--s-6); scroll-margin-top: calc(var(--nav) + var(--s-4)); }
+.g-body h2 + *, .g-body h3 + * { margin-top: var(--s-3); }
+.g-body a, .g-intro a { text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
+.g-body a:hover { text-decoration-color: currentColor; }
+.g-body b { font-weight: 600; }
+.g-body code, .g-path code, .g-shot figcaption code { font-family: var(--font-mono); font-size: 0.88em; padding: 1px 5px; border-radius: 4px; background: var(--surface); border: 1px solid var(--line); overflow-wrap: anywhere; }
+.g-list { padding-left: 1.4em; display: grid; gap: var(--s-2); }
+.g-list--ol { list-style: decimal; }
+.g-list--ul { list-style: disc; }
+.g-list li::marker { color: var(--muted); }
+.g-note { border-left: 3px solid #1659ff; background: var(--surface); border-radius: 0 var(--r-md) var(--r-md) 0; padding: var(--s-3) var(--s-4); }
+
+/* "Coming": a part that is not built yet; it links to its entry on the What is coming page */
+.g-pill { display: inline-block; vertical-align: 0.1em; font: 500 12px/1 var(--font-text); letter-spacing: 0.01em; padding: 4px 8px; border-radius: 999px;
+  color: #8a4100; background: #fbefe4; border: 1px solid #f0d3b8; text-decoration: none !important; white-space: nowrap; }
+a.g-pill:hover { border-color: #8a4100; }
+.g-coming { border-top: 1px solid var(--line); padding-top: var(--s-5); scroll-margin-top: calc(var(--nav) + var(--s-4)); }
+.g-coming h2 { margin-top: 0; }
+
+/* a screenshot, or its placeholder until guide/shots/NAME.png exists */
+.g-shot { margin-block: var(--s-5); }
+.g-shot img { width: 100%; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--surface); }
+.g-shot figcaption { margin-top: var(--s-2); font-size: var(--t-small); color: var(--muted); }
+
+.g-pager { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); margin-top: var(--s-8); }
+.g-pn { display: grid; gap: var(--s-1); padding: var(--s-4); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); font-weight: 500; }
+.g-pn:hover { border-color: var(--line-strong); }
+.g-pn--next { text-align: right; grid-column: 2; }
+.g-path { margin-top: var(--s-6); }
+
+/* the guide's index */
+.g-article--index { max-width: 960px; }
+.g-intro { margin-bottom: var(--s-6); max-width: 64ch; }
+.g-group + .g-group { margin-top: var(--s-7); }
+.g-group h2 { font-size: 24px; margin-bottom: var(--s-4); }
+.g-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--s-3); }
+.g-card { display: grid; align-content: start; gap: var(--s-2); padding: var(--s-4) var(--s-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); }
+.g-card:hover { border-color: var(--line-strong); }
+.g-card .g-pill { justify-self: start; }
+
+.g-footer { padding-block: 0 var(--s-6); border-top: 0; }
+.g-footer .footer__legal { margin-top: 0; }
+.g-footer a:hover { color: var(--ink); text-decoration: underline; }
+
+@media (max-width: 1023px) {
+  .g-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+  .g-side { position: static; max-height: none; overflow: visible; }
+  .g-side summary { display: list-item; cursor: pointer; font-weight: 500; padding: var(--s-3) var(--s-4); }
+  .g-side__fold { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
+  .g-side__fold[open] { padding-bottom: var(--s-2); }
+  .g-side__fold > :not(summary) { padding-inline: var(--s-4); }
+  .g-side a { margin-left: 0; }
+}
+@media (max-width: 639px) {
+  .g-main { padding-top: calc(var(--nav) + var(--s-5)); }
+  .g-body { font-size: 16px; }
+  .g-pager { grid-template-columns: 1fr; }
+  .g-pn--next { grid-column: 1; }
+}
+
+/* dark mode (the tokens switch in each page's head): the few colours set here by hand get their dark pair */
+@media (prefers-color-scheme: dark) {
+  .g-side a[aria-current="page"] { box-shadow: inset 2px 0 0 #7aa5ff; }
+  .g-note { border-left-color: #7aa5ff; }
+  .g-pill { color: #ffb37a; background: #3a2a1c; border-color: #6b4524; }
+  a.g-pill:hover { border-color: #ffb37a; }
+}

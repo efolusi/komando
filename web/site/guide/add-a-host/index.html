@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Add a server · Komando guide</title>
+<meta name="description" content="Put a server in the inventory, test it, and import the ones you already have.">
+<link rel="canonical" href="https://komando.efolusi.com/guide/add-a-host/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary><p class="g-side__home"><a href="../">Guide home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../first-ten-minutes/">Your first ten minutes</a></li><li><a href="../add-a-host/" aria-current="page">Add a server</a></li><li><a href="../log-in/">Log in with a key or a password</a></li><li><a href="../add-a-connection/">Add a database, cache or anything else</a></li><li><a href="../home-and-findings/">Home and findings</a></li><li><a href="../the-window/">Find your way around the window</a></li></ul><p class="t-label g-side__group">Servers</p><ul><li><a href="../open-a-terminal/">Open a terminal</a></li><li><a href="../files/">Files and copying between servers</a></li><li><a href="../services/">Services</a></li><li><a href="../logs/">Logs</a></li><li><a href="../updates/">Updates</a></li><li><a href="../containers/">Containers</a></li><li><a href="../jobs/">Jobs</a></li></ul><p class="t-label g-side__group">Data and networks</p><ul><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../port-forwarding/">Port forwarding</a></li><li><a href="../vpn/">VPNs</a></li></ul><p class="t-label g-side__group">Tools</p><ul><li><a href="../keychain/">Keychain</a></li><li><a href="../recipes/">Recipes</a></li><li><a href="../agent/">The agent</a></li></ul><p class="t-label g-side__group">Safety</p><ul><li><a href="../touch-id-and-safety/">Touch ID and safety</a></li><li><a href="../edit-or-remove/">Edit, protect or remove</a></li></ul><p class="t-label g-side__group">iPhone and iPad</p><ul><li><a href="../iphone-and-ipad/">Komando on iPhone and iPad</a></li></ul><p class="t-label g-side__group">About this guide</p><ul><li><a href="../coming/">What is coming</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Guide</a> · Start here</p><h1>Add a server</h1><p class="g-lead t-lead">Put a server in the inventory, test it, and import the ones you already have.</p><p class="g-status"><span class="g-pill g-pill--static">Not released</span> The Komando apps are not released yet. This guide describes them as they will ship. The command line works today: see <a href="../../docs/getting-started/">Getting started</a>.</p><p class="g-status"><span class="g-pill g-pill--static">Coming</span> Parts of this page are not built yet; they are marked. <a href="../coming/">What is coming</a></p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#add-a-server">Add a server</a></li><li><a href="#the-connection-test">The connection test</a></li><li><a href="#import-what-you-already-have">Import what you already have</a></li><li><a href="#groups">Groups</a></li><li><a href="#on-the-command-line">On the command line</a></li></ul></nav><div class="g-body"><p>A server, or host, is a computer you log in to over SSH. Add each one to komando's inventory once, and Komando can open a terminal, read its logs and services, and keep it updated.</p>
+<h2 id="add-a-server">Add a server</h2>
+<ol class="g-list g-list--ol"><li>Open <b>Hosts</b> in the sidebar and click <b>Add</b> (⌘N). On an empty Home, click <b>Add a Host</b>. Elsewhere, <b>Add</b> (⌘N) opens "What do you want to add?": click <b>Host</b>.</li><li>A <b>New Host</b> tab opens. Fill in:<ul class="g-list g-list--ul"><li><b>Name</b>: a short name with no spaces, such as <code>web-1</code>.</li><li><b>Address</b>: <code>user@address</code>, such as <code>deploy@10.0.0.4</code>. Add <code>:port</code> only when SSH does not listen on port 22, such as <code>deploy@10.0.0.4:2222</code>.</li></ul></li><li>Under <b>Log in with</b>, pick how Komando logs in: <b>SSH Agent</b>, <b>Saved Key</b> or <b>Password</b>. <a href="../log-in/">Log in with a key or a password</a> explains each one. <a class="g-pill" href="../coming/#ask-each-time" title="Ask each time, for a server or connection: not built yet">Coming</a> A password is stored as a new secret, such as <code>secret:web-1-pass</code>. It never overwrites a secret you already have: if that name is taken, Komando picks the next free one (<code>secret:web-1-pass-2</code>).</li><li>Optional:<ul class="g-list g-list--ul"><li><b>Groups</b>: names separated by commas, such as <code>production</code>. You can then run a recipe on the whole group as <code>@production</code>.</li><li><b>Reach through a server or VPN</b>: turn it on for a server you can only reach through another server (often called a bastion) or a VPN, then pick which.</li><li><b>Protected</b>: turn it on for production. Every change on a protected server asks you first.</li></ul></li><li>Click <b>Save Host</b> (⌘↩).</li></ol>
+<p><b>Save Host</b> stays dimmed until the name has no spaces, the address has an <code>@</code>, and the login you chose is complete.</p>
+
+<h2 id="the-connection-test">The connection test</h2>
+<p>After you save, Komando says "web-1 is in the inventory." and tests the connection: "Testing the connection…", then "Connected" with how long the server took to answer.</p>
+<p>Then click <b>Open web-1</b> to open the server as a tab, or <b>Close</b>.</p>
+<h3 id="check-the-host-key">Check the host key</h3>
+<p>A host key is how a server proves it is the same server each time. After the test, the form shows "Host key komando saved for web-1": the key's type (such as ED25519) and its whole fingerprint, with a button to copy it.</p>
+<p>Compare it with the fingerprint the server's owner gave you.</p>
+<ul class="g-list g-list--ul"><li>It matches: you are done.</li><li>It differs: someone may be between you and the server. Do not use web-1, and tell its owner. If you logged in with a password, the test already sent it to that server, so change that password.</li></ul>
+<p>Removing web-1 keeps the saved key. Once the owner gives you the right one, replace it in a terminal with the command the form shows: <code>komando host trust web-1 --reset</code>.</p>
+<h3 id="if-the-test-fails">If the test fails</h3>
+<p>The test says "Saved, but the test failed:" with komando's message and a hint. The server is in the inventory anyway, so you can fix it in place:</p>
+<ul class="g-list g-list--ul"><li>A wrong password: open <b>Edit Host…</b> and type the right one under <b>Set a new password</b>. See <a href="../log-in/#change-how-a-server-logs-in">Change how a server logs in</a>.</li><li>A wrong user or address: right-click the server on <b>Hosts</b>, choose <b>Edit Host…</b> and change <b>Address</b>.</li><li>The server is behind a VPN or another server: turn on <b>Reach through a server or VPN</b> in the same sheet.</li></ul>
+<p>Then open the server and click <b>Test</b> (⇧⌘T) on its Overview to try again.</p>
+<h2 id="import-what-you-already-have">Import what you already have</h2>
+<p>If you already keep servers in other tools, import them instead of typing each one.</p>
+<ol class="g-list g-list--ol"><li>Click <b>Add</b> (⌘N). Under "Or import what you already have", click the source, such as <b>SSH Config…</b>. On an empty Home, <b>Import from ~/.ssh/config</b> does the same, and so does <b>File</b> › <b>Import from SSH Config…</b>.</li><li>komando does a practice run that adds nothing, and lists what it would add.</li><li>Click <b>Import 3 Targets</b> (the button counts them). Komando says "Added 3 targets." and lists them.</li></ol>
+<p>The other sources are .pgpass, my.cnf, .env, kubeconfig, Docker, DBeaver, AWS, rclone and FileZilla. Entries from DBeaver arrive without their passwords: their rows say "Password missing", with <b>Add Password</b>. See <a href="../keychain/">Keychain</a>.</p>
+<p>If everything is already in the inventory, the sheet says "Nothing new to add."</p>
+
+<h2 id="groups">Groups</h2>
+<p>A group is a name you give several servers, such as <code>web</code> or <code>production</code>. It shows as a chip on <b>Hosts</b>, so you can filter the list, and you can run a recipe on all of them at once.</p>
+<ul class="g-list g-list--ul"><li>To put a server in a group, type the group's name under <b>Groups</b> when you add it.</li><li>To rename a group, click the group's ⋯ on <b>Hosts</b> and choose <b>Rename Group…</b>. The servers stay; only the name changes. <b>Remove Group…</b> in the same menu takes the group away and leaves the servers.</li><li>Putting several servers in a group at once, putting every imported server in a group, and changing how a whole group logs in are not in the app yet. <a class="g-pill" href="../coming/#group-tools" title="Group tools on Hosts: not built yet">Coming</a></li></ul>
+<h2 id="on-the-command-line">On the command line</h2>
+<p><code>komando host add</code> does the same as New Host, and <code>komando import ssh-config</code> (and the other sources) does the same as the import sheet.</p></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../first-ten-minutes/"><span class="t-label muted">Previous</span>Your first ten minutes</a><a class="g-pn g-pn--next" href="../log-in/"><span class="t-label muted">Next</span>Log in with a key or a password</a></nav><p class="g-path t-small muted">Help link for this page: <code>/guide/add-a-host/</code></p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

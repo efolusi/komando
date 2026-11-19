@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cloud logins · komando docs</title>
+<meta name="description" content="komando talks to AWS itself, with no aws CLI: it uses the profiles in your ~/.aws/config, and a person renews an SSO login with one command.">
+<link rel="canonical" href="https://komando.efolusi.com/docs/cloud/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Docs"><details class="g-side__fold" open><summary>All docs pages</summary><p class="g-side__home"><a href="../">Docs home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../getting-started/">Getting started</a></li><li><a href="../switch-from-termius/">Switch from Termius</a></li></ul><p class="t-label g-side__group">Features</p><ul><li><a href="../install/">Install, update, remove</a></li><li><a href="../servers/">Servers</a></li><li><a href="../secrets/">Secrets</a></li><li><a href="../windows/">Windows servers</a></li><li><a href="../import/">Moving in and moving computers</a></li><li><a href="../targets/">Targets</a></li><li><a href="../commands/">Running commands</a></li><li><a href="../health/">Health and network checks</a></li><li><a href="../files/">Files</a></li><li><a href="../system/">Services, logs, Docker, packages, users</a></li><li><a href="../tunnels/">Private servers and tunnels</a></li><li><a href="../vpn/">VPNs</a></li><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../queues/">Queues</a></li><li><a href="../storage/">Storage: buckets and file servers</a></li><li><a href="../cluster/">Clusters (Kubernetes and Docker Swarm)</a></li><li><a href="../cloud/" aria-current="page">Cloud logins</a></li><li><a href="../registry/">Container registries</a></li><li><a href="../rotate/">Rotate keys and passwords, and when someone leaves</a></li><li><a href="../safety/">Safety</a></li><li><a href="../security-standards/">Security standards</a></li><li><a href="../output/">Results and errors</a></li><li><a href="../error-codes/">Error codes</a></li><li><a href="../settings/">Settings and files</a></li><li><a href="../glossary/">Glossary</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Docs</a> · Features</p><h1>Cloud logins</h1><p class="g-lead t-lead">komando talks to AWS itself, with no aws CLI: it uses the profiles in your <code>~/.aws/config</code>, and a person renews an SSO login with one command.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#log-in-to-aws-iam-identity-center-sso">Log in to AWS IAM Identity Center (SSO)</a></li><li><a href="#use-an-aws-profile-in-a-conn">Use an AWS profile in a conn</a></li><li><a href="#add-a-conn-for-every-s3-bucket">Add a conn for every S3 bucket</a></li><li><a href="#see-and-end-an-aws-login">See and end an AWS login</a></li><li><a href="#google-cloud-and-azure">Google Cloud and Azure</a></li><li><a href="#limits">Limits</a></li><li><a href="#troubleshooting">Troubleshooting</a></li></ul></nav><div class="g-body"><h2 id="log-in-to-aws-iam-identity-center-sso">Log in to AWS IAM Identity Center (SSO)</h2>
+<p>For a profile in <code>~/.aws/config</code> that uses SSO (<code>sso_session</code> or <code>sso_start_url</code>), or a profile that assumes a role from one (<code>role_arn</code> with <code>source_profile</code>):</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando login aws --profile prod                                   # a person signs in once in the browser
+komando conn add backups &#39;s3://my-bucket/db?region=eu-west-1&#39; --option aws_profile=prod
+komando storage list backups                                       # uses the login until it runs out</code></pre>
+<p>komando shows a code and opens the AWS sign-in page in your browser. Confirm the same code there. The login is saved where the aws CLI keeps it (<code>~/.aws/sso/cache</code>, readable only by you), so komando, the AWS SDKs and the aws CLI all use it.</p>
+<ul class="g-list g-list--ul"><li>Without <code>--profile</code>, komando uses <code>AWS_PROFILE</code>, else <code>default</code>. It does not ask: the usual profile is the answer.</li><li><code>komando login aws --profile prod --dry-run</code> checks the profile and shows its sign-in page (<code>sso_start_url</code>) and region, and logs in to nothing.</li><li>A profile with keys in <code>~/.aws/credentials</code> needs no login. Running <code>komando login aws</code> for it says so (<code>AWS_FAILED</code>).</li><li>Cloud logins are lower case: <code>komando login AWS</code> stops with <code>USAGE</code> and points to <code>komando login aws</code>.</li><li>komando opens only an <code>https://</code> sign-in address in the browser. On a machine without a browser, open the printed address on any device.</li><li>Ctrl-C while komando waits for the sign-in stops it (<code>CANCELLED</code>); the old login, if any, stays as it was.</li></ul>
+<p><b>AI agents</b> cannot log in: the sign-in happens in a person&#39;s browser. An agent gets <code>NEEDS_PERSON</code> (exit 6) with the hint <i>ask the user to run <code>komando login aws --profile prod</code> in their own terminal</i>. After the person logs in, the agent&#39;s commands use that login. A script without a terminal gets <code>NEEDS_PERSON</code> (exit 6), as an agent does. komando never puts the token in a command line, its output or the audit log; the audit records only <code>login.aws</code> and the profile name.</p>
+<h2 id="use-an-aws-profile-in-a-conn">Use an AWS profile in a conn</h2>
+<p>A conn names a profile with <code>--option aws_profile=NAME</code>. komando reads the profile each time, so SSO, assumed roles and temporary keys work as the aws CLI uses them, and no key is stored in komando:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando conn add backups &#39;s3://my-bucket/db?region=eu-west-1&#39; --option aws_profile=prod   # S3
+komando conn add orders sqs://eu-west-1 --option aws_profile=prod                         # SQS
+komando registry add ecr registry://AWS@123456789012.dkr.ecr.eu-west-1.amazonaws.com --option aws_profile=prod
+komando conn edit backups --option aws_profile=staging                                    # another profile</code></pre>
+<ul class="g-list g-list--ul"><li>The region comes from the conn (<code>region=</code> for S3, the address for SQS and ECR), not from the profile.</li><li><code>aws_profile=default</code> uses the usual AWS chain: the <code>AWS_*</code> variables, the default profile, or the role of the machine komando runs on.</li><li>Secrets from AWS Secrets Manager (<code>--password-ref aws-sm:NAME</code>) use the usual chain too (<code>AWS_PROFILE</code> picks the profile).</li></ul>
+<p>See <a href="../storage/#aws-logins-sso-roles-temporary-keys">Storage</a>, <a href="../queues/#add-an-sqs-region">Queues</a> and <a href="../registry/">Container registries</a>.</p>
+<h2 id="add-a-conn-for-every-s3-bucket">Add a conn for every S3 bucket</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando import aws --dry-run      # what it would add
+komando import aws                # one storage conn per bucket of each profile
+komando import aws ~/work/aws-config</code></pre>
+<p>Each conn uses its profile (<code>aws_profile</code>), so no key is copied. A profile whose login has run out, or that has no keys, is skipped with a note saying what fixes it: <code>komando login aws --profile NAME</code> for an SSO profile, the credentials file for the others. Then run the import again. See <a href="../import/">Moving in</a>.</p>
+<p>With a FILE, the conns keep only each profile&#39;s name: later commands read <code>~/.aws/config</code> (or <code>AWS_CONFIG_FILE</code>), so put the profiles there too, or they stop with <code>AWS_PROFILE_NOT_FOUND</code>.</p>
+<h2 id="see-and-end-an-aws-login">See and end an AWS login</h2>
+<p><code>komando status</code> lists the SSO logins of the profiles in <code>~/.aws/config</code> (made by <code>komando login aws</code>, <code>aws sso login</code> or an AWS SDK): the profiles that share each one and when its token runs out. A login with a refresh token (<code>renews: true</code>) gets a new token by itself after that, for as long as the AWS session lasts.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando logout aws --profile prod   # end it now
+komando logout aws --all            # every SSO login of your profiles</code></pre>
+<p><code>komando logout aws</code> does what <code>aws sso logout</code> does: it tells AWS to end the token and deletes the login in <code>~/.aws/sso/cache</code>, so komando, the AWS SDKs and the aws CLI all need <code>komando login aws</code> again. Profiles that share the login (one <code>sso-session</code>) are logged out together. When AWS cannot be reached, the login on this computer still ends (<code>revoked: false</code>); the token then runs out by itself. It never shows the token.</p>
+<h2 id="google-cloud-and-azure">Google Cloud and Azure</h2>
+<p>Google Cloud and Azure sign-in are not available yet. What works instead:</p>
+<ul class="g-list g-list--ul"><li><b>Google Cloud</b>: your application default credentials (<code>GOOGLE_APPLICATION_CREDENTIALS</code>, or the file gcloud saved), or a service account key in the vault:<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando secret set gcs-key &lt; key.json
+komando conn add media gs://my-bucket/site --password-ref secret:gcs-key</code></pre></li><li><b>Azure</b>: an Azure blob conn takes the storage account key or a SAS token. Key Vault secrets (<code>--password-ref azure-kv:VAULT/NAME</code>) use a service principal (<code>AZURE_TENANT_ID</code>, <code>AZURE_CLIENT_ID</code>, <code>AZURE_CLIENT_SECRET</code>), a token the Azure CLI saved, or the machine&#39;s managed identity.<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando secret set blob-key
+komando conn add files azblob://mystorageacct@uploads --password-ref secret:blob-key</code></pre></li></ul>
+<p>Registries on Google Cloud and Azure log in the same way: see <a href="../registry/">Container registries</a>.</p>
+<p>A cloud login goes only to the cloud&#39;s own sign-in address:</p>
+<ul class="g-list g-list--ul"><li>A Google login file that names addresses (a workload or workforce identity file, <code>external_account</code>; an impersonated service account) is used only when they are Google&#39;s token services (<code>https://sts.googleapis.com/v1/token</code>, <code>https://iamcredentials.googleapis.com/...</code>).</li><li><code>AZURE_AUTHORITY_HOST</code> has to be one of Azure&#39;s sign-in hosts.</li><li>gcloud&#39;s login and the cloud registry logins never go to a conn with a CA of its own (<code>?ca=</code>) or <code>?resolve=</code>.</li></ul>
+<p>For an AI agent&#39;s command, more is fixed, because the agent sets the variables on its own command line:</p>
+<ul class="g-list g-list--ul"><li>As a Google login file only a gcloud login (<code>gcloud auth application-default login</code>) or a service account key is used; any other kind stops with <code>NEEDS_PERSON</code>: the user sets that login up in their own terminal.</li><li><code>AWS_ENDPOINT_URL</code>, <code>AWS_ENDPOINT_URL_*</code> and a profile&#39;s <code>endpoint_url</code> are not followed, nor a container credentials address (<code>AWS_CONTAINER_CREDENTIALS_FULL_URI</code>) that is not ECS&#39;s or EKS&#39;s. An emulator or VPC endpoint goes in the conn (<code>endpoint=</code>).</li><li>The file named by <code>AZURE_FEDERATED_TOKEN_FILE</code>, <code>AWS_WEB_IDENTITY_TOKEN_FILE</code> (or <code>web_identity_token_file</code> in an AWS profile) may not be a private key, komando&#39;s own data, a credential store or a file that holds secrets by its name: <code>NEEDS_PERSON</code> (no flag lifts it; the user sets the login up in their own terminal).</li></ul>
+<h2 id="limits">Limits</h2>
+<ul class="g-list g-list--ul"><li>Only AWS has a <code>komando login</code>; Google Cloud and Azure use the logins above.</li><li><code>aws</code>, <code>gcp</code> and <code>azure</code> (any case) cannot be the name of a new server, conn or VPN, as <code>all</code> cannot: those words are the cloud logins.</li></ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Code</th><th scope="col">What happened</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><code>AWS_LOGIN_REQUIRED</code> (exit 4)</td><td>the SSO login of the profile ran out, or was never made</td><td>a person runs <code>komando login aws --profile NAME</code>, the command in the hint</td></tr><tr><td><code>AWS_FAILED</code> (exit 4)</td><td>the profile has no SSO and gave no keys, or the role it assumes was refused</td><td>the hint says which: add the keys to <code>~/.aws/credentials</code>, or check the role and its source profile</td></tr><tr><td><code>AWS_PROFILE_NOT_FOUND</code> (exit 3)</td><td>the profile is not in <code>~/.aws/config</code> or <code>~/.aws/credentials</code></td><td>add it, or fix the conn&#39;s <code>--option aws_profile</code></td></tr><tr><td><code>NEEDS_PERSON</code> (exit 6)</td><td>an AI agent ran <code>komando login aws</code></td><td>the person runs it in their own terminal</td></tr><tr><td><code>CANCELLED</code> (exit 1)</td><td>Ctrl-C while waiting for the sign-in</td><td>run it again; the old login is unchanged</td></tr></tbody></table></div></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../cluster/"><span class="t-label muted">Previous</span>Clusters (Kubernetes and Docker Swarm)</a><a class="g-pn g-pn--next" href="../registry/"><span class="t-label muted">Next</span>Container registries</a></nav><p class="g-path t-small muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/cloud.md">docs/features/cloud.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../docs/">komando docs</a> · <a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

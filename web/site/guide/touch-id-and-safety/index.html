@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Touch ID and safety · Komando guide</title>
+<meta name="description" content="Allow changes, protected targets, the audit log and the Touch ID lock.">
+<link rel="canonical" href="https://komando.efolusi.com/guide/touch-id-and-safety/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary><p class="g-side__home"><a href="../">Guide home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../first-ten-minutes/">Your first ten minutes</a></li><li><a href="../add-a-host/">Add a server</a></li><li><a href="../log-in/">Log in with a key or a password</a></li><li><a href="../add-a-connection/">Add a database, cache or anything else</a></li><li><a href="../home-and-findings/">Home and findings</a></li><li><a href="../the-window/">Find your way around the window</a></li></ul><p class="t-label g-side__group">Servers</p><ul><li><a href="../open-a-terminal/">Open a terminal</a></li><li><a href="../files/">Files and copying between servers</a></li><li><a href="../services/">Services</a></li><li><a href="../logs/">Logs</a></li><li><a href="../updates/">Updates</a></li><li><a href="../containers/">Containers</a></li><li><a href="../jobs/">Jobs</a></li></ul><p class="t-label g-side__group">Data and networks</p><ul><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../port-forwarding/">Port forwarding</a></li><li><a href="../vpn/">VPNs</a></li></ul><p class="t-label g-side__group">Tools</p><ul><li><a href="../keychain/">Keychain</a></li><li><a href="../recipes/">Recipes</a></li><li><a href="../agent/">The agent</a></li></ul><p class="t-label g-side__group">Safety</p><ul><li><a href="../touch-id-and-safety/" aria-current="page">Touch ID and safety</a></li><li><a href="../edit-or-remove/">Edit, protect or remove</a></li></ul><p class="t-label g-side__group">iPhone and iPad</p><ul><li><a href="../iphone-and-ipad/">Komando on iPhone and iPad</a></li></ul><p class="t-label g-side__group">About this guide</p><ul><li><a href="../coming/">What is coming</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Guide</a> · Safety</p><h1>Touch ID and safety</h1><p class="g-lead t-lead">Allow changes, protected targets, the audit log and the Touch ID lock.</p><p class="g-status"><span class="g-pill g-pill--static">Not released</span> The Komando apps are not released yet. This guide describes them as they will ship. The command line works today: see <a href="../../docs/getting-started/">Getting started</a>.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#allow-changes">Allow changes</a></li><li><a href="#protected-targets">Protected targets</a></li><li><a href="#the-questions-komando-asks">The questions komando asks</a></li><li><a href="#the-audit-log">The audit log</a></li><li><a href="#copy-gives-one-clean-line">Copy gives one clean line</a></li><li><a href="#the-touch-id-lock">The Touch ID lock</a></li><li><a href="#on-iphone-and-ipad">On iPhone and iPad</a></li><li><a href="#on-the-command-line">On the command line</a></li></ul></nav><div class="g-body"><p>Komando is built so that you cannot change a server by accident. Reading is always safe; changing needs a tick, a question, or both. This page explains the safety controls, the audit log, and the Touch ID lock.</p>
+<h2 id="allow-changes">Allow changes</h2>
+<p>Pages that can change something (Services, Updates, Containers, the database Query tab, the cache Keys tab, and the agent) have one box: ☐ <b>Allow changes</b>.</p>
+<ul class="g-list g-list--ul"><li>While it is off, the buttons that change things are dimmed, with "Tick Allow changes first". A database refuses any change, even one you type by hand.</li><li>Ticked, the page says what happens next, such as "Allow changes is on: every change asks before it runs."</li><li>It starts off again each time you open the page.</li></ul>
+<h2 id="protected-targets">Protected targets</h2>
+<p>Turn on <b>Protected</b> for production servers and databases, when you add them or in <b>Edit Host…</b> / <b>Edit…</b>. On a protected target, every change asks "This target is protected" first, with the exact command and <b>Run Anyway</b>. <b>Cancel</b> runs nothing.</p>
+<h2 id="the-questions-komando-asks">The questions komando asks</h2>
+<p>komando stops a risky command and Komando asks you, in plain words, once:</p>
+<ul class="g-list g-list--ul"><li>"This changes data", with <b>Allow Writes</b>, when a query would change a database while ☐ Allow changes is off.</li><li>"This target is protected", with <b>Run Anyway</b>.</li><li>"This command looks destructive", for a command that could do damage, such as removing a package the server needs.</li></ul>
+<p>Each question shows the exact command and names the one flag your yes adds (<code>--write</code>, <code>--yes</code> or <code>--allow-dangerous</code>). Your yes covers that one command only; the next one asks again. <b>Cancel</b> always runs nothing.</p>
+<h2 id="the-audit-log">The audit log</h2>
+<p>The audit log is komando's record of every change it made and every attempt it blocked.</p>
+<ol class="g-list g-list--ol"><li>Open <b>Audit Log</b> under <b>More</b>, or click <b>Audit Log</b> under Recent activity on Home.</li><li>Newest first: when, who (you or the agent), the command, the targets, and the result (Done, Failed, or Blocked when komando stopped it).</li><li>Chips filter it: <b>All</b>, <b>Changes</b>, <b>Failed</b>, <b>Agent</b>. The <b>Last 200</b> menu shows more.</li><li>Click a row for the exact command and who allowed it. A row the agent ran has <b>Open Conversation</b>. Drag the line beside the details to make them wider or narrower.</li><li>Right-click a row for <b>Copy Command</b> (a line komando takes, with what ran), <b>Show Target</b> (opens that server or connection) and <b>Show Only This Target</b> (lists only its entries).</li></ol>
+<p>To check that nobody edited the record, click ⋯ › <b>Verify the Record…</b>. If something was changed outside komando, Home shows a finding.</p>
+
+<h2 id="copy-gives-one-clean-line">Copy gives one clean line</h2>
+<p>A name or an address can come from a server, and a server could hide a line break or a control code in it. Pasted into a terminal, that could run a second command you never saw.</p>
+<p>So on the Mac, <b>Copy Name</b>, <b>Copy ID</b>, <b>Copy Address</b>, <b>Copy Key Name</b>, <b>Copy Local Address</b> and <b>Copy Command</b> always copy one line, with the hidden codes taken out. ⌘C in a table copies each cell on one line, so a cell cannot add a row.</p>
+<p>When a copy worked, Komando says "Copied" for a moment above the page.</p>
+<h2 id="the-touch-id-lock">The Touch ID lock</h2>
+<p>Lock Komando so that the next person at your Mac cannot open your servers in the app.</p>
+<aside class="g-note"><p>The lock covers the Komando app only. It does not stop someone at your Mac from running <code>komando</code> in the Terminal app, which reaches the same servers. Lock your Mac itself (Control-Command-Q) when you walk away.</p></aside>
+<ol class="g-list g-list--ol"><li>Open <b>Settings</b> (⌘,), <b>General</b> tab.</li><li>Turn on <b>Lock Komando with Touch ID</b>. macOS asks for Touch ID, or your Mac's password, to turn it on.</li></ol>
+<p>From then on:</p>
+<ul class="g-list g-list--ul"><li>When Komando opens, it says "Komando is locked". Click <b>Unlock</b> and use Touch ID or your Mac's password.</li><li>The Keychain page asks again on each visit, unless you unlocked in the last few minutes.</li><li>Komando locks again when your Mac locks or sleeps. While it is locked nothing shows and nothing runs; terminal sessions keep running in the background.</li><li>The menu bar shows only "Komando is locked", <b>Open Komando</b> and <b>Quit Komando</b>.</li></ul>
+<p>Turning the lock off asks for Touch ID too. Without Touch ID, your Mac's password works, so nobody is locked out.</p>
+
+<h2 id="on-iphone-and-ipad">On iPhone and iPad</h2>
+<p>On the phone, every change asks for Face ID first. See <a href="../iphone-and-ipad/">Komando on iPhone and iPad</a>.</p>
+<h2 id="on-the-command-line">On the command line</h2>
+<p>komando asks the same questions in the Terminal app, and names the flag that allows the command (<code>--yes</code>, <code>--write</code>, <code>--allow-dangerous</code>). <code>komando audit</code> and <code>komando audit verify</code> show and check the log.</p></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../agent/"><span class="t-label muted">Previous</span>The agent</a><a class="g-pn g-pn--next" href="../edit-or-remove/"><span class="t-label muted">Next</span>Edit, protect or remove</a></nav><p class="g-path t-small muted">Help link for this page: <code>/guide/touch-id-and-safety/</code></p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

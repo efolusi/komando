@@ -1,0 +1,26 @@
+/* The komando docs: guide.css (the reading layout) plus what the command line docs have and the guide does not:
+   code blocks, tables and #### headings. Colours and spacing come from system.css tokens only. */
+
+.d-code { font-family: var(--font-mono); font-size: 14px; line-height: 1.55; padding: var(--s-3) var(--s-4);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); overflow-x: auto; tab-size: 4; }
+.d-code code { white-space: pre; }
+
+/* a wide table scrolls inside its own box, so the page never scrolls sideways on a phone */
+.d-table { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
+.d-table:focus-visible, .d-code:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.d-table table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.5; }
+.d-table th, .d-table td { text-align: left; vertical-align: top; padding: var(--s-2) var(--s-3); border-bottom: 1px solid var(--line); }
+.d-table th { font-weight: 600; }
+.d-table tbody tr:last-child td { border-bottom: 0; }
+.d-table td code { white-space: nowrap; overflow-wrap: normal; }
+.d-table td:last-child code { white-space: normal; overflow-wrap: anywhere; }
+
+.g-body h4 { font-size: 17px; font-weight: 600; margin-top: var(--s-5); scroll-margin-top: calc(var(--nav) + var(--s-4)); }
+.g-body li { min-width: 0; }
+.g-body li > * + * { margin-top: var(--s-2); }
+.g-note > * + * { margin-top: var(--s-2); }
+
+@media (max-width: 639px) {
+  .d-code { font-size: 13px; }
+  .d-table table { font-size: 14px; }
+}

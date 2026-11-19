@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+.wrangler/
+web/dist/
+web/site/.taste-skill/
+web/site/shots/

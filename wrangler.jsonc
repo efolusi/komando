@@ -1,0 +1,18 @@
+// The komando website as a Cloudflare Worker with static assets only (owner, 2026-11-18: web frontends
+// deploy as Workers). There is no Worker script: Cloudflare serves web/dist as it is, and reads the
+// _headers file that web/deploy/build_dist.py writes into it (CSP, HSTS and the other safety headers).
+// Deployed by .github/workflows/deploy-site.yml from a v* tag on main.
+// Test: web/deploy/test_build_dist.py checks this file.
+{
+  "name": "komando",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./web/dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  // The custom domain (owner's yes for the cut-over, 2026-11-19); workers.dev stays for checks.
+  "routes": [{ "pattern": "komando.efolusi.com", "custom_domain": true }],
+  "workers_dev": true,
+  "preview_urls": false
+}

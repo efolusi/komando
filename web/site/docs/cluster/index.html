@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clusters (Kubernetes and Docker Swarm) · komando docs</title>
+<meta name="description" content="See and change what runs in Kubernetes and Docker Swarm with one set of commands. You do not need kubectl or docker on your computer: komando speaks to the cluster itself.">
+<link rel="canonical" href="https://komando.efolusi.com/docs/cluster/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Docs"><details class="g-side__fold" open><summary>All docs pages</summary><p class="g-side__home"><a href="../">Docs home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../getting-started/">Getting started</a></li><li><a href="../switch-from-termius/">Switch from Termius</a></li></ul><p class="t-label g-side__group">Features</p><ul><li><a href="../install/">Install, update, remove</a></li><li><a href="../servers/">Servers</a></li><li><a href="../secrets/">Secrets</a></li><li><a href="../windows/">Windows servers</a></li><li><a href="../import/">Moving in and moving computers</a></li><li><a href="../targets/">Targets</a></li><li><a href="../commands/">Running commands</a></li><li><a href="../health/">Health and network checks</a></li><li><a href="../files/">Files</a></li><li><a href="../system/">Services, logs, Docker, packages, users</a></li><li><a href="../tunnels/">Private servers and tunnels</a></li><li><a href="../vpn/">VPNs</a></li><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../queues/">Queues</a></li><li><a href="../storage/">Storage: buckets and file servers</a></li><li><a href="../cluster/" aria-current="page">Clusters (Kubernetes and Docker Swarm)</a></li><li><a href="../cloud/">Cloud logins</a></li><li><a href="../registry/">Container registries</a></li><li><a href="../rotate/">Rotate keys and passwords, and when someone leaves</a></li><li><a href="../safety/">Safety</a></li><li><a href="../security-standards/">Security standards</a></li><li><a href="../output/">Results and errors</a></li><li><a href="../error-codes/">Error codes</a></li><li><a href="../settings/">Settings and files</a></li><li><a href="../glossary/">Glossary</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Docs</a> · Features</p><h1>Clusters (Kubernetes and Docker Swarm)</h1><p class="g-lead t-lead">See and change what runs in Kubernetes and Docker Swarm with one set of commands. You do not need <code>kubectl</code> or <code>docker</code> on your computer: komando speaks to the cluster itself.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#check-a-clusters-health">Check a cluster&#39;s health</a></li><li><a href="#add-a-cluster">Add a cluster</a></li><li><a href="#name-objects">Name objects</a></li><li><a href="#look-around">Look around</a></li><li><a href="#read-logs">Read logs</a></li><li><a href="#deploy-a-new-version-and-roll-back">Deploy a new version, and roll back</a></li><li><a href="#change-the-cluster">Change the cluster</a></li><li><a href="#work-inside-a-pod">Work inside a pod</a></li><li><a href="#anything-else-kubectl-or-docker-can-do">Anything else kubectl or docker can do</a></li><li><a href="#limits">Limits</a></li><li><a href="#troubleshooting">Troubleshooting</a></li><li><a href="#reference">Reference</a></li></ul></nav><div class="g-body"><h2 id="check-a-clusters-health">Check a cluster&#39;s health</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando import kubeconfig                  # one conn per kubeconfig context (see Add a cluster)
+komando conn rename my-ctx-name prod-k8s   # give it a short name (import names it after the context)
+komando cluster status prod-k8s            # version, nodes, and every problem</code></pre>
+<p>Typed alone at a terminal, <code>komando cluster status</code> asks which cluster, with a list of yours to pick from.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>prod-k8s: version v1.30.4, 3 of 3 nodes ready
+not healthy: 2 problems
+OBJECT                 PROBLEM
+pod/shop/api-7d9f-x2   api: CrashLoopBackOff
+deployment/shop/api    1 of 3 replicas ready</code></pre>
+<p><code>cluster status</code> lists each problem by name: pods that crash or cannot start, deployments, StatefulSets and DaemonSets short of replicas, and nodes under pressure (<code>MemoryPressure</code>). With none it says <code>healthy: no problems found</code> (<code>healthy: true</code> in JSON). On Swarm it lists nodes that are down or drained and services short of replicas, with the error of each task that does not run.</p>
+<p>The same commands work on Kubernetes and on Docker Swarm.</p>
+<h2 id="add-a-cluster">Add a cluster</h2>
+<h3 id="kubernetes">Kubernetes</h3>
+<p>komando reads your kubeconfig (the login file <code>kubectl</code> uses, usually <code>~/.kube/config</code>) and adds one conn per context (one cluster and user in that file):</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando import kubeconfig --dry-run           # see what would be added
+komando import kubeconfig                     # reads $KUBECONFIG, else ~/.kube/config
+komando conn edit prod-k8s --via bastion      # API server on a private network? reach it like anything else</code></pre>
+<p>Typed alone at a terminal, <code>komando cluster add</code> asks whether it is Kubernetes (then for your kubeconfig file) or Docker Swarm (then for a manager&#39;s address).</p>
+<p>How the login works:</p>
+<ul class="g-list g-list--ul"><li>komando keeps each context&#39;s kubeconfig in the vault.</li><li>It makes the EKS and GKE logins itself (<code>aws eks get-token</code>, <code>aws-iam-authenticator</code>, <code>gke-gcloud-auth-plugin</code>), so you do not need those programs. That login is made from this computer&#39;s AWS or Google Cloud login and sent to the kubeconfig&#39;s server, so an AI agent needs a person&#39;s yes (<code>--yes</code>) to import such a kubeconfig. It goes only over https with the server&#39;s certificate checked: a server at <code>http://</code>, or <code>insecure-skip-tls-verify</code> with no CA, stops with a usage error.</li><li>Any other login program the kubeconfig names runs on this computer, so an AI agent needs a person&#39;s yes (<code>--yes</code>) to import it, as with a server&#39;s <code>--proxy-command</code>.</li><li>Your own import records which file that program is (its full path) and the <code>PATH</code> of the import. An AI agent&#39;s command runs that file with that <code>PATH</code>, your real home folder and only a few plain variables (user, language, screen, temp folder) of its own environment: what the program needs beyond those goes in the kubeconfig&#39;s <code>env</code>. If the file is one that programs of your user can replace (Homebrew&#39;s <code>bin</code>, <code>~/.local/bin</code>, or on Windows a folder under Program Files that an installer let every user write) and its contents changed, for example after an update, agents are asked again until you import the kubeconfig again.</li><li>An import an AI agent made with your yes trusts nothing for later: its cluster commands ask you each time, and after your yes the program runs with the system&#39;s <code>PATH</code>. Import the kubeconfig yourself to trust it.</li><li>When that program is missing, cluster commands stop with <code>TOOL_MISSING</code> (exit 3) and the kubeconfig&#39;s own <code>installHint</code>. When it runs but cannot log in (it may want a person to sign in first), they stop with <code>LOGIN_FAILED</code> (exit 4).</li><li>Once a person imported (or allowed) a kubeconfig, agents use the conn without asking. If the kubeconfig in the vault changes to another program or anything in its cluster block (the server, its CA, <code>tls-server-name</code>, <code>proxy-url</code>, <code>insecure-skip-tls-verify</code>; <code>secret set</code>), or reads its token from a local file (<code>tokenFile</code>), every agent command asks again, reads included, until a person imports it again. This holds for the EKS and GKE logins too.</li></ul>
+<p>komando checks the API server&#39;s certificate against the kubeconfig&#39;s CA. A context with <code>insecure-skip-tls-verify</code> and no CA skips that check, as kubectl does; the import names it in its notes, because its login goes to whoever answers at that address. With a CA, the certificate is always checked, even if <code>insecure-skip-tls-verify</code> is set too.</p>
+<p>To add one cluster by hand, store its kubeconfig in the vault first, then name it with <code>cluster add</code> (the same as <code>conn add</code>, but it refuses a URL that is not a cluster):</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando secret set prod-kubeconfig &lt; prod.kubeconfig
+komando cluster add prod-k8s k8s://api.cluster.example:6443 --password-ref secret:prod-kubeconfig</code></pre>
+<h3 id="docker-swarm">Docker Swarm</h3>
+<p>A Swarm is reached through a manager server: add the manager as a server and give it the tag <code>swarm</code>, so a group or <code>all</code> picks it as a cluster too (see <a href="#many-clusters-at-once">Many clusters at once</a>):</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando host add swarm1 admin@10.0.0.10 --tag swarm
+komando host edit swarm1 --add-tag swarm     # a manager already in your list</code></pre>
+<p><code>komando cluster add</code> typed alone at a terminal adds the tag for you when you answer Docker Swarm.</p>
+<h3 id="remove-a-cluster-from-komando">Remove a cluster from komando</h3>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando conn rm prod-k8s                 # komando forgets it; the cluster is not touched
+komando secret rm prod-kubeconfig        # its kubeconfig, once nothing uses it</code></pre>
+<p><code>conn rm</code> lists the vault secrets nothing uses any more (<code>secrets_unused</code>). <code>cluster rm</code> is different: it deletes an object inside the cluster.</p>
+<h2 id="name-objects">Name objects</h2>
+<p>Every command names objects the way kubectl does: <code>TYPE NAME</code> or <code>TYPE/NAME</code> (<code>deployment api</code>, <code>deploy/api</code>, <code>deployment.apps/api</code>). If you mistype a kind, the error suggests the one you probably meant.</p>
+<ul class="g-list g-list--ul"><li>Name a namespace (see <a href="../glossary/">Glossary</a>) with <code>--namespace</code>, or <code>-n</code> as in kubectl. Without it, komando uses the cluster&#39;s usual namespace: the one its kubeconfig context names, else <code>default</code>. Change it for good with <code>komando conn edit prod-k8s --option namespace=shop</code>.</li><li>How many lines or objects to show is <code>--limit</code> (it has no short form in cluster commands). A number after <code>-n</code> (<code>-n 50</code>) is refused, with a hint: write <code>--limit 50</code>, or <code>--namespace=50</code> for a namespace named 50.</li><li><code>-A</code> (<code>--all-namespaces</code>) works on <code>list</code>, <code>events</code> and <code>helm list</code>. It cannot go with <code>--namespace</code>.</li><li>Swarm kinds are <code>service</code> (<code>svc</code>), <code>task</code>, <code>node</code> and <code>stack</code>. Swarm has no namespaces, so <code>--namespace</code> is refused there.</li></ul>
+<h2 id="look-around">Look around</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cluster status prod-k8s --namespace shop                # only the problems in one namespace
+komando cluster list prod-k8s pods --namespace shop
+komando cluster list prod-k8s deploy -A                         # every namespace
+komando cluster list prod-k8s pods -l app=api                   # only objects with these labels
+komando cluster describe prod-k8s deployment/api --namespace shop   # images, strategy, pods, events
+komando cluster events prod-k8s --namespace shop --warnings     # what went wrong, oldest first
+komando cluster events prod-k8s --for deployment/api --namespace shop
+komando cluster get prod-k8s deploy/api --namespace shop        # the whole object (Secret values hidden)
+
+komando cluster status swarm1                                   # a Swarm manager
+komando cluster list swarm1 services                            # also: tasks, nodes, stacks
+komando cluster describe swarm1 service/web                     # image, replicas, update state, task errors</code></pre>
+<p>Typed alone at a terminal, <code>komando cluster list</code> asks for the cluster, then what to list (pods by default).</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>$ komando cluster list prod-k8s deploy --namespace shop
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+api    3/3     3            3           12d
+web    2/2     2            2           40d</code></pre>
+<p><code>cluster list</code> shows the useful columns for each kind: ready replicas, restarts, ingress hosts, volume claims, job completions, cron schedules and autoscaler targets. In text mode the tables look like kubectl&#39;s (<code>NAME READY STATUS RESTARTS AGE NODE</code> for pods). In JSON the same rows are under <code>data.items[]</code>, for Kubernetes and Swarm alike.</p>
+<p>In JSON, <code>cluster describe</code> of a Kubernetes object also gives <code>data.detail</code>, made for a program to read: <code>kind</code>, <code>name</code>, <code>namespace</code>, <code>status</code> (a pod&#39;s phase, <code>ready 2/3</code> for a workload), <code>created_at</code>, <code>labels</code>, <code>conditions[]</code> (<code>type</code>, <code>status</code>, <code>reason</code>, <code>message</code>) and <code>events[]</code> (<code>type</code>, <code>reason</code>, <code>message</code>, <code>count</code>, <code>last_seen_at</code>). It never holds a Secret&#39;s values.</p>
+<h3 id="many-clusters-at-once">Many clusters at once</h3>
+<p><code>cluster status</code>, <code>cluster list</code>, <code>cluster events</code> and <code>cluster helm list</code> take a selector that picks several clusters: a group, <code>kind:k8s</code>, a tag or <code>all</code>. komando reads them at the same time and shows one block per cluster. A server counts as a Swarm manager there only when it has the tag <code>swarm</code> or is named in the selector; other servers are listed in <code>meta.skipped</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cluster status kind:k8s                  # health of every Kubernetes cluster
+komando cluster events tag:prod --warnings -A    # what goes wrong anywhere in production
+komando cluster list all nodes</code></pre>
+<p>In JSON each cluster is a row of <code>data.results[]</code> (<code>cluster</code>, <code>engine</code>, <code>ok</code>, and its <code>data</code> or <code>error</code>), with <code>data.summary</code>. A cluster that cannot be read fails alone: the others still show, and the command ends with <code>PARTIAL_FAILURE</code>. One cluster gives the same output as always. Commands that change a cluster (<code>apply</code>, <code>deploy</code>, <code>restart</code>, <code>scale</code>, <code>rm</code>, <code>rollback</code>) and a rollout&#39;s <code>status</code> stay on one cluster.</p>
+<h3 id="helm-releases-read-only">Helm releases (read-only)</h3>
+<p>komando reads the Helm releases stored in the cluster, without the <code>helm</code> program. It only reads: install, upgrade and rollback stay with <code>helm</code>. To change what runs from komando, <code>cluster deploy</code> sets a new image with a rollout you can wait for, and <code>cluster apply</code> applies manifests, for example the output of <code>helm template</code> (a server dry run checks them first).</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cluster helm list prod-k8s -A                                   # name, revision, status, chart, app version
+komando cluster helm status prod-k8s shop-api --namespace shop          # deployed when, description, notes
+komando cluster helm history prod-k8s shop-api --namespace shop
+komando cluster helm values prod-k8s shop-api --namespace shop          # the values it was installed with
+komando cluster helm values prod-k8s shop-api --namespace shop --all    # with the chart&#39;s defaults</code></pre>
+<p><code>--revision N</code> shows an older revision in <code>status</code> and <code>values</code>. Helm keeps releases as Secrets, so the kubeconfig&#39;s user needs to list Secrets in that namespace (<code>K8S_FORBIDDEN</code> otherwise). For an AI agent, passwords and tokens in the values show as <code>[hidden]</code>, as everywhere.</p>
+<h2 id="read-logs">Read logs</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cluster logs prod-k8s api-7d9f-x2 --namespace shop --since 10m --limit 100   # one pod
+komando cluster logs prod-k8s deploy/api --namespace shop -f                         # every pod of a workload, following
+komando cluster logs prod-k8s -l app=api --namespace shop --limit 50                 # every pod with a label
+komando cluster logs prod-k8s api-7d9f-x2 --namespace shop --previous                # the run before the last restart
+komando cluster logs swarm1 service/web -f --timeout 1m                              # a Swarm service</code></pre>
+<p>Typed alone at a terminal, <code>komando cluster logs</code> asks for the cluster, then the pod or workload.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>[api-7d9f-x2] GET /health 200 1ms
+[api-7d9f-k4] GET /orders 500 32ms</code></pre>
+<ul class="g-list g-list--ul"><li>When several pods answer, each line starts with <code>[pod]</code>. JSON names the <code>object</code> and its <code>pods</code>.</li><li><code>-f</code> keeps reading new lines. Ctrl-C or <code>--timeout</code> ends it normally.</li><li><code>--since</code> takes a duration (<code>10m</code>, <code>2h</code>) or a time (<code>2026-01-02T10:00:00Z</code>).</li><li><code>--timestamps</code> starts each line with its time; <code>-c</code> picks a container.</li><li>In JSON, <code>data.lines[]</code> has each line on its own: <code>logged_at</code> (its time), <code>pod</code>, <code>container</code> and <code>text</code>. <code>data.truncated</code> (and <code>meta.truncated</code>) is true when a pod sent <code>--limit</code> lines, so it may have older ones. <code>--limit 0</code> reads every line.</li></ul>
+<h2 id="deploy-a-new-version-and-roll-back">Deploy a new version, and roll back</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cluster deploy prod-k8s deployment/api --image ghcr.io/acme/api:1.4.3 --namespace shop --wait
+komando cluster status prod-k8s deployment/api --namespace shop --wait    # has it rolled out?
+komando cluster history prod-k8s deployment/api --namespace shop          # revisions and their images
+komando cluster rollback prod-k8s deployment/api --namespace shop --wait  # back to the previous one
+komando cluster rollback prod-k8s deployment/api --revision 3 --namespace shop  # back to revision 3
+
+komando cluster deploy swarm1 service/web --image nginx:1.27 --wait
+komando cluster rollback swarm1 service/web --wait</code></pre>
+<p>Typed alone at a terminal, <code>komando cluster deploy</code> asks for the cluster, the workload and the new image.</p>
+<p>With several containers in a pod, name the one that gets the image with <code>--container</code> (or <code>--image CONTAINER=IMAGE</code>).</p>
+<p><code>--wait</code> stays until every replica runs the new version. It stops with:</p>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Code</th><th scope="col">When</th></tr></thead><tbody><tr><td><code>ROLLOUT_FAILED</code> (exit 5)</td><td>the cluster gives up, or pods sit in <code>ImagePullBackOff</code>, <code>CrashLoopBackOff</code> and the like for 3 minutes</td></tr><tr><td><code>ROLLOUT_TIMEOUT</code> (exit 7)</td><td><code>--timeout</code> passed (default 5 minutes)</td></tr></tbody></table></div>
+<p>Both name the stuck pods (or Swarm tasks), why they are stuck, and their image. Run <code>cluster rollback</code> to go back.</p>
+<p><code>rollback</code> without <code>--revision</code> goes to the newest earlier revision with different images. The revision it replaced (the broken one) is then skipped, so rolling back twice does not bring it back. <code>--revision</code> picks any revision: one that does not exist lists the ones that do, and the current one changes nothing (<code>unchanged</code>). On Swarm, a rollback you start is followed to its end, not reported as a failed update.</p>
+<h2 id="change-the-cluster">Change the cluster</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cluster apply prod-k8s --file app.yaml --dry-run       # the server checks it; nothing changes
+komando cluster apply prod-k8s --file app.yaml                 # created / configured / unchanged per object
+komando cluster restart prod-k8s deployment/api --namespace shop --wait
+komando cluster scale prod-k8s deployment/api 3 --namespace shop --wait
+komando cluster rm prod-k8s pod/api-7d9f-x2 --namespace shop
+
+komando cluster apply swarm1 --file compose.yml --stack shop --dry-run   # checked like docker stack config
+komando cluster apply swarm1 --file compose.yml --stack shop
+komando cluster scale swarm1 service/web 4</code></pre>
+<ul class="g-list g-list--ul"><li><code>apply</code> first sends the whole file to the server as a dry run. If the cluster refuses one object (a typo, an unknown field or kind), it stops there and nothing in the file is applied (<code>K8S_INVALID</code>, &#34;nothing was applied: configmap/bad: ...&#34;).</li><li><code>apply</code> uses server-side apply as <code>komando</code>. A field another tool owns (an autoscaler&#39;s replicas, a <code>kubectl edit</code>) stops it with <code>K8S_CONFLICT</code>, which names that tool and the fields, and nothing is applied. Leave those fields out of the file, or add <code>--force-conflicts</code> to take them over (as <code>kubectl apply --server-side --force-conflicts</code> does). It is still a change: a protected cluster needs a person&#39;s yes, as without it.</li><li><code>apply --dry-run</code> shows for each object whether it would be created, changed or stay the same, with a diff. Secret values never show: a changed value reads <code>[hidden, changed]</code>. Objects in a namespace that the same file creates are reported as created too. <code>--file -</code> reads from stdin.</li><li>An object whose namespace in the file differs from <code>--namespace</code> is refused, as kubectl does.</li><li><code>scale</code> reports <code>previous_replicas</code> (or <code>unchanged</code>).</li><li>A protected cluster needs a person&#39;s yes before any change.</li><li>Scaling to 0 and <code>rm</code> stop things. At your terminal komando asks you first: type the object&#39;s name (<code>Type the name api-7d9f-x2 to continue</code>); any other answer, the cluster&#39;s name too, changes nothing. An AI agent or a script adds <code>--allow-dangerous</code> after a person agrees. See <a href="../safety/#what-needs-a-yes">Safety</a>.</li></ul>
+<h2 id="work-inside-a-pod">Work inside a pod</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cluster exec prod-k8s deploy/api --namespace shop --read-only -- cat /app/config.yml
+komando cluster exec prod-k8s api-7d9f-x2 -c api --namespace shop -- php artisan cache:clear
+komando cluster forward prod-k8s svc/api 8080:80 --namespace shop   # 127.0.0.1:8080 until Ctrl-C
+komando cluster shell prod-k8s deploy/api --namespace shop          # interactive, for people</code></pre>
+<ul class="g-list g-list--ul"><li><code>cluster exec</code> runs one command (not interactive). The dangerous-command filter checks it, as with <code>exec</code> on servers. <code>--read-only</code> says it only looks, checked as for <code>exec</code>: only a command komando knows only reads runs (<code>cat</code>, <code>ls</code>, <code>printenv</code> ...); anything else is refused (<code>READ_ONLY_VIOLATION</code>; see <a href="../commands/#protected-servers-and---read-only">Commands</a>).</li><li><code>cluster forward</code> makes a pod or service port reachable on this computer only (127.0.0.1). For a service, the service port is forwarded to the pod port behind it. Ctrl-C or <code>--timeout</code> ends it normally. What goes through it skips komando&#39;s checks, so a protected cluster asks first (<code>--yes</code>), and the audit log records the forward.</li><li><code>cluster shell</code> opens a terminal in the pod (bash, else sh) for a person, and asks first on a protected cluster. Agents get <code>NEEDS_TERMINAL</code> and use <code>cluster exec</code> instead.</li><li>komando speaks Kubernetes&#39; exec and port-forward protocols itself: WebSocket, and SPDY on clusters older than Kubernetes 1.30, as kubectl does. A pod or service that does not exist is &#34;not found&#34; (exit 3).</li></ul>
+<h2 id="anything-else-kubectl-or-docker-can-do">Anything else kubectl or docker can do</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando cluster run prod-k8s -- get pods -A -o wide
+komando cluster run prod-k8s --write -- rollout undo deployment/api -n shop
+komando cluster run swarm1 -- service ps web</code></pre>
+<p>On Kubernetes, <code>cluster run</code> is komando&#39;s own kubectl. It understands kubectl commands and prints what kubectl prints, through the conn&#39;s <code>--via</code> path, with no kubectl installed. On Swarm the command goes to docker on the manager. The words after <code>--</code> are kubectl&#39;s (or docker&#39;s), so <code>-n</code> there is kubectl&#39;s namespace flag.</p>
+<ul class="g-list g-list--ul"><li>It only reads unless you add <code>--write</code>. Delete, drain, scaling to 0 and similar also need <code>--allow-dangerous</code>.</li><li><code>--dry-run</code> sends a change to the server as a server-side dry run (<code>apply</code>, <code>create</code>, <code>delete</code>, <code>scale</code>, <code>patch</code>, ...). A command the server cannot dry-run (<code>exec</code>, <code>cp</code>, <code>create token</code>, <code>config view</code>, <code>get</code> of Secret values for a person) is only shown, not run.</li><li>For AI agents, Secret values and env values named like secrets (<code>DB_PASSWORD</code>) show as hidden in <code>get</code> output, as in <code>cluster get</code>, so <code>get secret -o yaml</code> is a read for them. <code>apply</code>, <code>create</code> and <code>replace</code> refuse a file that still holds a hidden value (<code>HIDDEN_VALUE</code>): change one field with <code>set image</code> or <code>patch</code> instead.</li><li>For AI agents, files of this computer that would go to the cluster (<code>-f</code>, <code>--from-file</code>, <code>cp</code> to a pod) may not be secrets by their name (<code>.env</code>, keys) unless the person allows <code>--reveal</code>, and never komando&#39;s own folder (<code>SENSITIVE_FILE</code>).</li><li><code>delete -f FILE</code> deletes each object in the namespace its file names, and refuses a <code>-n</code> that says otherwise. An empty name is refused.</li><li><code>cp POD:SRC DST</code> writes only inside DST, never into a <code>.git</code> folder, and skips links and devices, like kubectl cp. It brings at most 512 MiB (<code>FILE_TOO_LARGE</code>): komando checks every name before it writes any, so it holds the copy in memory. For an AI agent it copies as <code>download</code> does: a file that is a secret by its name (<code>.env</code>, a private key) is refused (<code>SENSITIVE_FILE</code>; when SRC itself is named so, before komando reads the pod), a text file is written with its secret values <code>[hidden]</code>, and a binary or larger file that holds a vault value is refused; nothing is written when any file is refused.</li><li>On Swarm, <code>docker run</code>, <code>create</code> and <code>service create|update</code> that give a container the server (<code>--privileged</code>, <code>--cap-add</code>, devices, the host&#39;s network or processes, <code>--volumes-from</code>, a bind of <code>/</code>, the docker socket, system or credential folders) also need <code>--allow-dangerous</code>, as do <code>plugin install|create|enable|set</code> and a <code>volume create</code> that is a host folder.</li><li>It stops at <code>--timeout</code> (default 5 minutes). A watch (<code>get -w</code>) or follow (<code>logs -f</code>) that ends there ends normally. <code>logs -f</code> prints lines as they come and follows all selected pods at once (<code>--max-log-requests</code>, 5 by default).</li><li>Sessions have their own commands: <code>cluster forward</code> (port-forward) and <code>cluster shell</code> (<code>exec -it</code>).</li><li>A command it does not know gets a &#34;did you mean&#34;. The commands it knows are in <a href="#reference">Reference</a>.</li></ul>
+<h2 id="limits">Limits</h2>
+<ul class="g-list g-list--ul"><li><code>cluster status</code> on a cluster with more than 20000 objects of one kind reads only those, says <code>truncated: true</code>, and <code>healthy</code> is <code>null</code> unless it found a problem. Narrow it with <code>--namespace</code>.</li><li><code>cluster run</code> knows kubectl&#39;s own commands, not kubectl plugins (krew). <code>edit</code> is refused (get the YAML, change it, then <code>apply -f</code>), and of <code>config</code> only <code>current-context</code> and <code>get-contexts</code> work.</li><li>On Swarm, komando cannot see inside a compose or stack file on the server, so <code>cluster run swarm1 -- stack deploy -c FILE</code> and <code>compose up</code> are rated by their flags only.</li><li>Helm: komando reads releases only; install, upgrade and rollback stay with <code>helm</code> (<code>cluster deploy</code> and <code>cluster apply</code> change what runs).</li></ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Code</th><th scope="col">What it means</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><code>TOOL_MISSING</code> (exit 3)</td><td>the login program the kubeconfig names is not installed</td><td>install it; the error shows the kubeconfig&#39;s <code>installHint</code></td></tr><tr><td><code>LOGIN_FAILED</code> (exit 4)</td><td>the login program ran but could not log in</td><td>a person signs in with that program, then run it again</td></tr><tr><td><code>CONN_UNREACHABLE</code> (exit 4)</td><td>the API server did not answer</td><td><code>komando test prod-k8s</code>, and check its <code>--via</code> path or VPN</td></tr><tr><td><code>K8S_FORBIDDEN</code> (exit 4)</td><td>the kubeconfig&#39;s user may not do this (Helm: list Secrets)</td><td>give the user the right, or name one namespace with <code>--namespace</code></td></tr><tr><td><code>K8S_INVALID</code> (exit 2)</td><td>the cluster refused the request or the file as written</td><td>read the cluster&#39;s words in the message; fix the YAML or the <code>-l</code> selector</td></tr><tr><td><code>K8S_POD_NOT_FOUND</code> (exit 3)</td><td>the workload has no running pod to read or run in</td><td><code>komando cluster list prod-k8s pods --namespace shop</code></td></tr><tr><td><code>NOT_SWARM_MANAGER</code> (exit 3)</td><td>the server is not a Swarm manager</td><td>name a manager; <code>komando exec swarm1 --read-only -- docker node ls</code> shows whether it is one</td></tr><tr><td><code>ROLLOUT_FAILED</code> (exit 5), <code>ROLLOUT_TIMEOUT</code> (exit 7)</td><td>the new version did not come up</td><td><code>komando cluster describe prod-k8s deployment/api --namespace shop</code>, then <code>cluster rollback</code></td></tr><tr><td><code>HIDDEN_VALUE</code> (exit 2)</td><td>the file holds a value komando hid from an AI agent</td><td>leave hidden entries out, or change one field with <code>cluster run ... --write -- set image</code> or <code>patch</code></td></tr><tr><td><code>NEEDS_TERMINAL</code> (exit 2)</td><td><code>cluster shell</code> needs a person</td><td>agents and scripts use <code>cluster exec</code></td></tr><tr><td><code>PARTIAL_FAILURE</code> (exit 1)</td><td>some clusters of a selector failed</td><td>read each cluster&#39;s error in the output</td></tr></tbody></table></div>
+<h2 id="reference">Reference</h2>
+<p>Kubectl commands <code>cluster run</code> knows:</p>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Group</th><th scope="col">Commands</th></tr></thead><tbody><tr><td>Read</td><td><code>get</code> (server tables, <code>-o wide|name|json|yaml|jsonpath=...|custom-columns=...</code>, <code>-w</code>, <code>-l</code>, <code>-A</code>), <code>describe</code>, <code>logs</code>, <code>events</code>, <code>top</code>, <code>explain</code>, <code>version</code>, <code>api-resources</code>, <code>api-versions</code>, <code>cluster-info</code>, <code>auth can-i</code>, <code>auth whoami</code>, <code>wait</code></td></tr><tr><td>Roll out</td><td><code>rollout status|history|undo|restart|pause|resume</code>, <code>set image</code>, <code>scale</code></td></tr><tr><td>Change</td><td><code>apply</code>, <code>diff</code>, <code>create</code> (<code>-f</code>, namespace, configmap, secret, deployment, job, cronjob, service, role, rolebinding, token), <code>replace</code>, <code>delete</code>, <code>patch</code>, <code>label</code>, <code>annotate</code></td></tr><tr><td>Nodes</td><td><code>cordon</code>, <code>uncordon</code>, <code>drain</code>, <code>taint</code></td></tr><tr><td>Pods</td><td><code>run</code>, <code>exec</code>, <code>cp</code>, <code>debug</code></td></tr><tr><td>Other</td><td><code>certificate approve|deny</code>, <code>config</code></td></tr></tbody></table></div></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../storage/"><span class="t-label muted">Previous</span>Storage: buckets and file servers</a><a class="g-pn g-pn--next" href="../cloud/"><span class="t-label muted">Next</span>Cloud logins</a></nav><p class="g-path t-small muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/cluster.md">docs/features/cluster.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../docs/">komando docs</a> · <a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>

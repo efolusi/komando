@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Targets · komando docs</title>
+<meta name="description" content="Pick which servers, conns and VPNs a command works on: one name, a group, a tag, or everything.">
+<link rel="canonical" href="https://komando.efolusi.com/docs/targets/">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/system.css">
+<style>
+:root {
+  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
+  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
+  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
+  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
+  --font-display: "Instrument Sans", system-ui, sans-serif;
+  --font-text: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
+}
+/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark;
+    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
+    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
+}
+.nav__logo .kc { width: 28px; height: 28px; flex: none; }
+.nav__logo { gap: var(--s-2); }
+</style>
+<link rel="stylesheet" href="../../guide/guide.css">
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
+      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Docs"><details class="g-side__fold" open><summary>All docs pages</summary><p class="g-side__home"><a href="../">Docs home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../getting-started/">Getting started</a></li><li><a href="../switch-from-termius/">Switch from Termius</a></li></ul><p class="t-label g-side__group">Features</p><ul><li><a href="../install/">Install, update, remove</a></li><li><a href="../servers/">Servers</a></li><li><a href="../secrets/">Secrets</a></li><li><a href="../windows/">Windows servers</a></li><li><a href="../import/">Moving in and moving computers</a></li><li><a href="../targets/" aria-current="page">Targets</a></li><li><a href="../commands/">Running commands</a></li><li><a href="../health/">Health and network checks</a></li><li><a href="../files/">Files</a></li><li><a href="../system/">Services, logs, Docker, packages, users</a></li><li><a href="../tunnels/">Private servers and tunnels</a></li><li><a href="../vpn/">VPNs</a></li><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../queues/">Queues</a></li><li><a href="../storage/">Storage: buckets and file servers</a></li><li><a href="../cluster/">Clusters (Kubernetes and Docker Swarm)</a></li><li><a href="../cloud/">Cloud logins</a></li><li><a href="../registry/">Container registries</a></li><li><a href="../rotate/">Rotate keys and passwords, and when someone leaves</a></li><li><a href="../safety/">Safety</a></li><li><a href="../security-standards/">Security standards</a></li><li><a href="../output/">Results and errors</a></li><li><a href="../error-codes/">Error codes</a></li><li><a href="../settings/">Settings and files</a></li><li><a href="../glossary/">Glossary</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Docs</a> · Features</p><h1>Targets</h1><p class="g-lead t-lead">Pick which servers, conns and VPNs a command works on: one name, a group, a tag, or everything.</p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#write-a-target">Write a target</a></li><li><a href="#check-what-a-target-picks">Check what a target picks</a></li><li><a href="#what-each-command-does-with-a-target">What each command does with a target</a></li><li><a href="#groups-tags-and-labels">Groups, tags and labels</a></li><li><a href="#limits">Limits</a></li><li><a href="#troubleshooting">Troubleshooting</a></li></ul></nav><div class="g-body"><h2 id="write-a-target">Write a target</h2>
+<p>Most commands take a <i>target</i>. One target picks servers, conns (databases, caches, queues, storage, clusters, registries) and VPNs together:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando exec @web -- uptime            # run on every server in group web</code></pre>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Write</th><th scope="col">Picks</th></tr></thead><tbody><tr><td><code>web1</code></td><td>one server or conn, by name</td></tr><tr><td><code>web-*</code></td><td>names that start with <code>web-</code></td></tr><tr><td><code>@prod</code></td><td>everything in group <code>prod</code></td></tr><tr><td><code>tag:prod</code></td><td>everything tagged <code>prod</code></td></tr><tr><td><code>label:dc=jkt</code></td><td>everything with label <code>dc=jkt</code> (<code>label:dc</code> picks everything that has a <code>dc</code> label)</td></tr><tr><td><code>kind:db</code></td><td>every database (also <code>kind:host</code>, <code>kind:conn</code>, <code>kind:vpn</code>, <code>kind:cache</code>, <code>kind:queue</code>, <code>kind:storage</code>, <code>kind:cluster</code>, <code>kind:registry</code>, <code>kind:postgres</code>, and the other conn kinds)</td></tr><tr><td><code>os:windows</code></td><td>every Windows server (<code>os:linux</code>: every other server)</td></tr><tr><td><code>all</code></td><td>everything</td></tr><tr><td><code>@prod,!web2</code></td><td>combine with <code>,</code>; leave out with <code>!</code></td></tr><tr><td><code>!web2</code></td><td>everything except <code>web2</code> (same as <code>all,!web2</code>)</td></tr><tr><td><code>root@203.0.113.10:22</code></td><td>a one-off server that is not in your list (<code>203.0.113.10</code> or <code>203.0.113.10:22</code> uses your default user)</td></tr></tbody></table></div>
+<p>Quote targets that contain <code>*</code> or <code>!</code> so your shell leaves them alone: <code>&#39;web-*&#39;</code>, <code>&#39;@prod,!web2&#39;</code>.</p>
+<p>Names, groups and tags match in any case: <code>WEB1</code> finds <code>web1</code> when there is only one. A misspelled name, <code>@group</code> or <code>tag:</code> gets a &#34;did you mean&#34;.</p>
+<p>At your terminal, a command typed without its target asks for it: pick a row by number, type part of a name to narrow the list, or type a target as above (<a href="../commands/#at-your-terminal-komando-asks-for-what-is-missing">details</a>).</p>
+<h2 id="check-what-a-target-picks">Check what a target picks</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando list @prod           # only what @prod picks</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>NAME     KIND      WHERE                VIA      GROUPS  TAGS  PROTECTED
+web1     host      ubuntu@203.0.113.10  -        prod    web   yes
+prod-db  postgres  10.0.0.9:5432        bastion  prod    -     yes</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando list                 # everything: servers, conns and VPNs
+komando list kind:db         # only databases
+komando test @prod           # reach and log in to each one</code></pre>
+<h2 id="what-each-command-does-with-a-target">What each command does with a target</h2>
+<p>Each command uses what it can work with and tells you what it left out. For example, <code>komando exec @prod -- uptime</code> runs on the servers in <code>prod</code> and lists the databases under &#34;skipped&#34;. <code>komando db query @prod &#34;...&#34;</code> does the opposite: it uses the one database in <code>@prod</code> (a <code>db</code> command needs exactly one) and skips the servers. If a target picks nothing the command can use, the error names the command to use instead. A target that picks nothing is an error, not an empty result.</p>
+<h2 id="groups-tags-and-labels">Groups, tags and labels</h2>
+<p>Set them when you add or edit a server or conn:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando host edit web1 --add-group prod --add-tag web --label dc=jkt
+komando host edit web1 --rm-group prod --rm-tag web</code></pre>
+<p>Or manage a group for many entries at once:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>komando group add prod &#39;web-*&#39;          # add everything a target picks
+komando group add prod web1 web2        # several names
+komando group list                      # every group and tag with its members
+komando group list prod                 # the members of one group
+komando group rm prod web2              # take web2 out of prod
+komando group rm old --dry-run          # delete a whole group: who would leave it
+komando group rm old                    # more than 3 members: asks first</code></pre>
+<p>Typed alone, <code>komando group add</code> asks for the group, then what goes in it.</p>
+<p>Deleting a group with more than 3 members asks first: at your terminal komando asks <code>[y/N]</code>; an AI agent or a script adds <code>--yes</code> after a person agrees (<a href="../safety/">Safety</a>). At a terminal, <code>group rm</code> ends with the way back: <code>Next: komando group add old TARGET...</code>.</p>
+<h2 id="limits">Limits</h2>
+<ul class="g-list g-list--ul"><li>A server, conn or VPN name uses letters, digits, <code>.</code>, <code>_</code> and <code>-</code>, starts with a letter or digit, and is at most 63 characters long.</li><li>Group, tag and label names use the same letters, so every one can be written in a target.</li><li><code>all</code> cannot be a name, because as a target it means everything.</li><li>Servers, conns and VPNs share one list of names, and <code>Web1</code> and <code>web1</code> are the same name.</li><li>A <code>db</code>, <code>cache</code> or other conn command needs exactly one conn of its kind in the target.</li></ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="d-table" role="region" aria-label="Table" tabindex="0"><table><thead><tr><th scope="col">Error code</th><th scope="col">What it means</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><code>TARGET_EMPTY</code></td><td>the target matched nothing (exit 3)</td><td><code>komando list</code> shows servers, conns, groups and tags</td></tr><tr><td><code>NO_MATCHING_TARGETS</code></td><td>the target picked only things this command cannot use (exit 3)</td><td>the hint names the command for what it picked</td></tr><tr><td><code>TARGET_NOT_FOUND</code></td><td>no server of that name (exit 3)</td><td>check the &#34;did you mean&#34;, or <code>komando host list</code></td></tr><tr><td><code>USAGE</code></td><td>a command that needs exactly one conn got a target with several</td><td>name the one conn</td></tr><tr><td><code>CONFIRM_REQUIRED</code></td><td><code>group rm</code> of a group with more than 3 members, from an AI agent or a script without <code>--yes</code></td><td>check the members with <code>komando group list GROUP</code>, then add <code>--yes</code> after a person agrees</td></tr></tbody></table></div></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../import/"><span class="t-label muted">Previous</span>Moving in and moving computers</a><a class="g-pn g-pn--next" href="../commands/"><span class="t-label muted">Next</span>Running commands</a></nav><p class="g-path t-small muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/targets.md">docs/features/targets.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer class="footer g-footer">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Komando</span>
+      <span><a href="../../docs/">komando docs</a> · <a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
+    </div>
+  </div>
+</footer>
+<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
+<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
+<script type="module" src="../../assets/system.js"></script>
+</body>
+</html>
