@@ -82,6 +82,13 @@ class SymlinkTests(unittest.TestCase):
                      "X-Content-Type-Options: nosniff", "Referrer-Policy: strict-origin-when-cross-origin"):
             self.assertIn(want, headers)
 
+    def test_csp_allows_the_cloudflare_beacon(self):
+        # Cloudflare Web Analytics runs on the zone; a CSP without these blocks its script and its reports.
+        build_dist.main()
+        headers = (self.out / "_headers").read_text()
+        self.assertRegex(headers, r"script-src 'self' https://static\.cloudflareinsights\.com( 'sha256-[^']+')*;")
+        self.assertIn("connect-src 'self' https://cloudflareinsights.com;", headers)
+
     def test_linked_file_in_assets_is_refused(self):
         os.symlink(self.secret, self.site / "assets" / "key.css")
         self.assert_refused("assets/key.css")
