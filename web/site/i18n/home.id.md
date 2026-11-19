@@ -5,7 +5,7 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 ## Head
 
 - title: komando, command line DevOps untuk Anda dan agen AI Anda
-- description: Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda bilang lain. Gratis dan open source.
+- description: Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Gratis dan open source.
 
 ## Navigation
 
@@ -26,14 +26,14 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 ## Hero
 
 - h1: Command line DevOps untuk Anda dan agen AI Anda
-- lede: Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda bilang lain. Command line-nya, komando, gratis dan open source. Komando dengan K besar, aplikasi gratis untuk Mac, iPhone, dan iPad yang menjalankannya, menyusul.
+- lede: Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Command line-nya, komando, gratis dan open source. Aplikasi Komando (K besar) untuk Mac, iPhone, dan iPad yang menjalankannya juga gratis dan segera hadir.
 - button: Baca panduan
 
 ## One command (statement)
 
 - h2: Command line komando menggabungkan sesi SSH, klien database, redis-cli, dan lainnya dalam satu perintah.
 - line: Agen AI Anda mendapat jangkauan yang sama tanpa pernah melihat satu kata sandi pun.
-- note: Agen AI yang dikenali komando dengan sendirinya. Untuk agen lain, setel KOMANDO_AGENT=1.
+- note (English: "AI agents komando recognises by itself. For any other agent, set KOMANDO_AGENT=1", printed under the list of agents): komando mengenali agen AI di atas dengan sendirinya. Untuk agen lain, setel KOMANDO_AGENT=1.
 
 ## Inventory
 
@@ -52,7 +52,7 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 
 ## Features
 
-- h2: Rahasia, output, dan riwayat. Ditangani dengan cara yang sama di setiap mesin.
+- h2: komando menangani rahasia, output, dan riwayat dengan cara yang sama di setiap mesin.
 - card 1, "komando's keychain holds every secret": Keychain komando menyimpan setiap rahasia. Kata sandi tetap di keychain terenkripsi milik komando atau di password manager Anda sendiri. Agen yang dikenali komando mendapat hasilnya, tidak pernah rahasianya.
 - card 2, "Every komando answer as text or JSON": Setiap jawaban komando dalam teks atau JSON. Orang membaca teks biasa. Skrip, job CI, dan agen menambahkan -o json dan mendapat jawaban yang sama sebagai data yang bisa diolah.
 - card 3, "An audit log of every command": Log audit untuk setiap perintah. (command: komando audit)
@@ -80,7 +80,7 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 - h3: macOS, Linux, dan Windows
 - p: Buka terminal dan jalankan baris ini. Di Windows, komando berjalan lewat WSL: buka terminal WSL dan jalankan baris yang sama.
 - button: Salin perintah
-- p: Periksa dulu.
+- p (the label before the verify step): Periksa installer-nya dulu.
 - p: Installer memastikan rilisnya ditandatangani dengan kunci proyek komando, pemeriksaan yang sama dengan komando update.
 - h3: Dengan Go 1.27.4 atau lebih baru
 - p: Kalau Go sudah terpasang, baris ini membangun komando dari kode sumbernya.
