@@ -44,14 +44,17 @@ DATA_TYPES = {"application/json", "application/ld+json", "importmap"}
 # the origins the pages load from, besides their own (checked against index.html and the guide pages)
 CSP = [
     ("default-src", ["'self'"]),
-    ("script-src", ["'self'"]),  # the inline script hashes are added here
+    # Cloudflare injects its Web Analytics beacon on the zone; it loads from static.cloudflareinsights.com
+    # and reports to cloudflareinsights.com. The inline script hashes are added here as well.
+    ("script-src", ["'self'", "https://static.cloudflareinsights.com"]),
     # 'unsafe-inline': index.html has two <style> blocks and about 40 style="..." attributes (CSS custom
     # properties on the app screens), and the scripts set styles too. Hashes cannot cover style attributes
     # in every browser. Scripts stay locked to 'self' and hashes, which is where the danger is.
     ("style-src", ["'self'", "'unsafe-inline'"]),
     ("font-src", ["'self'"]),  # Instrument Sans and DM Mono are served from assets/fonts/
     ("img-src", ["'self'", "data:"]),
-    ("connect-src", ["'self'"]),  # the release number is written in at release time (set_release.py)
+    # the release number is written in at release time (set_release.py); the beacon reports to Cloudflare
+    ("connect-src", ["'self'", "https://cloudflareinsights.com"]),
     ("frame-ancestors", ["'none'"]),
     ("base-uri", ["'self'"]),
     ("form-action", ["'self'"]),
