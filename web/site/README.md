@@ -117,7 +117,7 @@ scripts and styles the page loads stay.
 
 **Deploy: a Cloudflare Worker with static assets** (owner, 2026-11-18: web frontends deploy as Workers).
 `wrangler.jsonc` at the repo root names the Worker `komando` and serves `web/dist` with no Worker script, on the
-custom domain `komando.efolusi.com` and the `workers.dev` URL. `.github/workflows/deploy-site.yml` deploys from a `v*` tag on `main` (or a manual run on such a tag)
+custom domain `komando.efolusi.com` only. `.github/workflows/deploy-site.yml` deploys from a `v*` tag on `main` (or a manual run on such a tag)
 on the self-hosted `efolusi-cd` runner:
 
 ```bash
