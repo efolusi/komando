@@ -38,7 +38,7 @@ class SymlinkTests(unittest.TestCase):
             "favicon.svg": "<svg/>",
             "share.jpg": "jpg",
             "glyphs/a.svg": "<svg/>",
-            "assets/system.css": "body{}",
+            "assets/site.css": "body{}",
             "guide/index.html": "<!doctype html><title>g</title>",
             "guide/guide.css": "p{}",
             "guide/start/index.html": "<!doctype html><title>s</title>",
@@ -70,10 +70,30 @@ class SymlinkTests(unittest.TestCase):
 
     def test_plain_site_builds(self):
         build_dist.main()
-        self.assertTrue((self.out / "assets" / "system.css").is_file())
+        self.assertTrue((self.out / "assets" / "site.css").is_file())
         self.assertTrue((self.out / "_headers").is_file())
         self.assertTrue((self.out / "docs" / "install" / "index.html").is_file())
         self.assertFalse(any(p.is_symlink() for p in self.out.rglob("*")))
+
+    def test_node_build_files_stay_behind(self):
+        # build.mjs, its content, the shell partials and node_modules are sources of the pages, never served
+        for rel in ("build.mjs", "package.json", "pnpm-lock.yaml", "content/home.en.mjs", "_shell/en/header.html",
+                    "node_modules/react/index.js", "test/build.test.mjs"):
+            p = self.site / rel
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text("x")
+        build_dist.main()
+        served = {p.relative_to(self.out).as_posix() for p in self.published()}
+        for rel in ("build.mjs", "package.json", "pnpm-lock.yaml", "content/home.en.mjs", "_shell/en/header.html",
+                    "node_modules/react/index.js", "test/build.test.mjs"):
+            self.assertNotIn(rel, served)
+
+    def test_meridian_css_is_served(self):
+        p = self.site / "assets" / "meridian" / "styles.css"
+        p.parent.mkdir(parents=True)
+        p.write_text("@import './components.css';")
+        build_dist.main()
+        self.assertTrue((self.out / "assets" / "meridian" / "styles.css").is_file())
 
     def test_headers_hold_the_safety_headers(self):
         build_dist.main()

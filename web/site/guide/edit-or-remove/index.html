@@ -1,63 +1,37 @@
 <!doctype html>
-<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Edit, protect or remove · Komando guide</title>
 <meta name="description" content="Change a server or connection, protect it, or take it out of the inventory.">
 <link rel="canonical" href="https://komando.efolusi.com/guide/edit-or-remove/">
-<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
 <meta name="color-scheme" content="light dark">
-<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
-<link rel="preload" href="../../assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/fonts/fonts.css">
-<link rel="stylesheet" href="../../assets/system.css">
-<style>
-:root {
-  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
-  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
-  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
-  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
-  --font-display: "Instrument Sans", system-ui, sans-serif;
-  --font-text: "Instrument Sans", system-ui, sans-serif;
-  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
-}
-/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
-@media (prefers-color-scheme: dark) {
-  :root { color-scheme: dark;
-    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
-    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
-}
-.nav__logo .kc { width: 28px; height: 28px; flex: none; }
-.nav__logo { gap: var(--s-2); }
-</style>
+<script>(function(){try{var s=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light',c=null,t;try{c=localStorage.getItem('efolusi-theme')}catch(e){}if(c==='light'||c==='dark')t=c;else if(c==='system')t=s;else{var m=document.cookie.match(/(?:^|;\s*)efolusi_theme=(dark|light)(?:;|$)/);t=m?m[1]:s}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme')}catch(e){}})();</script>
+<link rel="preload" href="../../assets/meridian/assets/fonts/Figtree-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/meridian/styles.css">
+<link rel="stylesheet" href="../../assets/meridian/landing.css">
+<link rel="stylesheet" href="../../assets/site.css">
 <link rel="stylesheet" href="../../guide/guide.css">
+<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
 </head>
 <body>
-<header class="nav">
-  <div class="wrap nav__bar">
-    <a class="skip-link" href="#top">Skip to content</a>
-    <a class="nav__logo" href="../../index.html"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
-    <nav class="nav__links" aria-label="Main">
-      <div class="nav__item"><a class="nav__link" href="../../guide/">Guide</a></div>
-      <div class="nav__item"><a class="nav__link" href="../../docs/">Docs</a></div>
-      <div class="nav__item"><a class="nav__link" href="../../index.html#safety">Safety</a></div>
-      <div class="nav__item"><a class="nav__link" href="../../index.html#agent">Agent</a></div>
-      <div class="nav__item"><a class="nav__link" href="../../index.html#editions">Editions</a></div>
-    </nav>
-    <div class="nav__actions">
-      <a class="btn btn--primary" href="../../index.html#install">Install komando</a>
-    </div>
-    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
-      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
-  </div>
-</header>
-<main id="top" class="g-main"><div class="wrap g-grid"><nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary><p class="g-side__home"><a href="../">Guide home</a></p><p class="t-label g-side__group">Start here</p><ul><li><a href="../first-ten-minutes/">Your first ten minutes</a></li><li><a href="../add-a-host/">Add a server</a></li><li><a href="../log-in/">Log in with a key or a password</a></li><li><a href="../add-a-connection/">Add a database, cache or anything else</a></li><li><a href="../home-and-findings/">Home and findings</a></li><li><a href="../the-window/">Find your way around the window</a></li></ul><p class="t-label g-side__group">Servers</p><ul><li><a href="../open-a-terminal/">Open a terminal</a></li><li><a href="../files/">Files and copying between servers</a></li><li><a href="../services/">Services</a></li><li><a href="../logs/">Logs</a></li><li><a href="../updates/">Updates</a></li><li><a href="../containers/">Containers</a></li><li><a href="../jobs/">Jobs</a></li></ul><p class="t-label g-side__group">Data and networks</p><ul><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../port-forwarding/">Port forwarding</a></li><li><a href="../vpn/">VPNs</a></li></ul><p class="t-label g-side__group">Tools</p><ul><li><a href="../keychain/">Keychain</a></li><li><a href="../recipes/">Recipes</a></li><li><a href="../agent/">The agent</a></li></ul><p class="t-label g-side__group">Safety</p><ul><li><a href="../touch-id-and-safety/">Touch ID and safety</a></li><li><a href="../edit-or-remove/" aria-current="page">Edit, protect or remove</a></li></ul><p class="t-label g-side__group">iPhone and iPad</p><ul><li><a href="../iphone-and-ipad/">Komando on iPhone and iPad</a></li></ul><p class="t-label g-side__group">About this guide</p><ul><li><a href="../coming/">What is coming</a></li></ul></details></nav><article class="g-article"><p class="g-crumb t-small muted"><a href="../">Guide</a> · Safety</p><h1>Edit, protect or remove</h1><p class="g-lead t-lead">Change a server or connection, protect it, or take it out of the inventory.</p><p class="g-status"><span class="g-pill g-pill--static">Not released</span> The Komando apps are not released yet. This guide describes them as they will ship. The command line works today: see <a href="../../docs/getting-started/">Getting started</a>.</p><p class="g-status"><span class="g-pill g-pill--static">Coming</span> Parts of this page are not built yet; they are marked. <a href="../coming/">What is coming</a></p><nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul><li><a href="#edit-a-server-or-connection">Edit a server or connection</a></li><li><a href="#a-new-password-for-a-server">A new password for a server</a></li><li><a href="#everything-in-a-row-s-menu">Everything in a row's menu</a></li><li><a href="#protect-a-target">Protect a target</a></li><li><a href="#remove-a-target">Remove a target</a></li><li><a href="#on-the-command-line">On the command line</a></li></ul></nav><div class="g-body"><p>Change a server's or connection's details, protect it, or take it out of the inventory, without the command line.</p>
+<a href="#top" class="ef-skip">Skip to content</a><header data-slot="site-header" class="ef-site-header"><div class="ef-site-header__inner"><a class="ef-site-header__brand" href="../../index.html" aria-label="Komando home"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><nav class="ef-site-header__nav" aria-label="Main"><a class="ef-site-header__link" href="../../index.html#inventory" data-nav="product">Product</a><a class="ef-site-header__link" href="../../index.html#safety" data-nav="safety">Safety</a><a class="ef-site-header__link" href="../../index.html#agent" data-nav="agent">Agent</a><a class="ef-site-header__link" href="../../index.html#editions" data-nav="editions">Editions</a><a class="ef-site-header__link" href="../../guide/" data-nav="guide">Guide</a><a class="ef-site-header__link" href="../../docs/" data-nav="docs">Docs</a></nav><div class="ef-site-header__actions"><button type="button" data-slot="theme-toggle" data-preference="system" class="ef-theme-toggle" aria-label="System theme, switch to light theme" title="System theme"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../index.html#install">Install komando</a></div><button type="button" class="ef-site-header__menu" aria-expanded="false" aria-controls="site-menu" aria-label="Menu"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></button></div><div id="site-menu" class="ef-site-header__panel"><a class="ef-site-header__link" href="../../index.html#inventory" data-nav="product">Product</a><a class="ef-site-header__link" href="../../index.html#safety" data-nav="safety">Safety</a><a class="ef-site-header__link" href="../../index.html#agent" data-nav="agent">Agent</a><a class="ef-site-header__link" href="../../index.html#editions" data-nav="editions">Editions</a><a class="ef-site-header__link" href="../../guide/" data-nav="guide">Guide</a><a class="ef-site-header__link" href="../../docs/" data-nav="docs">Docs</a><div class="ef-site-header__panel-actions"><button type="button" data-slot="theme-toggle" data-preference="system" class="ef-theme-toggle" aria-label="System theme, switch to light theme" title="System theme"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../index.html#install">Install komando</a></div></div></header>
+<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid"><nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary><p class="g-side__home"><a href="../">Guide home</a></p><p class="g-label g-side__group">Start here</p><ul><li><a href="../first-ten-minutes/">Your first ten minutes</a></li><li><a href="../add-a-host/">Add a server</a></li><li><a href="../log-in/">Log in with a key or a password</a></li><li><a href="../add-a-connection/">Add a database, cache or anything else</a></li><li><a href="../home-and-findings/">Home and findings</a></li><li><a href="../the-window/">Find your way around the window</a></li></ul><p class="g-label g-side__group">Servers</p><ul><li><a href="../open-a-terminal/">Open a terminal</a></li><li><a href="../files/">Files and copying between servers</a></li><li><a href="../services/">Services</a></li><li><a href="../logs/">Logs</a></li><li><a href="../updates/">Updates</a></li><li><a href="../containers/">Containers</a></li><li><a href="../jobs/">Jobs</a></li></ul><p class="g-label g-side__group">Data and networks</p><ul><li><a href="../databases/">Databases</a></li><li><a href="../caches/">Caches</a></li><li><a href="../port-forwarding/">Port forwarding</a></li><li><a href="../vpn/">VPNs</a></li></ul><p class="g-label g-side__group">Tools</p><ul><li><a href="../keychain/">Keychain</a></li><li><a href="../recipes/">Recipes</a></li><li><a href="../agent/">The agent</a></li></ul><p class="g-label g-side__group">Safety</p><ul><li><a href="../touch-id-and-safety/">Touch ID and safety</a></li><li><a href="../edit-or-remove/" aria-current="page">Edit, protect or remove</a></li></ul><p class="g-label g-side__group">iPhone and iPad</p><ul><li><a href="../iphone-and-ipad/">Komando on iPhone and iPad</a></li></ul><p class="g-label g-side__group">About this guide</p><ul><li><a href="../coming/">What is coming</a></li></ul></details></nav><article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">Guide</a> · Safety</p><h1>Edit, protect or remove</h1><p class="g-lead">Change a server or connection, protect it, or take it out of the inventory.</p><p class="g-status"><span class="g-pill g-pill--static">Not released</span> The Komando apps are not released yet. This guide describes them as they will ship. The command line works today: see <a href="../../docs/getting-started/">Getting started</a>.</p><p class="g-status"><span class="g-pill g-pill--static">Coming</span> Parts of this page are not built yet; they are marked. <a href="../coming/">What is coming</a></p><nav class="g-toc" aria-label="On this page"><p class="g-label g-muted">On this page</p><ul><li><a href="#edit-a-server-or-connection">Edit a server or connection</a></li><li><a href="#a-new-password-for-a-server">A new password for a server</a></li><li><a href="#everything-in-a-row-s-menu">Everything in a row's menu</a></li><li><a href="#protect-a-target">Protect a target</a></li><li><a href="#remove-a-target">Remove a target</a></li><li><a href="#on-the-command-line">On the command line</a></li></ul></nav><div class="g-body"><p>Change a server's or connection's details, protect it, or take it out of the inventory, without the command line.</p>
 <h2 id="edit-a-server-or-connection">Edit a server or connection</h2>
 <ol class="g-list g-list--ol"><li>Right-click its row on <b>Hosts</b> or <b>Connections</b>, or use the row's ⋯, and choose <b>Edit Host…</b> for a server or <b>Edit…</b> for anything else.</li><li>The sheet "Edit web-2" shows its details, filled in, in the same order as New Host:<ul class="g-list g-list--ul"><li><b>Name</b>: a new name is changed everywhere komando uses it.</li><li><b>Address</b>: <code>user@address</code>, with <code>:port</code> when SSH does not listen on 22. Take the user or the port out to clear it.</li><li><b>Log in with</b>: how the server logs in today is chosen. See <a href="../log-in/#change-how-a-server-logs-in">Change how a server logs in</a>.</li><li><b>Reach through a server or VPN</b>, <b>Groups</b> and <b>Protected</b>.</li><li><b>More</b>: the sudo password. A saved one shows as "Sudo password saved"; leave the field empty to keep it.</li></ul></li><li>Click <b>Save</b>. It stays dimmed until something changed, and only what changed is sent. A banner says "Saved web-2." An open tab of a renamed target follows the new name.</li></ol>
 <p>If the save fails, komando's message shows above the buttons and what you typed stays in the sheet, so you can try again.</p>
@@ -77,17 +51,37 @@
 <ol class="g-list g-list--ol"><li>Click <b>Remove…</b> at the left of the Edit sheet, or <b>Remove Host…</b> (<b>Remove…</b> for a connection) in the row's menu.</li><li>It asks "Remove web-2 from the inventory?". komando forgets it; its passwords stay in the keychain, and the server or database itself is not touched.</li><li>A banner says it is no longer in the inventory, and its open tab closes.</li></ol>
 <p>There is no undo. To bring it back, add it again; its password is still in the keychain.</p>
 <h2 id="on-the-command-line">On the command line</h2>
-<p><code>komando host edit</code>, <code>komando conn edit</code>, <code>komando vpn edit</code> and <code>komando host rename</code> do the same, and <code>komando host rm</code> removes a server.</p></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../touch-id-and-safety/"><span class="t-label muted">Previous</span>Touch ID and safety</a><a class="g-pn g-pn--next" href="../iphone-and-ipad/"><span class="t-label muted">Next</span>Komando on iPhone and iPad</a></nav><p class="g-path t-small muted">Help link for this page: <code>/guide/edit-or-remove/</code></p></article></div></main>
-<footer class="footer g-footer">
-  <div class="wrap">
-    <div class="footer__legal">
-      <span>&copy; 2026 Komando</span>
-      <span><a href="../../guide/">User guide</a> · <a href="../../index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
-    </div>
-  </div>
-</footer>
-<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
-<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
-<script type="module" src="../../assets/system.js"></script>
+<p><code>komando host edit</code>, <code>komando conn edit</code>, <code>komando vpn edit</code> and <code>komando host rename</code> do the same, and <code>komando host rm</code> removes a server.</p></div><nav class="g-pager" aria-label="Previous and next page"><a class="g-pn g-pn--prev" href="../touch-id-and-safety/"><span class="g-label g-muted">Previous</span>Touch ID and safety</a><a class="g-pn g-pn--next" href="../iphone-and-ipad/"><span class="g-label g-muted">Next</span>Komando on iPhone and iPad</a></nav><p class="g-path g-small g-muted">Help link for this page: <code>/guide/edit-or-remove/</code></p></article></div></main>
+<footer data-slot="site-footer" class="ef-site-footer"><div class="ef-site-footer__inner"><div class="ef-site-footer__top"><div class="ef-site-footer__brand"><a class="ef-site-footer__brand-link" href="../../index.html"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><p class="ef-site-footer__tagline">One safe command line for DevOps work.</p></div><nav aria-label="Command line"><h2 class="ef-site-footer__heading">Command line</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../index.html#inventory">Inventory</a></li><li><a class="ef-site-footer__link" href="../../index.html#safety">Safety</a></li><li><a class="ef-site-footer__link" href="../../index.html#install">Install</a></li><li><a class="ef-site-footer__link" href="../../docs/">Docs</a></li><li><a class="ef-site-footer__link" href="https://github.com/sgnd/komando" target="_blank" rel="noopener noreferrer">Source on GitHub<span class="ef-site-footer__sr"> (opens in a new tab)</span></a></li></ul></nav><nav aria-label="Komando apps"><h2 class="ef-site-footer__heading">Komando apps</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../index.html#agent">Agent</a></li><li><a class="ef-site-footer__link" href="../../index.html#editions">Editions</a></li><li><a class="ef-site-footer__link" href="../../guide/">User guide</a></li></ul></nav></div><div class="ef-site-footer__bottom"><span>© 2026 Komando</span><span>Product names and logos are trademarks of their owners.</span></div></div></footer>
+<template id="icon-sun"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span></template><template id="icon-moon"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span></template><template id="icon-monitor"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></template><template id="icon-menu"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></template><template id="icon-x"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 6 6 18"></path>
+  <path d="m6 6 12 12"></path>
+</svg></span></template><template id="icon-play"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:16px;height:16px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
+</svg></span></template><template id="icon-pause"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:16px;height:16px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="14" y="3" width="5" height="18" rx="1"></rect>
+  <rect x="5" y="3" width="5" height="18" rx="1"></rect>
+</svg></span></template>
+<script type="module" src="../../assets/site.js"></script>
 </body>
 </html>

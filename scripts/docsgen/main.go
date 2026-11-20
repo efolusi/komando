@@ -51,6 +51,7 @@ func main() {
 	out := flag.String("out", "web/site/docs", "where the built pages go; its src/ holds this site's own pages")
 	checkOnly := flag.Bool("check", false, "only check the links of the built pages")
 	flag.Parse()
+	outDir = *out
 	if !*checkOnly {
 		if *src == "" {
 			fail("-src is required: the docs/features folder of a komando checkout")
@@ -118,11 +119,11 @@ func build(src, out string) {
 		body, heads := render(p.md, p.slug, slugs)
 		var b strings.Builder
 		b.WriteString(head(p.title+" · komando docs", p.lead, "docs/"+p.slug+"/"))
-		fmt.Fprintf(&b, `<main id="top" class="g-main"><div class="wrap g-grid">%s`, sidebar(pages, p.slug))
-		fmt.Fprintf(&b, `<article class="g-article"><p class="g-crumb t-small muted"><a href="../">Docs</a> · %s</p>`, esc(p.group))
-		fmt.Fprintf(&b, `<h1>%s</h1><p class="g-lead t-lead">%s</p>%s`, inline(p.title, p.slug, slugs), inline(p.lead, p.slug, slugs), toc(heads))
+		fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(pages, p.slug))
+		fmt.Fprintf(&b, `<article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">Docs</a> · %s</p>`, esc(p.group))
+		fmt.Fprintf(&b, `<h1>%s</h1><p class="g-lead">%s</p>%s`, inline(p.title, p.slug, slugs), inline(p.lead, p.slug, slugs), toc(heads))
 		fmt.Fprintf(&b, `<div class="g-body">%s</div>%s`, body, pager(pages, i))
-		fmt.Fprintf(&b, `<p class="g-path t-small muted">%s</p></article></div></main>`+"\n", source(p, ref))
+		fmt.Fprintf(&b, `<p class="g-path g-small g-muted">%s</p></article></div></main>`+"\n", source(p, ref))
 		b.WriteString(foot(false))
 		dir := filepath.Join(out, p.slug)
 		if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -134,7 +135,7 @@ func build(src, out string) {
 	// the docs home: one card per page, under its group
 	var b strings.Builder
 	b.WriteString(head("komando docs", "How to use the komando command line, one page per feature.", "docs/"))
-	fmt.Fprintf(&b, `<main id="top" class="g-main"><div class="wrap g-grid">%s`, sidebar(pages, ""))
+	fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(pages, ""))
 	b.WriteString(`<article class="g-article g-article--index"><h1>komando docs</h1><div class="g-body g-intro">`)
 	b.WriteString(`<p>How to use komando, the free command line for your servers, databases, caches, queues and more, ` +
 		`for people and AI agents. One page per feature. New to komando? Start with <a href="getting-started/">Getting started</a>.</p>`)
@@ -153,11 +154,11 @@ func build(src, out string) {
 		if s, ok := summary[p.slug]; ok {
 			sum = upper(s) + "."
 		}
-		fmt.Fprintf(&b, `<a class="g-card" href="%s/"><span class="t-card">%s</span><span class="t-small muted">%s</span></a>`,
+		fmt.Fprintf(&b, `<a class="g-card" href="%s/"><span class="g-card__title">%s</span><span class="g-small g-muted">%s</span></a>`,
 			esc(p.slug), esc(p.title), plain(sum))
 	}
 	b.WriteString("</div></section>")
-	fmt.Fprintf(&b, `<p class="g-path t-small muted">Built from <a href="https://github.com/sgnd/komando/tree/main/docs/features">docs/features</a> in sgnd/komando%s.</p></article></div></main>`+"\n", refText(ref))
+	fmt.Fprintf(&b, `<p class="g-path g-small g-muted">Built from <a href="https://github.com/sgnd/komando/tree/main/docs/features">docs/features</a> in sgnd/komando%s.</p></article></div></main>`+"\n", refText(ref))
 	b.WriteString(foot(true))
 	write(filepath.Join(out, "index.html"), b.String())
 	fmt.Printf("built %d pages from %s and %s\n", len(pages)+1, src, filepath.Join(out, "src"))
@@ -528,82 +529,45 @@ func (r *renderer) href(target string) string {
 
 // ---------------------------------------------------------------- the page frame (as guide/build.py draws it)
 
-const logo = `<svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" ` +
-	`fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/>` +
-	`<path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" ` +
-	`stroke-linejoin="round"/></svg>`
-
-// siteURL is where the site is served (owner, 2026-11-18: Cloudflare Pages on a subdomain of efolusi.com)
+// siteURL is where the site is served (owner, 2026-11-18: a Cloudflare Worker on a subdomain of efolusi.com)
 const siteURL = "https://komando.efolusi.com/"
+
+// shellDir holds the page shell partials web/site/build.mjs renders with Meridian, relative to -out
+const shellDir = "../_shell/en"
+
+var outDir string
+
+// shell reads one partial; {{root}} becomes the way up to web/site/, and the nav link named current is marked
+func shell(name, root, current string) string {
+	text := strings.ReplaceAll(read(filepath.Join(outDir, shellDir, name+".html")), "{{root}}", root)
+	if current != "" {
+		text = strings.ReplaceAll(text, `data-nav="`+current+`"`, `data-nav="`+current+`" aria-current="page"`)
+	}
+	return strings.TrimRight(text, "\n")
+}
 
 // head starts a docs page; path is the page's own path under the site, such as "docs/" or "docs/install/"
 func head(title, description, path string) string {
 	root, current := "../../", ""
 	if path == "docs/" {
-		root, current = "../", ` aria-current="page"`
+		root, current = "../", "docs"
 	}
 	description = html.UnescapeString(tagRe.ReplaceAllString(inline(description, "", nil), ""))
 	return fmt.Sprintf(`<!doctype html>
-<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>%s</title>
 <meta name="description" content="%s">
-<link rel="canonical" href="%[6]s%[7]s">
-<meta property="og:image" content="%[6]sshare.jpg">
-<link rel="icon" href="%[3]sfavicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
-<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="%s%s">
+%s
+<link rel="stylesheet" href="%[6]sguide/guide.css">
+<link rel="stylesheet" href="%[6]sdocs/docs.css">
 <!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
-<link rel="preload" href="%[3]sassets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="%[3]sassets/fonts/fonts.css">
-<link rel="stylesheet" href="%[3]sassets/system.css">
-<style>
-:root {
-  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
-  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
-  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
-  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
-  --font-display: "Instrument Sans", system-ui, sans-serif;
-  --font-text: "Instrument Sans", system-ui, sans-serif;
-  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%%;
-}
-/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
-@media (prefers-color-scheme: dark) {
-  :root { color-scheme: dark;
-    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
-    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }
-}
-.nav__logo .kc { width: 28px; height: 28px; flex: none; }
-.nav__logo { gap: var(--s-2); }
-</style>
-<link rel="stylesheet" href="%[3]sguide/guide.css">
-<link rel="stylesheet" href="%[3]sdocs/docs.css">
 </head>
 <body>
-<header class="nav">
-  <div class="wrap nav__bar">
-    <a class="skip-link" href="#top">Skip to content</a>
-    <a class="nav__logo" href="%[3]sindex.html">%[4]sKomando</a>
-    <nav class="nav__links" aria-label="Main">
-      <div class="nav__item"><a class="nav__link" href="%[3]sguide/">Guide</a></div>
-      <div class="nav__item"><a class="nav__link" href="%[3]sdocs/"%[5]s>Docs</a></div>
-      <div class="nav__item"><a class="nav__link" href="%[3]sindex.html#safety">Safety</a></div>
-      <div class="nav__item"><a class="nav__link" href="%[3]sindex.html#agent">Agent</a></div>
-      <div class="nav__item"><a class="nav__link" href="%[3]sindex.html#editions">Editions</a></div>
-    </nav>
-    <div class="nav__actions">
-      <a class="btn btn--primary" href="%[3]sindex.html#install">Install komando</a>
-    </div>
-    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
-      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
-  </div>
-</header>
-`, esc(title), esc(description), root, logo, current, siteURL, path)
+%s
+`, esc(title), esc(description), siteURL, path, shell("head", root, ""), root, shell("header", root, current))
 }
 
 func foot(home bool) string {
@@ -611,20 +575,7 @@ func foot(home bool) string {
 	if home {
 		root = "../"
 	}
-	return fmt.Sprintf(`<footer class="footer g-footer">
-  <div class="wrap">
-    <div class="footer__legal">
-      <span>&copy; 2026 Komando</span>
-      <span><a href="%[1]sdocs/">komando docs</a> · <a href="%[1]sguide/">User guide</a> · <a href="%[1]sindex.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
-    </div>
-  </div>
-</footer>
-<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
-<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
-<script type="module" src="%[1]sassets/system.js"></script>
-</body>
-</html>
-`, root)
+	return shell("footer", root, "") + "\n</body>\n</html>\n"
 }
 
 func sidebar(pages []*page, current string) string {
@@ -639,7 +590,7 @@ func sidebar(pages []*page, current string) string {
 			if group != "" {
 				b.WriteString("</ul>")
 			}
-			fmt.Fprintf(&b, `<p class="t-label g-side__group">%s</p><ul>`, esc(p.group))
+			fmt.Fprintf(&b, `<p class="g-label g-side__group">%s</p><ul>`, esc(p.group))
 			group = p.group
 		}
 		cur := ""
@@ -667,17 +618,17 @@ func toc(heads []heading) string {
 	if len(links) < 3 {
 		return ""
 	}
-	return `<nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul>` + strings.Join(links, "") + `</ul></nav>`
+	return `<nav class="g-toc" aria-label="On this page"><p class="g-label g-muted">On this page</p><ul>` + strings.Join(links, "") + `</ul></nav>`
 }
 
 func pager(pages []*page, i int) string {
-	prev := `<a class="g-pn g-pn--prev" href="../"><span class="t-label muted">Previous</span>Docs home</a>`
+	prev := `<a class="g-pn g-pn--prev" href="../"><span class="g-label g-muted">Previous</span>Docs home</a>`
 	if i > 0 {
-		prev = fmt.Sprintf(`<a class="g-pn g-pn--prev" href="../%s/"><span class="t-label muted">Previous</span>%s</a>`, esc(pages[i-1].slug), esc(pages[i-1].title))
+		prev = fmt.Sprintf(`<a class="g-pn g-pn--prev" href="../%s/"><span class="g-label g-muted">Previous</span>%s</a>`, esc(pages[i-1].slug), esc(pages[i-1].title))
 	}
 	next := ""
 	if i+1 < len(pages) {
-		next = fmt.Sprintf(`<a class="g-pn g-pn--next" href="../%s/"><span class="t-label muted">Next</span>%s</a>`, esc(pages[i+1].slug), esc(pages[i+1].title))
+		next = fmt.Sprintf(`<a class="g-pn g-pn--next" href="../%s/"><span class="g-label g-muted">Next</span>%s</a>`, esc(pages[i+1].slug), esc(pages[i+1].title))
 	}
 	return `<nav class="g-pager" aria-label="Previous and next page">` + prev + next + `</nav>`
 }

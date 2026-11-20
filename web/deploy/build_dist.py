@@ -13,7 +13,8 @@ Only these parts of web/site are copied (an allowlist):
 
 Hidden files (.DS_Store, .taste-skill/ ...) are never copied. A symbolic link anywhere in what is copied stops the
 build: a committed link would otherwise publish whatever it points to (test: web/deploy/test_build_dist.py).
-Everything else stays behind: README.md, guide/README.md, guide/build.py, guide/src/, docs/README.md, docs/src/, shots/. After the copy, the script checks the output again
+Everything else stays behind: README.md, build.mjs, content/, _shell/, test/, node_modules/, package.json,
+guide/README.md, guide/build.py, guide/src/, docs/README.md, docs/src/, shots/. After the copy, the script checks the output again
 and stops with an error if a file that must never be served is in it (notes, Python, Markdown sources,
 checker state, a demo page under assets/).
 
@@ -47,11 +48,11 @@ CSP = [
     # Cloudflare injects its Web Analytics beacon on the zone; it loads from static.cloudflareinsights.com
     # and reports to cloudflareinsights.com. The inline script hashes are added here as well.
     ("script-src", ["'self'", "https://static.cloudflareinsights.com"]),
-    # 'unsafe-inline': index.html has two <style> blocks and about 40 style="..." attributes (CSS custom
-    # properties on the app screens), and the scripts set styles too. Hashes cannot cover style attributes
+    # 'unsafe-inline': the drawn app screens carry about 40 style="..." attributes (CSS custom properties), and
+    # Meridian's icons set an inline style. Hashes cannot cover style attributes
     # in every browser. Scripts stay locked to 'self' and hashes, which is where the danger is.
     ("style-src", ["'self'", "'unsafe-inline'"]),
-    ("font-src", ["'self'"]),  # Instrument Sans and DM Mono are served from assets/fonts/
+    ("font-src", ["'self'"]),  # Meridian's fonts are served from assets/meridian/assets/fonts/
     ("img-src", ["'self'", "data:"]),
     # the release number is written in at release time (set_release.py); the beacon reports to Cloudflare
     ("connect-src", ["'self'", "https://cloudflareinsights.com"]),

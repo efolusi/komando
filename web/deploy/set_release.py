@@ -10,6 +10,8 @@ What it changes:
   "Latest komando release" line, the Install link and its address (releases/tag/<tag>), the tag inside the install one-liner's URL,
   .../sgnd/komando/<tag>/install.sh, and its pin, KOMANDO_VERSION=<tag>, so the line installs exactly that release). Every element with data-install-sha holds the sha256 of that tag's
   install.sh.
+- web/site/content/home.en.mjs: `release` and `installSha`, the copy web/site/build.mjs renders index.html from, so a
+  later build keeps the same tag and sha256.
 - web/site/guide/src/first-ten-minutes.md: the tag in each install.sh URL, in "release vX.Y.Z" and in each
   KOMANDO_VERSION= pin, and the sha256 after "should be". Then it builds the guide again (guide/build.py).
 
@@ -29,6 +31,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 PAGE = REPO / "web" / "site" / "index.html"
+CONTENT = REPO / "web" / "site" / "content" / "home.en.mjs"
 GUIDE_SRC = REPO / "web" / "site" / "guide" / "src" / "first-ten-minutes.md"
 GUIDE_BUILD = REPO / "web" / "site" / "guide" / "build.py"
 SCRIPT_URL = "https://raw.githubusercontent.com/sgnd/komando/{tag}/install.sh"
@@ -83,6 +86,12 @@ def main():
     if not n_link:
         raise SystemExit("set_release: index.html has no link to releases/tag/vX.Y.Z")
 
+    content = CONTENT.read_text(encoding="utf-8")
+    content, n_tag = re.subn(r"(export const release = ')v\d+\.\d+\.\d+(';)", r"\g<1>" + tag + r"\g<2>", content)
+    content, n_csha = re.subn(r"(export const installSha = ')[0-9a-f]{64}(';)", r"\g<1>" + sha + r"\g<2>", content)
+    if not (n_tag == 1 and n_csha == 1):
+        raise SystemExit("set_release: home.en.mjs lost its release or its installSha line")
+
     guide = GUIDE_SRC.read_text(encoding="utf-8")
     guide, n_url = re.subn(r"(sgnd/komando/)v\d+\.\d+\.\d+(/install\.sh)", r"\g<1>" + tag + r"\g<2>", guide)
     guide, n_rel = re.subn(r"(release )v\d+\.\d+\.\d+", r"\g<1>" + tag, guide)
@@ -93,6 +102,7 @@ def main():
                          "or one of its two KOMANDO_VERSION pins")
 
     PAGE.write_text(page, encoding="utf-8")
+    CONTENT.write_text(content, encoding="utf-8")
     GUIDE_SRC.write_text(guide, encoding="utf-8")
     subprocess.run([sys.executable, str(GUIDE_BUILD)], check=True)
     print(f"set_release: index.html ({len(tags)} places) and the guide's first page say {tag}; "

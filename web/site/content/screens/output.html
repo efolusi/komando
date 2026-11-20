@@ -1,0 +1,11 @@
+<div class="kmd kfrag" role="img" aria-label="A script with komando commands: komando list and komando facts for people, the same with -o json for scripts, CI and agents">
+<div class="kfrag__head"><svg class="ks"><use href="#s-terminal"/></svg>deploy.sh</div>
+<div class="kfrag__code"><span class="ph-hide"><span class="d">#!/bin/sh</span>
+</span><span class="d"># for people</span>
+<span class="p">komando</span> list
+<span class="ph-hide"><span class="p">komando</span> facts web-1
+</span><span class="d"># for scripts, CI and agents</span>
+<span class="p">komando</span> list -o json
+<span class="ph-hide"><span class="p">komando</span> facts web-1 -o json
+</span><span class="p">komando</span> doctor -o json</div>
+</div>
