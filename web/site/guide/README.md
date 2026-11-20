@@ -38,6 +38,11 @@ decided yet, so the pages link to each other with relative links; prefix these p
 | `/guide/coming/` | What is coming | made from `COMING` in `build.py` |
 
 A section inside a page has an anchor made from its heading, for example `/guide/log-in/#make-or-import-a-key`.
+
+Every page also exists in Indonesian at `/id/guide/<slug>/`, from `src/<slug>.id.md`, with the same heading anchors as the
+English page (so `/id/guide/log-in/#make-or-import-a-key` works too). The Indonesian page words (titles, summaries,
+groups, interface text, the "coming" list) are in `../i18n/guide.id.json`. Keep each `.id.md` heading for heading with its
+English source: the build stops if the counts differ.
 Renaming a heading changes its anchor, so keep the headings the app links to.
 
 Suggested links from the Mac app (not wired yet; the Help menu opens komando's README today, see

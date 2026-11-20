@@ -1,0 +1,135 @@
+{
+  "groups": {
+    "Start here": "Mulai di sini",
+    "Servers": "Server",
+    "Data and networks": "Data dan jaringan",
+    "Tools": "Alat",
+    "Safety": "Keamanan",
+    "iPhone and iPad": "iPhone dan iPad",
+    "About this guide": "Tentang panduan ini"
+  },
+  "pages": {
+    "first-ten-minutes": {"title": "Sepuluh menit pertama Anda", "summary": "Instal komando, buka Komando, tambahkan satu server, lalu buka terminal di server itu."},
+    "add-a-host": {"title": "Menambahkan server", "summary": "Masukkan server ke inventaris, uji, lalu impor server yang sudah Anda punya."},
+    "log-in": {"title": "Login dengan key atau kata sandi", "summary": "Pilih cara Komando login ke server, percayai identitas server, dan ubah nanti."},
+    "add-a-connection": {"title": "Menambahkan database, cache, atau lainnya", "summary": "Tambahkan database, cache, storage, cluster, registry, atau message queue, lalu periksa."},
+    "home-and-findings": {"title": "Home dan temuan", "summary": "Lihat apa yang perlu ditangani dan perbaiki dengan satu tombol."},
+    "the-window": {"title": "Mengenal jendela aplikasi", "summary": "Enam tempat beserta shortcut-nya, memberi ruang, memuat ulang, tab, dan ikon menu bar."},
+    "open-a-terminal": {"title": "Membuka terminal", "summary": "Dapatkan command prompt di server, bagi layarnya, dan sambungkan ulang."},
+    "files": {"title": "File dan menyalin antar-server", "summary": "Salin file antara Mac ini dan server."},
+    "services": {"title": "Service", "summary": "Lihat service di server dan restart, hentikan, atau jalankan salah satunya."},
+    "logs": {"title": "Log", "summary": "Baca log sistem server, log satu service, atau file log, dan ikuti secara langsung."},
+    "updates": {"title": "Update", "summary": "Lihat update yang menunggu di server, instal, dan reboot bila perlu."},
+    "containers": {"title": "Container", "summary": "Lihat container Docker di server beserta lognya, lalu restart atau hentikan salah satunya."},
+    "jobs": {"title": "Job", "summary": "Jalankan perintah panjang yang tetap berjalan setelah Anda memutus koneksi, dan ikuti lognya."},
+    "databases": {"title": "Database", "summary": "Kueri database dengan aman, dan ubah data hanya bila Anda memang ingin."},
+    "caches": {"title": "Cache", "summary": "Cari key di cache seperti Redis, baca isinya, dan ubah dengan sengaja."},
+    "port-forwarding": {"title": "Port forwarding", "summary": "Jangkau database atau halaman web di server dari Mac ini lewat tunnel."},
+    "vpn": {"title": "VPN", "summary": "Tambahkan VPN, nyalakan dan matikan, dan ketahui saat koneksinya putus."},
+    "keychain": {"title": "Keychain", "summary": "Beri komando kata sandi dan key yang dibutuhkan, lalu pasang key di server."},
+    "recipes": {"title": "Recipe", "summary": "Jalankan perintah tersimpan di satu server atau satu grup, dan simpan milik Anda sendiri."},
+    "agent": {"title": "Agen", "summary": "Jelaskan masalah dengan kata-kata, lalu biarkan agen menemukan dan memperbaikinya, dengan bertanya dulu."},
+    "touch-id-and-safety": {"title": "Touch ID dan keamanan", "summary": "Allow changes, target yang dilindungi, audit log, dan kunci Touch ID."},
+    "edit-or-remove": {"title": "Mengubah, melindungi, atau menghapus", "summary": "Ubah server atau koneksi, lindungi, atau keluarkan dari inventaris."},
+    "iphone-and-ipad": {"title": "Komando di iPhone dan iPad", "summary": "Pasangkan ponsel dengan komando, lihat temuan, dan perbaiki dengan Face ID."},
+    "coming": {"title": "Yang akan datang", "summary": "Bagian Komando yang dijelaskan panduan ini tetapi belum dibuat."}
+  },
+  "ui": {
+    "Guide": "Panduan",
+    "All guide pages": "Semua halaman panduan",
+    "Guide home": "Beranda panduan",
+    "On this page": "Di halaman ini",
+    "Previous": "Sebelumnya",
+    "Next": "Berikutnya",
+    "Previous and next page": "Halaman sebelumnya dan berikutnya",
+    "Komando guide": "Panduan Komando",
+    "Komando user guide": "Panduan pengguna Komando",
+    "How to use Komando for Mac, iPhone and iPad, one page per task.": "Cara memakai Komando untuk Mac, iPhone, dan iPad, satu halaman per tugas.",
+    "Not released": "Belum dirilis",
+    "The Komando apps are not released yet. This guide describes them as they will ship.": "Aplikasi Komando belum dirilis. Panduan ini menjelaskannya seperti saat nanti dirilis.",
+    "The command line works today: see": "Command line sudah bisa dipakai sekarang: lihat",
+    "Getting started": "Mulai",
+    "Coming": "Segera",
+    "Parts coming": "Sebagian segera",
+    "not built yet": "belum dibuat",
+    "What is coming": "Yang akan datang",
+    "Parts of this page are not built yet; they are marked.": "Sebagian isi halaman ini belum dibuat dan sudah ditandai.",
+    "These parts of Komando are designed but not built yet.": "Bagian Komando berikut sudah dirancang tetapi belum dibuat.",
+    "The guide marks each one with a {pill} pill where it would be.": "Panduan menandai masing-masing dengan label {pill} di tempatnya nanti.",
+    "Until then, each page says what to do today.": "Sampai saat itu, setiap halaman menjelaskan apa yang bisa Anda lakukan sekarang.",
+    "Waits on:": "Menunggu:",
+    "In the guide:": "Di panduan:",
+    "no page yet": "belum ada halaman",
+    "How to use Komando, the free app for Mac, iPhone and iPad that runs the komando command line for you.": "Cara memakai Komando, aplikasi gratis untuk Mac, iPhone, dan iPad yang menjalankan command line komando untuk Anda.",
+    "One page per thing you do.": "Satu halaman untuk setiap hal yang Anda lakukan.",
+    "New to Komando? Start with": "Baru memakai Komando? Mulai dari",
+    "The app's own button names are in {bold}.": "Nama tombol aplikasi ditulis {bold}.",
+    "bold": "tebal",
+    "Commands, addresses and file paths are in {mono}.": "Perintah, alamat, dan path file ditulis {mono}.",
+    "A {pill} pill marks a part that is not built yet;": "Label {pill} menandai bagian yang belum dibuat;",
+    "lists them all.": "mencantumkan semuanya.",
+    "Help link for this page": "Link bantuan untuk halaman ini"
+  },
+  "coming": {
+    "app-download": {
+      "title": "Link unduh untuk aplikasinya",
+      "what": "Situs ini akan menautkan ke Komando untuk Mac dan ke App Store untuk iPhone dan iPad.",
+      "waits": "Tempat aplikasi Mac dipublikasikan, dan halaman App Store-nya."
+    },
+    "ask-each-time": {
+      "title": "Tanya setiap kali, untuk server atau koneksi",
+      "what": "Pilihan keempat di bawah Log in with pada New Host dan Edit Host, dan pada kata sandi koneksi: tidak ada yang disimpan, dan kata sandi ditanyakan di sebuah tab setiap kali Komando terhubung.",
+      "waits": "komando 0.15.0, yang menambahkan mode yang bertanya saat terhubung. Sampai saat itu formulirnya menawarkan SSH Agent, Saved Key, dan Password, dan kata sandi koneksi disimpan. Formulir VPN sudah punya Ask each time sendiri."
+    },
+    "edit-login": {
+      "title": "Ubah kata sandi koneksi di lembar Edit-nya",
+      "what": "Edit… pada database atau cache mendapat kolom kata sandi baru, seperti Edit Host…: kata sandi yang tersimpan tampil sebagai satu baris, dan kolom kosong berarti tetap memakai yang lama.",
+      "waits": "Lembar Edit Connection. Sampai saat itu, ganti nilainya di halaman Keychain."
+    },
+    "group-tools": {
+      "title": "Alat grup di Hosts",
+      "what": "Add Hosts to Group… (centang beberapa server), Change Login for Group… (satu login untuk setiap server dalam grup, dengan uji coba dulu), dan Add to group saat Anda mengimpor.",
+      "waits": "Sudah dirancang, belum dibuat. Saat ini Anda mengatur grup server di Groups saat menambah atau mengeditnya."
+    },
+    "files-place": {
+      "title": "Tempat Files yang baru",
+      "what": "Files menjadi tempat tersendiri di sidebar (⌘4). Setiap sisi memilih This Mac, sebuah server, atau sebuah storage bucket; Swap menukarnya. Copy to web-1 (⌥⌘→) dan Copy to This Mac (⌥⌘←), folder utuh, seret dari Finder, klik kanan untuk Rename…, Move…, Permissions…, dan Delete…, Retry pada transfer yang gagal, Only copy changed files, dan Copy to a Group….",
+      "waits": "Branch Files P1 milik aplikasi, yang menjadikan Files sebuah tempat. Saat ini Files adalah tab untuk satu server."
+    },
+    "server-to-server": {
+      "title": "Menyalin dari satu server ke server lain",
+      "what": "Pilih server di tiap sisi Files lalu salin silang. komando belum bisa menyalin langsung antara dua server, jadi Komando mengunduh ke Mac ini, mengunggah, lalu menghapus salinan di sini, dan memberi tahu Anda dulu.",
+      "waits": "Tempat Files yang baru."
+    },
+    "phone-files": {
+      "title": "Files di iPhone dan iPad",
+      "what": "Tombol Browse Files pada setiap server dan storage bucket di aplikasi ponsel.",
+      "waits": "komando: unduh ke ponsel dan unggah dari ponsel lewat key terbatas milik ponsel."
+    },
+    "phone-recipes": {
+      "title": "Recipe di iPhone dan iPad",
+      "what": "Pilih recipe tersimpan dan jalankan di server dari ponsel. Recipe yang mengubah sesuatu lewat kartu persetujuan agen.",
+      "waits": "Sudah dirancang, belum dibuat."
+    },
+    "home-updates": {
+      "title": "Update keamanan di Home",
+      "what": "Kartu di Home seperti \"3 servers have security updates.\" dengan Review, dan satu kartu untuk server yang perlu reboot.",
+      "waits": "Sudah dirancang, belum dibuat. Saat ini Anda melihat update di tab Updates setiap server."
+    },
+    "db-backups": {
+      "title": "Tab Backups milik database",
+      "what": "Backup database, Back Up Now, dan Restore, yang selalu bertanya dulu.",
+      "waits": "Belum digambar."
+    },
+    "connection-changes": {
+      "title": "Mengubah storage, cluster, registry, atau queue",
+      "what": "Tombol untuk mengunggah ke bucket, me-restart deployment, atau mengirim pesan ke queue.",
+      "waits": "Belum dirancang. Saat ini: ⌘K, lalu Run a Command…."
+    },
+    "upgrade": {
+      "title": "Upgrade",
+      "what": "Sinkronisasi antar perangkat, tim, AI bawaan tanpa key milik Anda sendiri, dan persetujuan dari ponsel.",
+      "waits": "Belum dibuat dan tidak dijual. Komando dan komando gratis, dan semua yang ada di perangkat Anda sendiri berfungsi sekarang."
+    }
+  }
+}

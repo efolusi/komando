@@ -11,6 +11,13 @@
 //     the order and the one-line summaries of the docs home (its "Every feature" table).
 //   - <out>/src: this site's own pages (getting-started.md, switch-from-termius.md), listed in sitePages.
 //
+// Two languages. Every page is built in English into <out>/<slug>/. A page with an Indonesian twin,
+// <out>/src/<slug>.id.md, is also built into web/site/id/docs/<slug>/ (the folder beside <out>'s parent), with its words
+// (groups and interface text) from web/site/i18n/docs.id.json. An Indonesian page keeps its English page's heading
+// anchors, heading by heading, so the two share their #links; the build stops if their headings differ. A page without a
+// twin is not built in Indonesian: a link to it from an Indonesian page goes to the English page, and its language
+// switch goes to the Indonesian docs home.
+//
 // Each page's title is its "# " heading and its lead is its first paragraph. The Markdown is the subset the
 // sources use: ## to #### headings, paragraphs, "-" and "1." lists (nested by indent), fenced code, tables,
 // "> " notes, `code`, **bold**, *italic* and [text](target) links. A link to NAME.md becomes that page here,
@@ -18,6 +25,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"html"
@@ -58,7 +66,11 @@ func main() {
 		}
 		build(*src, *out)
 	}
-	if !check(*out) {
+	ok := check(*out)
+	if !check(filepath.Join(*out, "..", "id", "docs")) {
+		ok = false
+	}
+	if !ok {
 		os.Exit(1)
 	}
 }
@@ -79,6 +91,56 @@ func read(path string) string {
 // ---------------------------------------------------------------- the pages
 
 var rowRe = regexp.MustCompile(`^\|\s*\[([^\]]+)\]\(([a-z0-9-]+)\.md\)\s*\|\s*([^|]+?)\s*\|`)
+
+// words is the Indonesian text of the interface (web/site/i18n/docs.id.json).
+type words struct {
+	Groups map[string]string `json:"groups"`
+	UI     map[string]string `json:"ui"`
+}
+
+// lang is one language of the docs. English words are the strings in this file; Indonesian words are in words.
+type lang struct {
+	code  string // "en" or "id"
+	base  string // the folder the language lives in under web/site/: "" or "id/"
+	words *words
+}
+
+// lookup returns the text for an interface string. English is the string itself; Indonesian is looked up, and a
+// string the file lacks is not found, so the build stops instead of showing English on an Indonesian page.
+func (l *lang) lookup(text string) (string, bool) {
+	if l.words == nil {
+		return text, true
+	}
+	t, ok := l.words.UI[text]
+	return t, ok
+}
+
+func (l *lang) ui(text string) string {
+	t, ok := l.lookup(text)
+	if !ok {
+		fail("i18n/docs.id.json has no Indonesian text for %q", text)
+	}
+	return t
+}
+
+func (l *lang) group(name string) string {
+	if l.words == nil {
+		return name
+	}
+	t, ok := l.words.Groups[name]
+	if !ok {
+		fail("i18n/docs.id.json has no Indonesian group %q", name)
+	}
+	return t
+}
+
+func readWords(path string) *words {
+	var w words
+	if err := json.Unmarshal([]byte(read(path)), &w); err != nil {
+		fail("%s: %v", path, err)
+	}
+	return &w
+}
 
 func build(src, out string) {
 	readme := read(filepath.Join(src, "README.md"))
@@ -115,16 +177,58 @@ func build(src, out string) {
 	}
 
 	ref := gitRef(src)
+	// the pages that have an Indonesian twin, in the same order
+	var twins []*page
+	idSlugs := map[string]bool{}
+	for _, p := range pages {
+		path := filepath.Join(out, "src", p.slug+".id.md")
+		if _, err := os.Stat(path); err != nil {
+			continue
+		}
+		twins = append(twins, load(path, p.slug, p.group, p.site))
+		idSlugs[p.slug] = true
+	}
+	en := &lang{code: "en"}
+	headIDs := writeLang(en, pages, slugs, idSlugs, summary, ref, out, nil)
+
+	id := &lang{code: "id", base: "id/", words: readWords(filepath.Join(out, "..", "i18n", "docs.id.json"))}
+	writeLang(id, twins, slugs, idSlugs, nil, ref, filepath.Join(out, "..", "id", "docs"), headIDs)
+	fmt.Printf("built %d pages in English and %d in Indonesian from %s and %s\n", len(pages)+1, len(twins)+1, src, filepath.Join(out, "src"))
+}
+
+// writeLang builds the pages of one language and the docs home. all is every English slug (a link to one that has no
+// page in this language goes to the English page); twin is the slugs that have an Indonesian page. fixed holds the English heading ids by slug while building
+// Indonesian; it returns the heading ids of what it built.
+func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[string]string, ref, out string, fixed map[string][]string) map[string][]string {
+	own := map[string]bool{}
+	for _, p := range pages {
+		own[p.slug] = true
+	}
+	ids := map[string][]string{}
 	for i, p := range pages {
-		body, heads := render(p.md, p.slug, slugs)
+		path := "docs/" + p.slug + "/"
+		r := &renderer{slug: p.slug, slugs: own, all: all, lang: l, ids: map[string]int{}}
+		if fixed != nil {
+			r.fixed = fixed[p.slug]
+			if r.fixed == nil {
+				fail("%s: no English page to take its anchors from", p.slug)
+			}
+		}
+		body, heads, err := r.run(p.md)
+		if err != nil {
+			fail("%s (%s): %v", p.slug, l.code, err)
+		}
+		for _, h := range heads {
+			ids[p.slug] = append(ids[p.slug], h.id)
+		}
 		var b strings.Builder
-		b.WriteString(head(p.title+" · komando docs", p.lead, "docs/"+p.slug+"/"))
-		fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(pages, p.slug))
-		fmt.Fprintf(&b, `<article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">Docs</a> · %s</p>`, esc(p.group))
-		fmt.Fprintf(&b, `<h1>%s</h1><p class="g-lead">%s</p>%s`, inline(p.title, p.slug, slugs), inline(p.lead, p.slug, slugs), toc(heads))
-		fmt.Fprintf(&b, `<div class="g-body">%s</div>%s`, body, pager(pages, i))
-		fmt.Fprintf(&b, `<p class="g-path g-small g-muted">%s</p></article></div></main>`+"\n", source(p, ref))
-		b.WriteString(foot(false))
+		b.WriteString(head(p.title+" · "+l.ui("komando docs"), p.lead, path, l, l.code == "id" || twin[p.slug]))
+		fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, p.slug))
+		fmt.Fprintf(&b, `<article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">%s</a> · %s</p>`, esc(l.ui("Docs")), esc(l.group(p.group)))
+		fmt.Fprintf(&b, `<h1>%s</h1><p class="g-lead">%s</p>%s`, inline(p.title, p.slug, own, l), inline(p.lead, p.slug, own, l), toc(l, heads))
+		fmt.Fprintf(&b, `<div class="g-body">%s</div>%s`, body, pager(l, pages, i))
+		fmt.Fprintf(&b, `<p class="g-path g-small g-muted">%s</p></article></div></main>`+"\n", source(l, p, ref))
+		b.WriteString(foot(l, path, l.code == "id" || twin[p.slug]))
 		dir := filepath.Join(out, p.slug)
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			fail("%v", err)
@@ -134,20 +238,31 @@ func build(src, out string) {
 
 	// the docs home: one card per page, under its group
 	var b strings.Builder
-	b.WriteString(head("komando docs", "How to use the komando command line, one page per feature.", "docs/"))
-	fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(pages, ""))
-	b.WriteString(`<article class="g-article g-article--index"><h1>komando docs</h1><div class="g-body g-intro">`)
-	b.WriteString(`<p>How to use komando, the free command line for your servers, databases, caches, queues and more, ` +
-		`for people and AI agents. One page per feature. New to komando? Start with <a href="getting-started/">Getting started</a>.</p>`)
-	b.WriteString(`<p>Commands, flags and file paths are in <code>mono</code>. Help for any command: <code>komando &lt;command&gt; --help</code>. ` +
-		`Looking for the Mac, iPhone and iPad apps? Read the <a href="../guide/">user guide</a>.</p></div>`)
+	b.WriteString(head(l.ui("komando docs"), l.ui("How to use the komando command line, one page per feature."), "docs/", l, true))
+	fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, ""))
+	fmt.Fprintf(&b, `<article class="g-article g-article--index"><h1>%s</h1><div class="g-body g-intro">`, esc(l.ui("komando docs")))
+	start := "Getting started"
+	for _, p := range pages {
+		if p.slug == sitePages[0] {
+			start = p.title
+		}
+	}
+	fmt.Fprintf(&b, `<p>%s %s %s <a href="getting-started/">%s</a>.</p>`, esc(l.ui("How to use komando, the free command line for your servers, databases, caches, queues and more, for people and AI agents.")),
+		esc(l.ui("One page per feature.")), esc(l.ui("New to komando? Start with")), esc(start))
+	fmt.Fprintf(&b, `<p>%s %s <code>komando &lt;command&gt; --help</code>. %s <a href="../guide/">%s</a>.</p>`,
+		strings.Replace(esc(l.ui("Commands, flags and file paths are in {mono}.")), "{mono}", "<code>mono</code>", 1),
+		esc(l.ui("Help for any command:")), esc(l.ui("Looking for the Mac, iPhone and iPad apps? Read the")), esc(l.ui("user guide")))
+	if l.code == "id" {
+		fmt.Fprintf(&b, `<p>%s <a href="../../docs/">%s</a>.</p>`, esc(l.ui("Only some docs pages are translated so far; the rest are in English:")), esc(l.ui("all docs pages in English")))
+	}
+	b.WriteString(`</div>`)
 	group := ""
 	for _, p := range pages {
 		if p.group != group {
 			if group != "" {
 				b.WriteString("</div></section>")
 			}
-			fmt.Fprintf(&b, `<section class="g-group" id="%s"><h2>%s</h2><div class="g-cards">`, anchor(p.group), esc(p.group))
+			fmt.Fprintf(&b, `<section class="g-group" id="%s"><h2>%s</h2><div class="g-cards">`, anchor(p.group), esc(l.group(p.group)))
 			group = p.group
 		}
 		sum := p.lead
@@ -155,13 +270,16 @@ func build(src, out string) {
 			sum = upper(s) + "."
 		}
 		fmt.Fprintf(&b, `<a class="g-card" href="%s/"><span class="g-card__title">%s</span><span class="g-small g-muted">%s</span></a>`,
-			esc(p.slug), esc(p.title), plain(sum))
+			esc(p.slug), esc(p.title), plain(sum, l))
 	}
 	b.WriteString("</div></section>")
-	fmt.Fprintf(&b, `<p class="g-path g-small g-muted">Built from <a href="https://github.com/sgnd/komando/tree/main/docs/features">docs/features</a> in sgnd/komando%s.</p></article></div></main>`+"\n", refText(ref))
-	b.WriteString(foot(true))
+	if l.code == "en" {
+		fmt.Fprintf(&b, `<p class="g-path g-small g-muted">Built from <a href="https://github.com/sgnd/komando/tree/main/docs/features">docs/features</a> in sgnd/komando%s.</p>`, refText(ref))
+	}
+	b.WriteString("</article></div></main>\n")
+	b.WriteString(foot(l, "docs/", true))
 	write(filepath.Join(out, "index.html"), b.String())
-	fmt.Printf("built %d pages from %s and %s\n", len(pages)+1, src, filepath.Join(out, "src"))
+	return ids
 }
 
 // load reads a page and splits off its title (the "# " line) and its lead (the first paragraph).
@@ -209,9 +327,13 @@ func refText(ref string) string {
 	return fmt.Sprintf(" at commit <code>%s</code>", esc(ref))
 }
 
-func source(p *page, ref string) string {
+func source(l *lang, p *page, ref string) string {
 	if p.site {
-		return fmt.Sprintf("Source: <code>web/site/docs/src/%s.md</code>, written from komando&#39;s own docs.", p.slug)
+		suffix := ""
+		if l.code == "id" {
+			suffix = ".id"
+		}
+		return fmt.Sprintf("%s <code>web/site/docs/src/%s%s.md</code>, %s", esc(l.ui("Source:")), p.slug, suffix, esc(l.ui("written from komando's own docs.")))
 	}
 	return fmt.Sprintf(`Source: <a href="%s%s.md">docs/features/%s.md</a> in sgnd/komando%s.`, repoBlob, p.slug, p.slug, refText(ref))
 }
@@ -234,8 +356,8 @@ func esc(s string) string { return html.EscapeString(s) }
 var tagRe = regexp.MustCompile(`<[^>]+>`)
 
 // plain is the inline HTML of text with the links taken out (for a card, which is itself a link).
-func plain(text string) string {
-	h := inline(text, "", nil)
+func plain(text string, l *lang) string {
+	h := inline(text, "", nil, l)
 	h = regexp.MustCompile(`</?a[^>]*>`).ReplaceAllString(h, "")
 	return h
 }
@@ -258,14 +380,22 @@ func anchor(text string) string {
 
 type renderer struct {
 	slug  string
-	slugs map[string]bool
+	slugs map[string]bool // the pages that exist in this language
+	all   map[string]bool // every English page: a link to one that is not in slugs goes to the English page
+	lang  *lang
 	heads []heading
 	ids   map[string]int
+	fixed []string // heading ids to use, in order (an Indonesian page takes its English page's); nil: make them
+	err   error
 }
 
-func render(md, slug string, slugs map[string]bool) (string, []heading) {
-	r := &renderer{slug: slug, slugs: slugs, ids: map[string]int{}}
-	return r.blocks(strings.Split(md, "\n")), r.heads
+// run renders the Markdown of a page. With fixed ids, the page must have exactly those headings.
+func (r *renderer) run(md string) (string, []heading, error) {
+	out := r.blocks(strings.Split(md, "\n"))
+	if r.err == nil && r.fixed != nil && len(r.heads) != len(r.fixed) {
+		r.err = fmt.Errorf("the Indonesian source has %d headings, the English one %d; keep them heading for heading", len(r.heads), len(r.fixed))
+	}
+	return out, r.heads, r.err
 }
 
 func indent(s string) int { return len(s) - len(strings.TrimLeft(s, " ")) }
@@ -303,17 +433,27 @@ func (r *renderer) blocks(lines []string) string {
 				i++
 			}
 			i++
-			out = append(out, `<pre class="d-code" tabindex="0" role="region" aria-label="Code"><code>`+esc(strings.Join(dedent(code, n), "\n"))+`</code></pre>`)
+			out = append(out, `<pre class="d-code" tabindex="0" role="region" aria-label="`+esc(r.lang.ui("Code"))+`"><code>`+esc(strings.Join(dedent(code, n), "\n"))+`</code></pre>`)
 		case headRe.MatchString(line):
 			m := headRe.FindStringSubmatch(line)
 			level := len(m[1])
 			text := r.inline(m[2])
-			id := anchor(text)
-			if k := r.ids[id]; k > 0 {
-				r.ids[id] = k + 1
-				id = fmt.Sprintf("%s-%d", id, k)
+			var id string
+			if r.fixed != nil {
+				if len(r.heads) >= len(r.fixed) {
+					r.err = fmt.Errorf("the Indonesian source has more headings than the English one")
+					id = fmt.Sprintf("extra-%d", len(r.heads))
+				} else {
+					id = r.fixed[len(r.heads)]
+				}
 			} else {
-				r.ids[id] = 1
+				id = anchor(text)
+				if k := r.ids[id]; k > 0 {
+					r.ids[id] = k + 1
+					id = fmt.Sprintf("%s-%d", id, k)
+				} else {
+					r.ids[id] = 1
+				}
 			}
 			r.heads = append(r.heads, heading{level, id, text})
 			out = append(out, fmt.Sprintf(`<h%d id="%s">%s</h%d>`, level, id, text, level))
@@ -441,7 +581,7 @@ var sepRe = regexp.MustCompile(`^\|?[\s:|-]+$`)
 
 func (r *renderer) table(rows []string) string {
 	var b strings.Builder
-	b.WriteString(`<div class="d-table" role="region" aria-label="Table" tabindex="0"><table>`)
+	b.WriteString(`<div class="d-table" role="region" aria-label="` + esc(r.lang.ui("Table")) + `" tabindex="0"><table>`)
 	body := rows[1:]
 	if len(body) > 0 && sepRe.MatchString(body[0]) {
 		body = body[1:]
@@ -470,8 +610,8 @@ var (
 	keepRe   = regexp.MustCompile("\x00(\\d+)\x00")
 )
 
-func inline(text, slug string, slugs map[string]bool) string {
-	return (&renderer{slug: slug, slugs: slugs}).inline(text)
+func inline(text, slug string, slugs map[string]bool, l *lang) string {
+	return (&renderer{slug: slug, slugs: slugs, lang: l}).inline(text)
 }
 
 // inline escapes the text, then turns `code`, links, **bold** and *italic* into HTML.
@@ -520,6 +660,9 @@ func (r *renderer) href(target string) string {
 		return up + "../" + strings.TrimPrefix(file, "site:") + frag
 	case !strings.Contains(file, "/") && strings.HasSuffix(file, ".md") && r.slugs[strings.TrimSuffix(file, ".md")]:
 		return up + strings.TrimSuffix(file, ".md") + "/" + frag
+	case !strings.Contains(file, "/") && strings.HasSuffix(file, ".md") && r.all[strings.TrimSuffix(file, ".md")]:
+		// a page this language does not have yet: the English page, up to the site's root and down again
+		return up + "../../docs/" + strings.TrimSuffix(file, ".md") + "/" + frag
 	case file == "":
 		return frag
 	}
@@ -532,53 +675,91 @@ func (r *renderer) href(target string) string {
 // siteURL is where the site is served (owner, 2026-11-18: a Cloudflare Worker on a subdomain of efolusi.com)
 const siteURL = "https://komando.efolusi.com/"
 
-// shellDir holds the page shell partials web/site/build.mjs renders with Meridian, relative to -out
-const shellDir = "../_shell/en"
+// shellDir holds the page shell partials web/site/build.mjs renders with Meridian, relative to -out; one folder per language
+const shellDir = "../_shell"
 
 var outDir string
 
-// shell reads one partial; {{root}} becomes the way up to web/site/, and the nav link named current is marked
-func shell(name, root, current string) string {
-	text := strings.ReplaceAll(read(filepath.Join(outDir, shellDir, name+".html")), "{{root}}", root)
+// shell reads one partial; {{root}} becomes the way up to web/site/, {{switch}} the address of the page in the other
+// language, and the nav link named current is marked
+func shell(l *lang, name, root, switchTo, current string) string {
+	text := read(filepath.Join(outDir, shellDir, l.code, name+".html"))
+	text = strings.ReplaceAll(strings.ReplaceAll(text, "{{root}}", root), "{{switch}}", switchTo)
 	if current != "" {
 		text = strings.ReplaceAll(text, `data-nav="`+current+`"`, `data-nav="`+current+`" aria-current="page"`)
 	}
 	return strings.TrimRight(text, "\n")
 }
 
-// head starts a docs page; path is the page's own path under the site, such as "docs/" or "docs/install/"
-func head(title, description, path string) string {
-	root, current := "../../", ""
+// rootOf is the way from the page at path (such as "docs/" or "docs/install/") up to web/site/.
+func rootOf(path string, l *lang) string {
+	root := "../../"
 	if path == "docs/" {
-		root, current = "../", "docs"
+		root = "../"
 	}
-	description = html.UnescapeString(tagRe.ReplaceAllString(inline(description, "", nil), ""))
+	if l.code == "id" {
+		root += "../"
+	}
+	return root
+}
+
+// switchHref is where the language switch of the page at path goes. An English page goes to its Indonesian twin, or to
+// the Indonesian docs home when it has none; an Indonesian page goes to its English page.
+func switchHref(path string, l *lang, hasTwin bool) string {
+	root := rootOf(path, l)
+	if l.code == "id" {
+		return root + path
+	}
+	if !hasTwin {
+		path = "docs/"
+	}
+	return root + "id/" + path
+}
+
+// alternates are the hreflang links of the page at path: en and x-default (the English page), and id when it has a twin.
+func alternates(path string, hasTwin bool) string {
+	line := func(code, base string) string {
+		return fmt.Sprintf(`<link rel="alternate" hreflang="%s" href="%s%s%s">`, code, siteURL, base, path)
+	}
+	lines := []string{line("en", "")}
+	if hasTwin {
+		lines = append(lines, line("id", "id/"))
+	}
+	return strings.Join(append(lines, line("x-default", "")), "\n")
+}
+
+// head starts a docs page; path is the page's own path under the site, such as "docs/" or "docs/install/"; hasTwin says
+// whether the page exists in both languages (the docs home always does)
+func head(title, description, path string, l *lang, hasTwin bool) string {
+	root, current := rootOf(path, l), ""
+	if path == "docs/" {
+		current = "docs"
+	}
+	description = html.UnescapeString(tagRe.ReplaceAllString(inline(description, "", nil, l), ""))
+	switchTo := switchHref(path, l, hasTwin)
 	return fmt.Sprintf(`<!doctype html>
-<html lang="en">
+<html lang="%s">
 <head>
 <meta charset="utf-8">
 <title>%s</title>
 <meta name="description" content="%s">
-<link rel="canonical" href="%s%s">
+<link rel="canonical" href="%s%s%s">
 %s
-<link rel="stylesheet" href="%[6]sguide/guide.css">
-<link rel="stylesheet" href="%[6]sdocs/docs.css">
+%s
+<link rel="stylesheet" href="%[9]sguide/guide.css">
+<link rel="stylesheet" href="%[9]sdocs/docs.css">
 <!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
 </head>
 <body>
 %s
-`, esc(title), esc(description), siteURL, path, shell("head", root, ""), root, shell("header", root, current))
+`, l.code, esc(title), esc(description), siteURL, l.base, path, alternates(path, hasTwin), shell(l, "head", root, switchTo, ""), root, shell(l, "header", root, switchTo, current))
 }
 
-func foot(home bool) string {
-	root := "../../"
-	if home {
-		root = "../"
-	}
-	return shell("footer", root, "") + "\n</body>\n</html>\n"
+func foot(l *lang, path string, hasTwin bool) string {
+	return shell(l, "footer", rootOf(path, l), switchHref(path, l, hasTwin), "") + "\n</body>\n</html>\n"
 }
 
-func sidebar(pages []*page, current string) string {
+func sidebar(l *lang, pages []*page, current string) string {
 	up := "../"
 	if current == "" {
 		up = ""
@@ -590,7 +771,7 @@ func sidebar(pages []*page, current string) string {
 			if group != "" {
 				b.WriteString("</ul>")
 			}
-			fmt.Fprintf(&b, `<p class="g-label g-side__group">%s</p><ul>`, esc(p.group))
+			fmt.Fprintf(&b, `<p class="g-label g-side__group">%s</p><ul>`, esc(l.group(p.group)))
 			group = p.group
 		}
 		cur := ""
@@ -600,15 +781,19 @@ func sidebar(pages []*page, current string) string {
 		fmt.Fprintf(&b, `<li><a href="%s%s/"%s>%s</a></li>`, up, p.slug, cur, esc(p.title))
 	}
 	b.WriteString("</ul>")
+	if l.code == "id" {
+		// the pages that are not translated yet are the English docs
+		fmt.Fprintf(&b, `<p class="g-side__home"><a href="%s../../docs/" hreflang="en" lang="en">%s</a></p>`, up, esc(l.ui("all docs pages in English")))
+	}
 	home, homeCur := up, ""
 	if current == "" {
 		home, homeCur = "./", ` aria-current="page"`
 	}
-	return fmt.Sprintf(`<nav class="g-side" aria-label="Docs"><details class="g-side__fold" open><summary>All docs pages</summary>`+
-		`<p class="g-side__home"><a href="%s"%s>Docs home</a></p>%s</details></nav>`, home, homeCur, b.String())
+	return fmt.Sprintf(`<nav class="g-side" aria-label="%s"><details class="g-side__fold" open><summary>%s</summary>`+
+		`<p class="g-side__home"><a href="%s"%s>%s</a></p>%s</details></nav>`, esc(l.ui("Docs")), esc(l.ui("All docs pages")), home, homeCur, esc(l.ui("Docs home")), b.String())
 }
 
-func toc(heads []heading) string {
+func toc(l *lang, heads []heading) string {
 	var links []string
 	for _, h := range heads {
 		if h.level == 2 {
@@ -618,19 +803,21 @@ func toc(heads []heading) string {
 	if len(links) < 3 {
 		return ""
 	}
-	return `<nav class="g-toc" aria-label="On this page"><p class="g-label g-muted">On this page</p><ul>` + strings.Join(links, "") + `</ul></nav>`
+	on := esc(l.ui("On this page"))
+	return `<nav class="g-toc" aria-label="` + on + `"><p class="g-label g-muted">` + on + `</p><ul>` + strings.Join(links, "") + `</ul></nav>`
 }
 
-func pager(pages []*page, i int) string {
-	prev := `<a class="g-pn g-pn--prev" href="../"><span class="g-label g-muted">Previous</span>Docs home</a>`
+func pager(l *lang, pages []*page, i int) string {
+	prevL, nextL := esc(l.ui("Previous")), esc(l.ui("Next"))
+	prev := fmt.Sprintf(`<a class="g-pn g-pn--prev" href="../"><span class="g-label g-muted">%s</span>%s</a>`, prevL, esc(l.ui("Docs home")))
 	if i > 0 {
-		prev = fmt.Sprintf(`<a class="g-pn g-pn--prev" href="../%s/"><span class="g-label g-muted">Previous</span>%s</a>`, esc(pages[i-1].slug), esc(pages[i-1].title))
+		prev = fmt.Sprintf(`<a class="g-pn g-pn--prev" href="../%s/"><span class="g-label g-muted">%s</span>%s</a>`, esc(pages[i-1].slug), prevL, esc(pages[i-1].title))
 	}
 	next := ""
 	if i+1 < len(pages) {
-		next = fmt.Sprintf(`<a class="g-pn g-pn--next" href="../%s/"><span class="g-label g-muted">Next</span>%s</a>`, esc(pages[i+1].slug), esc(pages[i+1].title))
+		next = fmt.Sprintf(`<a class="g-pn g-pn--next" href="../%s/"><span class="g-label g-muted">%s</span>%s</a>`, esc(pages[i+1].slug), nextL, esc(pages[i+1].title))
 	}
-	return `<nav class="g-pager" aria-label="Previous and next page">` + prev + next + `</nav>`
+	return `<nav class="g-pager" aria-label="` + esc(l.ui("Previous and next page")) + `">` + prev + next + `</nav>`
 }
 
 // ---------------------------------------------------------------- link check
