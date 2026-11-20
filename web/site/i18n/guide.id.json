@@ -35,15 +35,7 @@
     "coming": {"title": "Yang akan datang", "summary": "Bagian Komando yang dijelaskan panduan ini tetapi belum dibuat."}
   },
   "ui": {
-    "Skip to content": "Langsung ke konten",
-    "Main": "Utama",
-    "Menu": "Menu",
     "Guide": "Panduan",
-    "Docs": "Dokumentasi",
-    "Safety": "Keamanan",
-    "Agent": "Agen",
-    "Editions": "Edisi",
-    "Install komando": "Instal komando",
     "All guide pages": "Semua halaman panduan",
     "Guide home": "Beranda panduan",
     "On this page": "Di halaman ini",
@@ -76,10 +68,7 @@
     "Commands, addresses and file paths are in {mono}.": "Perintah, alamat, dan path file ditulis {mono}.",
     "A {pill} pill marks a part that is not built yet;": "Label {pill} menandai bagian yang belum dibuat;",
     "lists them all.": "mencantumkan semuanya.",
-    "Help link for this page": "Link bantuan untuk halaman ini",
-    "© 2026 Komando": "© 2026 Komando",
-    "User guide": "Panduan pengguna",
-    "komando on GitHub": "komando di GitHub"
+    "Help link for this page": "Link bantuan untuk halaman ini"
   },
   "coming": {
     "app-download": {

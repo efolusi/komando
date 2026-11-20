@@ -1,37 +1,64 @@
 # komando website
 
 The static site for the free komando command line and the free Komando apps: the home page, the user guide
-(`guide/`) and the command line docs (`docs/`), built on the Meridian design system. The HTML is committed, so
-serving the site needs no build step.
+(`guide/`) and the command line docs (`docs/`), built on the Meridian design system, in English and Indonesian
+(`id/`, see "Languages"). The HTML is committed, so serving the site needs no build step.
 
 ## How the pages are made
 
 | Part | Made by | From |
 |---|---|---|
-| `index.html` | `build.mjs` (Node 26.13.1, pnpm 11.24.0) | `content/home.en.mjs` (the copy) and `content/screens/*.html` (the drawn app screens), rendered with Meridian's marketing components (`Hero`, `Section`, `SectionHead`, `FeatureGrid`, `FeatureCard`, `Marquee`, `SiteHeader`, `SiteFooter`, `ThemeToggle`) through `renderToStaticMarkup` |
-| `_shell/en/head.html`, `header.html`, `footer.html` | `build.mjs` | the same components; `{{root}}` is the way up to `web/site/`, `data-nav="ID"` marks a link the builder sets `aria-current` on |
+| `index.html`, `id/index.html` | `build.mjs` (Node 26.13.1, pnpm 11.24.0) | `content/home.en.mjs` and `content/home.id.mjs` (the copy) and `content/screens/*.html` (the drawn app screens, shared), rendered with Meridian's marketing components (`Hero`, `Section`, `SectionHead`, `FeatureGrid`, `FeatureCard`, `Marquee`, `SiteHeader`, `SiteFooter`, `ThemeToggle`) through `renderToStaticMarkup` |
+| `_shell/en/` and `_shell/id/`: `head.html`, `header.html`, `footer.html` | `build.mjs` | the same components; `{{root}}` is the way up to `web/site/`, `{{switch}}` the address of the page in the other language, `data-nav="ID"` marks a link the builder sets `aria-current` on |
 | `assets/meridian/` | `build.mjs` | copied from the pinned `@efolusi/meridian` package: `styles.css`, `components.css`, `landing.css`, `tokens/`, the fonts and the licence |
-| `guide/<page>/index.html` | `guide/build.py` | `guide/src/*.md`, framed by the shell partials |
-| `docs/<page>/index.html` | `scripts/docsgen` | komando's `docs/features` and `docs/src/`, framed by the shell partials |
+| `guide/<page>/index.html`, `id/guide/<page>/index.html` | `guide/build.py` | `guide/src/*.md` and `guide/src/*.id.md`, framed by the shell partials; the Indonesian words are in `i18n/guide.id.json` |
+| `docs/<page>/index.html`, `id/docs/<page>/index.html` | `scripts/docsgen` | komando's `docs/features` and `docs/src/*.md`, and `docs/src/*.id.md`, framed by the shell partials; the Indonesian words are in `i18n/docs.id.json` |
 | `assets/site.css` | by hand | the site's layer on Meridian's tokens, and the drawn app screens (`.kmd`) on the apps' own tokens |
 | `assets/site.js` | by hand | the theme button (Light, Dark, System; `localStorage` `efolusi-theme`, cookie `efolusi_theme`), the header menu, the Marquee pause, the Copy buttons and the folding page list, following Meridian's `ThemeToggle`, `SiteHeader` and `Marquee`. It becomes an import once Meridian 1.27.0 ships these as plain scripts (MD14) |
 
-Build everything, in this order (the guide and the docs read the shell, so build it first):
+Build everything, in this order (the guide and the docs read the shell, so build it first). Each builder writes
+both languages:
 
 ```bash
 cd web/site && pnpm install && node build.mjs && node --test test/ && cd ../..
 python3 web/site/guide/build.py
 go run scripts/docsgen/main.go -src KOMANDO/docs/features -out web/site/docs
 python3 -I web/deploy/test_build_dist.py && python3 -I web/deploy/build_dist.py
+(cd scripts/docsgen && gofmt -l . && go vet main.go main_test.go && go test main.go main_test.go)
 ```
 
 A Meridian upgrade is a version bump in `package.json` and `pnpm-workspace.yaml`, then the same commands.
+
+## Languages
+
+English is at `/`, Indonesian at `/id/`. Same slugs, so a switch between languages is one prefix
+(`/guide/vpn/` and `/id/guide/vpn/`). Page list: `i18n/page-map.md`.
+
+- **Twin rule.** A page is built in Indonesian only when it has an Indonesian source: the home page
+  (`content/home.id.mjs`), a guide page with `guide/src/<slug>.id.md`, a docs page with `docs/src/<slug>.id.md`. A page
+  without a twin is not built under `/id/`. A link to it from an Indonesian page goes to the English page. Its own
+  language switch goes to the Indonesian docs home, which says the other pages are English.
+- **Every page** has `<html lang>`, a canonical link, and `hreflang` links: `en` and `x-default` (the English page), and
+  `id` when the twin exists. The shell header and footer carry the language switch, named in the language it goes to.
+- **Anchors.** An Indonesian page keeps its English page's heading anchors, heading by heading, so a link such as
+  `/guide/log-in/#make-or-import-a-key` works in both languages. The build stops if the two sources have a different
+  number of headings. Keep every Indonesian source heading for heading with its English page.
+- **Words.** Page titles, summaries, groups, the interface text the builders write and the guide's "coming" list are in
+  `i18n/guide.id.json` and `i18n/docs.id.json`; the home page's and the shell's are in `content/home.id.mjs`. A string
+  that is missing stops the build: an Indonesian page never falls back to English.
+- **Stays as it is** in both languages: product names, commands, flags, file names, error codes, and the app's own button
+  and menu names (the drawn app screens are the app's English interface; only their description for screen readers and
+  the few lines `content/home.id.mjs` names are Indonesian).
+- **Releases.** `set_release.py` writes the tag and the install script's sha256 into both home pages and both first guide
+  pages. Check the version numbers in the Indonesian copy against the release (`i18n/page-map.md`).
+- A new language is a new folder beside `id/`, its `_shell/<lang>/` and word files; nothing else is hard-wired to two.
 
 ## Where the facts come from
 
 | On the page | Source of truth |
 |---|---|
 | Latest release (hero and Install), the tag in the install one-liner and its script's sha256 | Written in at release time, never fetched by the page: `python3 -I web/deploy/set_release.py vX.Y.Z` writes the tag and sha256 into `content/home.en.mjs` and swaps the tag in every `data-release` element of `index.html` (the one-liner runs `install.sh` from that tag, not `main`, and pins it with `KOMANDO_VERSION=<tag>`, so it installs exactly that release), writes the sha256 of that tag's `install.sh` into `data-install-sha`, does the same in `guide/src/first-ten-minutes.md`, and rebuilds the guide. Run it with each komando release and commit what it changed. The install script (from sgnd/komando#183 on) checks that the release is signed with the komando project's key, as `komando update` does, and installs nothing otherwise; the page says so only once the tag it names holds that script |
+| The release marker in every page's head, `<meta name="release" content="<full git sha>">` | Written at build time by `web/deploy/build_dist.py`, never committed: `GITHUB_SHA` in CI (on a `v*` tag it is the tag's commit) or `git rev-parse HEAD` of the checkout. `curl -s https://komando.efolusi.com/ \| grep 'name="release"'` shows which commit is live, as `GET /healthz` does for the APIs |
 | Every `komando …` command | `komando schema` (v0.13.0): every command and flag on the page checked against it on 2026-11-13 |
 | Go version for `go install` | `go.mod` in sgnd/komando (`go 1.27.4`) |
 | Apps: free, everything local; the upgrade (sync, teams, built-in AI, phone approval) coming, not built, no price, no buy link | The owner's decision of 2026-11-12. The apps implement it on their branches: Mac `bfe3f07` (no trial, one Upgrade sheet, no Buy link), iPhone and iPad `3a6e85c` and `aa04a63` (an Upgrade section, nothing for sale), and `docs/product.md` `afe7d6c` |
@@ -73,8 +100,11 @@ The site lives in `efolusi/komando`, under `web/site/`. It deploys as a Cloudfla
 writes to `web/dist/`:
 
 - It copies only what a visitor needs (an allowlist: `index.html`, `favicon.svg`, `share.jpg`, `glyphs/`, `assets/`,
-  the guide and the docs pages and their CSS). `build.mjs`, `content/`, `_shell/`, `test/`, `node_modules/` and the
+  the guide and the docs pages and their CSS, and the same pages under `id/`). `build.mjs`, `content/`, `_shell/`, `test/`, `node_modules/` and the
   notes stay behind. Hidden files and symbolic links are refused.
+- It puts the release marker in the head of every page (see "Where the facts come from"), checks that each page has
+  exactly one, and writes `sitemap.xml` (every page, with `hreflang` alternates for the pages that exist in both
+  languages) and `robots.txt` (everything allowed, the sitemap's address).
 - It writes `_headers`: a Content-Security-Policy whose `script-src` is `'self'`, Cloudflare's analytics beacon and
   the sha256 of every inline script (only Meridian's theme init script, one hash for every page), worked out at
   each build; `frame-ancestors 'none'`, HSTS, `nosniff`, a strict referrer policy and a one-week cache for

@@ -573,7 +573,7 @@ def build_language(lang, english_ids):
 def build():
     en, id_ = Lang("en"), Lang("id")
     pages, ids = build_language(en, None)
-    id_pages, _ = build_language(id_, ids)
+    build_language(id_, ids)
     count = len(PAGES) + 1
     shots = sum(len(p.shots) for p in pages.values())
     done = sum(1 for p in pages.values() for s in p.shots if os.path.exists(os.path.join(SHOTS, s + ".png")))
