@@ -56,7 +56,7 @@
     "Not released": "Belum dirilis",
     "The Komando apps are not released yet. This guide describes them as they will ship.": "Aplikasi Komando belum dirilis. Panduan ini menjelaskannya seperti saat nanti dirilis.",
     "The command line works today: see": "Command line sudah bisa dipakai sekarang: lihat",
-    "Getting started": "Memulai",
+    "Getting started": "Mulai",
     "Coming": "Segera",
     "Parts coming": "Sebagian segera",
     "not built yet": "belum dibuat",
@@ -80,5 +80,67 @@
     "© 2026 Komando": "© 2026 Komando",
     "User guide": "Panduan pengguna",
     "komando on GitHub": "komando di GitHub"
+  },
+  "coming": {
+    "app-download": {
+      "title": "Link unduh untuk aplikasinya",
+      "what": "Situs ini akan menautkan ke Komando untuk Mac dan ke App Store untuk iPhone dan iPad.",
+      "waits": "Tempat aplikasi Mac dipublikasikan, dan halaman App Store-nya."
+    },
+    "ask-each-time": {
+      "title": "Tanya setiap kali, untuk server atau koneksi",
+      "what": "Pilihan keempat di bawah Log in with pada New Host dan Edit Host, dan pada kata sandi koneksi: tidak ada yang disimpan, dan kata sandi ditanyakan di sebuah tab setiap kali Komando terhubung.",
+      "waits": "komando 0.15.0, yang menambahkan mode yang bertanya saat terhubung. Sampai saat itu formulirnya menawarkan SSH Agent, Saved Key, dan Password, dan kata sandi koneksi disimpan. Formulir VPN sudah punya Ask each time sendiri."
+    },
+    "edit-login": {
+      "title": "Ubah kata sandi koneksi di lembar Edit-nya",
+      "what": "Edit… pada database atau cache mendapat kolom kata sandi baru, seperti Edit Host…: kata sandi yang tersimpan tampil sebagai satu baris, dan kolom kosong berarti tetap memakai yang lama.",
+      "waits": "Lembar Edit Connection. Sampai saat itu, ganti nilainya di halaman Keychain."
+    },
+    "group-tools": {
+      "title": "Alat grup di Hosts",
+      "what": "Add Hosts to Group… (centang beberapa server), Change Login for Group… (satu login untuk setiap server dalam grup, dengan uji coba dulu), dan Add to group saat Anda mengimpor.",
+      "waits": "Sudah dirancang, belum dibuat. Saat ini Anda mengatur grup server di Groups saat menambah atau mengeditnya."
+    },
+    "files-place": {
+      "title": "Tempat Files yang baru",
+      "what": "Files menjadi tempat tersendiri di sidebar (⌘4). Setiap sisi memilih This Mac, sebuah server, atau sebuah storage bucket; Swap menukarnya. Copy to web-1 (⌥⌘→) dan Copy to This Mac (⌥⌘←), folder utuh, seret dari Finder, klik kanan untuk Rename…, Move…, Permissions…, dan Delete…, Retry pada transfer yang gagal, Only copy changed files, dan Copy to a Group….",
+      "waits": "Branch Files P1 milik aplikasi, yang menjadikan Files sebuah tempat. Saat ini Files adalah tab untuk satu server."
+    },
+    "server-to-server": {
+      "title": "Menyalin dari satu server ke server lain",
+      "what": "Pilih server di tiap sisi Files lalu salin silang. komando belum bisa menyalin langsung antara dua server, jadi Komando mengunduh ke Mac ini, mengunggah, lalu menghapus salinan di sini, dan memberi tahu Anda dulu.",
+      "waits": "Tempat Files yang baru."
+    },
+    "phone-files": {
+      "title": "Files di iPhone dan iPad",
+      "what": "Tombol Browse Files pada setiap server dan storage bucket di aplikasi ponsel.",
+      "waits": "komando: unduh ke ponsel dan unggah dari ponsel lewat key terbatas milik ponsel."
+    },
+    "phone-recipes": {
+      "title": "Recipe di iPhone dan iPad",
+      "what": "Pilih recipe tersimpan dan jalankan di server dari ponsel. Recipe yang mengubah sesuatu lewat kartu persetujuan agen.",
+      "waits": "Sudah dirancang, belum dibuat."
+    },
+    "home-updates": {
+      "title": "Update keamanan di Home",
+      "what": "Kartu di Home seperti \"3 servers have security updates.\" dengan Review, dan satu kartu untuk server yang perlu reboot.",
+      "waits": "Sudah dirancang, belum dibuat. Saat ini Anda melihat update di tab Updates setiap server."
+    },
+    "db-backups": {
+      "title": "Tab Backups milik database",
+      "what": "Backup database, Back Up Now, dan Restore, yang selalu bertanya dulu.",
+      "waits": "Belum digambar."
+    },
+    "connection-changes": {
+      "title": "Mengubah storage, cluster, registry, atau queue",
+      "what": "Tombol untuk mengunggah ke bucket, me-restart deployment, atau mengirim pesan ke queue.",
+      "waits": "Belum dirancang. Saat ini: ⌘K, lalu Run a Command…."
+    },
+    "upgrade": {
+      "title": "Upgrade",
+      "what": "Sinkronisasi antar perangkat, tim, AI bawaan tanpa key milik Anda sendiri, dan persetujuan dari ponsel.",
+      "waits": "Belum dibuat dan tidak dijual. Komando dan komando gratis, dan semua yang ada di perangkat Anda sendiri berfungsi sekarang."
+    }
   }
 }

@@ -1,6 +1,6 @@
 // The English copy of the home page and the shell. build.mjs renders it with Meridian's marketing components.
 // A field named *Html holds a little inline markup (code, links, strong); every other field is plain text.
-// An Indonesian twin (home.id.mjs, from i18n/home.id.md) adds /id/ in W02.
+// The Indonesian twin is home.id.mjs (from i18n/home.id.md); build.mjs renders both.
 
 export const release = 'v0.15.0';
 export const installSha = '9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af';
@@ -14,6 +14,9 @@ export const meta = {
 
 export const shell = {
   brandLabel: 'Komando home',
+  skip: 'Skip to content',
+  // the link to the other language, named in that language
+  switch: { hrefLang: 'id', label: 'Bahasa Indonesia', ariaLabel: 'Baca halaman ini dalam bahasa Indonesia' },
   nav: [
     { id: 'product', label: 'Product', section: 'inventory' },
     { id: 'safety', label: 'Safety', section: 'safety' },
@@ -84,6 +87,8 @@ export const inventory = {
   lede: 'Add a target once and reach it by name. Servers, databases, caches, storage, clusters, registries and VPNs share one list that you, your scripts and your agent all read.',
   link: 'See how secrets and output work',
   alt: 'You, your scripts and your AI agent all go through komando to reach servers, databases, caches, storage, clusters and VPNs.',
+  sourcesLabel: 'Who asks',
+  reachLabel: 'What komando reaches',
   sources: [
     ['person', 'You', 'Plain text'],
     ['curlybraces', 'Scripts and CI', '-o json'],
@@ -152,6 +157,8 @@ export const editions = {
 export const install = {
   title: 'Install komando on macOS, Linux or Windows',
   copy: 'Copy command',
+  // {release} is the tag; the link keeps data-release so set_release.py finds it
+  ledeHtml: 'One line installs release <a class="site-link" href="https://github.com/sgnd/komando/releases/tag/{release}" data-release>{release}</a>. Then run <code>komando version</code> to check it. The source is on <a class="site-link" href="https://github.com/sgnd/komando">GitHub</a>.',
   unix: {
     title: 'macOS, Linux and Windows',
     body: 'Open a terminal and run this line. On Windows, komando runs through WSL: open a WSL terminal and run the same line.',

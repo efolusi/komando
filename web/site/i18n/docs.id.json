@@ -1,0 +1,31 @@
+{
+  "groups": {
+    "Start here": "Mulai di sini",
+    "Features": "Fitur",
+    "More": "Lainnya"
+  },
+  "ui": {
+    "Docs": "Dokumentasi",
+    "Docs home": "Beranda dokumentasi",
+    "All docs pages": "Semua halaman dokumentasi",
+    "all docs pages in English": "semua halaman dokumentasi (bahasa Inggris)",
+    "On this page": "Di halaman ini",
+    "Previous": "Sebelumnya",
+    "Next": "Berikutnya",
+    "Previous and next page": "Halaman sebelumnya dan berikutnya",
+    "Code": "Kode",
+    "Table": "Tabel",
+    "komando docs": "Dokumentasi komando",
+    "How to use the komando command line, one page per feature.": "Cara memakai command line komando, satu halaman per fitur.",
+    "How to use komando, the free command line for your servers, databases, caches, queues and more, for people and AI agents.": "Cara memakai komando, command line gratis untuk server, database, cache, queue, dan lainnya, bagi manusia dan agen AI.",
+    "One page per feature.": "Satu halaman per fitur.",
+    "New to komando? Start with": "Baru memakai komando? Mulai dari",
+    "Commands, flags and file paths are in {mono}.": "Perintah, flag, dan path file ditulis {mono}.",
+    "Help for any command:": "Bantuan untuk perintah apa pun:",
+    "Looking for the Mac, iPhone and iPad apps? Read the": "Mencari aplikasi untuk Mac, iPhone, dan iPad? Baca",
+    "user guide": "panduan pengguna",
+    "Only some docs pages are translated so far; the rest are in English:": "Baru sebagian halaman dokumentasi yang diterjemahkan; sisanya dalam bahasa Inggris:",
+    "Source:": "Sumber:",
+    "written from komando's own docs.": "ditulis dari dokumentasi komando sendiri."
+  }
+}

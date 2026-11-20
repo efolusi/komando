@@ -1,0 +1,134 @@
+package main
+
+import (
+	"strings"
+	"testing"
+)
+
+var testWords = &words{
+	Groups: map[string]string{"Start here": "Mulai di sini"},
+	UI:     map[string]string{"Docs": "Dokumentasi"},
+}
+
+func TestEnglishWordsAreTheKeys(t *testing.T) {
+	en := &lang{code: "en"}
+	if got, ok := en.lookup("Docs home"); !ok || got != "Docs home" {
+		t.Fatalf("English lookup = %q, %v; want the key itself", got, ok)
+	}
+	if got := en.group("Start here"); got != "Start here" {
+		t.Fatalf("English group = %q", got)
+	}
+}
+
+func TestIndonesianWordsComeFromTheFile(t *testing.T) {
+	id := &lang{code: "id", base: "id/", words: testWords}
+	if got, ok := id.lookup("Docs"); !ok || got != "Dokumentasi" {
+		t.Fatalf("lookup = %q, %v", got, ok)
+	}
+	if _, ok := id.lookup("Docs home"); ok {
+		t.Fatal("a string the file does not have must not be found: the build stops on it, it never falls back to English")
+	}
+	if got := id.group("Start here"); got != "Mulai di sini" {
+		t.Fatalf("group = %q", got)
+	}
+}
+
+func idRenderer() *renderer {
+	return &renderer{
+		slug:  "getting-started",
+		slugs: map[string]bool{"getting-started": true},
+		all:   map[string]bool{"getting-started": true, "install": true},
+		lang:  &lang{code: "id", base: "id/", words: testWords},
+		ids:   map[string]int{},
+	}
+}
+
+func TestIndonesianLinksStayInIndonesianOrGoToTheEnglishPage(t *testing.T) {
+	r := idRenderer()
+	cases := map[string]string{
+		"getting-started.md#2-add":  "../getting-started/#2-add",
+		"install.md":                "../../../docs/install/",
+		"install.md#windows":        "../../../docs/install/#windows",
+		"README.md":                 "../",
+		"site:guide/":               "../../guide/",
+		"site:index.html#install":   "../../index.html#install",
+		"https://example.com/a":     "https://example.com/a",
+		"#top":                      "#top",
+		"../design/sync.md#section": repoBlob + "../design/sync.md#section",
+	}
+	for in, want := range cases {
+		if got := r.href(in); got != want {
+			t.Errorf("href(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
+func TestEnglishLinksAreUnchanged(t *testing.T) {
+	r := &renderer{slug: "getting-started", slugs: map[string]bool{"getting-started": true, "install": true}, lang: &lang{code: "en"}}
+	if got := r.href("install.md"); got != "../install/" {
+		t.Errorf("href = %q", got)
+	}
+	if got := r.href("site:guide/"); got != "../../guide/" {
+		t.Errorf("href = %q", got)
+	}
+}
+
+func TestIndonesianHeadingsTakeTheEnglishAnchors(t *testing.T) {
+	r := idRenderer()
+	r.fixed = []string{"1-install-komando", "2-add-a-server"}
+	out, heads, err := r.run("## 1. Instal komando\n\nTeks.\n\n## 2. Tambah server\n")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out, `<h2 id="1-install-komando">1. Instal komando</h2>`) || !strings.Contains(out, `<h2 id="2-add-a-server">`) {
+		t.Fatalf("anchors not taken from English:\n%s", out)
+	}
+	if len(heads) != 2 || heads[1].id != "2-add-a-server" {
+		t.Fatalf("heads = %+v", heads)
+	}
+}
+
+func TestIndonesianSourceMustHaveTheEnglishHeadings(t *testing.T) {
+	for name, md := range map[string]string{
+		"fewer": "## Satu\n",
+		"more":  "## Satu\n\n## Dua\n\n## Tiga\n",
+	} {
+		r := idRenderer()
+		r.fixed = []string{"one", "two"}
+		if _, _, err := r.run(md); err == nil {
+			t.Errorf("%s headings: want an error, got none", name)
+		}
+	}
+}
+
+func TestSwitchAndAlternates(t *testing.T) {
+	en := &lang{code: "en"}
+	id := &lang{code: "id", base: "id/", words: testWords}
+
+	// an English page with a twin goes to it; one without goes to the Indonesian docs home
+	if got := switchHref("docs/getting-started/", en, true); got != "../../id/docs/getting-started/" {
+		t.Errorf("twin: %q", got)
+	}
+	if got := switchHref("docs/install/", en, false); got != "../../id/docs/" {
+		t.Errorf("no twin: %q", got)
+	}
+	if got := switchHref("docs/", en, true); got != "../id/docs/" {
+		t.Errorf("home: %q", got)
+	}
+	// an Indonesian page goes to its English page
+	if got := switchHref("docs/getting-started/", id, true); got != "../../../docs/getting-started/" {
+		t.Errorf("id page: %q", got)
+	}
+	if got := switchHref("docs/", id, true); got != "../../docs/" {
+		t.Errorf("id home: %q", got)
+	}
+
+	with := alternates("docs/getting-started/", true)
+	if !strings.Contains(with, `hreflang="id" href="https://komando.efolusi.com/id/docs/getting-started/"`) || !strings.Contains(with, `hreflang="x-default" href="https://komando.efolusi.com/docs/getting-started/"`) {
+		t.Errorf("with twin:\n%s", with)
+	}
+	without := alternates("docs/install/", false)
+	if strings.Contains(without, `hreflang="id"`) || !strings.Contains(without, `hreflang="en"`) || !strings.Contains(without, `hreflang="x-default"`) {
+		t.Errorf("without twin:\n%s", without)
+	}
+}

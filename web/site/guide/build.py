@@ -2,10 +2,16 @@
 """Build the Komando user guide: web/site/guide/<slug>/index.html from web/site/guide/src/<slug>.md.
 
     python3 web/site/guide/build.py           build every page, then check every link
-    python3 web/site/guide/build.py --check   only check the links (the site's index.html and the guide)
+    python3 web/site/guide/build.py --check   only check the links (the home pages and the guide, English and Indonesian)
 
 Standard library only. The built pages are committed, so the site keeps needing no build step to serve. Each page's head, header and
-footer come from the shell partials in web/site/_shell/en/, which web/site/build.mjs renders with Meridian.
+footer come from the shell partials in web/site/_shell/<lang>/, which web/site/build.mjs renders with Meridian.
+
+Two languages. English pages come from src/<slug>.md into guide/<slug>/. An Indonesian page comes from src/<slug>.id.md into
+id/guide/<slug>/ and takes its words (page titles and summaries, groups, the interface text this file writes, and the
+"coming" list) from i18n/guide.id.json. The Indonesian page keeps the English page's heading anchors, heading by heading,
+so /guide/log-in/#make-or-import-a-key and /id/guide/log-in/#make-or-import-a-key are the same place; the build stops if
+the two sources do not have the same headings. A page without an .id.md twin is not built in Indonesian.
 
 Two lists live in this file and nowhere else:
   PAGES   every page: its path, title and one-line summary, in the order of the guide's index.
@@ -23,6 +29,7 @@ and "> " for a note box. Link targets: "guide:SLUG" or "guide:SLUG#anchor" for a
                          guide/README.md lists them. Drop the PNG in and build again.
 """
 import html
+import json
 import os
 import re
 import sys
@@ -32,6 +39,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.dirname(HERE)
 SRC = os.path.join(HERE, "src")
 SHOTS = os.path.join(HERE, "shots")
+ID_JSON = os.path.join(SITE, "i18n", "guide.id.json")
 
 # (group, slug, title, summary). The guide's index lists them in this order, under each group.
 PAGES = [
@@ -148,7 +156,49 @@ COMING = {
 }
 
 SLUGS = [p[1] for p in PAGES]
+BUTTON_NAMES = "The app's own button names are in {bold}."
+
+
+class Lang:
+    """English words are the ones in this file; Indonesian words come from i18n/guide.id.json."""
+
+    def __init__(self, code):
+        self.code = code
+        self.base = "id/" if code == "id" else ""   # the folder the language lives in, under web/site/
+        self.out = os.path.join(SITE, "id", "guide") if code == "id" else HERE
+        if code == "id":
+            with open(ID_JSON, encoding="utf-8") as f:
+                self.words = json.load(f)
+        else:
+            self.words = None
+
+    def ui(self, text):
+        """An interface string: the English text itself, or its Indonesian twin."""
+        if self.words is None:
+            return text
+        if text not in self.words["ui"]:
+            raise SystemExit(f"{ID_JSON}: no Indonesian text for {text!r}")
+        return self.words["ui"][text]
+
+    def group(self, name):
+        return name if self.words is None else self.words["groups"][name]
+
+    def title(self, slug):
+        return TITLE[slug] if self.words is None else self.words["pages"][slug]["title"]
+
+    def summary(self, slug):
+        return SUMMARY[slug] if self.words is None else self.words["pages"][slug]["summary"]
+
+    def coming(self, cid):
+        """(title, what it will do, what it waits on) of a COMING entry."""
+        if self.words is None:
+            return COMING[cid]
+        t = self.words["coming"][cid]
+        return t["title"], t["what"], t["waits"]
+
+
 TITLE = {p[1]: p[2] for p in PAGES}
+SUMMARY = {p[1]: p[3] for p in PAGES}
 
 
 def slugify(text):
@@ -158,9 +208,9 @@ def slugify(text):
     return text or "section"
 
 
-def rel_root(slug):
+def rel_root(slug, lang):
     """The way from a page's folder up to web/site/."""
-    return "../" if slug is None else "../../"
+    return ("../" if slug is None else "../../") + ("../" if lang.code == "id" else "")
 
 
 def guide_href(slug, target):
@@ -174,15 +224,18 @@ def guide_href(slug, target):
 
 
 class Page:
-    def __init__(self, slug):
+    def __init__(self, slug, lang):
         self.slug = slug
+        self.lang = lang
         self.coming = []      # COMING ids this page names
         self.shots = []       # screenshot names this page asks for
+        self.ids = None       # heading ids to use, in order (an Indonesian page takes its English page's)
 
 
 def inline(text, page):
     """Escape, then **bold**, `mono`, links and {coming:ID}."""
     codes = []
+    lang = page.lang
 
     def keep_code(m):
         codes.append(m.group(1))
@@ -196,7 +249,7 @@ def inline(text, page):
         if target.startswith("guide:"):
             href = guide_href(page.slug, target[len("guide:"):])
         elif target.startswith("site:"):
-            href = rel_root(page.slug) + "index.html" + target[len("site:"):]
+            href = rel_root(page.slug, lang) + lang.base + "index.html" + target[len("site:"):]
         elif target.startswith("https://"):
             href = target
         elif target.startswith("#"):
@@ -215,7 +268,8 @@ def inline(text, page):
         if cid not in page.coming:
             page.coming.append(cid)
         href = guide_href(page.slug, f"coming#{cid}")
-        return f'<a class="g-pill" href="{href}" title="{html.escape(COMING[cid][0])}: not built yet">Coming</a>'
+        title = html.escape(f"{lang.coming(cid)[0]}: {lang.ui('not built yet')}")
+        return f'<a class="g-pill" href="{href}" title="{title}">{lang.ui("Coming")}</a>'
 
     text = re.sub(r"\{coming:([a-z0-9-]+)\}", coming, text)
     text = re.sub(r"\x00(\d+)\x00", lambda m: f"<code>{html.escape(codes[int(m.group(1))])}</code>", text)
@@ -227,7 +281,7 @@ def shot(name, caption, page):
     png = os.path.join(SHOTS, name + ".png")
     cap = inline(caption, page)
     if os.path.exists(png):
-        src = rel_root(page.slug) + f"guide/shots/{name}.png"
+        src = rel_root(page.slug, page.lang) + f"guide/shots/{name}.png"
         alt = html.escape(re.sub(r"<[^>]+>", "", cap), quote=True)
         return f'<figure class="g-shot"><img src="{src}" alt="{alt}" loading="lazy"><figcaption>{cap}</figcaption></figure>'
     # no PNG yet: the figure is left out of the page; README.md lists every file still to make
@@ -263,9 +317,14 @@ def render(md, page):
             flush()
             level = len(m.group(1))
             text = inline(m.group(2), page)
-            hid = slugify(m.group(2))
-            if hid in [h[1] for h in headings]:
-                raise SystemExit(f"{page.slug}: two headings make the anchor #{hid}")
+            if page.ids is None:
+                hid = slugify(m.group(2))
+                if hid in [h[1] for h in headings]:
+                    raise SystemExit(f"{page.slug}: two headings make the anchor #{hid}")
+            elif len(headings) < len(page.ids):
+                hid = page.ids[len(headings)]
+            else:
+                raise SystemExit(f"{page.slug}: the Indonesian source has more headings than the English one")
             headings.append((level, hid, text))
             out.append(f'<h{level} id="{hid}">{text}</h{level}>')
             continue
@@ -310,142 +369,172 @@ def render(md, page):
             flush()
         para.append(line.strip())
     flush()
+    if page.ids is not None and len(headings) != len(page.ids):
+        raise SystemExit(f"{page.slug}: the Indonesian source has {len(headings)} headings, the English one {len(page.ids)}; "
+                         "keep them heading for heading")
     return "\n".join(out), headings
 
 
 # where the site is served (owner, 2026-11-18: a Cloudflare Worker on a subdomain of efolusi.com)
 SITE_URL = "https://komando.efolusi.com/"
-SHELL = os.path.join(SITE, "_shell", "en")
 
 
-def shell(name, root, current=None):
-    """A page shell partial that web/site/build.mjs renders with Meridian; {{root}} becomes the way up to web/site/."""
-    with open(os.path.join(SHELL, name + ".html"), encoding="utf-8") as f:
-        text = f.read().replace("{{root}}", root).rstrip("\n")
+def shell(name, root, lang, switch, current=None):
+    """A page shell partial that web/site/build.mjs renders with Meridian; {{root}} becomes the way up to web/site/ and
+    {{switch}} the address of the page in the other language."""
+    with open(os.path.join(SITE, "_shell", lang.code, name + ".html"), encoding="utf-8") as f:
+        text = f.read().replace("{{root}}", root).replace("{{switch}}", switch).rstrip("\n")
     if current:
         text = text.replace(f'data-nav="{current}"', f'data-nav="{current}" aria-current="page"')
     return text
 
 
-def head(title, description, slug):
-    root = rel_root(slug)
-    path = "guide/" if slug is None else f"guide/{slug}/"
+def guide_path(slug):
+    return "guide/" if slug is None else f"guide/{slug}/"
+
+
+def head(title, description, slug, lang):
+    root = rel_root(slug, lang)
+    path = guide_path(slug)
+    switch = root + ("" if lang.code == "id" else "id/") + path
     return f"""<!doctype html>
-<html lang="en">
+<html lang="{lang.code}">
 <head>
 <meta charset="utf-8">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description, quote=True)}">
-<link rel="canonical" href="{SITE_URL}{path}">
-{shell("head", root)}
+<link rel="canonical" href="{SITE_URL}{lang.base}{path}">
+<link rel="alternate" hreflang="en" href="{SITE_URL}{path}">
+<link rel="alternate" hreflang="id" href="{SITE_URL}id/{path}">
+<link rel="alternate" hreflang="x-default" href="{SITE_URL}{path}">
+{shell("head", root, lang, switch)}
 <link rel="stylesheet" href="{root}guide/guide.css">
 <!-- built by guide/build.py from guide/src/; edit the source, not this file -->
 </head>
 <body>
-{shell("header", root, "guide" if slug is None else None)}
+{shell("header", root, lang, switch, "guide" if slug is None else None)}
 """
 
 
-def foot(slug):
-    return shell("footer", rel_root(slug)) + "\n</body>\n</html>\n"
+def foot(slug, lang):
+    root = rel_root(slug, lang)
+    switch = root + ("" if lang.code == "id" else "id/") + guide_path(slug)
+    return shell("footer", root, lang, switch) + "\n</body>\n</html>\n"
 
 
-def sidebar(current):
+def sidebar(current, lang):
     up = "" if current is None else "../"
     parts, group = [], None
     for g, slug, title, _ in PAGES:
         if g != group:
             if group is not None:
                 parts.append("</ul>")
-            parts.append(f'<p class="g-label g-side__group">{html.escape(g)}</p><ul>')
+            parts.append(f'<p class="g-label g-side__group">{html.escape(lang.group(g))}</p><ul>')
             group = g
         cur = ' aria-current="page"' if slug == current else ""
-        parts.append(f'<li><a href="{up}{slug}/"{cur}>{html.escape(title)}</a></li>')
+        parts.append(f'<li><a href="{up}{slug}/"{cur}>{html.escape(lang.title(slug))}</a></li>')
     parts.append("</ul>")
     index_cur = ' aria-current="page"' if current is None else ""
-    return (f'<nav class="g-side" aria-label="Guide"><details class="g-side__fold" open><summary>All guide pages</summary>'
-            f'<p class="g-side__home"><a href="{up or "./"}"{index_cur}>Guide home</a></p>{"".join(parts)}</details></nav>')
+    return (f'<nav class="g-side" aria-label="{lang.ui("Guide")}"><details class="g-side__fold" open><summary>{lang.ui("All guide pages")}</summary>'
+            f'<p class="g-side__home"><a href="{up or "./"}"{index_cur}>{lang.ui("Guide home")}</a></p>{"".join(parts)}</details></nav>')
 
 
-def toc(headings):
+def toc(headings, lang):
     h2 = [h for h in headings if h[0] == 2]
     if len(h2) < 3:
         return ""
     links = "".join(f'<li><a href="#{hid}">{text}</a></li>' for _, hid, text in h2)
-    return f'<nav class="g-toc" aria-label="On this page"><p class="g-label g-muted">On this page</p><ul>{links}</ul></nav>'
+    on_page = lang.ui("On this page")
+    return f'<nav class="g-toc" aria-label="{on_page}"><p class="g-label g-muted">{on_page}</p><ul>{links}</ul></nav>'
 
 
-def prev_next(slug):
+def prev_next(slug, lang):
     i = SLUGS.index(slug)
+    prev_l, next_l = lang.ui("Previous"), lang.ui("Next")
     cells = []
     if i > 0:
         p = SLUGS[i - 1]
-        cells.append(f'<a class="g-pn g-pn--prev" href="../{p}/"><span class="g-label g-muted">Previous</span>{html.escape(TITLE[p])}</a>')
+        cells.append(f'<a class="g-pn g-pn--prev" href="../{p}/"><span class="g-label g-muted">{prev_l}</span>{html.escape(lang.title(p))}</a>')
     else:
-        cells.append('<a class="g-pn g-pn--prev" href="../"><span class="g-label g-muted">Previous</span>Guide home</a>')
+        cells.append(f'<a class="g-pn g-pn--prev" href="../"><span class="g-label g-muted">{prev_l}</span>{lang.ui("Guide home")}</a>')
     if i + 1 < len(SLUGS):
         n = SLUGS[i + 1]
-        cells.append(f'<a class="g-pn g-pn--next" href="../{n}/"><span class="g-label g-muted">Next</span>{html.escape(TITLE[n])}</a>')
-    return f'<nav class="g-pager" aria-label="Previous and next page">{"".join(cells)}</nav>'
+        cells.append(f'<a class="g-pn g-pn--next" href="../{n}/"><span class="g-label g-muted">{next_l}</span>{html.escape(lang.title(n))}</a>')
+    return f'<nav class="g-pager" aria-label="{lang.ui("Previous and next page")}">{"".join(cells)}</nav>'
 
 
-UNRELEASED = ('<p class="g-status"><span class="g-pill g-pill--static">Not released</span> '
-              'The Komando apps are not released yet. This guide describes them as they will ship. '
-              'The command line works today: see <a href="{root}docs/getting-started/">Getting started</a>.</p>')
+def pill(lang):
+    return f'<span class="g-pill g-pill--static">{lang.ui("Coming")}</span>'
+
+
+def unreleased(root, lang):
+    return (f'<p class="g-status"><span class="g-pill g-pill--static">{lang.ui("Not released")}</span> '
+            f'{lang.ui("The Komando apps are not released yet. This guide describes them as they will ship.")} '
+            f'{lang.ui("The command line works today: see")} '
+            f'<a href="{root}{lang.base}docs/getting-started/">{lang.ui("Getting started")}</a>.</p>')
 
 
 def coming_body(pages_by_id, page):
-    out = ["<p>These parts of Komando are designed but not built yet. The guide marks each one with a "
-           "<span class=\"g-pill g-pill--static\">Coming</span> pill where it would be. Until then, each page says "
-           "what to do today.</p>"]
-    for cid, (title, what, waits) in COMING.items():
+    lang = page.lang
+    out = [f"<p>{lang.ui('These parts of Komando are designed but not built yet.')} "
+           f"{lang.ui('The guide marks each one with a {pill} pill where it would be.').replace('{pill}', pill(lang))} "
+           f"{lang.ui('Until then, each page says what to do today.')}</p>"]
+    for cid in COMING:
+        title, what, waits = lang.coming(cid)
         used = pages_by_id.get(cid, [])
-        where = ", ".join(f'<a href="../{s}/">{html.escape(TITLE[s])}</a>' for s in used) or "no page yet"
+        where = ", ".join(f'<a href="../{s}/">{html.escape(lang.title(s))}</a>' for s in used) or lang.ui("no page yet")
         out.append(f'<section class="g-coming" id="{cid}"><h2>{html.escape(title)}</h2>'
                    f'<p>{inline(what, page)}</p>'
-                   f'<p class="g-muted"><b>Waits on:</b> {inline(waits, page)}</p>'
-                   f'<p class="g-small g-muted">In the guide: {where}</p></section>')
+                   f'<p class="g-muted"><b>{lang.ui("Waits on:")}</b> {inline(waits, page)}</p>'
+                   f'<p class="g-small g-muted">{lang.ui("In the guide:")} {where}</p></section>')
     return "\n".join(out)
 
 
-def build():
-    pages, bodies = {}, {}
+def build_language(lang, english_ids):
+    """Build one language. english_ids: slug -> heading ids of the English page (None while building English)."""
+    pages, bodies, ids = {}, {}, {}
     for _, slug, _, _ in PAGES:
         if slug == "coming":
             continue
-        path = os.path.join(SRC, slug + ".md")
+        path = os.path.join(SRC, slug + (".id" if lang.code == "id" else "") + ".md")
         if not os.path.exists(path):
             raise SystemExit(f"missing {path}")
-        page = Page(slug)
+        page = Page(slug, lang)
+        if english_ids is not None:
+            page.ids = english_ids[slug]
         with open(path, encoding="utf-8") as f:
             bodies[slug] = render(f.read(), page)
         pages[slug] = page
+        ids[slug] = [h[1] for h in bodies[slug][1]]
 
     pages_by_id = {}
     for slug in SLUGS:
         if slug in pages:
             for cid in pages[slug].coming:
                 pages_by_id.setdefault(cid, []).append(slug)
-    cp = Page("coming")
+    cp = Page("coming", lang)
     bodies["coming"] = (coming_body(pages_by_id, cp), [])
     pages["coming"] = cp
 
+    guide_title = lang.ui("Komando guide")
     for group, slug, title, summary in PAGES:
         body, headings = bodies[slug]
         page = pages[slug]
+        title, summary = lang.title(slug), lang.summary(slug)
+        root = rel_root(slug, lang)
         badge = ""
         if page.coming and slug != "coming":
-            badge = (f'<p class="g-status"><span class="g-pill g-pill--static">Coming</span> Parts of this page are not built yet; '
-                     f'they are marked. <a href="../coming/">What is coming</a></p>')
-        doc = (head(f"{title} · Komando guide", summary, slug)
-               + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(slug)}'
-               + f'<article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">Guide</a> · {html.escape(group)}</p>'
-               + f'<h1>{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{UNRELEASED.format(root='../../')}{badge}{toc(headings)}'
-               + f'<div class="g-body">{body}</div>{prev_next(slug)}'
-               + f'<p class="g-path g-small g-muted">Help link for this page: <code>/guide/{slug}/</code></p>'
-               + '</article></div></main>\n' + foot(slug))
-        os.makedirs(os.path.join(HERE, slug), exist_ok=True)
-        with open(os.path.join(HERE, slug, "index.html"), "w", encoding="utf-8") as f:
+            badge = (f'<p class="g-status">{pill(lang)} {lang.ui("Parts of this page are not built yet; they are marked.")} '
+                     f'<a href="../coming/">{lang.ui("What is coming")}</a></p>')
+        doc = (head(f"{title} · {guide_title}", summary, slug, lang)
+               + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(slug, lang)}'
+               + f'<article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">{lang.ui("Guide")}</a> · {html.escape(lang.group(group))}</p>'
+               + f'<h1>{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{unreleased("../../" + ("../" if lang.code == "id" else ""), lang)}{badge}{toc(headings, lang)}'
+               + f'<div class="g-body">{body}</div>{prev_next(slug, lang)}'
+               + f'<p class="g-path g-small g-muted">{lang.ui("Help link for this page")}: <code>/{lang.base}guide/{slug}/</code></p>'
+               + '</article></div></main>\n' + foot(slug, lang))
+        os.makedirs(os.path.join(lang.out, slug), exist_ok=True)
+        with open(os.path.join(lang.out, slug, "index.html"), "w", encoding="utf-8") as f:
             f.write(doc)
 
     # the guide's own index
@@ -454,30 +543,41 @@ def build():
         if g != group:
             if group is not None:
                 cards.append("</div></section>")
-            cards.append(f'<section class="g-group" id="{slugify(g)}"><h2>{html.escape(g)}</h2><div class="g-cards">')
+            cards.append(f'<section class="g-group" id="{slugify(g)}"><h2>{html.escape(lang.group(g))}</h2><div class="g-cards">')
             group = g
-        pill = ' <span class="g-pill g-pill--static">Parts coming</span>' if pages[slug].coming and slug != "coming" else ""
-        cards.append(f'<a class="g-card" href="{slug}/"><span class="g-card__title">{html.escape(title)}</span>{pill}'
-                     f'<span class="g-small g-muted">{html.escape(summary)}</span></a>')
+        parts = f' <span class="g-pill g-pill--static">{lang.ui("Parts coming")}</span>' if pages[slug].coming and slug != "coming" else ""
+        cards.append(f'<a class="g-card" href="{slug}/"><span class="g-card__title">{html.escape(lang.title(slug))}</span>{parts}'
+                     f'<span class="g-small g-muted">{html.escape(lang.summary(slug))}</span></a>')
     cards.append("</div></section>")
-    intro = (UNRELEASED.format(root='../') + "<p>How to use Komando, the free app for Mac, iPhone and iPad that runs the komando command line for you. "
-             "One page per thing you do. New to Komando? Start with "
-             f'<a href="first-ten-minutes/">Your first ten minutes</a>.</p>'
-             "<p>The app's own button names are in <b>bold</b>. Commands, addresses and file paths are in <code>mono</code>. "
-             'A <span class="g-pill g-pill--static">Coming</span> pill marks a part that is not built yet; '
-             '<a href="coming/">What is coming</a> lists them all.</p>')
-    doc = (head("Komando user guide", "How to use Komando for Mac, iPhone and iPad, one page per task.", None)
-           + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(None)}'
-           + f'<article class="g-article g-article--index"><h1>Komando user guide</h1><div class="g-body g-intro">{intro}</div>'
+    bold = f"<b>{lang.ui('bold')}</b>"
+    intro = (unreleased("../" + ("../" if lang.code == "id" else ""), lang)
+             + f"<p>{lang.ui('How to use Komando, the free app for Mac, iPhone and iPad that runs the komando command line for you.')} "
+             f"{lang.ui('One page per thing you do.')} {lang.ui('New to Komando? Start with')} "
+             f'<a href="first-ten-minutes/">{html.escape(lang.title("first-ten-minutes"))}</a>.</p>'
+             f"<p>{lang.ui(BUTTON_NAMES).replace('{bold}', bold)} "
+             f"{lang.ui('Commands, addresses and file paths are in {mono}.').replace('{mono}', '<code>mono</code>')} "
+             f"{lang.ui('A {pill} pill marks a part that is not built yet;').replace('{pill}', pill(lang))} "
+             f'<a href="coming/">{lang.ui("What is coming")}</a> {lang.ui("lists them all.")}</p>')
+    index_title = lang.ui("Komando user guide")
+    doc = (head(index_title, lang.ui("How to use Komando for Mac, iPhone and iPad, one page per task."), None, lang)
+           + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(None, lang)}'
+           + f'<article class="g-article g-article--index"><h1>{index_title}</h1><div class="g-body g-intro">{intro}</div>'
            + "".join(cards)
-           + '<p class="g-path g-small g-muted">Help link for this page: <code>/guide/</code></p></article></div></main>\n'
-           + foot(None))
-    with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8") as f:
+           + f'<p class="g-path g-small g-muted">{lang.ui("Help link for this page")}: <code>/{lang.base}guide/</code></p></article></div></main>\n'
+           + foot(None, lang))
+    with open(os.path.join(lang.out, "index.html"), "w", encoding="utf-8") as f:
         f.write(doc)
+    return pages, ids
 
+
+def build():
+    en, id_ = Lang("en"), Lang("id")
+    pages, ids = build_language(en, None)
+    id_pages, _ = build_language(id_, ids)
+    count = len(PAGES) + 1
     shots = sum(len(p.shots) for p in pages.values())
     done = sum(1 for p in pages.values() for s in p.shots if os.path.exists(os.path.join(SHOTS, s + ".png")))
-    print(f"built {len(PAGES) + 1} pages; screenshots: {done} of {shots} in place, the rest left out of the pages")
+    print(f"built {count} pages in English and {count} in Indonesian; screenshots: {done} of {shots} in place, the rest left out of the pages")
     for slug, p in pages.items():
         for s in p.shots:
             if not os.path.exists(os.path.join(SHOTS, s + ".png")):
@@ -508,9 +608,10 @@ def parse(path):
 
 
 def check():
-    files = [os.path.join(SITE, "index.html")]
-    for dirpath, _, names in os.walk(HERE):
-        files += [os.path.join(dirpath, n) for n in names if n.endswith(".html")]
+    files = [os.path.join(SITE, "index.html"), os.path.join(SITE, "id", "index.html")]
+    for top in (HERE, os.path.join(SITE, "id", "guide")):
+        for dirpath, _, names in os.walk(top):
+            files += [os.path.join(dirpath, n) for n in names if n.endswith(".html")]
     cache, bad, count = {}, [], 0
     for path in files:
         for ref in parse(path).refs:
