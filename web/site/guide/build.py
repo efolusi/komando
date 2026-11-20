@@ -4,7 +4,8 @@
     python3 web/site/guide/build.py           build every page, then check every link
     python3 web/site/guide/build.py --check   only check the links (the site's index.html and the guide)
 
-Standard library only. The built pages are committed, so the site keeps needing no build step to serve.
+Standard library only. The built pages are committed, so the site keeps needing no build step to serve. Each page's head, header and
+footer come from the shell partials in web/site/_shell/en/, which web/site/build.mjs renders with Meridian.
 
 Two lists live in this file and nowhere else:
   PAGES   every page: its path, title and one-line summary, in the order of the guide's index.
@@ -148,11 +149,6 @@ COMING = {
 
 SLUGS = [p[1] for p in PAGES]
 TITLE = {p[1]: p[2] for p in PAGES}
-
-LOGO = ('<svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" '
-        'fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/>'
-        '<path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" '
-        'stroke-linejoin="round"/></svg>')
 
 
 def slugify(text):
@@ -317,91 +313,41 @@ def render(md, page):
     return "\n".join(out), headings
 
 
-# where the site is served (owner, 2026-11-18: Cloudflare Pages on a subdomain of efolusi.com)
+# where the site is served (owner, 2026-11-18: a Cloudflare Worker on a subdomain of efolusi.com)
 SITE_URL = "https://komando.efolusi.com/"
+SHELL = os.path.join(SITE, "_shell", "en")
+
+
+def shell(name, root, current=None):
+    """A page shell partial that web/site/build.mjs renders with Meridian; {{root}} becomes the way up to web/site/."""
+    with open(os.path.join(SHELL, name + ".html"), encoding="utf-8") as f:
+        text = f.read().replace("{{root}}", root).rstrip("\n")
+    if current:
+        text = text.replace(f'data-nav="{current}"', f'data-nav="{current}" aria-current="page"')
+    return text
 
 
 def head(title, description, slug):
     root = rel_root(slug)
     path = "guide/" if slug is None else f"guide/{slug}/"
     return f"""<!doctype html>
-<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description, quote=True)}">
 <link rel="canonical" href="{SITE_URL}{path}">
-<meta property="og:image" content="{SITE_URL}share.jpg">
-<link rel="icon" href="{root}favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
-<meta name="color-scheme" content="light dark">
-<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
-<link rel="preload" href="{root}assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{root}assets/fonts/fonts.css">
-<link rel="stylesheet" href="{root}assets/system.css">
-<style>
-:root {{
-  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
-  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
-  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
-  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
-  --font-display: "Instrument Sans", system-ui, sans-serif;
-  --font-text: "Instrument Sans", system-ui, sans-serif;
-  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --display-weight: 500; --display-tracking: -0.028em; --display-tracking-xl: -0.036em; --display-stretch: 96%;
-}}
-/* dark mode follows the reader's system setting: the site's own inverse tokens (--p-inv-*) become the page's */
-@media (prefers-color-scheme: dark) {{
-  :root {{ color-scheme: dark;
-    --p-bg: #1c1c1e; --p-surface: #28282a; --p-ink: #f3f3f1; --p-muted: #a1a1a6;
-    --p-accent: #f3f3f1; --p-accent-ink: #1c1c1e; --p-action: #f3f3f1; --p-action-ink: #1c1c1e; }}
-}}
-.nav__logo .kc {{ width: 28px; height: 28px; flex: none; }}
-.nav__logo {{ gap: var(--s-2); }}
-</style>
+{shell("head", root)}
 <link rel="stylesheet" href="{root}guide/guide.css">
+<!-- built by guide/build.py from guide/src/; edit the source, not this file -->
 </head>
 <body>
-<header class="nav">
-  <div class="wrap nav__bar">
-    <a class="skip-link" href="#top">Skip to content</a>
-    <a class="nav__logo" href="{root}index.html">{LOGO}Komando</a>
-    <nav class="nav__links" aria-label="Main">
-      <div class="nav__item"><a class="nav__link" href="{root}guide/"{' aria-current="page"' if slug is None else ''}>Guide</a></div>
-      <div class="nav__item"><a class="nav__link" href="{root}docs/">Docs</a></div>
-      <div class="nav__item"><a class="nav__link" href="{root}index.html#safety">Safety</a></div>
-      <div class="nav__item"><a class="nav__link" href="{root}index.html#agent">Agent</a></div>
-      <div class="nav__item"><a class="nav__link" href="{root}index.html#editions">Editions</a></div>
-    </nav>
-    <div class="nav__actions">
-      <a class="btn btn--primary" href="{root}index.html#install">Install komando</a>
-    </div>
-    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
-      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
-  </div>
-</header>
+{shell("header", root, "guide" if slug is None else None)}
 """
 
 
 def foot(slug):
-    root = rel_root(slug)
-    return f"""<footer class="footer g-footer">
-  <div class="wrap">
-    <div class="footer__legal">
-      <span>&copy; 2026 Komando</span>
-      <span><a href="{root}guide/">User guide</a> · <a href="{root}index.html#install">Install komando</a> · <a href="https://github.com/sgnd/komando">komando on GitHub</a></span>
-    </div>
-  </div>
-</footer>
-<!-- on a narrow screen the list of guide pages starts folded, so the page's own text comes first -->
-<script>if (matchMedia('(max-width: 1023px)').matches) document.querySelector('.g-side__fold')?.removeAttribute('open');</script>
-<script type="module" src="{root}assets/system.js"></script>
-</body>
-</html>
-"""
+    return shell("footer", rel_root(slug)) + "\n</body>\n</html>\n"
 
 
 def sidebar(current):
@@ -411,7 +357,7 @@ def sidebar(current):
         if g != group:
             if group is not None:
                 parts.append("</ul>")
-            parts.append(f'<p class="t-label g-side__group">{html.escape(g)}</p><ul>')
+            parts.append(f'<p class="g-label g-side__group">{html.escape(g)}</p><ul>')
             group = g
         cur = ' aria-current="page"' if slug == current else ""
         parts.append(f'<li><a href="{up}{slug}/"{cur}>{html.escape(title)}</a></li>')
@@ -426,7 +372,7 @@ def toc(headings):
     if len(h2) < 3:
         return ""
     links = "".join(f'<li><a href="#{hid}">{text}</a></li>' for _, hid, text in h2)
-    return f'<nav class="g-toc" aria-label="On this page"><p class="t-label muted">On this page</p><ul>{links}</ul></nav>'
+    return f'<nav class="g-toc" aria-label="On this page"><p class="g-label g-muted">On this page</p><ul>{links}</ul></nav>'
 
 
 def prev_next(slug):
@@ -434,12 +380,12 @@ def prev_next(slug):
     cells = []
     if i > 0:
         p = SLUGS[i - 1]
-        cells.append(f'<a class="g-pn g-pn--prev" href="../{p}/"><span class="t-label muted">Previous</span>{html.escape(TITLE[p])}</a>')
+        cells.append(f'<a class="g-pn g-pn--prev" href="../{p}/"><span class="g-label g-muted">Previous</span>{html.escape(TITLE[p])}</a>')
     else:
-        cells.append('<a class="g-pn g-pn--prev" href="../"><span class="t-label muted">Previous</span>Guide home</a>')
+        cells.append('<a class="g-pn g-pn--prev" href="../"><span class="g-label g-muted">Previous</span>Guide home</a>')
     if i + 1 < len(SLUGS):
         n = SLUGS[i + 1]
-        cells.append(f'<a class="g-pn g-pn--next" href="../{n}/"><span class="t-label muted">Next</span>{html.escape(TITLE[n])}</a>')
+        cells.append(f'<a class="g-pn g-pn--next" href="../{n}/"><span class="g-label g-muted">Next</span>{html.escape(TITLE[n])}</a>')
     return f'<nav class="g-pager" aria-label="Previous and next page">{"".join(cells)}</nav>'
 
 
@@ -457,8 +403,8 @@ def coming_body(pages_by_id, page):
         where = ", ".join(f'<a href="../{s}/">{html.escape(TITLE[s])}</a>' for s in used) or "no page yet"
         out.append(f'<section class="g-coming" id="{cid}"><h2>{html.escape(title)}</h2>'
                    f'<p>{inline(what, page)}</p>'
-                   f'<p class="muted"><b>Waits on:</b> {inline(waits, page)}</p>'
-                   f'<p class="t-small muted">In the guide: {where}</p></section>')
+                   f'<p class="g-muted"><b>Waits on:</b> {inline(waits, page)}</p>'
+                   f'<p class="g-small g-muted">In the guide: {where}</p></section>')
     return "\n".join(out)
 
 
@@ -492,11 +438,11 @@ def build():
             badge = (f'<p class="g-status"><span class="g-pill g-pill--static">Coming</span> Parts of this page are not built yet; '
                      f'they are marked. <a href="../coming/">What is coming</a></p>')
         doc = (head(f"{title} · Komando guide", summary, slug)
-               + f'<main id="top" class="g-main"><div class="wrap g-grid">{sidebar(slug)}'
-               + f'<article class="g-article"><p class="g-crumb t-small muted"><a href="../">Guide</a> · {html.escape(group)}</p>'
-               + f'<h1>{html.escape(title)}</h1><p class="g-lead t-lead">{html.escape(summary)}</p>{UNRELEASED.format(root='../../')}{badge}{toc(headings)}'
+               + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(slug)}'
+               + f'<article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">Guide</a> · {html.escape(group)}</p>'
+               + f'<h1>{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{UNRELEASED.format(root='../../')}{badge}{toc(headings)}'
                + f'<div class="g-body">{body}</div>{prev_next(slug)}'
-               + f'<p class="g-path t-small muted">Help link for this page: <code>/guide/{slug}/</code></p>'
+               + f'<p class="g-path g-small g-muted">Help link for this page: <code>/guide/{slug}/</code></p>'
                + '</article></div></main>\n' + foot(slug))
         os.makedirs(os.path.join(HERE, slug), exist_ok=True)
         with open(os.path.join(HERE, slug, "index.html"), "w", encoding="utf-8") as f:
@@ -511,8 +457,8 @@ def build():
             cards.append(f'<section class="g-group" id="{slugify(g)}"><h2>{html.escape(g)}</h2><div class="g-cards">')
             group = g
         pill = ' <span class="g-pill g-pill--static">Parts coming</span>' if pages[slug].coming and slug != "coming" else ""
-        cards.append(f'<a class="g-card" href="{slug}/"><span class="t-card">{html.escape(title)}</span>{pill}'
-                     f'<span class="t-small muted">{html.escape(summary)}</span></a>')
+        cards.append(f'<a class="g-card" href="{slug}/"><span class="g-card__title">{html.escape(title)}</span>{pill}'
+                     f'<span class="g-small g-muted">{html.escape(summary)}</span></a>')
     cards.append("</div></section>")
     intro = (UNRELEASED.format(root='../') + "<p>How to use Komando, the free app for Mac, iPhone and iPad that runs the komando command line for you. "
              "One page per thing you do. New to Komando? Start with "
@@ -521,10 +467,10 @@ def build():
              'A <span class="g-pill g-pill--static">Coming</span> pill marks a part that is not built yet; '
              '<a href="coming/">What is coming</a> lists them all.</p>')
     doc = (head("Komando user guide", "How to use Komando for Mac, iPhone and iPad, one page per task.", None)
-           + f'<main id="top" class="g-main"><div class="wrap g-grid">{sidebar(None)}'
+           + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(None)}'
            + f'<article class="g-article g-article--index"><h1>Komando user guide</h1><div class="g-body g-intro">{intro}</div>'
            + "".join(cards)
-           + '<p class="g-path t-small muted">Help link for this page: <code>/guide/</code></p></article></div></main>\n'
+           + '<p class="g-path g-small g-muted">Help link for this page: <code>/guide/</code></p></article></div></main>\n'
            + foot(None))
     with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8") as f:
         f.write(doc)

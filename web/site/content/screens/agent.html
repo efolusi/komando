@@ -1,0 +1,48 @@
+<div class="app kmd kmd--dark" role="img" aria-label="The Komando agent beside web-1’s terminal: it checked the locks on prod-db, found query 48213 holding the orders table and asks before cancelling it on protected prod-db">
+<div class="app__pane app__pane--list">
+<div class="k-toolbar"><span class="k-dot"></span><span class="k-mono">deploy@web-1</span><span class="k-meta">10.0.0.4 · via bastion</span><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-dots"/></svg></span></div>
+<div class="k-term"><span class="d">Last login: Sun Nov  8 09:12:44 2026 from 10.0.0.1</span>
+<span class="g">deploy@web-1</span>:<span class="b">~</span>$ systemctl is-active nginx
+<span class="g">active</span>
+<span class="g">deploy@web-1</span>:<span class="b">~</span>$ cat releases/CURRENT
+v1.8.1
+<span class="g">deploy@web-1</span>:<span class="b">~</span>$ df -h /
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1        78G   61G   14G  <span class="y">82%</span> /
+<span class="g">deploy@web-1</span>:<span class="b">~</span>$ tail -n 4 logs/app.log
+<span class="d">09:14:02 INFO </span> GET /health 200 3ms
+<span class="d">09:14:05 </span><span class="y">WARN </span> slow query on orders 812ms
+<span class="d">09:14:07 </span><span class="r">ERROR</span> upstream timed out: api:8080
+<span class="d">09:14:09 INFO </span> GET /orders 200 1204ms
+<span class="g">deploy@web-1</span>:<span class="b">~</span>$ <span class="cur"></span></div>
+</div>
+<div class="app__pane app__pane--open" style="background: var(--k-panel)">
+<div class="k-toolbar"><span class="k-mark"><svg class="ks"><use href="#s-bubble"/></svg></span><b>Agent</b><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks ks--12"><use href="#s-new"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks ks--12"><use href="#s-x"/></svg></span></div>
+<!-- the conversation stacks up from the composer (column-reverse, newest first in the source); on a short screen
+the older turns are left out whole (page CSS), so nothing is cut through its text -->
+<div class="k-conv">
+<div class="k-approval">
+<div class="kmd-row" style="align-items: flex-start"><svg class="ks" style="color: var(--k-warn)"><use href="#s-warn"/></svg><span class="kmd-two"><b>Cancel query 48213 on prod-db?</b><span class="k-sub">prod-db is protected, and this stops a running query.</span></span></div>
+<div class="k-approval__code">komando db kill prod-db 48213</div>
+<div class="k-approval__act"><span class="k-btn k-btn--ghost">Don’t Run</span><span class="k-btn">Allow Once</span></div>
+</div>
+<div class="k-msg"><span class="k-mark"><svg class="ks"><use href="#s-bubble"/></svg></span><div class="k-msg__body">
+<p>The app on web-1 is waiting for prod-db.</p>
+<div class="k-tool"><div class="k-tool__head"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-mono k-trunc">komando db locks prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span><span class="k-meta">1.1 s</span></div></div>
+<p>Query 48213 has held the orders table for 14 minutes.</p>
+</div></div>
+<div class="k-turn">
+<div class="k-tool"><div class="k-tool__head"><svg class="ks k-t3"><use href="#s-clip"/></svg><span class="k-mono k-trunc">tail -n 4 logs/app.log</span><span class="k-spacer"></span><span class="k-meta">web-1 · 4 lines</span></div></div>
+<div class="k-bubble">What do these errors mean?</div>
+</div>
+</div>
+<div class="k-foot">
+<div class="k-composer">
+<div class="kmd-row"><span class="k-ctx"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks ks--12"><use href="#s-server"/></svg></span>web-1</span><span class="k-ctx"><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks ks--12"><use href="#s-db"/></svg></span>prod-db</span></div>
+<span class="k-t3">Ask about your servers, or tell the agent what to do…</span>
+<div class="kmd-row"><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-at"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-clip"/></svg></span><span class="k-check"><span class="k-check__box"><svg class="ks ks--12" style="stroke-width:2"><use href="#s-check"/></svg></span>Allow changes</span><span class="k-meta" style="color: var(--k-warn)">Each change asks first</span><span class="k-spacer"></span><span class="k-send"><svg class="ks ks--12"><use href="#s-up"/></svg></span></div>
+</div>
+<span class="k-contract">Runs as you, with komando’s seatbelts. Every command it runs goes to the audit log.</span>
+</div>
+</div>
+</div>

@@ -1,678 +1,164 @@
 <!doctype html>
-<html lang="en" data-type="software" data-radius="soft" data-ground="sage" data-buttons="arrow" data-motion>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>komando: a DevOps command line for you and your AI agent</title>
 <meta name="description" content="Free, open-source command line for servers, databases, caches, storage and VPNs, with free Komando apps for Mac, iPhone and iPad coming next.">
+<link rel="canonical" href="https://komando.efolusi.com/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="komando: a DevOps command line for you and your AI agent">
 <meta property="og:description" content="One inventory, read-only by default, passwords out of the agent’s reach. Free and open source. Free Komando apps for Mac, iPhone and iPad come next.">
-<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f3f3f1">
-<link rel="canonical" href="https://komando.efolusi.com/">
-<meta name="site-kind" content="software">
-<meta name="page-type" content="software">
-<link rel="preload" href="assets/fonts/InstrumentSans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/system.css">
-<link rel="stylesheet" href="assets/ui/cards.css">
-<link rel="stylesheet" href="assets/motion/motion.css">
-<link rel="stylesheet" href="assets/backgrounds/backgrounds.css">
-<link rel="stylesheet" href="assets/layout/layout.css">
-<link rel="stylesheet" href="assets/icons/icon.css">
-<!-- start.mjs brand --page software --bg "#f3f3f1" --surface "#ffffff" --ink "#1c1c1e" --muted "#505056" --accent "#1c1c1e" --type instrument --radius soft -->
-<style>
-:root {
-  --p-bg: #f3f3f1; --p-surface: #ffffff; --p-ink: #1c1c1e; --p-muted: #505056;
-  --p-accent: #1c1c1e; --p-accent-ink: #f3f3f1; --p-action: #1c1c1e; --p-action-ink: #f3f3f1;
-  --p-inv-bg: #1c1c1e; --p-inv-surface: #28282a; --p-inv-ink: #f3f3f1; --p-inv-muted: #999999;
-  --p-inv-accent: #f3f3f1; --p-inv-accent-ink: #1c1c1e; --p-inv-action: #f3f3f1; --p-inv-action-ink: #1c1c1e;
-  --font-display: "Instrument Sans", system-ui, sans-serif;
-  --font-text: "Instrument Sans", system-ui, sans-serif;
-  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --display-weight: 500;
-  --display-tracking: -0.028em;
-  --display-tracking-xl: -0.036em;
-  --display-stretch: 96%;
-  --ly-scale: 1.04;
-}
-</style>
-<link rel="stylesheet" href="assets/diagrams/diagram.css">
-<script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
-<script src="assets/backgrounds/backgrounds.js"></script>
-<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
-<link rel="modulepreload" href="assets/moments/moments.js">
-<link rel="modulepreload" href="assets/moments/lib.js">
-<link rel="modulepreload" href="assets/moments/word-highlight/moment.js">
-<link rel="modulepreload" href="assets/moments/line-carries-colour/moment.js">
-<!-- page CSS: only what sits inside a visual (the Komando screens, drawn from design/components Page cards and
-     design/tokens.json), the logo, the install line and one --p-h for the card group -->
-<style>
-  /* the K-caret logo (design/logo.md, the white version for the web) */
-  .nav__logo .kc { width: 28px; height: 28px; flex: none; }
-  .nav__logo { gap: var(--s-2); }
-
-  /* the install line: the real command and its Copy button */
-  .cmd { display: flex; align-items: center; gap: var(--s-3); margin-top: var(--s-6); padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); }
-  /* the command breaks only after a "/" (a <wbr> there) or at a space, never inside a word */
-  .cmd code { flex: 1 1 auto; min-width: 0; font-family: var(--font-mono); font-size: 14px; line-height: 20px; color: var(--ink); overflow-wrap: normal; word-break: normal; }
-  .cmd code::before { content: "$ "; color: #1659ff; }
-  html[data-buttons] .cmd .btn { flex: none; }
-  .cmd__status { min-height: 20px; margin: var(--s-2) 0 0; font-size: var(--t-small); color: var(--muted); }
-  .hero__text .btn-row { margin-top: var(--s-5); }
-  /* in a card, and on a phone, the Copy button sits under the command, on the command's left line */
-  .cmd--stack { flex-direction: column; align-items: flex-start; gap: var(--s-2); }
-  @media (max-width: 639px) { .cmd { flex-direction: column; align-items: flex-start; gap: var(--s-2); } .cmd .btn { height: 44px; } }
-
-  /* ---- Komando, the app: tokens from design/tokens.json (light and dark) ---- */
-  .kmd { --k-window: #f3f3f1; --k-panel: #ffffff; --k-card: #ffffff; --k-hover: #f7f7f5; --k-subtle: #f4f4f2; --k-border: #e4e4e1; --k-edge: #8c8c91;
-    --k-text: #1c1c1e; --k-text2: #505056; --k-text3: #6e6e75; --k-accent: #1659ff; --k-on-accent: #ffffff; --k-primary: #1c1c1e; --k-on-primary: #ffffff;
-    --k-ok: #247a43; --k-warn: #b24a00; --k-danger: #ca282e; --k-tint-servers: #2f6bff; --k-tint-db: #808086; --k-tint-vpn: #247a43; --k-tint-cache: #dc502b;
-    --k-term-bg: #fbfbfa; --a-green: #237a42; --a-blue: #1659ff; --a-yellow: #8a6100; --a-red: #c4262c; --a-dim: #6e6e75;
-    /* the app's own type (design/tokens.json type.families, owner decision 2026-11-13): every screen drawn here uses the
-       system fonts like the apps (SF Pro and SF Mono on Apple devices); the marketing text around it keeps Instrument Sans */
-    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-    --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-    font-family: var(--font-text); font-size: 13px; line-height: 16px; color: var(--k-text); text-align: left; letter-spacing: 0; }
-  .kmd--dark { --k-window: #0f1115; --k-panel: #17191f; --k-card: #1d2028; --k-hover: #242833; --k-subtle: #20232c; --k-border: #2a2e39; --k-edge: #6d717d;
-    --k-text: #ecedf1; --k-text2: #b3b7c4; --k-text3: #8a8e9c; --k-accent: #6090ff; --k-on-accent: #111216; --k-primary: #ecedf1; --k-on-primary: #111216;
-    --k-ok: #45c46a; --k-warn: #f2a445; --k-danger: #f36368; --k-tint-servers: #5b8cff; --k-tint-db: #8a90a6; --k-tint-vpn: #45c46a; --k-tint-cache: #ff7a59;
-    --k-term-bg: #0f1115; --a-green: #5fd27f; --a-blue: #7aa5ff; --a-yellow: #f2c14e; --a-red: #ff7a7a; --a-dim: #8a8e9c; }
-  .kmd * { box-sizing: border-box; }
-  .ks { width: 16px; height: 16px; flex: none; display: inline-block; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-  .ks--12 { width: 12px; height: 12px; } .ks--8 { width: 8px; height: 8px; stroke-width: 2; }
-  .kmd .k-spacer { flex: 1 1 auto; }
-  .kmd .k-t2 { color: var(--k-text2); } .kmd .k-t3 { color: var(--k-text3); }
-  .kmd .k-mono { font-family: var(--font-mono); font-size: 12px; line-height: 16px; }
-  .kmd .k-trunc { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .kmd .k-meta { font-size: 12px; color: var(--k-text3); white-space: nowrap; }
-  .kmd-run .k-meta { white-space: normal; }
-  .kmd .k-sub { font-size: 12px; color: var(--k-text2); }
-  .kmd .k-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--k-ok)); flex: none; }
-  .kmd .k-pill { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 11px; font-weight: 500; white-space: nowrap; flex: none;
-    color: var(--c, var(--k-text2)); background: color-mix(in srgb, var(--c, var(--k-text2)) 10%, var(--k-card)); }
-  .kmd .k-tile { width: var(--ts, 28px); height: var(--ts, 28px); border-radius: 25%; display: inline-flex; align-items: center; justify-content: center; flex: none;
-    color: var(--t, var(--k-accent)); background: color-mix(in srgb, var(--t, var(--k-accent)) 12%, transparent); }
-  .kmd .k-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 28px; padding: 0 12px; border-radius: 6px; font-size: 13px; font-weight: 500; white-space: nowrap; flex: none;
-    color: var(--k-text); background: var(--k-card); box-shadow: inset 0 0 0 1px var(--k-border), 0 1px 1px rgb(0 0 0 / .04); }
-  .kmd .k-btn--primary { color: var(--k-on-primary); background: var(--k-primary); box-shadow: none; font-weight: 600; }
-  .kmd .k-btn--ghost { background: transparent; box-shadow: none; color: var(--k-text2); font-weight: 400; padding: 0 8px; }
-  .kmd .k-btn--icon { width: 28px; padding: 0; }
-  .kmd .k-dashed { height: 1px; flex: none; background: repeating-linear-gradient(90deg, var(--k-border) 0 4px, transparent 4px 8px); }
-  .kmd .k-rule { height: 1px; flex: none; background: var(--k-border); }
-
-  /* the window: sidebar on the window grey, one white panel floating on it */
-  .kmd-win { display: flex; background: var(--k-window); border-radius: 12px; box-shadow: 0 0 0 1px rgb(0 0 0 / .08), 0 24px 48px -16px rgb(0 0 0 / .18); overflow: hidden; }
-  .kmd-side { width: 224px; flex: none; display: flex; flex-direction: column; }
-  .kmd-traffic { height: 48px; display: flex; align-items: center; gap: 8px; padding-left: 20px; flex: none; }
-  .kmd-traffic i { width: 12px; height: 12px; border-radius: 50%; display: block; background: #ff5f57; }
-  .kmd-traffic i + i { background: #febc2e; } .kmd-traffic i + i + i { background: #28c840; }
-  .kmd-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px 16px; font-size: 17px; line-height: 24px; font-weight: 600; }
-  .kmd-brand .kc { width: 28px; height: 28px; }
-  .kmd-search { display: flex; align-items: center; gap: 8px; height: 32px; min-height: 32px; flex: none; white-space: nowrap; overflow: hidden; margin: 0 12px; padding: 0 12px; border-radius: 8px; background: var(--k-card); box-shadow: inset 0 0 0 1px var(--k-edge); color: var(--k-text3); }
-  .kmd-places { display: flex; flex-direction: column; gap: 2px; padding: 16px 12px 12px; flex: 1 1 auto; }
-  .kmd-place { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; border-radius: 8px; color: var(--k-text2); }
-  .kmd-place.on { color: var(--k-text); background: var(--k-panel); box-shadow: inset 0 0 0 1px var(--k-border); }
-  .kmd-place b { margin-left: auto; font-weight: 400; font-size: 12px; color: var(--k-text3); }
-  .kmd-place--more { color: var(--k-text3); }
-  .kmd-profile { display: flex; align-items: center; gap: 12px; height: 52px; margin: 8px 12px 12px; padding: 0 12px; border-radius: 12px; background: var(--k-card); box-shadow: inset 0 0 0 1px var(--k-border); flex: none; }
-  .kmd-avatar { width: 32px; height: 32px; border-radius: 50%; flex: none; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; color: #ffffff; background: #247a43; }
-  .kmd-two { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .kmd-two > b { font-weight: 500; }
-  .kmd-panel { flex: 1 1 auto; min-width: 0; margin: 8px 8px 8px 0; background: var(--k-panel); border-radius: 12px; box-shadow: inset 0 0 0 1px var(--k-border), 0 1px 3px rgb(0 0 0 / .06); display: flex; flex-direction: column; overflow: hidden; }
-  .kmd-head { display: flex; align-items: center; gap: 4px; height: 52px; padding: 0 24px; border-bottom: 1px solid var(--k-border); flex: none; }
-  .kmd-head > b { font-size: 17px; line-height: 24px; font-weight: 600; padding-left: 8px; }
-  .kmd-page { display: flex; flex-direction: column; gap: 24px; padding: 24px 32px; }
-  .kmd-sec { display: flex; flex-direction: column; gap: 16px; }
-  .kmd-sec__head { display: flex; align-items: center; gap: 16px; }
-  .kmd-sec__head > b { font-size: 15px; line-height: 20px; font-weight: 600; }
-  .kmd-link { display: inline-flex; align-items: center; gap: 4px; color: var(--k-text2); }
-  .kmd-att { display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: 12px; background: color-mix(in srgb, var(--c) 5%, var(--k-panel)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 55%, transparent); }
-  .kmd-att__text { display: flex; flex-direction: column; gap: 4px; flex: 1 1 auto; min-width: 0; }
-  .kmd-att__text b { font-weight: 500; }
-  .kmd-att__text span { font-size: 12px; color: var(--c); }
-  .kmd-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-  .kmd-run { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 12px; background: var(--k-card); box-shadow: inset 0 0 0 1px var(--k-border); min-width: 0; }
-  .kmd-run__top { display: flex; align-items: center; gap: 12px; min-width: 0; }
-  .kmd-run__top b { font-weight: 500; }
-  .kmd-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .kmd-act { display: flex; align-items: center; gap: 12px; height: 40px; }
-  .kmd-act .who { width: 48px; } .kmd-act .when { width: 96px; text-align: right; }
-
-  /* hero: the Home screen in the split's frame, on the page's lit ground, cut by the frame's right and bottom */
-  /* the window recipe (hero and #editions): 40px of ground on the left, top and right; the window runs on past the
-     frame's foot and its content fades out above that edge, so no row is ever cut through its text */
-  .hero__media.kmd-stage { background: var(--ground-bg); container-type: inline-size; }
-  .kmd-stage > .kmd-win { position: absolute; left: 40px; right: 40px; top: 40px; bottom: -16px; }
-  .kmd-win .kmd-panel { min-height: 0; }
-  .kmd-win .kmd-page { flex: 1 1 auto; min-height: 0; overflow: hidden;
-    -webkit-mask: linear-gradient(to bottom, #000 calc(100% - 128px), transparent calc(100% - 32px)); mask: linear-gradient(to bottom, #000 calc(100% - 128px), transparent calc(100% - 32px)); }
-  /* a narrow window shows its white panel alone: one layer, no grey edge round it */
-  @container (max-width: 640px) { .kmd-stage .kmd-side { display: none; } .kmd-stage > .kmd-win { background: none; box-shadow: none; overflow: visible; }
-    .kmd-stage .kmd-panel { margin: 0; box-shadow: 0 0 0 1px rgb(0 0 0 / .08), 0 24px 48px -16px rgb(0 0 0 / .18); } }
-  @container (max-width: 420px) { .kmd-stage > .kmd-win { left: 16px; right: 16px; top: 16px; } .kmd-stage .kmd-page { padding: 16px; } .kmd-stage .kmd-grid3 { grid-template-columns: minmax(0, 1fr); } .kmd-stage .kmd-act .who { display: none; }
-    .kmd-stage .kmd-att__text span { display: none; } .kmd-stage .kmd-att { flex-wrap: wrap; } .kmd-stage .kmd-att__text { flex: 1 1 calc(100% - 32px); } .kmd-stage .kmd-att .k-btn { margin-left: 20px; } }
-
-  /* the agent: the drawer over web-1's terminal (PageAgentDrawer), dark */
-  .app.ui { display: grid; grid-template-columns: minmax(0, 1fr) 440px; margin-top: var(--s-7); background: var(--k-panel); border-radius: 16px; box-shadow: 0 0 0 1px rgb(255 255 255 / .08); overflow: hidden; }
-  .app > .app__pane { position: relative; min-width: 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
-  .app > .app__pane + .app__pane { border-left: 1px solid var(--k-border); }
-  .app .app__pane--list::after { content: ""; position: absolute; inset: auto 0 0 0; height: 64px; background: linear-gradient(transparent, var(--k-term-bg)); pointer-events: none; }
-  @media (max-width: 1279px) { .app.ui { grid-template-columns: minmax(0, 1fr) 360px; } }
-  .k-toolbar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px 0 16px; border-bottom: 1px solid var(--k-border); flex: none; background: var(--k-panel); }
-  .k-term { flex: 1 1 auto; min-height: 0; background: var(--k-term-bg); font-family: var(--font-mono); font-size: 13px; line-height: 20px; padding: 12px 16px; white-space: pre; overflow: hidden; color: var(--k-text); }
-  .k-term .g { color: var(--a-green); font-weight: 500; } .k-term .b { color: var(--a-blue); font-weight: 500; } .k-term .y { color: var(--a-yellow); } .k-term .r { color: var(--a-red); font-weight: 500; } .k-term .d { color: var(--a-dim); }
-  .k-term .cur { display: inline-block; width: 8px; height: 16px; vertical-align: -3px; background: var(--k-accent); }
-  .k-conv { flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; padding: 16px; }
-  .k-turn { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-  .k-bubble { max-width: 300px; padding: 8px 12px; border-radius: 12px 12px 4px 12px; background: var(--k-subtle); line-height: 20px; }
-  .k-tool { width: 100%; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--k-border); background: var(--k-card); overflow: hidden; }
-  .k-tool__head { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; }
-  .k-tool__out { padding: 12px; border-top: 1px solid var(--k-border); background: var(--k-subtle); white-space: pre; overflow: hidden; font-family: var(--font-mono); font-size: 12px; line-height: 16px; }
-  .k-msg { display: flex; gap: 12px; }
-  .k-mark { width: 28px; height: 28px; flex: none; border-radius: 25%; display: inline-flex; align-items: center; justify-content: center; color: var(--k-accent); background: color-mix(in srgb, var(--k-accent) 12%, transparent); }
-  .k-msg__body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 12px; line-height: 20px; }
-  .k-msg__body p { margin: 0; }
-  .k-approval { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 12px; background: color-mix(in srgb, var(--k-warn) 5%, var(--k-card)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--k-warn) 55%, transparent); }
-  .k-approval__code { padding: 12px; border-radius: 8px; background: var(--k-subtle); font-family: var(--font-mono); font-size: 12px; line-height: 16px; overflow-wrap: anywhere; }
-  .k-approval__act { display: flex; justify-content: flex-end; gap: 8px; }
-  .k-composer { display: flex; flex-direction: column; gap: 12px; padding: 12px; background: var(--k-card); border-radius: 16px; box-shadow: inset 0 0 0 1px var(--k-border); }
-  .k-ctx { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px 0 4px; border-radius: 6px; background: var(--k-subtle); font-size: 12px; box-shadow: inset 0 0 0 1px var(--k-border); }
-  .k-ctx .k-tile { --ts: 20px; }
-  .k-check { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-  .k-check__box { width: 16px; height: 16px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; background: var(--k-accent); color: #ffffff; }
-  .k-send { width: 28px; height: 28px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; background: var(--k-subtle); color: var(--k-text3); }
-  .k-foot { flex: none; display: flex; flex-direction: column; gap: 8px; padding: 0 16px 16px; }
-  .k-contract { color: var(--k-text3); text-align: center; font-size: 12px; }
-  @media (max-width: 1023px) { .app.ui { grid-template-columns: minmax(0, 1fr); } .app > .app__pane--list { display: none; } .app > .app__pane + .app__pane { border-left: 0; } }
-  /* the conversation starts under its header and never runs past it: what does not fit is left out, not cut */
-  .k-conv { flex-direction: column-reverse; justify-content: flex-start; }
-  @media (min-width: 640px) and (max-height: 999px) { .app .k-turn { display: none; } }
-  @media (min-width: 640px) and (max-height: 859px) { .app .k-msg { display: none; } }
-  @media (min-width: 640px) and (max-height: 819px) { .app .k-contract { display: none; } }
-  /* a phone shows the drawer whole: the reply and the question, the composer without its side buttons */
-  @media (max-width: 639px) {
-    main > .section > .wrap > .app.ui.fill { flex: none; min-height: 0; }
-    .app .k-conv { overflow: visible; }
-    .app .k-turn { display: none; }
-    .k-composer .k-meta, .k-composer .k-btn--icon { display: none; }
-  }
-
-  /* the small Komando pieces on the safety frame and the card panels */
-  .kfrag { background: var(--k-panel); border-radius: 12px; box-shadow: 0 0 0 1px rgb(0 0 0 / .08), 0 12px 32px -12px rgb(0 0 0 / .18); overflow: hidden; }
-  .kfrag__head { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--k-border); font-weight: 600; }
-  .kfrag__body { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
-  .kfrag__list > div { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--k-border); }
-  .kfrag__list > div:last-child { border-bottom: 0; }
-  .kfrag__list > .kfrag__row2 { height: 52px; }
-  .kfrag__chips { display: flex; gap: 8px; padding: 12px 16px 4px; }
-  .kfrag__chips span { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; font-size: 12px; color: var(--k-text2); box-shadow: inset 0 0 0 1px var(--k-border); }
-  .kfrag__chips span.on { color: var(--k-text); font-weight: 500; background: var(--k-subtle); }
-  .kfrag__code { padding: 16px; font-family: var(--font-mono); font-size: 13px; line-height: 24px; white-space: pre; }
-  .kfrag__code .p { color: var(--k-accent); }
-  .kfrag__code .d { color: var(--k-text3); }
-
-  /* #features: each Komando piece centred in its panel, at its true width, with even ground round it */
-  #features .panel { --p-h: 300px; }
-  #features .stage > .at-center { --w: 440px; }
-  /* on a phone the panel takes the piece's own height, 16px of ground round it, so nothing is cut */
-  @media (max-width: 639px) {
-    #features .card--open > .panel { --p-h: 0px; min-height: 0; }
-    /* the section stays within its two screens: each piece shows its first rows */
-    #features .kfrag__list > :nth-child(n+4), #features .kfrag__list > .kfrag__row2:nth-child(n+3), #features .kfrag__chips, #features .ph-hide { display: none; }
-    #features .panel > .stage { position: static; inset: auto; }
-    #features .stage > .at-center { position: static; translate: none; width: auto; max-width: none; margin: 12px; }
-    #features .kfrag__list .k-meta:first-child { display: none; }
-  }
-  /* under 380px the bar holds only the logo and the menu; the hero carries Install komando there */
-  @media (max-width: 379px) { .nav:not(.is-open) .nav__actions { display: none; } .nav:not(.is-open) .nav__actions + .nav__toggle { margin-left: auto; } }
-  /* #install: the icon band runs to the card's edges; every card has one line of words, so the commands share a line */
-  #install .panel { aspect-ratio: auto; height: 152px; display: flex; align-items: center; justify-content: center; gap: var(--s-3); }
-  #install .card > .panel--top { margin: calc(-1 * var(--c-pad, var(--card-pad)) - 1px) calc(-1 * var(--c-pad, var(--card-pad)) - 1px) var(--s-5); border-radius: var(--r-lg) var(--r-lg) 0 0; }
-  /* the main line's Copy is the section's one filled button */
-  /* check it first: the four commands and the script's sha256, under the one-liner */
-  .install-check { display: grid; gap: var(--s-2); margin-top: var(--s-4); padding-top: var(--s-4); border-top: 1px solid var(--line); }
-  .install-check p { margin: 0; }
-  .install-check code { font-family: var(--font-mono); }
-  .install-check__sha { font-size: 12px; overflow-wrap: anywhere; word-break: break-all; }
-  .install-check__code { margin: 0; padding: var(--s-3) var(--s-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md);
-    font-size: 13px; line-height: 20px; white-space: pre-wrap; overflow-wrap: anywhere; }
-  /* a short laptop (1024 to 1279): the two cards stack under the heading, two screens */
-  @media (min-width: 1024px) and (max-width: 1279px) { #install { --h: 2; } }
-  /* a desktop (1280 and up): the icon band is lower and the check sits in two columns (its words beside its four
-     commands), so both cards end inside the one screen */
-  @media (min-width: 1280px) {
-    #install .panel { height: 88px; }
-    #install .section-head { margin-bottom: 24px; }
-    #install .card > .panel--top { margin-bottom: var(--s-4); }
-    .install-check { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); column-gap: var(--s-5); align-items: start; margin-top: var(--s-3); padding-top: var(--s-3); }
-    .install-check__code { grid-column: 2; grid-row: 1 / span 2; }
-  }
-  /* rhythm: every section is one or two whole screens at every width. On a tablet and a phone the sections whose
-     stacked content is near a screen and a half take two; the inventory diagram is lower on a phone so its section stays one */
-  @media (min-width: 640px) and (max-width: 1023px) and (max-height: 1100px) { #safety { --h: 2; } }
-  @media (min-width: 640px) and (max-width: 1023px) { #editions, #install { --h: 2; } }
-  @media (max-width: 639px) { #safety { --hm: 2; }
-    /* #safety is two phone screens: the words on the first, the ink frame across the whole second, its picture centred */
-    #safety .wrap > .grid.fill { display: flex; flex-direction: column; flex: 1 1 auto; }
-    #safety .grid.fill > .frame--ink.frame--fill { flex: none; margin-top: auto; height: calc(100lvh - var(--padt) - var(--padb) - var(--bar, 0px));
-      display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    /* owner, 2026-11-17: on a phone #one-command lists three of its six lines, the agent's picture ends after the
-       approval card, and the Upgrade sheet shows its first rows and fades out, so each section is one screen */
-    .swap li:nth-child(n+4) { display: none; }
-    main #one-command :is(.mo-wh__lead, .mo-wh__text) { font-size: 26px; }
-    #one-command .swap { margin-top: var(--s-4); } #one-command .swap li { padding: 8px 0; }
-    #one-command .agents-block { padding-top: 20px; } #one-command .agents { gap: 8px; }
-    footer.closing > .wrap { row-gap: 20px; } footer.closing .closing__cta { gap: 24px; } footer.closing .closing__links { gap: 16px; }
-    #agent .k-foot, #agent .k-turn { display: none; }
-    #editions .ksheet__rows > div:nth-child(n+3), #editions .ksheet__note, #editions .ksheet__act { display: none; }
-    #editions .ksheet { -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
-  }
-  /* a phone's hero keeps its one main button inside the first screen; the guide stays one tap away in the menu */
-  @media (max-width: 639px) { #install .panel { height: 96px; } .hero .btn-row > .btn--secondary { display: none; } }
-  /* the inventory diagram's frame: wide on a desktop, upright on a phone; each kind of target in its family tint
-     (design/tokens.json), the agent in the accent; databases and clusters in the neutral tint, never violet */
-  #inventory .frame { aspect-ratio: 16 / 7; padding: 0; }
-  #inventory .frame > .dg { position: absolute; inset: 0; }
-  @media (min-width: 640px) and (max-width: 1023px) { #inventory .frame { aspect-ratio: 4 / 3; } }
-  .inv-legend { display: none; }
-  @media (max-width: 639px) {
-    #inventory .frame { aspect-ratio: auto; display: block; }
-    #inventory .frame > .dg { position: relative; inset: auto; height: 240px; }
-    .inv-legend { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; margin: 0; padding: 0 16px 20px; list-style: none; font-size: 14px; line-height: 20px; color: var(--ink); }
-    .inv-legend li { display: flex; align-items: center; gap: 8px; min-width: 0; }
-    .inv-legend img { flex: none; }
-  }
-  #inventory .dg-node[data-id="servers"] .dg-ic { color: #2f6bff; }
-  #inventory .dg-node[data-id="caches"] .dg-ic { color: #dc502b; }
-  #inventory .dg-node[data-id="storage"] .dg-ic { color: #0d8e81; }
-  #inventory .dg-node[data-id="vpns"] .dg-ic { color: #247a43; }
-  #inventory .dg-node[data-id="ai-agent"] .dg-ic { color: #1659ff; }
-
-  .kmd-run .kmd-row, .kmd-att__text b { flex-wrap: wrap; white-space: normal; }
-
-  /* the three grounds behind the Komando pieces, so no two neighbours look alike: sage (hero, #features), ink
-     (#safety) and the plain page (#editions, where the Upgrade sheet floats as it does over the app) */
-  .frame--ink { background: var(--p-inv-bg); border: 0; padding: 40px; }
-  .frame--plain { background: none; border: 0; padding: 0 0 24px; align-items: flex-start; }
-  @media (max-width: 1023px) {
-    .grid.fill > :is(.frame--ink, .frame--plain).frame--fill { flex: none; min-height: 0; }
-    main > section > .wrap > .grid.fill:has(> :is(.frame--ink, .frame--plain)) { flex: 0 0 auto; } }
-  @media (max-width: 639px) { .frame--ink { padding: 16px; } .frame--split:is(.frame--ink, .frame--plain) { --ratio: 0px; } }
-
-  /* #safety: the Hosts page (PageHosts), dimmed under komando's own stop (PageSafetyPrompts) */
-  .ksafe { width: min(100%, 520px); }
-  .khosts { position: relative; padding-bottom: 156px; }
-  .khosts::after { content: ""; position: absolute; inset: 0; background: rgb(0 0 0 / .16); pointer-events: none; }
-  .khosts .kfrag__head .k-btn { height: 24px; font-size: 12px; }
-  .khosts__group { margin: 0; padding: 16px 16px 4px; font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: .02em; color: var(--k-text3); }
-  .khosts .kfrag__list > div { height: 40px; }
-  .khosts .kfrag__list b { width: 72px; flex: none; font-weight: 500; }
-  .kalert { position: absolute; z-index: 1; right: 16px; bottom: 16px; width: min(100% - 32px, 340px); padding: 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
-    border-radius: 14px; box-shadow: 0 0 0 1px rgb(0 0 0 / .1), 0 24px 48px -12px rgb(0 0 0 / .35); }
-  .kalert__title { font-size: 15px; line-height: 20px; font-weight: 600; margin-top: 4px; }
-  .kalert .k-approval__code { align-self: stretch; overflow-wrap: normal; }
-  .kalert__act { align-self: stretch; display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
-  .kalert__danger { color: var(--k-danger); }
-  @media (max-width: 639px) { .khosts .k-meta, .khosts .kfrag__chips { display: none; } .khosts { padding-bottom: 200px; } }
-
-  /* #editions: the Upgrade sheet (PageUpgrade), the app's own list of what is free and what is coming */
-  .ksheet { width: min(100%, 480px); padding: 24px; display: flex; flex-direction: column; gap: 16px; border-radius: 16px;
-    box-shadow: 0 0 0 1px rgb(0 0 0 / .08), 0 24px 56px -16px rgb(0 0 0 / .22); }
-  .ksheet__head { display: flex; align-items: flex-start; gap: 12px; }
-  .ksheet__head .kc { width: 48px; height: 48px; flex: none; }
-  .ksheet__head .kmd-two { gap: 4px; }
-  .ksheet__head .kmd-row { gap: 8px; }
-  .ksheet__title { font-size: 20px; line-height: 24px; font-weight: 600; }
-  .ksheet__rows { display: flex; flex-direction: column; gap: 12px; }
-  .ksheet__rows > div { display: flex; align-items: flex-start; gap: 12px; }
-  .ksheet__rows .kmd-row { gap: 8px; }
-  .ksheet__rows b { font-weight: 500; }
-  .kmd .ksheet__note { white-space: normal; }
-  .ksheet__act { display: flex; justify-content: flex-end; }
-  /* a phone: one screen for #editions. The sheet lists what is coming, so the table keeps the free rows, and the
-     sheet keeps each feature's name without its summary */
-  @media (max-width: 639px) { #editions .rows > .rows__head--next, #editions .rows > .rows__head--next ~ li, .ksheet__rows .k-sub { display: none; } }
-
-
-  /* #one-command: the one-liner is the heading; under it each tool it stands in for and the komando line that does
-     the job, then the agents komando recognises at the screen's foot */
-  #one-command > .wrap { display: flex; flex-direction: column; }
-  #one-command :is(.mo-wh__lead, .mo-wh__text) { max-width: 1120px; font-family: var(--font-display); font-weight: var(--display-weight); font-size: var(--t-h2); line-height: 1.16; letter-spacing: var(--display-tracking); text-wrap: pretty; }
-  #one-command .mo-wh__text { margin-top: var(--s-3); }
-  .nw { white-space: nowrap; }
-  .agents-block { margin-top: auto; padding-top: var(--s-8); display: grid; gap: var(--s-4); }
-  .agents { display: flex; flex-wrap: wrap; gap: var(--s-3); }
-  .agents-block code, .swap code { font-family: var(--font-mono); }
-  .swap { list-style: none; margin: var(--s-7) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--s-6); max-width: 1120px; }
-  .swap li { display: flex; align-items: baseline; gap: var(--s-4); min-width: 0; padding: var(--s-3) 0; border-top: 1px solid var(--line); }
-  .swap__was { flex: none; width: 88px; font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-  .swap code { min-width: 0; font-size: 15px; line-height: 22px; color: var(--ink); overflow-wrap: anywhere; }
-  .swap code::before { content: "$ "; color: #1659ff; }
-  @media (max-width: 899px) { .swap { grid-template-columns: minmax(0, 1fr); } }
-  @media (max-width: 639px) { .swap li { flex-direction: column; gap: 2px; } .swap__was { width: auto; } .swap code { font-size: 14px; } }
-
-  /* #editions: the two columns named, so no row reads as the command line doing the app's job */
-  .rows > li.rows__head { padding-top: 0; padding-bottom: var(--s-1); border-bottom: 0; font-size: var(--t-small); color: var(--muted); }
-  /* the two groups (free, upgrade) share one screen, so their rows sit a step closer than the system's rows */
-  #editions .rows > li:not(.rows__head) { padding-block: var(--s-3); }
-  /* a short laptop screen (1024x768): the rows sit closer, so the list stays inside its one screen */
-  @media (min-width: 1024px) and (max-height: 820px) { #editions .rows > li, #editions .rows > li:not(.rows__head) { padding-block: var(--s-2); } #editions .rows > li.rows__head--next { padding-top: var(--s-4); } #editions .rows > li:first-child { padding-top: 0; } }
-  .rows > li.rows__head > span { font-weight: 500; }
-  .rows > li.rows__head--next { padding-top: var(--s-5); }
-
-
-
-  /* the mega-menu: system.css and motion.css wait 150ms before a hovered menu opens (intent); keyboard focus opens it at once, so a
-     quick Tab from Product lands in the menu, not past it */
-  @media (min-width: 1024px) { .nav__item:focus-within > .nav__menu, html:not([data-motion="off"]) .nav__item:focus-within > .nav__menu { transition-delay: 0s; transition-duration: 0s; } }
-
-  /* a short laptop (1024 to 1199 wide): the hero's h1 one step smaller, so it keeps to three lines (P3-22) */
-  @media (min-width: 1024px) and (max-width: 1199px) { .hero h1 { font-size: 52px; } }
-
-  /* R-39: one disabled look for a button that is sending, a hover the ink primary can show, labels that say they click */
-  label[for] { cursor: pointer; }
-  .btn:disabled, .btn[aria-busy="true"] { cursor: not-allowed; opacity: .55; transform: none; }
-  .btn--primary:not(:disabled):hover { background: color-mix(in oklab, var(--action) 78%, var(--muted)); }
-  /* R-08: the arrow only on a control that goes somewhere; Copy, the form's submit and a link inside a sentence carry none */
-  [data-copy]::after, .form [type="submit"]::after, .link--inline::after { content: none; display: none; }
-  /* a link inside a sentence stays in the line (running text: no 44px box, its underline under its own word) */
-  .link.link--inline { display: inline; min-height: 0; }
-  /* the brand has no gradients (design/README.md, owner answer 2026-11-09): the lit panels are flat sage */
-  .panel:not([data-fx], .panel--device) { background-image: none !important; }
-  .panel::before { display: none; }
-</style>
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light',c=null,t;try{c=localStorage.getItem('efolusi-theme')}catch(e){}if(c==='light'||c==='dark')t=c;else if(c==='system')t=s;else{var m=document.cookie.match(/(?:^|;\s*)efolusi_theme=(dark|light)(?:;|$)/);t=m?m[1]:s}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme')}catch(e){}})();</script>
+<link rel="preload" href="assets/meridian/assets/fonts/Figtree-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/meridian/styles.css">
+<link rel="stylesheet" href="assets/meridian/landing.css">
+<link rel="stylesheet" href="assets/site.css">
+<!-- built by web/site/build.mjs from content/; edit the source, not this file -->
 </head>
-<!-- grounds: none dealt beyond the lit ground (sage) behind the Komando screens and the one effect -->
 <body>
-<!-- type: software (page type software, site-kind software, kind software)
-     deal: hero split, nav nav-mega, close close-type, footer footer-columns, rhythm dark-band (#agent),
-           buttons arrow (pill dealt first; dealt again without pill: the brand draws every button as a rounded
-           rectangle, design/README.md "Shapes, one rule"), mark stack (replaced by the client's K-caret logo),
-           palette: the client's own colours through start.mjs brand (window grey #f3f3f1, panel white, ink #1c1c1e;
-           the ink is the action because the brand has one black primary per view; the blue #1659ff stays in the logo's
-           cursor, the prompt and the app), pairing instrument (Instrument Sans + DM Mono), radius soft,
-           lit ground sage, flat. The dealt effect (gradient-mesh in #safety) is removed: design/README.md "no gradients",
-           the owner's answer of 2026-11-09 (antislop R-01/R-37 over the deal; the stricter honest choice)
-     theme: fixed light. The window grey and white panel are the brand's own look (design/README.md); the #agent band
-           shows the app's dark theme, so no theme toggle is shipped (antislop R-21)
-     moments: word-highlight in #one-command (the one-liner turns to ink as it is read),
-              line-carries-colour in #agent (the page turns to the dark band where the app's agent works) -->
-
-<header class="nav">
-  <div class="wrap nav__bar">
-    <a class="skip-link" href="#top">Skip to content</a>
-    <a class="nav__logo" href="#top"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
-    <nav class="nav__links" aria-label="Main">
-      <div class="nav__item">
-        <a class="nav__link" href="#inventory">Product <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <div class="nav__menu">
-          <div class="wrap grid">
-            <div class="menu-col span-3">
-              <p class="t-label">Command line</p>
-              <a href="#inventory">Inventory<span>One list for every service</span></a>
-              <a href="#safety">Safety<span>Read-only until you say so</span></a>
-              <a href="#install">Install<span>macOS, Linux and Windows</span></a>
-            </div>
-            <div class="menu-col span-3">
-              <p class="t-label">Komando apps</p>
-              <a href="#agent">Agent<span>Runs komando, asks first</span></a>
-              <a href="#editions">Editions<span>Free now, an upgrade later</span></a>
-              <a href="guide/">User guide<span>How to use Komando, one page per task</span></a>
-            </div>
-            <a class="menu-card span-3 start-10" href="#editions">
-              <div class="panel"><div class="stage stage--fade-b"><div class="at-rise fit" style="--fit-max:300px;--ax:24px;--ay:24px">
-                <div class="ui kmd kfrag" role="img" aria-label="A Komando finding: web-1 allows root to log in with a password, with a Fix button">
-                  <div class="kfrag__body"><div class="kmd-att" style="--c: var(--k-warn)"><span class="k-dot" style="--c: var(--k-warn)"></span><span class="kmd-att__text"><b>web-1 allows root to log in with a password.</b></span><span class="k-btn">Fix</span></div></div>
-                </div>
-              </div></div></div>
-              <span class="t-card">Komando for Mac, iPhone and iPad</span>
-              <span class="t-small muted">Coming next, free, everything on your own machines</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="nav__item"><a class="nav__link" href="#safety">Safety</a></div>
-      <div class="nav__item"><a class="nav__link" href="#agent">Agent</a></div>
-      <div class="nav__item"><a class="nav__link" href="#editions">Editions</a></div>
-      <div class="nav__item"><a class="nav__link" href="guide/">Guide</a></div>
-      <div class="nav__item"><a class="nav__link" href="docs/">Docs</a></div>
-    </nav>
-    <div class="nav__actions">
-      <a class="btn btn--primary" href="#install">Install komando</a>
-    </div>
-    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
-      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
-  </div>
-</header>
-
-<!-- the Komando glyphs (stand-ins for SF Symbols, from design/components/bundle.js), drawn once -->
+<a href="#top" class="ef-skip">Skip to content</a><header data-slot="site-header" class="ef-site-header"><div class="ef-site-header__inner"><a class="ef-site-header__brand" href="./" aria-label="Komando home"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><nav class="ef-site-header__nav" aria-label="Main"><a class="ef-site-header__link" href="#inventory" data-nav="product">Product</a><a class="ef-site-header__link" href="#safety" data-nav="safety">Safety</a><a class="ef-site-header__link" href="#agent" data-nav="agent">Agent</a><a class="ef-site-header__link" href="#editions" data-nav="editions">Editions</a><a class="ef-site-header__link" href="guide/" data-nav="guide">Guide</a><a class="ef-site-header__link" href="docs/" data-nav="docs">Docs</a></nav><div class="ef-site-header__actions"><button type="button" data-slot="theme-toggle" data-preference="system" class="ef-theme-toggle" aria-label="System theme, switch to light theme" title="System theme"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="#install">Install komando</a></div><button type="button" class="ef-site-header__menu" aria-expanded="false" aria-controls="site-menu" aria-label="Menu"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></button></div><div id="site-menu" class="ef-site-header__panel"><a class="ef-site-header__link" href="#inventory" data-nav="product">Product</a><a class="ef-site-header__link" href="#safety" data-nav="safety">Safety</a><a class="ef-site-header__link" href="#agent" data-nav="agent">Agent</a><a class="ef-site-header__link" href="#editions" data-nav="editions">Editions</a><a class="ef-site-header__link" href="guide/" data-nav="guide">Guide</a><a class="ef-site-header__link" href="docs/" data-nav="docs">Docs</a><div class="ef-site-header__panel-actions"><button type="button" data-slot="theme-toggle" data-preference="system" class="ef-theme-toggle" aria-label="System theme, switch to light theme" title="System theme"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="#install">Install komando</a></div></div></header>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <symbol id="s-house" viewBox="0 0 16 16"><path d="M2.3 7.6 8 2.6l5.7 5"/><path d="M3.8 6.4v6.8c0 .5.4.8.8.8h2.4v-3.6h2V14h2.4c.4 0 .8-.3.8-.8V6.4"/></symbol>
-  <symbol id="s-server" viewBox="0 0 16 16"><rect x="2" y="2.5" width="12" height="4.5" rx="1.2"/><rect x="2" y="9" width="12" height="4.5" rx="1.2"/><path d="M4.6 4.75h.01M4.6 11.25h.01"/></symbol>
-  <symbol id="s-db" viewBox="0 0 16 16"><ellipse cx="8" cy="3.8" rx="5.5" ry="2"/><path d="M2.5 3.8v8.4c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V3.8M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2"/></symbol>
-  <symbol id="s-tunnel" viewBox="0 0 16 16"><path d="M2.5 5.5h10.5M10.5 3 13 5.5 10.5 8M13.5 10.5H3M5.5 8 3 10.5 5.5 13"/></symbol>
-  <symbol id="s-recipe" viewBox="0 0 16 16"><path d="M5.5 2.5c-1.5 0-2 .6-2 1.8v1.6c0 1-.5 1.6-1.5 2.1 1 .5 1.5 1.1 1.5 2.1v1.6c0 1.2.5 1.8 2 1.8M10.5 2.5c1.5 0 2 .6 2 1.8v1.6c0 1 .5 1.6 1.5 2.1-1 .5-1.5 1.1-1.5 2.1v1.6c0 1.2-.5 1.8-2 1.8"/></symbol>
-  <symbol id="s-chev-r" viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5"/></symbol>
-  <symbol id="s-chev-ud" viewBox="0 0 16 16"><path d="M5 6 8 3l3 3M5 10l3 3 3-3"/></symbol>
-  <symbol id="s-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.75"/><path d="M10.5 10.5 14 14"/></symbol>
-  <symbol id="s-bubble" viewBox="0 0 16 16"><path d="M3.6 2.3h8.8c.9 0 1.6.7 1.6 1.6v5.8c0 .9-.7 1.6-1.6 1.6H7.4l-3 2.5v-2.5h-.8c-.9 0-1.6-.7-1.6-1.6V3.9c0-.9.7-1.6 1.6-1.6z"/><path d="M5 5.6h6M5 8.2h4"/></symbol>
-  <symbol id="s-refresh" viewBox="0 0 16 16"><path d="M12.5 5.9A5.2 5.2 0 1 1 8 3.3"/><path d="M6 1.3 8.2 3.3 6 5.3"/></symbol>
-  <symbol id="s-terminal" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" rx="2"/><path d="M4.5 6.2 6.8 8 4.5 9.8M8.5 10h3"/></symbol>
-  <symbol id="s-chip" viewBox="0 0 16 16"><rect x="1.8" y="4" width="12.4" height="7" rx="1.2"/><path d="M4.5 6.5v2M7 6.5v2M9.5 6.5v2M12 6.5v2M4 11v2M8 11v2M12 11v2"/></symbol>
-  <symbol id="s-vpn" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5.2"/><path d="M1.8 7h10.4M7 1.8c1.6 1.5 2.2 3.3 2.2 5.2S8.6 10.7 7 12.2C5.4 10.7 4.8 8.9 4.8 7S5.4 3.3 7 1.8"/><path d="M11.8 8.6 15 9.8v1.9c0 1.6-1.4 2.8-3.2 3.4-1.8-.6-3.2-1.8-3.2-3.4V9.8z" fill="currentColor" stroke="none"/></symbol>
-  <symbol id="s-gears" viewBox="0 0 16 16"><circle cx="6.5" cy="9" r="2"/><path d="M6.5 4.6v1.3M6.5 12.1v1.3M2.1 9h1.3M9.6 9h1.3M3.4 5.9l.9.9M8.7 11.2l.9.9M3.4 12.1l.9-.9M8.7 6.8l.9-.9"/><circle cx="12.2" cy="3.8" r="1.6"/></symbol>
-  <symbol id="s-dots" viewBox="0 0 16 16"><circle cx="3.5" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="12.5" cy="8" r="1.2" fill="currentColor" stroke="none"/></symbol>
-  <symbol id="s-clip" viewBox="0 0 16 16"><path d="M12.5 7.3 7.6 12.2a3 3 0 0 1-4.2-4.2l5.2-5.2a2 2 0 0 1 2.8 2.8L6.2 10.8a1 1 0 0 1-1.4-1.4l4.6-4.6"/></symbol>
-  <symbol id="s-new" viewBox="0 0 16 16"><path d="M7.2 2.6H4.1c-.8 0-1.5.7-1.5 1.5v7.8c0 .8.7 1.5 1.5 1.5h7.8c.8 0 1.5-.7 1.5-1.5V8.8"/><path d="M12.1 1.9l2 2-5.6 5.6-2.6.6.6-2.6z"/></symbol>
-  <symbol id="s-x" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></symbol>
-  <symbol id="s-warn" viewBox="0 0 16 16"><path d="M6.8 2.4a1.4 1.4 0 0 1 2.4 0l5.7 9.9a1.4 1.4 0 0 1-1.2 2.1H2.3a1.4 1.4 0 0 1-1.2-2.1z" fill="currentColor" stroke="none"/><path d="M8 6v3.4M8 11.8v.1" stroke="#ffffff"/></symbol>
-  <symbol id="s-at" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.6"/><path d="M10.6 8v1c0 1.2 1 2 2 1.6.9-.4 1.4-1.5 1.4-2.6A6 6 0 1 0 10.4 13.5"/></symbol>
-  <symbol id="s-check" viewBox="0 0 16 16"><path d="M3.5 8.3 6.5 11.2 12.5 5"/></symbol>
-  <symbol id="s-up" viewBox="0 0 16 16"><path d="M8 13.5v-11M3.8 6.7 8 2.5l4.2 4.2"/></symbol>
-  <symbol id="s-key" viewBox="0 0 16 16"><circle cx="5" cy="8" r="3"/><path d="M8 8h6.5M12 8v2.3M14.3 8v1.6"/></symbol>
-  <symbol id="s-lock" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7.5" rx="1.6" fill="currentColor" stroke="none"/><path d="M5.2 7V5a2.8 2.8 0 0 1 5.6 0v2"/></symbol>
-  <symbol id="s-archive" viewBox="0 0 16 16"><rect x="1.8" y="2.5" width="12.4" height="3.5" rx="1"/><path d="M2.8 6v6.2c0 .7.5 1.3 1.2 1.3h8c.7 0 1.2-.6 1.2-1.3V6M6.5 8.6h3"/></symbol>
-  <symbol id="s-sync" viewBox="0 0 16 16"><path d="M13 6.2A5.2 5.2 0 0 0 3.4 5M3 9.8A5.2 5.2 0 0 0 12.6 11"/><path d="M3.2 2.4V5h2.6M12.8 13.6V11h-2.6"/></symbol>
-  <symbol id="s-people" viewBox="0 0 16 16"><circle cx="6" cy="5.5" r="2.4"/><path d="M1.8 13.5c.4-2.3 2.1-3.7 4.2-3.7s3.8 1.4 4.2 3.7"/><path d="M10.6 3.4a2.3 2.3 0 0 1 0 4.4M12 9.9c1.2.5 2 1.7 2.2 3.6"/></symbol>
-  <symbol id="s-face" viewBox="0 0 16 16"><path d="M2 5V3.5C2 2.7 2.7 2 3.5 2H5M11 2h1.5c.8 0 1.5.7 1.5 1.5V5M14 11v1.5c0 .8-.7 1.5-1.5 1.5H11M5 14H3.5C2.7 14 2 13.3 2 12.5V11"/><path d="M5.6 6v1M10.4 6v1M8 6.2v3H7.2M5.8 10.6c1.3 1 3.1 1 4.4 0"/></symbol>
-  <symbol id="s-audit" viewBox="0 0 16 16"><path d="M2.7 8.6A5.4 5.4 0 1 0 4.3 4.2"/><path d="M1.8 2.5v2.6h2.6M8.2 5.2V8l2 1.3"/></symbol>
+<symbol id="s-house" viewBox="0 0 16 16"><path d="M2.3 7.6 8 2.6l5.7 5"/><path d="M3.8 6.4v6.8c0 .5.4.8.8.8h2.4v-3.6h2V14h2.4c.4 0 .8-.3.8-.8V6.4"/></symbol>
+<symbol id="s-server" viewBox="0 0 16 16"><rect x="2" y="2.5" width="12" height="4.5" rx="1.2"/><rect x="2" y="9" width="12" height="4.5" rx="1.2"/><path d="M4.6 4.75h.01M4.6 11.25h.01"/></symbol>
+<symbol id="s-db" viewBox="0 0 16 16"><ellipse cx="8" cy="3.8" rx="5.5" ry="2"/><path d="M2.5 3.8v8.4c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V3.8M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2"/></symbol>
+<symbol id="s-tunnel" viewBox="0 0 16 16"><path d="M2.5 5.5h10.5M10.5 3 13 5.5 10.5 8M13.5 10.5H3M5.5 8 3 10.5 5.5 13"/></symbol>
+<symbol id="s-recipe" viewBox="0 0 16 16"><path d="M5.5 2.5c-1.5 0-2 .6-2 1.8v1.6c0 1-.5 1.6-1.5 2.1 1 .5 1.5 1.1 1.5 2.1v1.6c0 1.2.5 1.8 2 1.8M10.5 2.5c1.5 0 2 .6 2 1.8v1.6c0 1 .5 1.6 1.5 2.1-1 .5-1.5 1.1-1.5 2.1v1.6c0 1.2-.5 1.8-2 1.8"/></symbol>
+<symbol id="s-chev-r" viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5"/></symbol>
+<symbol id="s-chev-ud" viewBox="0 0 16 16"><path d="M5 6 8 3l3 3M5 10l3 3 3-3"/></symbol>
+<symbol id="s-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.75"/><path d="M10.5 10.5 14 14"/></symbol>
+<symbol id="s-bubble" viewBox="0 0 16 16"><path d="M3.6 2.3h8.8c.9 0 1.6.7 1.6 1.6v5.8c0 .9-.7 1.6-1.6 1.6H7.4l-3 2.5v-2.5h-.8c-.9 0-1.6-.7-1.6-1.6V3.9c0-.9.7-1.6 1.6-1.6z"/><path d="M5 5.6h6M5 8.2h4"/></symbol>
+<symbol id="s-refresh" viewBox="0 0 16 16"><path d="M12.5 5.9A5.2 5.2 0 1 1 8 3.3"/><path d="M6 1.3 8.2 3.3 6 5.3"/></symbol>
+<symbol id="s-terminal" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" rx="2"/><path d="M4.5 6.2 6.8 8 4.5 9.8M8.5 10h3"/></symbol>
+<symbol id="s-chip" viewBox="0 0 16 16"><rect x="1.8" y="4" width="12.4" height="7" rx="1.2"/><path d="M4.5 6.5v2M7 6.5v2M9.5 6.5v2M12 6.5v2M4 11v2M8 11v2M12 11v2"/></symbol>
+<symbol id="s-vpn" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5.2"/><path d="M1.8 7h10.4M7 1.8c1.6 1.5 2.2 3.3 2.2 5.2S8.6 10.7 7 12.2C5.4 10.7 4.8 8.9 4.8 7S5.4 3.3 7 1.8"/><path d="M11.8 8.6 15 9.8v1.9c0 1.6-1.4 2.8-3.2 3.4-1.8-.6-3.2-1.8-3.2-3.4V9.8z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="s-gears" viewBox="0 0 16 16"><circle cx="6.5" cy="9" r="2"/><path d="M6.5 4.6v1.3M6.5 12.1v1.3M2.1 9h1.3M9.6 9h1.3M3.4 5.9l.9.9M8.7 11.2l.9.9M3.4 12.1l.9-.9M8.7 6.8l.9-.9"/><circle cx="12.2" cy="3.8" r="1.6"/></symbol>
+<symbol id="s-dots" viewBox="0 0 16 16"><circle cx="3.5" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="12.5" cy="8" r="1.2" fill="currentColor" stroke="none"/></symbol>
+<symbol id="s-clip" viewBox="0 0 16 16"><path d="M12.5 7.3 7.6 12.2a3 3 0 0 1-4.2-4.2l5.2-5.2a2 2 0 0 1 2.8 2.8L6.2 10.8a1 1 0 0 1-1.4-1.4l4.6-4.6"/></symbol>
+<symbol id="s-new" viewBox="0 0 16 16"><path d="M7.2 2.6H4.1c-.8 0-1.5.7-1.5 1.5v7.8c0 .8.7 1.5 1.5 1.5h7.8c.8 0 1.5-.7 1.5-1.5V8.8"/><path d="M12.1 1.9l2 2-5.6 5.6-2.6.6.6-2.6z"/></symbol>
+<symbol id="s-x" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></symbol>
+<symbol id="s-warn" viewBox="0 0 16 16"><path d="M6.8 2.4a1.4 1.4 0 0 1 2.4 0l5.7 9.9a1.4 1.4 0 0 1-1.2 2.1H2.3a1.4 1.4 0 0 1-1.2-2.1z" fill="currentColor" stroke="none"/><path d="M8 6v3.4M8 11.8v.1" stroke="#ffffff"/></symbol>
+<symbol id="s-at" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.6"/><path d="M10.6 8v1c0 1.2 1 2 2 1.6.9-.4 1.4-1.5 1.4-2.6A6 6 0 1 0 10.4 13.5"/></symbol>
+<symbol id="s-check" viewBox="0 0 16 16"><path d="M3.5 8.3 6.5 11.2 12.5 5"/></symbol>
+<symbol id="s-up" viewBox="0 0 16 16"><path d="M8 13.5v-11M3.8 6.7 8 2.5l4.2 4.2"/></symbol>
+<symbol id="s-key" viewBox="0 0 16 16"><circle cx="5" cy="8" r="3"/><path d="M8 8h6.5M12 8v2.3M14.3 8v1.6"/></symbol>
+<symbol id="s-lock" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7.5" rx="1.6" fill="currentColor" stroke="none"/><path d="M5.2 7V5a2.8 2.8 0 0 1 5.6 0v2"/></symbol>
+<symbol id="s-archive" viewBox="0 0 16 16"><rect x="1.8" y="2.5" width="12.4" height="3.5" rx="1"/><path d="M2.8 6v6.2c0 .7.5 1.3 1.2 1.3h8c.7 0 1.2-.6 1.2-1.3V6M6.5 8.6h3"/></symbol>
+<symbol id="s-sync" viewBox="0 0 16 16"><path d="M13 6.2A5.2 5.2 0 0 0 3.4 5M3 9.8A5.2 5.2 0 0 0 12.6 11"/><path d="M3.2 2.4V5h2.6M12.8 13.6V11h-2.6"/></symbol>
+<symbol id="s-people" viewBox="0 0 16 16"><circle cx="6" cy="5.5" r="2.4"/><path d="M1.8 13.5c.4-2.3 2.1-3.7 4.2-3.7s3.8 1.4 4.2 3.7"/><path d="M10.6 3.4a2.3 2.3 0 0 1 0 4.4M12 9.9c1.2.5 2 1.7 2.2 3.6"/></symbol>
+<symbol id="s-face" viewBox="0 0 16 16"><path d="M2 5V3.5C2 2.7 2.7 2 3.5 2H5M11 2h1.5c.8 0 1.5.7 1.5 1.5V5M14 11v1.5c0 .8-.7 1.5-1.5 1.5H11M5 14H3.5C2.7 14 2 13.3 2 12.5V11"/><path d="M5.6 6v1M10.4 6v1M8 6.2v3H7.2M5.8 10.6c1.3 1 3.1 1 4.4 0"/></symbol>
+<symbol id="s-audit" viewBox="0 0 16 16"><path d="M2.7 8.6A5.4 5.4 0 1 0 4.3 4.2"/><path d="M1.8 2.5v2.6h2.6M8.2 5.2V8l2 1.3"/></symbol>
 </svg>
-
-<main id="top">
-  <section class="hero hero--split" data-enter aria-labelledby="hero-h">
-    <div class="wrap"><div class="hero-text grid hero__grid">
-      <div class="hero__text span-6">
-        <p class="hero__kicker"><span>Latest komando release: <span data-release>v0.15.0</span></span></p>
-        <h1 id="hero-h">DevOps command line for you and your AI agent</h1>
-        <p class="hero__lead">Servers, databases, caches, storage and VPNs in one inventory, read-only until you say otherwise. The command line, komando, is free and open source. Komando with a capital K, the free app for Mac, iPhone and iPad that runs it, comes next.</p>
-        <div class="btn-row"><a class="btn btn--primary" href="#install">Install komando</a><a class="btn btn--secondary" href="guide/">Read the user guide</a></div>
-      </div>
-      <!-- the Komando Home screen (design/components/PageDashboard), live HTML in the design system's sample world -->
-      <div class="hero__media kmd-stage span-6 start-7">
-        <div class="kmd kmd-win" role="img" aria-label="Komando’s Home screen: two findings under Needs attention, two VPNs and a forward running, and recent activity">
-          <div class="kmd-side">
-            <div class="kmd-traffic"><i></i><i></i><i></i></div>
-            <div class="kmd-brand"><svg class="kc" viewBox="0 0 100 100"><defs><linearGradient id="kcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2f35"/><stop offset="1" stop-color="#161619"/></linearGradient></defs><rect width="100" height="100" rx="25" fill="url(#kcg)"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#6090ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#f4f5f7" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</div>
-            <div class="kmd-search"><svg class="ks"><use href="#s-search"/></svg>Search</div>
-            <div class="kmd-places">
-              <span class="kmd-place on"><svg class="ks"><use href="#s-house"/></svg>Home</span>
-              <span class="kmd-place"><svg class="ks"><use href="#s-server"/></svg>Hosts<b>12</b></span>
-              <span class="kmd-place"><svg class="ks"><use href="#s-db"/></svg>Connections<b>11</b></span>
-              <span class="kmd-place"><svg class="ks"><use href="#s-tunnel"/></svg>Port Forwarding<b>3</b></span>
-              <span class="kmd-place"><svg class="ks"><use href="#s-recipe"/></svg>Recipes<b>14</b></span>
-              <span class="kmd-place kmd-place--more"><svg class="ks ks--12"><use href="#s-chev-r"/></svg>More</span>
-            </div>
-            <div class="kmd-profile"><span class="kmd-avatar">Y</span><span class="kmd-two"><span class="kmd-row"><b>You</b></span><span class="k-meta">Local · on this Mac</span></span></div>
-          </div>
-          <div class="kmd-panel">
-            <div class="kmd-head"><b>Home</b><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-bubble"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-refresh"/></svg></span></div>
-            <div class="kmd-page">
-              <div class="kmd-sec">
-                <div class="kmd-sec__head"><b>Needs attention</b><span class="k-spacer"></span><span class="kmd-link">View all 4<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
-                <div class="kmd-att" style="--c: var(--k-danger)"><span class="k-dot" style="--c: var(--k-danger)"></span><span class="kmd-att__text"><b>prod-db’s password is missing from the keychain.</b><span>komando can’t connect to prod-db until you add it.</span></span><span class="k-btn">Add Password</span></div>
-                <div class="kmd-att" style="--c: var(--k-warn)"><span class="k-dot" style="--c: var(--k-warn)"></span><span class="kmd-att__text"><b>web-1 allows root to log in with a password.</b><span>Fix turns this off, so root can only log in with a key.</span></span><span class="k-btn">Fix</span></div>
-              </div>
-              <div class="k-dashed"></div>
-              <div class="kmd-sec">
-                <div class="kmd-sec__head"><b>Running now</b></div>
-                <div class="kmd-grid3">
-                  <div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">office</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">WireGuard</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Up</span><span class="k-meta">since 2 hours ago</span></span></div>
-                  <div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">tailnet</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">Tailscale</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Up</span><span class="k-meta">since yesterday</span></span></div>
-                  <div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-ok)"><svg class="ks"><use href="#s-tunnel"/></svg></span><b class="k-trunc">localhost:15432</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2 k-trunc">→ prod-db</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Open</span><span class="k-meta">since 12 minutes ago</span></span></div>
-                </div>
-                <div class="kmd-row"><svg class="ks ks--12 k-t3"><use href="#s-gears"/></svg><span class="k-sub">3 background jobs</span><span class="k-meta">·</span><span class="kmd-link">View<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
-              </div>
-              <div class="k-dashed"></div>
-              <div class="kmd-sec">
-                <div class="kmd-sec__head"><b>Recent activity</b><span class="k-spacer"></span><span class="kmd-link">Audit Log<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
-                <div>
-                  <div class="kmd-act"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-trunc">Ran a command on web-1 and web-2</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">2 minutes ago</span></div>
-                  <div class="k-rule"></div>
-                  <div class="kmd-act"><svg class="ks" style="color: var(--k-accent)"><use href="#s-bubble"/></svg><span class="k-trunc">Ran a read-only query on prod-db</span><span class="k-spacer"></span><span class="k-meta who">agent</span><span class="k-meta when">6 minutes ago</span></div>
-                  <div class="k-rule"></div>
-                  <div class="kmd-act"><svg class="ks k-t3"><use href="#s-tunnel"/></svg><span class="k-trunc">Opened a tunnel to prod-db</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">12 minutes ago</span></div>
-                  <div class="k-rule"></div>
-                  <div class="kmd-act"><svg class="ks k-t3"><use href="#s-chip"/></svg><span class="k-trunc">Couldn’t read a key in sessions</span><span class="k-pill" style="--c: var(--k-danger)">Failed</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">1 hour ago</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div></div>
-  </section>
-
-<!-- word-highlight: komando's own one-liner, turned to ink as it is read; under it, each tool it stands in for and the
-       komando line that does that job (every line from `komando <command> --help`, v0.14.0), then the agents it knows -->
-  <section class="section statement" id="one-command" data-moment="word-highlight" aria-labelledby="one-command-h">
-    <div class="wrap">
-      <h2 class="mo-wh__lead" id="one-command-h">The komando command line puts SSH sessions, a database client, <span class="nw">redis-cli</span>, storage consoles, kubectl and VPNs behind one command.</h2>
-      <p class="mo-wh__text">It gives your AI agent the same reach without showing it a <strong>single password</strong>.</p>
-      <ul class="swap" aria-label="The tool you use today and the komando line that does the same job">
-        <li><span class="swap__was">ssh</span><code>komando exec web-1 -- uptime</code></li>
-        <li><span class="swap__was">psql</span><code>komando db schema prod-db users</code></li>
-        <li><span class="swap__was">redis-cli</span><code>komando cache get prod-redis session:42</code></li>
-        <li><span class="swap__was">aws s3 ls</span><code>komando storage list backups 2026/</code></li>
-        <li><span class="swap__was">kubectl</span><code>komando cluster status prod-k8s</code></li>
-        <li><span class="swap__was">wg-quick</span><code>komando vpn up office</code></li>
-      </ul>
-      <div class="agents-block">
-        <p class="t-small muted" id="agents-l">AI agents komando recognises by itself. For any other agent, set <code>KOMANDO_AGENT=1</code>.</p>
-        <div class="agents ic-chip-row" aria-labelledby="agents-l">
-          <span class="ic-chip ic-chip--lg"><img class="ic" loading="lazy" data-icon="claude-code" src="assets/icons/claude-code.svg" alt="" width="22" height="22">Claude Code</span>
-          <span class="ic-chip ic-chip--lg"><img class="ic" loading="lazy" data-icon="openai" src="assets/icons/openai.svg" alt="" width="22" height="22">Codex</span>
-          <span class="ic-chip ic-chip--lg"><img class="ic" loading="lazy" data-icon="cursor" src="assets/icons/cursor.svg" alt="" width="22" height="22">Cursor</span>
-          <span class="ic-chip ic-chip--lg"><img class="ic" loading="lazy" data-icon="gemini" src="assets/icons/gemini.svg" alt="" width="22" height="22">Gemini CLI</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- chapter: the inventory, how you, your scripts and your agent reach every kind of target through komando -->
-  <section class="section" id="inventory" aria-labelledby="inventory-h">
-    <div class="wrap">
-      <div class="grid grid--top">
-        <h2 class="span-5" id="inventory-h">One inventory for every server and service</h2>
-        <div class="span-6 start-7 stack-4">
-          <p class="muted">Add a target once and reach it by name. Servers, databases, caches, storage, clusters, registries and VPNs share one list that you, your scripts and your agent all read.</p>
-          <p><a class="link" href="#features">See how secrets and output work</a></p>
-        </div>
-      </div>
-      <div class="frame frame--hero" style="margin-top: var(--s-7)">
-        <div class="dg" data-diagram><script type="application/json">{"layout":"bowtie","ground":"none","alt":"You, your scripts and your AI agent all go through komando to reach servers, databases, caches, storage, clusters and VPNs.","sources":[{"label":"You","icon":"glyphs/person.svg","sub":"Plain text"},{"label":"Scripts and CI","icon":"glyphs/curlybraces.svg","sub":"-o json"},{"label":"AI agent","icon":"glyphs/text-bubble.svg","sub":"No passwords"}],"core":{"label":"komando"},"targets":[{"label":"Servers","icon":"glyphs/server-rack.svg","sub":"SSH"},{"label":"Databases","icon":"glyphs/cylinder.svg","sub":"Queries"},{"label":"Caches","icon":"glyphs/memorychip.svg","sub":"Keys"},{"label":"Storage","icon":"glyphs/archivebox.svg","sub":"Buckets"},{"label":"Clusters","icon":"glyphs/hexagongrid.svg","sub":"kubectl"},{"label":"VPNs","icon":"glyphs/vpn.svg","sub":"Forwards"}]}</script></div>
-        <!-- the diagram's names on a phone, where its tiles show their glyphs only -->
-        <ul class="inv-legend" aria-hidden="true"><li><img loading="lazy" src="glyphs/person.svg" alt="" width="20" height="20"><span>You</span></li><li><img loading="lazy" src="glyphs/curlybraces.svg" alt="" width="20" height="20"><span>Scripts and CI</span></li><li><img loading="lazy" src="glyphs/text-bubble.svg" alt="" width="20" height="20"><span>AI agent</span></li><li><img loading="lazy" src="glyphs/server-rack.svg" alt="" width="20" height="20"><span>Servers</span></li><li><img loading="lazy" src="glyphs/cylinder.svg" alt="" width="20" height="20"><span>Databases</span></li><li><img loading="lazy" src="glyphs/memorychip.svg" alt="" width="20" height="20"><span>Caches</span></li><li><img loading="lazy" src="glyphs/archivebox.svg" alt="" width="20" height="20"><span>Storage</span></li><li><img loading="lazy" src="glyphs/hexagongrid.svg" alt="" width="20" height="20"><span>Clusters</span></li><li><img loading="lazy" src="glyphs/vpn.svg" alt="" width="20" height="20"><span>VPNs</span></li></ul>
-      </div>
-    </div>
-  </section>
-
-<!-- split-text-left: safety; the frame is the ink ground (one of the page's three grounds: sage, ink, plain), with the
-       Hosts page (design/components/PageHosts: protected hosts carry the lock) and komando's own stop over it
-       (PageSafetyPrompts: "This target is protected", the exact command and the flag it adds) -->
-  <section class="section" id="safety" aria-labelledby="safety-h">
-    <div class="wrap">
-      <div class="grid grid--top fill">
-        <div class="span-5 split-col">
-          <h2 id="safety-h">Every target starts read-only</h2>
-          <p class="t-lead">Dangerous commands are blocked. Production targets can be protected, so they ask first. A full audit log keeps what was done and by whom.</p>
-          <ul class="rows">
-            <li><span class="rows__name">Look first</span><span class="rows__value"><span class="nw">read-only</span> by default</span></li>
-            <li><span class="rows__name">Ask first</span><span class="rows__value">protected targets</span></li>
-            <li><span class="rows__name">Check the record</span><span class="rows__value"><code>komando audit verify</code></span></li>
-          </ul>
-          <p><a class="link" href="#editions">See what is free and what comes next</a></p>
-        </div>
-        <div class="frame frame--split frame--ink frame--fill span-6 start-7">
-          <div class="ui kmd ksafe" role="img" aria-label="Komando’s Hosts page: web-1, web-2 and bastion under production carry a lock because they are protected; staging-1 and staging-2 do not. Over it, komando stops a restart on web-1: This target is protected. The command it will run, with --yes, and two buttons: Cancel and Run Anyway">
-            <div class="kfrag khosts">
-              <div class="kfrag__head">Hosts<span class="k-spacer"></span><span class="k-btn k-btn--primary">Add</span></div>
-              <div class="kfrag__chips"><span class="on">All 5</span><span>production</span><span>staging</span><span>Protected</span></div>
-              <p class="khosts__group">Production</p>
-              <div class="kfrag__list">
-                <div><b>web-1</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.4</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-                <div><b>web-2</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.5</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-                <div><b>bastion</b><span class="k-mono k-t2 k-trunc">ops@203.0.113.10</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-              </div>
-              <p class="khosts__group">Staging</p>
-              <div class="kfrag__list">
-                <div><b>staging-1</b><span class="k-mono k-t2 k-trunc">deploy@10.1.0.4</span><span class="k-spacer"></span></div>
-                <div><b>staging-2</b><span class="k-mono k-t2 k-trunc">deploy@10.1.0.5</span><span class="k-spacer"></span></div>
-              </div>
-              <div class="kfrag kalert">
-                <span class="k-tile" style="--ts: 40px; --t: var(--k-warn)"><svg class="ks" style="width: 20px; height: 20px"><use href="#s-lock"/></svg></span>
-                <b class="kalert__title">This target is protected</b>
-                <span class="k-sub">This restarts nginx on web-1, which is protected, so komando asks you first.</span>
-                <span class="k-approval__code">komando svc restart <span class="nw">web-1</span> nginx <span class="nw">--yes</span></span>
-                <span class="kalert__act"><span class="k-btn">Cancel</span><span class="k-btn kalert__danger">Run Anyway</span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- features-2x2: four things komando does on every machine; each panel holds a small Komando or shell piece -->
-  <section class="section g2" id="features" aria-labelledby="features-h">
-    <div class="wrap">
-      <div class="group">
-        <div class="section-head">
-          <h2 id="features-h">Secrets, output and history. <span class="muted">Handled the same way on every machine.</span></h2>
-        </div>
-        <div class="grid">
-          <article class="card card--row card--open span-6 m-nolift">
-            <h3>komando's keychain holds every secret</h3>
-            <p>Passwords stay in komando's encrypted keychain or your own password manager. An agent komando recognises gets the result, never the secret.</p>
-            <div class="panel">
-              <div class="stage"><div class="at-center">
-                <div class="ui kmd kfrag" role="img" aria-label="Komando’s keychain: four secrets and two SSH keys, each locked, each with what uses it">
-                  <div class="kfrag__head"><svg class="ks"><use href="#s-key"/></svg>Keychain</div>
-                  <div class="kfrag__list">
-                    <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-cache)"><svg class="ks"><use href="#s-chip"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:sessions-pass</span><span class="k-meta">used by sessions</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-                    <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks"><use href="#s-db"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:staging-db-pass</span><span class="k-meta">used by staging-db</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-                    <div class="kfrag__row2"><span class="k-tile" style="--t: #ae731d"><svg class="ks"><use href="#s-server"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:registry-pass</span><span class="k-meta">used by registry</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-                    <div class="kfrag__row2"><span class="k-tile" style="--t: #0d8e81"><svg class="ks"><use href="#s-archive"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:assets-pass</span><span class="k-meta">used by assets</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-                    <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-key"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">deploy</span><span class="k-meta">ed25519 · used by 4 hosts</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-                    <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-key"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">ops</span><span class="k-meta">ed25519 · used by 1 host</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-                  </div>
-                </div>
-              </div></div>
-            </div>
-          </article>
-          <article class="card card--row card--open span-6 m-nolift">
-            <h3>Every komando answer as text or JSON</h3>
-            <p>People read plain text. Scripts, CI jobs and agents add -o json and get the same answer as data they can parse.</p>
-            <div class="panel">
-              <div class="stage"><div class="at-center">
-                <div class="ui kmd kfrag" role="img" aria-label="A script with komando commands: komando list and komando facts for people, the same with -o json for scripts, CI and agents">
-                  <div class="kfrag__head"><svg class="ks"><use href="#s-terminal"/></svg>deploy.sh</div>
-                  <div class="kfrag__code"><span class="ph-hide"><span class="d">#!/bin/sh</span>
+<main id="top" tabindex="-1"><section id="hero" aria-labelledby="hero-h" data-slot="hero" data-align="start" class="ef-hero site-hero"><div class="ef-hero__inner"><h1 class="ef-hero__title"><span id="hero-h">DevOps command line for you and your AI agent</span></h1><p class="ef-hero__sub">Servers, databases, caches, storage and VPNs in one inventory, read-only until you say otherwise. The command line, komando, is free and open source. Komando with a capital K, the free app for Mac, iPhone and iPad that runs it, comes next.</p><div class="ef-hero__actions"><a class="ef-btn ef-btn--primary ef-btn--lg" href="#install">Install komando</a><a class="ef-btn ef-btn--secondary ef-btn--lg" href="guide/">Read the user guide</a></div><div class="ef-hero__proof"><span>Latest komando release: <span data-release="">v0.15.0</span></span></div><div class="site-stage"><div class="kmd kmd-win" role="img" aria-label="Komando’s Home screen: two findings under Needs attention, two VPNs and a forward running, and recent activity">
+<div class="kmd-side">
+<div class="kmd-traffic"><i></i><i></i><i></i></div>
+<div class="kmd-brand"><svg class="kc" viewBox="0 0 100 100"><defs><linearGradient id="kcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2f35"/><stop offset="1" stop-color="#161619"/></linearGradient></defs><rect width="100" height="100" rx="25" fill="url(#kcg)"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#6090ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#f4f5f7" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</div>
+<div class="kmd-search"><svg class="ks"><use href="#s-search"/></svg>Search</div>
+<div class="kmd-places">
+<span class="kmd-place on"><svg class="ks"><use href="#s-house"/></svg>Home</span>
+<span class="kmd-place"><svg class="ks"><use href="#s-server"/></svg>Hosts<b>12</b></span>
+<span class="kmd-place"><svg class="ks"><use href="#s-db"/></svg>Connections<b>11</b></span>
+<span class="kmd-place"><svg class="ks"><use href="#s-tunnel"/></svg>Port Forwarding<b>3</b></span>
+<span class="kmd-place"><svg class="ks"><use href="#s-recipe"/></svg>Recipes<b>14</b></span>
+<span class="kmd-place kmd-place--more"><svg class="ks ks--12"><use href="#s-chev-r"/></svg>More</span>
+</div>
+<div class="kmd-profile"><span class="kmd-avatar">Y</span><span class="kmd-two"><span class="kmd-row"><b>You</b></span><span class="k-meta">Local · on this Mac</span></span></div>
+</div>
+<div class="kmd-panel">
+<div class="kmd-head"><b>Home</b><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-bubble"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-refresh"/></svg></span></div>
+<div class="kmd-page">
+<div class="kmd-sec">
+<div class="kmd-sec__head"><b>Needs attention</b><span class="k-spacer"></span><span class="kmd-link">View all 4<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
+<div class="kmd-att" style="--c: var(--k-danger)"><span class="k-dot" style="--c: var(--k-danger)"></span><span class="kmd-att__text"><b>prod-db’s password is missing from the keychain.</b><span>komando can’t connect to prod-db until you add it.</span></span><span class="k-btn">Add Password</span></div>
+<div class="kmd-att" style="--c: var(--k-warn)"><span class="k-dot" style="--c: var(--k-warn)"></span><span class="kmd-att__text"><b>web-1 allows root to log in with a password.</b><span>Fix turns this off, so root can only log in with a key.</span></span><span class="k-btn">Fix</span></div>
+</div>
+<div class="k-dashed"></div>
+<div class="kmd-sec">
+<div class="kmd-sec__head"><b>Running now</b></div>
+<div class="kmd-grid3">
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">office</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">WireGuard</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Up</span><span class="k-meta">since 2 hours ago</span></span></div>
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">tailnet</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">Tailscale</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Up</span><span class="k-meta">since yesterday</span></span></div>
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-ok)"><svg class="ks"><use href="#s-tunnel"/></svg></span><b class="k-trunc">localhost:15432</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2 k-trunc">→ prod-db</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Open</span><span class="k-meta">since 12 minutes ago</span></span></div>
+</div>
+<div class="kmd-row"><svg class="ks ks--12 k-t3"><use href="#s-gears"/></svg><span class="k-sub">3 background jobs</span><span class="k-meta">·</span><span class="kmd-link">View<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
+</div>
+<div class="k-dashed"></div>
+<div class="kmd-sec">
+<div class="kmd-sec__head"><b>Recent activity</b><span class="k-spacer"></span><span class="kmd-link">Audit Log<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
+<div>
+<div class="kmd-act"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-trunc">Ran a command on web-1 and web-2</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">2 minutes ago</span></div>
+<div class="k-rule"></div>
+<div class="kmd-act"><svg class="ks" style="color: var(--k-accent)"><use href="#s-bubble"/></svg><span class="k-trunc">Ran a read-only query on prod-db</span><span class="k-spacer"></span><span class="k-meta who">agent</span><span class="k-meta when">6 minutes ago</span></div>
+<div class="k-rule"></div>
+<div class="kmd-act"><svg class="ks k-t3"><use href="#s-tunnel"/></svg><span class="k-trunc">Opened a tunnel to prod-db</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">12 minutes ago</span></div>
+<div class="k-rule"></div>
+<div class="kmd-act"><svg class="ks k-t3"><use href="#s-chip"/></svg><span class="k-trunc">Couldn’t read a key in sessions</span><span class="k-pill" style="--c: var(--k-danger)">Failed</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">1 hour ago</span></div>
+</div>
+</div>
+</div>
+</div>
+</div></div></div></section><div data-slot="marquee" class="ef-marquee" style="--ef-marquee-duration:40s"><ul class="ef-marquee__list" aria-label="What komando reaches"><li>Servers</li><li>Databases</li><li>Caches</li><li>Storage</li><li>Clusters</li><li>Registries</li><li>VPNs</li></ul><div class="ef-marquee__viewport" aria-hidden="true" inert=""><div class="ef-marquee__track"><span class="ef-marquee__item">Servers</span><span class="ef-marquee__item">Databases</span><span class="ef-marquee__item">Caches</span><span class="ef-marquee__item">Storage</span><span class="ef-marquee__item">Clusters</span><span class="ef-marquee__item">Registries</span><span class="ef-marquee__item">VPNs</span><span class="ef-marquee__item">Servers</span><span class="ef-marquee__item">Databases</span><span class="ef-marquee__item">Caches</span><span class="ef-marquee__item">Storage</span><span class="ef-marquee__item">Clusters</span><span class="ef-marquee__item">Registries</span><span class="ef-marquee__item">VPNs</span></div></div><button type="button" class="ef-marquee__pause" aria-pressed="false" aria-label="Pause the moving list"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:16px;height:16px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="14" y="3" width="5" height="18" rx="1"></rect>
+  <rect x="5" y="3" width="5" height="18" rx="1"></rect>
+</svg></span></button></div><section id="one-command" aria-labelledby="one-command-h" data-slot="section" data-tone="default" class="ef-section"><div class="ef-section__inner"><div data-slot="section-head" data-align="start" class="ef-section-head site-statement"><h2 class="ef-section-head__title"><span id="one-command-h">The komando command line puts SSH sessions, a database client, <span class="nw">redis-cli</span>, storage consoles, kubectl and VPNs behind one command.</span></h2><p class="ef-section-head__lede">It gives your AI agent the same reach without showing it a <strong>single password</strong>.</p></div><ul class="site-swap" aria-label="The tool you use today and the komando line that does the same job"><li><span class="site-swap__was">ssh</span><code>komando exec web-1 -- uptime</code></li><li><span class="site-swap__was">psql</span><code>komando db schema prod-db users</code></li><li><span class="site-swap__was">redis-cli</span><code>komando cache get prod-redis session:42</code></li><li><span class="site-swap__was">aws s3 ls</span><code>komando storage list backups 2026/</code></li><li><span class="site-swap__was">kubectl</span><code>komando cluster status prod-k8s</code></li><li><span class="site-swap__was">wg-quick</span><code>komando vpn up office</code></li></ul><div class="site-agents"><p id="agents-l" class="site-small">AI agents komando recognises by itself. For any other agent, set <code>KOMANDO_AGENT=1</code>.</p><ul class="site-chips" aria-labelledby="agents-l"><li class="site-chip"><img src="assets/icons/claude-code.svg" alt="" width="22" height="22" loading="lazy"/>Claude Code</li><li class="site-chip"><img src="assets/icons/openai.svg" alt="" width="22" height="22" loading="lazy"/>Codex</li><li class="site-chip"><img src="assets/icons/cursor.svg" alt="" width="22" height="22" loading="lazy"/>Cursor</li><li class="site-chip"><img src="assets/icons/gemini.svg" alt="" width="22" height="22" loading="lazy"/>Gemini CLI</li></ul></div></div></section><section id="inventory" aria-labelledby="inventory-h" data-slot="section" data-tone="default" data-ruled="" class="ef-section"><div class="ef-section__inner"><div class="site-split site-split--head"><div data-slot="section-head" data-align="start" class="ef-section-head"><h2 class="ef-section-head__title"><span id="inventory-h">One inventory for every server and service</span></h2></div><div class="site-stack"><p class="site-lede">Add a target once and reach it by name. Servers, databases, caches, storage, clusters, registries and VPNs share one list that you, your scripts and your agent all read.</p><p><a class="site-link" href="#features">See how secrets and output work</a></p></div></div><figure class="site-flow" aria-label="You, your scripts and your AI agent all go through komando to reach servers, databases, caches, storage, clusters and VPNs."><ul class="site-flow__col" aria-label="Who asks"><li class="site-node" data-tint="plain"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="5.3" r="2.6"/><path d="M3 13.8c.5-2.7 2.5-4.4 5-4.4s4.5 1.7 5 4.4"/></svg></span><span class="site-node__label">You</span><span class="site-node__sub">Plain text</span></li><li class="site-node" data-tint="plain"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 2.5c-1.5 0-2 .6-2 1.8v1.6c0 1-.5 1.6-1.5 2.1 1 .5 1.5 1.1 1.5 2.1v1.6c0 1.2.5 1.8 2 1.8M10.5 2.5c1.5 0 2 .6 2 1.8v1.6c0 1 .5 1.6 1.5 2.1-1 .5-1.5 1.1-1.5 2.1v1.6c0 1.2-.5 1.8-2 1.8"/></svg></span><span class="site-node__label">Scripts and CI</span><span class="site-node__sub">-o json</span></li><li class="site-node" data-tint="agent"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 2.3h8.8c.9 0 1.6.7 1.6 1.6v5.8c0 .9-.7 1.6-1.6 1.6H7.4l-3 2.5v-2.5h-.8c-.9 0-1.6-.7-1.6-1.6V3.9c0-.9.7-1.6 1.6-1.6z"/><path d="M5 5.6h6M5 8.2h4"/></svg></span><span class="site-node__label">AI agent</span><span class="site-node__sub">No passwords</span></li></ul><div class="site-flow__core" aria-hidden="true"><span><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>komando</div><ul class="site-flow__col" aria-label="What komando reaches"><li class="site-node" data-tint="servers"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2.5" width="12" height="4.5" rx="1.2"/><rect x="2" y="9" width="12" height="4.5" rx="1.2"/><path d="M4.6 4.75h.01M4.6 11.25h.01"/></svg></span><span class="site-node__label">Servers</span><span class="site-node__sub">SSH</span></li><li class="site-node" data-tint="db"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="8" cy="3.8" rx="5.5" ry="2"/><path d="M2.5 3.8v8.4c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V3.8M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2"/></svg></span><span class="site-node__label">Databases</span><span class="site-node__sub">Queries</span></li><li class="site-node" data-tint="cache"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="4" width="12.4" height="7" rx="1.2"/><path d="M4.5 6.5v2M7 6.5v2M9.5 6.5v2M12 6.5v2M4 11v2M8 11v2M12 11v2"/></svg></span><span class="site-node__label">Caches</span><span class="site-node__sub">Keys</span></li><li class="site-node" data-tint="storage"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="3.5" rx="1"/><path d="M2.8 6v6.2c0 .7.5 1.3 1.2 1.3h8c.7 0 1.2-.6 1.2-1.3V6M6.5 8.6h3"/></svg></span><span class="site-node__label">Storage</span><span class="site-node__sub">Buckets</span></li><li class="site-node" data-tint="db"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g fill="currentColor" stroke="none"><circle cx="8" cy="8" r="1.5"/><circle cx="3.8" cy="8" r="1.5"/><circle cx="12.2" cy="8" r="1.5"/><circle cx="5.9" cy="4.3" r="1.5"/><circle cx="10.1" cy="4.3" r="1.5"/><circle cx="5.9" cy="11.7" r="1.5"/><circle cx="10.1" cy="11.7" r="1.5"/></g></svg></span><span class="site-node__label">Clusters</span><span class="site-node__sub">kubectl</span></li><li class="site-node" data-tint="vpn"><span class="site-node__icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.2"/><path d="M1.8 7h10.4M7 1.8c1.6 1.5 2.2 3.3 2.2 5.2S8.6 10.7 7 12.2C5.4 10.7 4.8 8.9 4.8 7S5.4 3.3 7 1.8"/><path d="M11.8 8.6 15 9.8v1.9c0 1.6-1.4 2.8-3.2 3.4-1.8-.6-3.2-1.8-3.2-3.4V9.8z" fill="currentColor" stroke="none"/></svg></span><span class="site-node__label">VPNs</span><span class="site-node__sub">Forwards</span></li></ul></figure></div></section><section id="safety" aria-labelledby="safety-h" data-slot="section" data-tone="default" class="ef-section"><div class="ef-section__inner"><div class="site-split"><div class="site-stack"><div data-slot="section-head" data-align="start" class="ef-section-head"><h2 class="ef-section-head__title"><span id="safety-h">Every target starts read-only</span></h2><p class="ef-section-head__lede">Dangerous commands are blocked. Production targets can be protected, so they ask first. A full audit log keeps what was done and by whom.</p></div><ul class="site-rows"><li><span class="site-rows__name">Look first</span><span class="site-rows__value"><span class="nw">read-only</span> by default</span></li><li><span class="site-rows__name">Ask first</span><span class="site-rows__value">protected targets</span></li><li><span class="site-rows__name">Check the record</span><span class="site-rows__value"><code>komando audit verify</code></span></li></ul><p><a class="site-link" href="#editions">See what is free and what comes next</a></p></div><div class="site-frame site-frame--ink"><div class="kmd ksafe" role="img" aria-label="Komando’s Hosts page: web-1, web-2 and bastion under production carry a lock because they are protected; staging-1 and staging-2 do not. Over it, komando stops a restart on web-1: This target is protected. The command it will run, with --yes, and two buttons: Cancel and Run Anyway">
+<div class="kfrag khosts">
+<div class="kfrag__head">Hosts<span class="k-spacer"></span><span class="k-btn k-btn--primary">Add</span></div>
+<div class="kfrag__chips"><span class="on">All 5</span><span>production</span><span>staging</span><span>Protected</span></div>
+<p class="khosts__group">Production</p>
+<div class="kfrag__list">
+<div><b>web-1</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.4</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+<div><b>web-2</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.5</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+<div><b>bastion</b><span class="k-mono k-t2 k-trunc">ops@203.0.113.10</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+</div>
+<p class="khosts__group">Staging</p>
+<div class="kfrag__list">
+<div><b>staging-1</b><span class="k-mono k-t2 k-trunc">deploy@10.1.0.4</span><span class="k-spacer"></span></div>
+<div><b>staging-2</b><span class="k-mono k-t2 k-trunc">deploy@10.1.0.5</span><span class="k-spacer"></span></div>
+</div>
+<div class="kfrag kalert">
+<span class="k-tile" style="--ts: 40px; --t: var(--k-warn)"><svg class="ks" style="width: 20px; height: 20px"><use href="#s-lock"/></svg></span>
+<b class="kalert__title">This target is protected</b>
+<span class="k-sub">This restarts nginx on web-1, which is protected, so komando asks you first.</span>
+<span class="k-approval__code">komando svc restart <span class="nw">web-1</span> nginx <span class="nw">--yes</span></span>
+<span class="kalert__act"><span class="k-btn">Cancel</span><span class="k-btn kalert__danger">Run Anyway</span></span>
+</div>
+</div>
+</div></div></div></div></section><section id="features" aria-labelledby="features-h" data-slot="section" data-tone="default" data-ruled="" class="ef-section"><div class="ef-section__inner"><div data-slot="section-head" data-align="start" class="ef-section-head"><h2 class="ef-section-head__title"><span id="features-h">Secrets, output and history. <span class="site-muted">Handled the same way on every machine.</span></span></h2></div><div data-slot="feature-grid" class="ef-feature-grid site-features"><div data-slot="feature-card" class="ef-feature-card site-feature"><span class="ef-feature-card__icon" aria-hidden="true"><span data-slot="icon" aria-hidden="true" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"></path>
+  <path d="m21 2-9.6 9.6"></path>
+  <circle cx="7.5" cy="15.5" r="5.5"></circle>
+</svg></span></span><h3 class="ef-feature-card__title">komando&#x27;s keychain holds every secret</h3><p class="ef-feature-card__body">Passwords stay in komando's encrypted keychain or your own password manager. An agent komando recognises gets the result, never the secret.</p><div class="site-panel"><div class="kmd kfrag" role="img" aria-label="Komando’s keychain: four secrets and two SSH keys, each locked, each with what uses it">
+<div class="kfrag__head"><svg class="ks"><use href="#s-key"/></svg>Keychain</div>
+<div class="kfrag__list">
+  <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-cache)"><svg class="ks"><use href="#s-chip"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:sessions-pass</span><span class="k-meta">used by sessions</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks"><use href="#s-db"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:staging-db-pass</span><span class="k-meta">used by staging-db</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile" style="--t: #ae731d"><svg class="ks"><use href="#s-server"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:registry-pass</span><span class="k-meta">used by registry</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile" style="--t: #0d8e81"><svg class="ks"><use href="#s-archive"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:assets-pass</span><span class="k-meta">used by assets</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-key"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">deploy</span><span class="k-meta">ed25519 · used by 4 hosts</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-key"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">ops</span><span class="k-meta">ed25519 · used by 1 host</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+</div>
+</div></div></div><div data-slot="feature-card" class="ef-feature-card site-feature"><span class="ef-feature-card__icon" aria-hidden="true"><span data-slot="icon" aria-hidden="true" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="m16 18 6-6-6-6"></path>
+  <path d="m8 6-6 6 6 6"></path>
+</svg></span></span><h3 class="ef-feature-card__title">Every komando answer as text or JSON</h3><p class="ef-feature-card__body">People read plain text. Scripts, CI jobs and agents add -o json and get the same answer as data they can parse.</p><div class="site-panel"><div class="kmd kfrag" role="img" aria-label="A script with komando commands: komando list and komando facts for people, the same with -o json for scripts, CI and agents">
+<div class="kfrag__head"><svg class="ks"><use href="#s-terminal"/></svg>deploy.sh</div>
+<div class="kfrag__code"><span class="ph-hide"><span class="d">#!/bin/sh</span>
 </span><span class="d"># for people</span>
 <span class="p">komando</span> list
 <span class="ph-hide"><span class="p">komando</span> facts web-1
@@ -680,68 +166,39 @@
 <span class="p">komando</span> list -o json
 <span class="ph-hide"><span class="p">komando</span> facts web-1 -o json
 </span><span class="p">komando</span> doctor -o json</div>
-                </div>
-              </div></div>
-            </div>
-          </article>
-        </div>
-      </div>
-      <div class="grid">
-        <article class="card card--row card--open span-6 m-nolift">
-          <h3>An audit log of every command</h3>
-          <p><code>komando audit</code> lists what was done and by whom. <code>komando audit verify</code> checks that nobody edited the record.</p>
-          <div class="panel">
-            <div class="stage"><div class="at-center">
-              <div class="ui kmd kfrag" role="img" aria-label="Komando’s audit log, filtered by All: six entries, who ran each and where; a cache read failed and a restart on web-1 was blocked">
-                <div class="kfrag__head"><svg class="ks"><use href="#s-audit"/></svg>Audit Log</div>
-                <div class="kfrag__chips"><span class="on">All</span><span>Changes</span><span>Failed</span><span>Agent</span></div>
-                <div class="kfrag__list">
-                  <div><span class="k-meta">10:20:14</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">exec · web-1, web-2</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
-                  <div><span class="k-meta">10:16:40</span><span class="k-mono">agent</span><span class="k-mono k-trunc k-t2">db.query · prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
-                  <div><span class="k-meta">10:10:05</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">tunnel.start · prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
-                  <div><span class="k-meta">09:41:20</span><span class="k-mono">agent</span><span class="k-mono k-trunc k-t2">exec · web-1</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
-                  <div><span class="k-meta">09:20:31</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">cache.get · sessions</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-danger)">Failed</span></div>
-                  <div><span class="k-meta">Nov 7 18:02</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">exec · web-1</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-warn)">Blocked</span></div>
-                </div>
-              </div>
-            </div></div>
-          </div>
-        </article>
-        <article class="card card--row card--open span-6 m-nolift">
-          <h3>One komando binary, clients built in</h3>
-          <p>Its own SSH, database and VPN clients are built in, in one file.</p>
-          <div class="panel">
-            <div class="stage"><div class="at-center">
-              <div class="ui kmd kfrag" role="img" aria-label="Clients inside komando: SSH, database and VPN, each built in">
-                <div class="kfrag__head"><svg class="ks"><use href="#s-terminal"/></svg>komando</div>
-                <div class="kfrag__list">
-                  <div><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-server"/></svg></span><b>SSH client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
-                  <div><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks"><use href="#s-db"/></svg></span><b>Database client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
-                  <div><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b>VPN client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
-                </div>
-              </div>
-            </div></div>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- app-frame on the dark band: the agent drawer over web-1's terminal (design/components/PageAgentDrawer), dark theme;
-       line-carries-colour turns the page to this ground -->
-  <section class="section ground-inverse" id="agent" data-moment="line-carries-colour" data-moment-opts='{"from": "base"}' aria-labelledby="agent-h">
-    <div class="wrap">
-      <div class="grid grid--top">
-        <h2 class="span-5" id="agent-h">An agent that runs komando and asks first</h2>
-        <div class="span-6 start-7 stack-4">
-          <p>Press ⌘J on the Mac, or open the Agent tab on iPhone, and describe the problem. The agent runs komando, shows every command and asks before any change, on Claude Opus 5.5 with your own Anthropic API key.</p>
-          <p><a class="link" href="#editions">See what the apps do</a></p>
-        </div>
-      </div>
-      <div class="ui app kmd kmd--dark fill" role="img" aria-label="The Komando agent beside web-1’s terminal: it checked the locks on prod-db, found query 48213 holding the orders table and asks before cancelling it on protected prod-db">
-        <div class="app__pane app__pane--list">
-          <div class="k-toolbar"><span class="k-dot"></span><span class="k-mono">deploy@web-1</span><span class="k-meta">10.0.0.4 · via bastion</span><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-dots"/></svg></span></div>
-          <div class="k-term"><span class="d">Last login: Sun Nov  8 09:12:44 2026 from 10.0.0.1</span>
+</div></div></div><div data-slot="feature-card" class="ef-feature-card site-feature"><span class="ef-feature-card__icon" aria-hidden="true"><span data-slot="icon" aria-hidden="true" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path>
+  <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+  <path d="M10 9H8"></path>
+  <path d="M16 13H8"></path>
+  <path d="M16 17H8"></path>
+</svg></span></span><h3 class="ef-feature-card__title">An audit log of every command</h3><p class="ef-feature-card__body"><code>komando audit</code> lists what was done and by whom. <code>komando audit verify</code> checks that nobody edited the record.</p><div class="site-panel"><div class="kmd kfrag" role="img" aria-label="Komando’s audit log, filtered by All: six entries, who ran each and where; a cache read failed and a restart on web-1 was blocked">
+<div class="kfrag__head"><svg class="ks"><use href="#s-audit"/></svg>Audit Log</div>
+<div class="kfrag__chips"><span class="on">All</span><span>Changes</span><span>Failed</span><span>Agent</span></div>
+<div class="kfrag__list">
+<div><span class="k-meta">10:20:14</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">exec · web-1, web-2</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
+<div><span class="k-meta">10:16:40</span><span class="k-mono">agent</span><span class="k-mono k-trunc k-t2">db.query · prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
+<div><span class="k-meta">10:10:05</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">tunnel.start · prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
+<div><span class="k-meta">09:41:20</span><span class="k-mono">agent</span><span class="k-mono k-trunc k-t2">exec · web-1</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
+<div><span class="k-meta">09:20:31</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">cache.get · sessions</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-danger)">Failed</span></div>
+<div><span class="k-meta">Nov 7 18:02</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">exec · web-1</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-warn)">Blocked</span></div>
+</div>
+</div></div></div><div data-slot="feature-card" class="ef-feature-card site-feature"><span class="ef-feature-card__icon" aria-hidden="true"><span data-slot="icon" aria-hidden="true" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path>
+  <path d="M12 22V12"></path>
+  <polyline points="3.29 7 12 12 20.71 7"></polyline>
+  <path d="m7.5 4.27 9 5.15"></path>
+</svg></span></span><h3 class="ef-feature-card__title">One komando binary, clients built in</h3><p class="ef-feature-card__body">Its own SSH, database and VPN clients are built in, in one file.</p><div class="site-panel"><div class="kmd kfrag" role="img" aria-label="Clients inside komando: SSH, database and VPN, each built in">
+<div class="kfrag__head"><svg class="ks"><use href="#s-terminal"/></svg>komando</div>
+<div class="kfrag__list">
+<div><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-server"/></svg></span><b>SSH client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
+<div><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks"><use href="#s-db"/></svg></span><b>Database client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
+<div><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b>VPN client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
+</div>
+</div></div></div></div></div></section><section id="agent" aria-labelledby="agent-h" data-slot="section" data-tone="band" class="ef-section"><div class="ef-section__inner"><div class="site-split site-split--head"><div data-slot="section-head" data-align="start" class="ef-section-head"><h2 class="ef-section-head__title"><span id="agent-h">An agent that runs komando and asks first</span></h2></div><div class="site-stack"><p class="site-lede">Press ⌘J on the Mac, or open the Agent tab on iPhone, and describe the problem. The agent runs komando, shows every command and asks before any change, on Claude Opus 5.5 with your own Anthropic API key.</p><p><a class="site-link" href="#editions">See what the apps do</a></p></div></div><div class="site-app"><div class="app kmd kmd--dark" role="img" aria-label="The Komando agent beside web-1’s terminal: it checked the locks on prod-db, found query 48213 holding the orders table and asks before cancelling it on protected prod-db">
+<div class="app__pane app__pane--list">
+<div class="k-toolbar"><span class="k-dot"></span><span class="k-mono">deploy@web-1</span><span class="k-meta">10.0.0.4 · via bastion</span><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-dots"/></svg></span></div>
+<div class="k-term"><span class="d">Last login: Sun Nov  8 09:12:44 2026 from 10.0.0.1</span>
 <span class="g">deploy@web-1</span>:<span class="b">~</span>$ systemctl is-active nginx
 <span class="g">active</span>
 <span class="g">deploy@web-1</span>:<span class="b">~</span>$ cat releases/CURRENT
@@ -755,175 +212,83 @@ Filesystem      Size  Used Avail Use% Mounted on
 <span class="d">09:14:07 </span><span class="r">ERROR</span> upstream timed out: api:8080
 <span class="d">09:14:09 INFO </span> GET /orders 200 1204ms
 <span class="g">deploy@web-1</span>:<span class="b">~</span>$ <span class="cur"></span></div>
-        </div>
-        <div class="app__pane app__pane--open" style="background: var(--k-panel)">
-          <div class="k-toolbar"><span class="k-mark"><svg class="ks"><use href="#s-bubble"/></svg></span><b>Agent</b><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks ks--12"><use href="#s-new"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks ks--12"><use href="#s-x"/></svg></span></div>
-          <!-- the conversation stacks up from the composer (column-reverse, newest first in the source); on a short screen
-               the older turns are left out whole (page CSS), so nothing is cut through its text -->
-          <div class="k-conv">
-            <div class="k-approval">
-              <div class="kmd-row" style="align-items: flex-start"><svg class="ks" style="color: var(--k-warn)"><use href="#s-warn"/></svg><span class="kmd-two"><b>Cancel query 48213 on prod-db?</b><span class="k-sub">prod-db is protected, and this stops a running query.</span></span></div>
-              <div class="k-approval__code">komando db kill prod-db 48213</div>
-              <div class="k-approval__act"><span class="k-btn k-btn--ghost">Don’t Run</span><span class="k-btn">Allow Once</span></div>
-            </div>
-            <div class="k-msg"><span class="k-mark"><svg class="ks"><use href="#s-bubble"/></svg></span><div class="k-msg__body">
-              <p>The app on web-1 is waiting for prod-db.</p>
-              <div class="k-tool"><div class="k-tool__head"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-mono k-trunc">komando db locks prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span><span class="k-meta">1.1 s</span></div></div>
-              <p>Query 48213 has held the orders table for 14 minutes.</p>
-            </div></div>
-            <div class="k-turn">
-              <div class="k-tool"><div class="k-tool__head"><svg class="ks k-t3"><use href="#s-clip"/></svg><span class="k-mono k-trunc">tail -n 4 logs/app.log</span><span class="k-spacer"></span><span class="k-meta">web-1 · 4 lines</span></div></div>
-              <div class="k-bubble">What do these errors mean?</div>
-            </div>
-          </div>
-          <div class="k-foot">
-            <div class="k-composer">
-              <div class="kmd-row"><span class="k-ctx"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks ks--12"><use href="#s-server"/></svg></span>web-1</span><span class="k-ctx"><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks ks--12"><use href="#s-db"/></svg></span>prod-db</span></div>
-              <span class="k-t3">Ask about your servers, or tell the agent what to do…</span>
-              <div class="kmd-row"><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-at"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-clip"/></svg></span><span class="k-check"><span class="k-check__box"><svg class="ks ks--12" style="stroke-width:2"><use href="#s-check"/></svg></span>Allow changes</span><span class="k-meta" style="color: var(--k-warn)">Each change asks first</span><span class="k-spacer"></span><span class="k-send"><svg class="ks ks--12"><use href="#s-up"/></svg></span></div>
-            </div>
-            <span class="k-contract">Runs as you, with komando’s seatbelts. Every command it runs goes to the audit log.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<!-- rows: owner decision 2026-11-12. Free: the command line and the apps, everything local (docs/product.md lists
-       the command that does each app job). The upgrade: service features, coming, not built, no price and no buy link,
-       shown as the app's own Upgrade sheet (design/components/PageUpgrade), on the plain ground -->
-  <section class="section" id="editions" aria-labelledby="editions-h">
-    <div class="wrap">
-      <div class="grid grid--top fill">
-        <div class="span-5 stack-4">
-          <h2 id="editions-h">Free now, an upgrade later</h2>
-          <p>The Komando apps for Mac, iPhone and iPad come next and will be free, like the command line. They will run komando on your own machines, with no account and no trial.</p>
-        <ul class="rows">
-          <li class="rows__head"><span>Free, everything local</span><span>Where</span></li>
-          <li><span class="rows__name">Every command, as text or JSON</span><span class="rows__value">komando</span></li>
-          <li><span class="rows__name">Terminal tabs, database client, forwards</span><span class="rows__value">Mac</span></li>
-          <li><span class="rows__name">One-click fixes, the agent, menu bar</span><span class="rows__value">Mac</span></li>
-          <li><span class="rows__name">Fixes, quick checks and the agent on the go</span><span class="rows__value">iPhone and iPad</span></li>
-          <li class="rows__head rows__head--next"><span>Upgrade, later</span><span>Not built yet</span></li>
-          <li><span class="rows__name">Sync between your devices</span><span class="rows__value">Coming</span></li>
-          <li><span class="rows__name">Teams</span><span class="rows__value">Coming</span></li>
-          <li><span class="rows__name">Built-in AI, with no API key of your own</span><span class="rows__value">Coming</span></li>
-          <li><span class="rows__name">Approve changes from your phone</span><span class="rows__value">Coming</span></li>
-        </ul>
-        </div>
-        <div class="frame frame--split frame--plain frame--fill span-6 start-7">
-          <div class="ui kmd kfrag ksheet" role="img" aria-label="Komando’s Upgrade sheet: Komando is free. Everything on this Mac is free, like the komando command line; an upgrade will add services that need a server. Four features marked Coming: sync between devices, teams, built-in AI, approve from your phone. Nothing to buy yet.">
-            <div class="ksheet__head">
-              <svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span class="kmd-two"><span class="kmd-row"><b class="ksheet__title">Komando</b><span class="k-pill" style="--c: var(--k-ok)">Free</span></span><span class="k-sub">Everything on this Mac is free, like the komando command line. An upgrade will add services that need a server.</span></span>
-            </div>
-            <div class="ksheet__rows">
-              <div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-sync"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Sync between devices</b><span class="k-pill">Coming</span></span><span class="k-sub">Your servers and settings on every device, encrypted on the device before they leave it.</span></span></div>
-              <div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-people"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Teams</b><span class="k-pill">Coming</span></span><span class="k-sub">Share servers with your team, and take access away when someone leaves.</span></span></div>
-              <div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-bubble"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Built-in AI</b><span class="k-pill">Coming</span></span><span class="k-sub">The agent without an Anthropic key of your own.</span></span></div>
-              <div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-face"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Approve from your phone</b><span class="k-pill">Coming</span></span><span class="k-sub">Approve a protected change from your phone, with Face ID.</span></span></div>
-            </div>
-            <span class="k-meta ksheet__note">Nothing to buy yet. Komando says so here when the upgrade is ready.</span>
-            <span class="ksheet__act"><span class="k-btn">Close</span></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<!-- install: the one line, once on the page, with its platforms' real icons and a working Copy button; Windows and Go
-       beside it as the two other ways in -->
-  <section class="section" id="install" style="--hm: 2" aria-labelledby="install-h">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="install-h">Install komando on macOS, Linux or Windows</h2>
-        <p>One line installs release <a class="link link--inline" href="https://github.com/sgnd/komando/releases/tag/v0.15.0" data-release>v0.15.0</a>. Then run <code>komando version</code> to check it. The source is on <a class="link link--inline" href="https://github.com/sgnd/komando">GitHub</a>.</p>
-      </div>
-      <div class="grid">
-        <article class="card span-8 m-nolift">
-          <div class="panel panel--top"><span class="ic-tile ic-tile--72"><img class="ic" loading="lazy" data-icon="apple" src="assets/icons/apple.svg" alt="Apple macOS" width="44" height="44"></span><span class="ic-tile ic-tile--72"><img class="ic" loading="lazy" data-icon="linux-tux" src="assets/icons/linux-tux.svg" alt="Linux" width="44" height="44"></span><span class="ic-tile ic-tile--72"><img class="ic" loading="lazy" data-icon="windows" src="assets/icons/windows.svg" alt="Windows" width="44" height="44"></span></div>
-          <h3>macOS, Linux and Windows</h3>
-          <p>Open a terminal and run this line. On Windows, komando runs through WSL: open a WSL terminal and run the same line.</p>
-          <div class="cmd"><code id="cmd-unix">curl --proto '=https' --tlsv1.2 -fsSL https://<wbr>raw.githubusercontent.com/<wbr>sgnd/<wbr>komando/<wbr><span data-release>v0.15.0</span>/<wbr>install.sh | <span class="nw">KOMANDO_VERSION=<span data-release>v0.15.0</span></span> sh</code>
-            <button class="btn btn--primary" type="button" data-copy="cmd-unix" aria-describedby="cmd-unix-status">Copy command</button></div>
-          <p class="cmd__status" id="cmd-unix-status" role="status"></p>
-          <!-- the one-liner runs install.sh from the release tag and pins that release (KOMANDO_VERSION), so it installs
-               exactly the version the page names. check it first: the script of the release tag, its sha256 written in by
-               web/deploy/set_release.py. The script
-               checks that the release is signed with the komando project's key (the check komando update makes, from
-               sgnd/komando#183) and installs nothing otherwise. Only a tag released after #183 holds that script: set_release.py
-               with that tag before this goes live -->
-          <div class="install-check">
-            <p class="t-small"><b>Check it first.</b> Download the script, read it, then run it. Its sha256 is <code class="install-check__sha" data-install-sha>9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af</code>.</p>
-            <pre class="install-check__code"><code>curl --proto '=https' --tlsv1.2 -fsSLO https://<wbr>raw.githubusercontent.com/<wbr>sgnd/<wbr>komando/<wbr><span data-release>v0.15.0</span>/<wbr>install.sh
+</div>
+<div class="app__pane app__pane--open" style="background: var(--k-panel)">
+<div class="k-toolbar"><span class="k-mark"><svg class="ks"><use href="#s-bubble"/></svg></span><b>Agent</b><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks ks--12"><use href="#s-new"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks ks--12"><use href="#s-x"/></svg></span></div>
+<!-- the conversation stacks up from the composer (column-reverse, newest first in the source); on a short screen
+the older turns are left out whole (page CSS), so nothing is cut through its text -->
+<div class="k-conv">
+<div class="k-approval">
+<div class="kmd-row" style="align-items: flex-start"><svg class="ks" style="color: var(--k-warn)"><use href="#s-warn"/></svg><span class="kmd-two"><b>Cancel query 48213 on prod-db?</b><span class="k-sub">prod-db is protected, and this stops a running query.</span></span></div>
+<div class="k-approval__code">komando db kill prod-db 48213</div>
+<div class="k-approval__act"><span class="k-btn k-btn--ghost">Don’t Run</span><span class="k-btn">Allow Once</span></div>
+</div>
+<div class="k-msg"><span class="k-mark"><svg class="ks"><use href="#s-bubble"/></svg></span><div class="k-msg__body">
+<p>The app on web-1 is waiting for prod-db.</p>
+<div class="k-tool"><div class="k-tool__head"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-mono k-trunc">komando db locks prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span><span class="k-meta">1.1 s</span></div></div>
+<p>Query 48213 has held the orders table for 14 minutes.</p>
+</div></div>
+<div class="k-turn">
+<div class="k-tool"><div class="k-tool__head"><svg class="ks k-t3"><use href="#s-clip"/></svg><span class="k-mono k-trunc">tail -n 4 logs/app.log</span><span class="k-spacer"></span><span class="k-meta">web-1 · 4 lines</span></div></div>
+<div class="k-bubble">What do these errors mean?</div>
+</div>
+</div>
+<div class="k-foot">
+<div class="k-composer">
+<div class="kmd-row"><span class="k-ctx"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks ks--12"><use href="#s-server"/></svg></span>web-1</span><span class="k-ctx"><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks ks--12"><use href="#s-db"/></svg></span>prod-db</span></div>
+<span class="k-t3">Ask about your servers, or tell the agent what to do…</span>
+<div class="kmd-row"><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-at"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-clip"/></svg></span><span class="k-check"><span class="k-check__box"><svg class="ks ks--12" style="stroke-width:2"><use href="#s-check"/></svg></span>Allow changes</span><span class="k-meta" style="color: var(--k-warn)">Each change asks first</span><span class="k-spacer"></span><span class="k-send"><svg class="ks ks--12"><use href="#s-up"/></svg></span></div>
+</div>
+<span class="k-contract">Runs as you, with komando’s seatbelts. Every command it runs goes to the audit log.</span>
+</div>
+</div>
+</div></div></div></section><section id="editions" aria-labelledby="editions-h" data-slot="section" data-tone="default" data-ruled="" class="ef-section"><div class="ef-section__inner"><div class="site-split"><div class="site-stack"><div data-slot="section-head" data-align="start" class="ef-section-head"><h2 class="ef-section-head__title"><span id="editions-h">Free now, an upgrade later</span></h2><p class="ef-section-head__lede">The Komando apps for Mac, iPhone and iPad come next and will be free, like the command line. They will run komando on your own machines, with no account and no trial.</p></div><ul class="site-rows site-rows--table"><li class="site-rows__head"><span>Free, everything local</span><span>Where</span></li><li><span class="site-rows__name">Every command, as text or JSON</span><span class="site-rows__value">komando</span></li><li><span class="site-rows__name">Terminal tabs, database client, forwards</span><span class="site-rows__value">Mac</span></li><li><span class="site-rows__name">One-click fixes, the agent, menu bar</span><span class="site-rows__value">Mac</span></li><li><span class="site-rows__name">Fixes, quick checks and the agent on the go</span><span class="site-rows__value">iPhone and iPad</span></li><li class="site-rows__head site-rows__head--next"><span>Upgrade, later</span><span>Not built yet</span></li><li><span class="site-rows__name">Sync between your devices</span><span class="site-rows__value">Coming</span></li><li><span class="site-rows__name">Teams</span><span class="site-rows__value">Coming</span></li><li><span class="site-rows__name">Built-in AI, with no API key of your own</span><span class="site-rows__value">Coming</span></li><li><span class="site-rows__name">Approve changes from your phone</span><span class="site-rows__value">Coming</span></li></ul></div><div class="site-frame site-frame--plain"><div class="kmd kfrag ksheet" role="img" aria-label="Komando’s Upgrade sheet: Komando is free. Everything on this Mac is free, like the komando command line; an upgrade will add services that need a server. Four features marked Coming: sync between devices, teams, built-in AI, approve from your phone. Nothing to buy yet.">
+<div class="ksheet__head">
+<svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span class="kmd-two"><span class="kmd-row"><b class="ksheet__title">Komando</b><span class="k-pill" style="--c: var(--k-ok)">Free</span></span><span class="k-sub">Everything on this Mac is free, like the komando command line. An upgrade will add services that need a server.</span></span>
+</div>
+<div class="ksheet__rows">
+<div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-sync"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Sync between devices</b><span class="k-pill">Coming</span></span><span class="k-sub">Your servers and settings on every device, encrypted on the device before they leave it.</span></span></div>
+<div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-people"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Teams</b><span class="k-pill">Coming</span></span><span class="k-sub">Share servers with your team, and take access away when someone leaves.</span></span></div>
+<div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-bubble"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Built-in AI</b><span class="k-pill">Coming</span></span><span class="k-sub">The agent without an Anthropic key of your own.</span></span></div>
+<div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-face"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Approve from your phone</b><span class="k-pill">Coming</span></span><span class="k-sub">Approve a protected change from your phone, with Face ID.</span></span></div>
+</div>
+<span class="k-meta ksheet__note">Nothing to buy yet. Komando says so here when the upgrade is ready.</span>
+<span class="ksheet__act"><span class="k-btn">Close</span></span>
+</div></div></div></div></section><section id="install" aria-labelledby="install-h" data-slot="section" data-tone="default" class="ef-section"><div class="ef-section__inner"><div data-slot="section-head" data-align="start" class="ef-section-head"><h2 class="ef-section-head__title"><span id="install-h">Install komando on macOS, Linux or Windows</span></h2><p class="ef-section-head__lede">One line installs release <a class="site-link" href="https://github.com/sgnd/komando/releases/tag/v0.15.0" data-release>v0.15.0</a>. Then run <code>komando version</code> to check it. The source is on <a class="site-link" href="https://github.com/sgnd/komando">GitHub</a>.</p></div><div class="site-install"><article class="site-card site-card--wide"><div class="site-platforms"><img src="assets/icons/apple.svg" alt="Apple macOS" width="44" height="44" loading="lazy"/><img src="assets/icons/linux-tux.svg" alt="Linux" width="44" height="44" loading="lazy"/><img src="assets/icons/windows.svg" alt="Windows" width="44" height="44" loading="lazy"/></div><h3>macOS, Linux and Windows</h3><p>Open a terminal and run this line. On Windows, komando runs through WSL: open a WSL terminal and run the same line.</p><div class="site-cmd"><code id="cmd-unix">curl --proto '=https' --tlsv1.2 -fsSL https://<wbr>raw.githubusercontent.com/<wbr>sgnd/<wbr>komando/<wbr><span data-release>v0.15.0</span>/<wbr>install.sh | <span class="nw">KOMANDO_VERSION=<span data-release>v0.15.0</span></span> sh</code><button class="ef-btn ef-btn--primary ef-btn--md" type="button" data-copy="cmd-unix" aria-describedby="cmd-unix-status">Copy command</button></div><p class="site-cmd__status" id="cmd-unix-status" role="status"></p><div class="site-check"><p class="site-small"><b>Check it first.</b> Download the script, read it, then run it. Its sha256 is <code class="site-check__sha" data-install-sha>9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af</code>.</p><pre class="site-check__code"><code>curl --proto '=https' --tlsv1.2 -fsSLO https://<wbr>raw.githubusercontent.com/<wbr>sgnd/<wbr>komando/<wbr><span data-release>v0.15.0</span>/<wbr>install.sh
 shasum -a 256 install.sh
 less install.sh
-KOMANDO_VERSION=<span data-release>v0.15.0</span> sh install.sh</code></pre>
-            <p class="t-small muted">The installer checks that the release is signed with the komando project's key (the check <code>komando update</code> makes) and installs nothing otherwise.</p>
-          </div>
-        </article>
-        <article class="card span-4 m-nolift">
-          <div class="panel panel--top"><span class="ic-tile ic-tile--72 ic-tile--wide"><img class="ic ic-wide" loading="lazy" data-icon="file:file-type-go" src="assets/icons/go.svg" alt="Go" width="120" height="44"></span></div>
-          <h3>With Go 1.27.4 or newer</h3>
-          <p>With Go installed, this line builds komando from its source.</p>
-          <div class="cmd cmd--stack"><code id="cmd-go">go install github.com/<wbr>sgnd/<wbr>komando/<wbr>cmd/<wbr>komando@latest</code>
-            <button class="btn btn--secondary" type="button" data-copy="cmd-go" aria-describedby="cmd-go-status">Copy command</button></div>
-          <p class="cmd__status" id="cmd-go-status" role="status"></p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer class="footer closing" id="contact" aria-labelledby="close-h">
-  <div class="wrap">
-    <div class="closing__cta close--type">
-      <div class="section-head">
-        <h2 id="close-h">Your first ten minutes with Komando</h2>
-        <p class="t-small muted">Install komando, add one server and log in to it. Free and open source under AGPL-3.0; the Komando apps will be free too.</p>
-      </div>
-      <a class="btn btn--primary btn--xl" href="guide/first-ten-minutes/">Read the first guide page</a>
-    </div>
-    <div class="closing__links">
-      <div class="grid">
-        <div class="span-4 stack-4">
-          <a class="nav__logo" href="#top"><svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Komando</a>
-          <p class="footer__lede">One safe command line for DevOps work.</p>
-        </div>
-        <div class="span-3 start-7 footer__col"><h3>Command line</h3><ul><li><a href="#inventory">Inventory</a></li><li><a href="#safety">Safety</a></li><li><a href="#install">Install</a></li><li><a href="docs/">Docs</a></li><li><a href="https://github.com/sgnd/komando">Source on GitHub</a></li></ul></div>
-        <div class="span-3 footer__col"><h3>Komando apps</h3><ul><li><a href="#agent">Agent</a></li><li><a href="#editions">Editions</a></li><li><a href="guide/">User guide</a></li></ul></div>
-      </div>
-      <div class="footer__legal">
-        <span>&copy; 2026 Komando</span>
-        <span>Product names and logos are trademarks of their owners.</span>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<!-- the Copy buttons: put the command on the clipboard, say so in the status line under it; when the clipboard is
-     refused, select the command and say how to copy it -->
-<script>
-document.querySelectorAll('[data-copy]').forEach(btn => {
-  const code = document.getElementById(btn.dataset.copy);
-  const status = document.getElementById(btn.getAttribute('aria-describedby'));
-  btn.addEventListener('click', async () => {
-    const text = code.textContent.trim();
-    try {
-      await navigator.clipboard.writeText(text);
-      status.textContent = 'Copied. Paste it into your terminal.';
-    } catch {
-      const r = document.createRange(); r.selectNodeContents(code);
-      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
-      status.textContent = 'The browser blocked the clipboard. The command is selected: press Cmd-C or Ctrl-C.';
-    }
-  });
-});
-</script>
-<script type="module" src="assets/system.js"></script>
-<script type="module" src="assets/motion/motion.js"></script>
-<script type="module" src="assets/layout/layout.js"></script>
-<script type="module" src="assets/diagrams/mount.js"></script>
+KOMANDO_VERSION=<span data-release>v0.15.0</span> sh install.sh</code></pre><p class="site-small site-muted">The installer checks that the release is signed with the komando project's key (the check <code>komando update</code> makes) and installs nothing otherwise.</p></div></article><article class="site-card"><div class="site-platforms"><img src="assets/icons/go.svg" alt="Go" width="120" height="44" loading="lazy"/></div><h3>With Go 1.27.4 or newer</h3><p>With Go installed, this line builds komando from its source.</p><div class="site-cmd"><code id="cmd-go">go install github.com/<wbr>sgnd/<wbr>komando/<wbr>cmd/<wbr>komando@latest</code><button class="ef-btn ef-btn--secondary ef-btn--md" type="button" data-copy="cmd-go" aria-describedby="cmd-go-status">Copy command</button></div><p class="site-cmd__status" id="cmd-go-status" role="status"></p></article></div></div></section><section id="start" aria-labelledby="start-h" data-slot="section" data-tone="default" data-ruled="" class="ef-section site-closing"><div class="ef-section__inner"><div data-slot="section-head" data-align="center" class="ef-section-head"><h2 class="ef-section-head__title"><span id="start-h">Your first ten minutes with Komando</span></h2><p class="ef-section-head__lede">Install komando, add one server and log in to it. Free and open source under AGPL-3.0; the Komando apps will be free too.</p><div class="site-closing__action"><a class="ef-btn ef-btn--primary ef-btn--lg" href="guide/first-ten-minutes/">Read the first guide page</a></div></div></div></section></main>
+<footer data-slot="site-footer" class="ef-site-footer"><div class="ef-site-footer__inner"><div class="ef-site-footer__top"><div class="ef-site-footer__brand"><a class="ef-site-footer__brand-link" href="./"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><p class="ef-site-footer__tagline">One safe command line for DevOps work.</p></div><nav aria-label="Command line"><h2 class="ef-site-footer__heading">Command line</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="#inventory">Inventory</a></li><li><a class="ef-site-footer__link" href="#safety">Safety</a></li><li><a class="ef-site-footer__link" href="#install">Install</a></li><li><a class="ef-site-footer__link" href="docs/">Docs</a></li><li><a class="ef-site-footer__link" href="https://github.com/sgnd/komando" target="_blank" rel="noopener noreferrer">Source on GitHub<span class="ef-site-footer__sr"> (opens in a new tab)</span></a></li></ul></nav><nav aria-label="Komando apps"><h2 class="ef-site-footer__heading">Komando apps</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="#agent">Agent</a></li><li><a class="ef-site-footer__link" href="#editions">Editions</a></li><li><a class="ef-site-footer__link" href="guide/">User guide</a></li></ul></nav></div><div class="ef-site-footer__bottom"><span>© 2026 Komando</span><span>Product names and logos are trademarks of their owners.</span></div></div></footer>
+<template id="icon-sun"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span></template><template id="icon-moon"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span></template><template id="icon-monitor"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></template><template id="icon-menu"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></template><template id="icon-x"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 6 6 18"></path>
+  <path d="m6 6 12 12"></path>
+</svg></span></template><template id="icon-play"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:16px;height:16px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
+</svg></span></template><template id="icon-pause"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:16px;height:16px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="14" y="3" width="5" height="18" rx="1"></rect>
+  <rect x="5" y="3" width="5" height="18" rx="1"></rect>
+</svg></span></template>
+<script type="module" src="assets/site.js"></script>
 </body>
 </html>
