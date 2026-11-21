@@ -42,7 +42,7 @@ export const shell = {
         { label: 'User guide', page: 'guide/' },
       ] },
     ],
-    rights: '© 2026 Komando',
+    rights: '© 2026 PT Efolusi Dunia Teknologi. Site source is a Meridian reference implementation.',
     trademarks: 'Product names and logos are trademarks of their owners.',
   },
 };

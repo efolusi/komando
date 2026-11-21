@@ -42,7 +42,7 @@ export const shell = {
         { label: 'Panduan', page: 'guide/' },
       ] },
     ],
-    rights: '© 2026 Komando',
+    rights: '© 2026 PT Efolusi Dunia Teknologi. Sumber situs ini adalah contoh penerapan Meridian.',
     trademarks: 'Nama produk dan logo adalah merek dagang pemiliknya.',
   },
 };
