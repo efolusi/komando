@@ -211,31 +211,14 @@ class SymlinkTests(unittest.TestCase):
         headers = (self.out / "_headers").read_text()
         self.assertEqual(len(re.findall(r"'sha256-", headers)), 1)  # still only the <script>1</script> of index.html
 
-    def test_local_scripts_and_styles_carry_a_version_from_their_content(self):
-        # assets are cached for a week under one name; the link changes when the file does
-        (self.site / "assets" / "site.js").write_text("one")
-        (self.site / "assets" / "site.css").write_text("css")
-        page_text = page("x").replace("</head>", '<link rel="stylesheet" href="../../assets/site.css">\n'
-                                      '<script type="module" src="../../assets/site.js"></script>\n'
-                                      '<script src="https://static.cloudflareinsights.com/beacon.min.js"></script>\n</head>')
-        (self.site / "docs" / "install" / "index.html").write_text(page_text)
+    def test_assets_are_revalidated_on_every_use(self):
+        # a cached old script or stylesheet must never sit beside a new page, so /assets/* is never served from cache blind
         build_dist.main()
-        first = (self.out / "docs" / "install" / "index.html").read_text()
-        want = __import__("hashlib").sha256(b"one").hexdigest()[:10]
-        self.assertIn(f'src="../../assets/site.js?v={want}"', first)
-        self.assertRegex(first, r'href="\.\./\.\./assets/site\.css\?v=[0-9a-f]{10}"')
-        self.assertIn('src="https://static.cloudflareinsights.com/beacon.min.js"', first)  # outside links stay as they are
-        (self.site / "assets" / "site.js").write_text("two")
-        build_dist.main()
-        second = (self.out / "docs" / "install" / "index.html").read_text()
-        self.assertNotIn(f"site.js?v={want}", second)
-
-    def test_a_link_to_a_missing_script_stops_the_build(self):
-        (self.site / "docs" / "install" / "index.html").write_text(
-            page("x").replace("</head>", '<script src="../../assets/gone.js"></script>\n</head>'))
-        with self.assertRaises(SystemExit) as stop:
-            build_dist.main()
-        self.assertIn("gone.js", str(stop.exception))
+        headers = (self.out / "_headers").read_text()
+        block = headers.split("/assets/*", 1)[1].split("\n\n", 1)[0]
+        self.assertIn("Cache-Control: no-cache", block)
+        self.assertNotIn("max-age", block)
+        self.assertNotIn("immutable", block)
 
     def test_sitemap_lists_every_page_with_its_other_language(self):
         build_dist.main()
