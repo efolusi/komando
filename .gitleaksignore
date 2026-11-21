@@ -1,0 +1,2 @@
+# False positive: an environment-variable example in a code span, the same text as the English page.
+web/site/docs/src/settings.id.md:generic-api-key:144
