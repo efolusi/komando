@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Container registry · Dokumentasi komando</title>
+<meta name="description" content="Lihat image apa yang disimpan sebuah registry, salin image antar-registry, dan bersihkan yang lama. Berfungsi dengan Docker Hub, GHCR, GitLab, Harbor, Amazon ECR, Azure Container Registry, Google Artifact Registry, dan registry:2 milik Anda sendiri.">
+<link rel="canonical" href="https://komando.efolusi.com/id/docs/registry/">
+<link rel="alternate" hreflang="en" href="https://komando.efolusi.com/docs/registry/">
+<link rel="alternate" hreflang="id" href="https://komando.efolusi.com/id/docs/registry/">
+<link rel="alternate" hreflang="x-default" href="https://komando.efolusi.com/docs/registry/">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<meta name="color-scheme" content="light dark">
+<script src="../../../assets/meridian/browser/theme-init.js"></script>
+<link rel="preload" href="../../../assets/meridian/assets/fonts/Figtree-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../assets/meridian/styles.css">
+<link rel="stylesheet" href="../../../assets/meridian/landing.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+<link rel="stylesheet" href="../../../guide/guide.css">
+<link rel="stylesheet" href="../../../docs/docs.css">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+</head>
+<body>
+<a href="#top" class="ef-skip">Langsung ke konten</a><header data-slot="site-header" class="ef-site-header"><div class="ef-site-header__inner"><a class="ef-site-header__brand" href="../../../id/index.html" aria-label="Beranda Komando"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><nav class="ef-site-header__nav" aria-label="Utama"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a></nav><div class="ef-site-header__actions"><a class="ef-site-header__link" href="../../../docs/registry/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><button type="button" data-slot="theme-toggle" class="ef-theme-toggle" data-preference="system" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span data-theme-icon="light" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span><span data-theme-icon="system" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../../id/index.html#install">Instal komando</a></div><button type="button" class="ef-site-header__menu" aria-expanded="false" aria-controls="site-menu" aria-label="Menu"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></button></div><div id="site-menu" class="ef-site-header__panel"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a><a class="ef-site-header__link" href="../../../docs/registry/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><div class="ef-site-header__panel-actions"><button type="button" data-slot="theme-toggle" class="ef-theme-toggle" data-preference="system" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span data-theme-icon="light" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span><span data-theme-icon="system" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../../id/index.html#install">Instal komando</a></div></div></header>
+<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid"><nav class="g-side" aria-label="Dokumentasi"><details class="g-side__fold" open><summary>Semua halaman dokumentasi</summary><p class="g-side__home"><a href="../">Beranda dokumentasi</a></p><p class="g-label g-side__group">Mulai di sini</p><ul><li><a href="../getting-started/">Mulai</a></li><li><a href="../switch-from-termius/">Pindah dari Termius</a></li></ul><p class="g-label g-side__group">Fitur</p><ul><li><a href="../install/">Instal, update, hapus</a></li><li><a href="../secrets/">Secret</a></li><li><a href="../windows/">Server Windows</a></li><li><a href="../import/">Pindah ke komando dan pindah komputer</a></li><li><a href="../targets/">Target</a></li><li><a href="../health/">Pemeriksaan kesehatan dan jaringan</a></li><li><a href="../system/">Service, log, Docker, package, user</a></li><li><a href="../tunnels/">Server privat dan tunnel</a></li><li><a href="../caches/">Cache</a></li><li><a href="../cloud/">Login cloud</a></li><li><a href="../registry/" aria-current="page">Container registry</a></li><li><a href="../rotate/">Rotasi key dan kata sandi, dan saat seseorang pergi</a></li><li><a href="../security-standards/">Standar keamanan</a></li><li><a href="../output/">Hasil dan error</a></li><li><a href="../error-codes/">Kode error</a></li><li><a href="../settings/">Pengaturan dan file</a></li><li><a href="../glossary/">Glosarium</a></li></ul><p class="g-side__home"><a href="../../../docs/" hreflang="en" lang="en">semua halaman dokumentasi (bahasa Inggris)</a></p></details></nav><article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">Dokumentasi</a> · Fitur</p><h1>Container registry</h1><p class="g-lead">Lihat image apa yang disimpan sebuah registry, salin image antar-registry, dan bersihkan yang lama. Berfungsi dengan Docker Hub, GHCR, GitLab, Harbor, Amazon ECR, Azure Container Registry, Google Artifact Registry, dan <code>registry:2</code> milik Anda sendiri.</p><nav class="g-toc" aria-label="Di halaman ini"><p class="g-label g-muted">Di halaman ini</p><ul><li><a href="#see-the-tags-of-an-image">Melihat tag sebuah image</a></li><li><a href="#add-a-registry">Menambah registry</a></li><li><a href="#look-at-images">Melihat image</a></li><li><a href="#copy-images">Menyalin image</a></li><li><a href="#delete-images">Menghapus image</a></li><li><a href="#limits">Batasan</a></li><li><a href="#troubleshooting">Pemecahan masalah</a></li><li><a href="#reference">Referensi</a></li></ul></nav><div class="g-body"><h2 id="see-the-tags-of-an-image">Melihat tag sebuah image</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando import docker                          # registry yang sudah Anda login
+komando list kind:registry                     # nama yang diberikan impor (ghcr.io -&gt; ghcr ...)
+komando registry list ghcr myorg/api           # tag satu repository</code></pre>
+<p>Jika diketik tanpa argumen di terminal, <code>komando registry list</code> menanyakan registry, dengan daftar milik Anda untuk dipilih, lalu repository (kosong mencantumkan semua repository).</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>1.4.1
+1.4.2
+latest</code></pre>
+<p><code>list</code> dan <code>inspect</code> hanya membaca. <code>copy</code> menulis ke tujuan. <code>rm</code> dan <code>prune</code> menghapus image. Agen AI memberikan setiap argumen; argumen yang kurang adalah error <code>USAGE</code> (exit 2) yang hint-nya menunjukkan contoh.</p>
+<h2 id="add-a-registry">Menambah registry</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando import docker                         # dari ~/.docker/config.json
+komando registry add ghcr registry://alice@ghcr.io --ask-password                         # menanyakan token, disembunyikan
+komando registry add ghcr registry://alice@ghcr.io --password-ref secret:ghcr-token       # token yang Anda simpan dengan secret set
+komando registry add harbor &#39;registry://alice@harbor.lan:5000?tls=false&#39; --via bastion    # tanpa TLS, di balik bastion</code></pre>
+<p>Kata sandinya biasanya sebuah access token. Token butuh hak baca untuk melihat, hak tulis untuk menyalin ke registry, dan hak hapus untuk menghapus. Untuk Docker Hub pakai <code>registry://alice@docker.io</code>.</p>
+<p><code>import docker</code> membaca setiap <code>docker login</code> dari <code>~/.docker/config.json</code>, dengan bertanya ke credential helper (<code>credsStore</code>, <code>credHelpers</code>) saat docker menyimpan login di sana. Amazon ECR, registry Google yang login lewat gcloud, dan registry Azure yang login dengan <code>az acr login</code> memegang token yang hanya bertahan beberapa jam: komando menambahkannya tanpa token itu dan login dengan login AWS, Google, atau Azure Anda setiap kali (lihat di bawah).</p>
+<p>Untuk mengeluarkan registry dari daftar Anda: <code>komando conn rm ghcr</code> (registry-nya sendiri tidak disentuh).</p>
+<h3 id="docker-hub">Docker Hub</h3>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry add dockerhub registry://alice@docker.io --ask-password
+komando registry list dockerhub alice/app       # tag repository Anda
+komando registry inspect dockerhub nginx        # image resmi: library/nginx:latest</code></pre>
+<ul class="g-list g-list--ul"><li>Nama image resmi tanpa <code>/</code> (<code>nginx</code>) berarti <code>library/nginx</code>, seperti pada <code>docker pull</code>.</li><li>Docker Hub tidak punya daftar semua repository: <code>registry list dockerhub</code> tanpa repository memberi <code>REGISTRY_UNSUPPORTED</code>; sebut satu.</li><li>Docker Hub membatasi pull (lebih sedikit tanpa login) dan menghitung setiap pembacaan manifest. Melewati batas, komando berhenti dengan <code>REGISTRY_RATE_LIMIT</code> dan menyatakan kapan mencoba lagi. <code>list</code> dan <code>rm</code> membaca tag dengan permintaan yang tidak dihitung Docker Hub; <code>prune</code> membaca setiap image sekali.</li></ul>
+<h3 id="amazon-ecr">Amazon ECR</h3>
+<p>Login ECR bertahan 12 jam, jadi komando mengambil yang baru dari AWS setiap kali, dengan login AWS Anda yang lazim (tidak butuh aws CLI). Hilangkan <code>--password-ref</code> dan sebut profil AWS-nya:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry add ecr registry://AWS@123456789012.dkr.ecr.eu-west-1.amazonaws.com --option aws_profile=prod</code></pre>
+<p>Bila login SSO sudah kedaluwarsa, error-nya <code>AWS_LOGIN_REQUIRED</code>: seseorang menjalankan <code>komando login aws --profile prod</code> sekali. Lihat <a href="../cloud/">Login cloud</a>.</p>
+<p>Login ECR berlaku untuk setiap repository yang dijangkau login AWS Anda, jadi komando mengirimnya hanya lewat https ke registry yang sertifikatnya diperiksa. Conn dengan <code>?tls=false</code> atau <code>?tls=skip-verify</code> berhenti dengan error penggunaan. Begitu juga conn registry cloud (ECR, Google, Azure) dengan <code>?ca=</code> atau <code>?resolve=</code> dan tanpa <code>--password-ref</code>: registry cloud punya sertifikat yang dipercayai setiap komputer, di alamatnya sendiri.</p>
+<h3 id="azure-container-registry">Azure Container Registry</h3>
+<p>Hilangkan <code>--password-ref</code> dan komando login dengan login Azure Anda, seperti yang dilakukan <code>az acr login</code>: komando mengambil token Azure dan menukarnya dengan registry untuk login registry yang bertahan beberapa jam. Ini dilakukan setiap kali, tidak menyimpan apa pun, dan tidak butuh program <code>az</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry add acr registry://myregistry.azurecr.io
+komando test acr</code></pre>
+<p>komando mencari login Azure dengan urutan ini:</p>
+<ol class="g-list g-list--ol"><li>service principal: <code>AZURE_TENANT_ID</code>, <code>AZURE_CLIENT_ID</code>, dan <code>AZURE_CLIENT_SECRET</code>;</li><li>workload identity di AKS: <code>AZURE_TENANT_ID</code>, <code>AZURE_CLIENT_ID</code>, dan <code>AZURE_FEDERATED_TOKEN_FILE</code>;</li><li>token yang disimpan Azure CLI setelah <code>az login</code> (Linux dan macOS). Token bertahan sekitar satu jam, dan perintah <code>az</code> apa pun memperbaruinya; komando membacanya tetapi tidak bisa memperbaruinya sendiri;</li><li>managed identity mesin Azure tempat komando berjalan (<code>AZURE_CLIENT_ID</code> memilih yang user-assigned).</li></ol>
+<p>Login butuh role <code>AcrPull</code> pada registry untuk melihat, <code>AcrPush</code> untuk menyalin image ke sana, dan <code>AcrDelete</code> untuk menghapus. Tanpa login, error-nya <code>AZURE_LOGIN_REQUIRED</code>; role yang hilang memberi <code>REGISTRY_AUTH</code>. Token registry atau user admin juga berfungsi: taruh user di URL dan berikan <code>--password-ref</code>, seperti untuk registry mana pun.</p>
+<p>Token Azure berlaku untuk seluruh subscription Anda, bukan hanya registry-nya, jadi komando mengirimnya hanya lewat https ke registry yang sertifikatnya diperiksa. Conn dengan <code>?tls=false</code> atau <code>?tls=skip-verify</code> berhenti dengan error penggunaan; pakai token registry dengan <code>--password-ref</code>.</p>
+<h3 id="google-artifact-registry-and-container-registry">Google Artifact Registry dan Container Registry</h3>
+<p>Host seperti <code>europe-west1-docker.pkg.dev</code>, <code>gcr.io</code>, <code>eu.gcr.io</code>, <code>us.gcr.io</code>, dan <code>asia.gcr.io</code> login dengan login Google Anda bila conn tidak punya <code>--password-ref</code>, seperti yang disiapkan <code>gcloud auth configure-docker</code>: komando mengambil access token Google (bertahan satu jam) setiap kali dan login sebagai <code>oauth2accesstoken</code>. Login itu adalah yang dipakai komando untuk storage <code>gs://</code> dan <code>gcp-sm:</code>: <code>GOOGLE_APPLICATION_CREDENTIALS</code> (file key service account), login dari <code>gcloud auth application-default login</code>, atau service account milik mesin di Google Cloud. Tidak butuh program <code>gcloud</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry add gar registry://europe-west1-docker.pkg.dev
+komando registry list gar my-project/my-repo/api</code></pre>
+<p>Untuk memakai key service account dari vault, simpan file key dan beri user nama <code>_json_key</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando secret set gar-key &lt; key.json
+komando registry add gar registry://_json_key@europe-west1-docker.pkg.dev --password-ref secret:gar-key</code></pre>
+<p>Login butuh role Artifact Registry Reader untuk melihat, Writer untuk menyalin image ke sana, dan Repository Administrator untuk menghapus. Tanpa login Google sama sekali, komando membaca tanpa login, jadi image publik tetap berfungsi; login yang sudah habis, atau file <code>GOOGLE_APPLICATION_CREDENTIALS</code> atau file login gcloud yang hilang atau rusak, memberi <code>GCP_LOGIN_REQUIRED</code>. Seperti Azure, token Google berlaku untuk seluruh project Anda, jadi hanya dikirim lewat https ke registry yang sertifikatnya diperiksa: tidak dengan <code>?tls=false</code> atau <code>?tls=skip-verify</code>.</p>
+<h3 id="https-with-your-own-certificate">HTTPS dengan sertifikat Anda sendiri</h3>
+<p>Secara default komando memeriksa sertifikat registry terhadap CA yang dipercayai komputer Anda. Registry dengan sertifikat dari CA privat (mkcert, CA internal) ditolak dengan <code>REGISTRY_TLS</code>. Dua cara memperbaikinya:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando secret set harbor-ca &lt; ca.crt        # 1. lebih baik: percayai CA itu (sertifikat PEM-nya), pemeriksaan tetap menyala
+komando registry add harbor &#39;registry://alice@harbor.lan?ca=secret:harbor-ca&#39; --password-ref secret:harbor-token
+komando registry add harbor &#39;registry://alice@harbor.lan?tls=skip-verify&#39; --password-ref secret:harbor-token   # 2. tanpa pemeriksaan sama sekali</code></pre>
+<p>Opsi URL ada di <a href="#reference">Referensi</a>. Secret CA dihitung dipakai oleh conn: <code>secret list</code> menampilkannya, <code>secret rm</code> menolaknya, <code>secret rename</code> mengubah URL juga, dan <code>export</code> mencantumkannya di <code>secrets_needed</code>.</p>
+<p>Bila CA ada di tempat lain (mkcert di komputer lain) dan registry hanya mengirim sertifikatnya sendiri, simpan sertifikat itu sebagai <code>ca=</code>. komando lalu mempercayai persis sertifikat itu (di-pin), tetap memeriksa nama dan tanggalnya, dan menolak yang lain. Saat registry mendapat sertifikat baru, simpan yang baru.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando secret set harbor-cert &lt; registry.crt    # sertifikat registry sendiri, PEM
+komando registry add harbor &#39;registry://alice@harbor.lan?ca=secret:harbor-cert&#39;</code></pre>
+<h3 id="when-dns-points-somewhere-else">Saat DNS menunjuk ke tempat lain</h3>
+<p>Kadang DNS publik registry menunjuk ke tempat selain alamat yang dipakai server Anda, atau nama itu tidak punya DNS sama sekali. Ada dua jalan memutarnya.</p>
+<p>Lewat server (<code>--via</code>): komando mengirim nama registry ke server terakhir di jalur <code>--via</code>, dan server itu yang mencarinya, jadi <code>/etc/hosts</code> dan DNS-nya berlaku. Pemeriksaan sertifikat dan header <code>Host</code> tetap memakai nama di URL:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry add harbor &#39;registry://alice@registry.example.com?ca=secret:harbor-ca&#39; --via web1</code></pre>
+<p>Dengan <code>?resolve=</code>: bila Anda bisa menjangkau registry dari komputer Anda, Anda tidak butuh server untuk ini. Berikan alamat IP-nya di URL, seperti <code>curl --resolve</code>. komando tersambung ke alamat itu dan tetap mengirim nama, jadi opsi TLS bekerja seperti tanpanya: sertifikat diperiksa terhadap nama (dengan atau tanpa <code>ca=</code>), atau tidak diperiksa sama sekali dengan <code>tls=skip-verify</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry add harbor &#39;registry://alice@registry.example.com?ca=secret:harbor-ca&amp;resolve=203.0.113.10&#39;
+komando registry add harbor &#39;registry://alice@harbor.lan?tls=skip-verify&amp;resolve=203.0.113.20&#39;
+komando test harbor</code></pre>
+<p>Hanya koneksi ke nama registry sendiri yang menuju IP itu. Layanan login atau unduhan di host lain dicari seperti biasa. Dengan <code>--via</code>, server terakhir di jalur yang tersambung ke IP. <code>komando tunnel</code> juga memakai IP itu.</p>
+<h2 id="look-at-images">Melihat image</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry list harbor                    # repository (Docker Hub dan GHCR tidak mengizinkan ini)
+komando registry list ghcr myorg/api            # tag satu repository
+komando registry inspect ghcr myorg/api:1.4.2   # digest, ukuran, platform, waktu dibuat, label</code></pre>
+<p>Jika diketik tanpa argumen di terminal, <code>komando registry inspect</code> menanyakan registry, lalu image.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>myorg/api:1.4.2
+  digest: sha256:4c2e...
+  media type: application/vnd.oci.image.index.v1+json
+  size: 48.2 MB in 7 layers, compressed
+  platforms: linux/amd64, linux/arm64
+  created: 2026-11-02 10:14 WIB</code></pre>
+<p>Tag atau repository yang tidak ada adalah &#34;not found&#34; (exit 3), dan pesan menyebut apa yang ada: <code>mirror/busybox:latest not found; tags: stable</code>.</p>
+<p><code>list</code> menampilkan paling banyak 1000 entri (<code>--limit</code> mengubahnya). Daftar yang terpotong punya <code>&#34;truncated&#34;: true</code> di JSON dan baris <code>(the first 1000 tags in shop/api; there are more: raise -n)</code> di terminal.</p>
+<p>Nama mengikuti aturan OCI: repository berupa huruf kecil, angka, <code>.</code>, <code>_</code>, <code>-</code>, dan <code>/</code> di antara bagian (<code>shop/api</code>); tag paling banyak 128 huruf, angka, <code>.</code>, <code>_</code>, dan <code>-</code>; digest adalah <code>sha256:</code> dan 64 digit heksadesimal. Selain itu ditolak dengan <code>USAGE</code> sebelum komando mengirim permintaan.</p>
+<h2 id="copy-images">Menyalin image</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry copy ghcr:myorg/api:1.4.2 harbor:prod/api:1.4.2   # antar-registry
+komando registry copy ghcr:myorg/api:1.4.2 harbor:                  # pertahankan nama dan tag yang sama
+komando registry copy harbor:app:latest harbor:app:stable           # tag lain di registry yang sama</code></pre>
+<p>Jika diketik tanpa argumen di terminal, <code>komando registry copy</code> menanyakan dari mana (<code>ghcr:myorg/api:1.4.2</code>), lalu ke mana.</p>
+<ul class="g-list g-list--ul"><li>Kedua sisi ditulis <code>CONN:IMAGE</code>, seperti pada <code>komando cp</code>. Image adalah <code>REPO[:TAG]</code> atau <code>REPO@DIGEST</code>.</li><li>Setiap platform dari image multi-platform disalin, dan digest tetap sama, sehingga tanda tangan dan deployment yang di-pin tetap valid.</li><li>Layer yang sudah dimiliki tujuan dilewati. Di registry yang sama layer ditautkan, bukan disalin, bila registry mengizinkan.</li><li>Hanya tujuan yang berubah, jadi hanya tujuan yang dilindungi yang butuh <code>--yes</code>.</li><li>Hasilnya menyatakan <code>&#34;replaced&#34;: true</code> bila tag tujuan sebelumnya menunjuk ke image yang berbeda.</li><li><code>harbor:prod/api</code> (tanpa tag) mempertahankan tag sumber; sumber yang diberikan dengan digest butuh tag tujuan. Menyalin image ke dirinya sendiri ditolak.</li><li><code>--dry-run</code> membaca kedua registry: menampilkan image sumber (<code>source</code>) dan menyatakan <code>&#34;would_replace&#34;: true</code> bila tag tujuan sekarang menunjuk ke image lain.</li></ul>
+<h2 id="delete-images">Menghapus image</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry rm harbor shop/api:1.9 --dry-run     # mencantumkan setiap tag yang akan hilang
+komando registry rm harbor shop/api:1.9</code></pre>
+<p><code>rm</code> menghapus image yang ditunjuk tag, jadi setiap tag lain pada image yang sama ikut hilang. Sebut tag atau digest: <code>rm</code> tidak pernah memilih <code>latest</code> sendiri. <code>--dry-run</code> menyebut setiap tag yang akan hilang (<code>would_remove_tags</code>) sebelum apa pun dihapus:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>$ komando registry rm harbor shop/api:1.9 --dry-run
+would delete shop/api@sha256:4c2e...
+with it goes every tag on that image: 1.9, latest
+latest is one of them: docker pull without a tag stops working</code></pre>
+<p>komando memeriksa setiap tag repository (sampai 10000); bila lebih banyak, <code>tags_note</code> menyatakan tag lain mungkin menunjuk ke image itu juga.</p>
+<p>Penghapusan tidak bisa dibatalkan. Di terminal Anda komando bertanya dulu: komando menyebut image dan setiap tag yang akan hilang, dan Anda mengetik nama image (<code>Type the name shop/api:1.9 to continue</code>). Agen AI atau script menambahkan <code>--allow-dangerous</code> setelah seseorang setuju; registry yang dilindungi juga butuh <code>--yes</code>. Lihat <a href="../../../docs/safety/#what-needs-a-yes">Keamanan</a>.</p>
+<p>Ruang disk kembali setelah registry menjalankan garbage collection-nya.</p>
+<h3 id="delete-old-images">Menghapus image lama</h3>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando registry prune harbor shop/api --keep 10 --dry-run   # apa yang akan hilang, dan mengapa sisanya tetap
+komando registry prune harbor shop/api --keep 10 --older-than 30d --match &#39;^v&#39;</code></pre>
+<p><code>prune</code> menghapus image lama dari satu repository. Di terminal Anda komando bertanya dulu: ketik nama repository. Agen AI atau script menambahkan <code>--allow-dangerous</code> setelah seseorang setuju. Berikan <code>--keep</code>, <code>--older-than</code>, atau keduanya:</p>
+<ul class="g-list g-list--ul"><li><code>--keep N</code> mempertahankan N tag terbaru yang cocok.</li><li><code>--older-than 30d</code> hanya menghapus image yang dibuat sebelum usia itu. Dengan keduanya, sebuah tag harus lolos keduanya untuk dihapus.</li><li><code>--match REGEX</code> membatasi pada tag yang cocok dengan pola ini (regular expression, seperti <code>^v</code> untuk tag yang diawali v).</li></ul>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>shop/api: would delete 2 images of 14 tags
+  - v1.0                 2026-03-02 09:12 WIB  sha256:91ab2c3d4e5f
+  - v1.1                 2026-04-10 15:40 WIB  sha256:7f3e1d2c3b4a
+keeps 12 tags:
+  = latest               latest is always kept
+  = v2.9                 one of the newest
+  ...</code></pre>
+<p><code>latest</code>, tag yang tidak cocok, dan tag tanpa tanggal build selalu tetap, begitu juga image mana pun yang ditunjuk tag yang dipertahankan. Index multi-platform punya tanggal build dari image pertamanya, jadi aturan berlaku padanya seperti pada image mana pun.</p>
+<h2 id="limits">Batasan</h2>
+<ul class="g-list g-list--ul"><li>Docker Hub dan GHCR tidak punya daftar semua repository: sebut satu.</li><li><code>list</code> menampilkan paling banyak 1000 entri kecuali Anda menaikkan <code>--limit</code>.</li><li><code>rm</code> dan dry run-nya memeriksa setiap tag repository, sampai 10000, untuk tag lain pada image yang sama.</li><li><code>prune</code> membaca digest setiap tag (8 sekaligus), lalu setiap image sekali, dan berhenti dengan <code>TOO_MANY_TAGS</code> di atas 10000 tag (<code>--match</code> tidak mengangkatnya, karena setiap tag dibaca): hapus beberapa dulu dengan <code>registry rm</code>.</li><li>Registry dengan penghapusan dimatikan (<code>registry:2</code> tanpa <code>REGISTRY_STORAGE_DELETE_ENABLED=true</code>) menjawab <code>rm</code> dan <code>prune</code> dengan <code>REGISTRY_UNSUPPORTED</code>.</li><li>Token Azure dan Google hanya dikirim lewat https dengan sertifikat yang diperiksa: tidak dengan <code>?tls=false</code> atau <code>?tls=skip-verify</code>.</li><li>Ruang disk kembali hanya setelah garbage collection milik registry sendiri.</li></ul>
+<h2 id="troubleshooting">Pemecahan masalah</h2>
+<div class="d-table" role="region" aria-label="Tabel" tabindex="0"><table><thead><tr><th scope="col">Kode</th><th scope="col">Artinya</th><th scope="col">Yang perlu dilakukan</th></tr></thead><tbody><tr><td><code>REGISTRY_AUTH</code> (exit 4)</td><td>registry menolak login, atau token kekurangan hak</td><td>periksa user di URL conn dan <code>--password-ref</code>-nya (token dengan scope atau role yang tepat)</td></tr><tr><td><code>REPOSITORY_NOT_FOUND</code> (exit 3)</td><td>tidak ada repository seperti itu</td><td><code>komando registry list harbor</code> menampilkan repository</td></tr><tr><td><code>REGISTRY_UNSUPPORTED</code> (exit 5)</td><td>registry tidak mengizinkannya: tanpa daftar semua repository, atau penghapusan dimatikan</td><td>sebut repository-nya; nyalakan penghapusan di registry</td></tr><tr><td><code>REGISTRY_RATE_LIMIT</code> (exit 5)</td><td>terlalu banyak permintaan (batas pull Docker Hub)</td><td>tunggu selama yang disebut hint, atau login</td></tr><tr><td><code>REGISTRY_TLS</code> (exit 4)</td><td>sertifikat berasal dari CA privat, atau untuk nama lain</td><td>tambahkan <code>?ca=secret:NAMA</code>, atau pakai nama yang dituju sertifikat</td></tr><tr><td><code>CONN_UNREACHABLE</code> (exit 4)</td><td>registry tidak menjawab</td><td><code>komando test harbor</code>, dan periksa jalur <code>--via</code>-nya</td></tr><tr><td><code>AWS_LOGIN_REQUIRED</code> (exit 4)</td><td>login AWS profil ECR sudah habis</td><td>seseorang menjalankan <code>komando login aws --profile prod</code></td></tr><tr><td><code>AZURE_LOGIN_REQUIRED</code> (exit 4)</td><td>tidak ada login Azure</td><td>atur service principal, atau seseorang menjalankan <code>az login</code></td></tr><tr><td><code>GCP_LOGIN_REQUIRED</code> (exit 4)</td><td>login Google sudah habis atau file-nya rusak</td><td>seseorang menjalankan <code>gcloud auth application-default login</code>, atau atur <code>GOOGLE_APPLICATION_CREDENTIALS</code></td></tr><tr><td><code>TOO_MANY_TAGS</code> (exit 2)</td><td><code>prune</code> pada repository dengan lebih dari 10000 tag (<code>--match</code> tidak mengangkatnya)</td><td>hapus beberapa dulu dengan <code>registry rm</code></td></tr></tbody></table></div>
+<h2 id="reference">Referensi</h2>
+<p>Opsi URL pada conn <code>registry://</code>:</p>
+<div class="d-table" role="region" aria-label="Tabel" tabindex="0"><table><thead><tr><th scope="col">Opsi URL</th><th scope="col">Fungsinya</th></tr></thead><tbody><tr><td>(tidak ada)</td><td>HTTPS, sertifikat diperiksa terhadap CA komputer Anda</td></tr><tr><td><code>?ca=secret:NAMA</code></td><td>HTTPS, sertifikat diperiksa terhadap CA itu ditambah sertifikat PEM di secret vault <code>NAMA</code>: sebuah CA, atau sertifikat registry sendiri</td></tr><tr><td><code>?resolve=IP</code></td><td>tersambung ke alamat IP ini sebagai ganti yang diberikan DNS untuk nama itu (seperti <code>curl --resolve</code>). <code>IP:PORT</code> mengatur port juga; tulis IPv6 dalam kurung siku: <code>[2001:db8::1]:443</code>. TLS tetap memakai nama di URL. Bisa dipakai bersama setiap opsi lain di tabel ini; lihat <a href="#when-dns-points-somewhere-else">Saat DNS menunjuk ke tempat lain</a></td></tr><tr><td><code>?tls=skip-verify</code></td><td>HTTPS, tetapi sertifikat tidak diperiksa (seperti <code>insecure-registries</code> milik Docker). Siapa pun di jalur bisa berpura-pura menjadi registry; <code>komando doctor</code> memperingatkannya</td></tr><tr><td><code>?tls=false</code></td><td>HTTP polos, tidak ada yang dienkripsi (<code>registry:2</code> di jaringan privat)</td></tr></tbody></table></div></div><nav class="g-pager" aria-label="Halaman sebelumnya dan berikutnya"><a class="g-pn g-pn--prev" href="../cloud/"><span class="g-label g-muted">Sebelumnya</span>Login cloud</a><a class="g-pn g-pn--next" href="../rotate/"><span class="g-label g-muted">Berikutnya</span>Rotasi key dan kata sandi, dan saat seseorang pergi</a></nav><p class="g-path g-small g-muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/registry.md">docs/features/registry.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer data-slot="site-footer" class="ef-site-footer"><div class="ef-site-footer__inner"><div class="ef-site-footer__top"><div class="ef-site-footer__brand"><a class="ef-site-footer__brand-link" href="../../../id/index.html"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><p class="ef-site-footer__tagline">Satu command line yang aman untuk pekerjaan DevOps.</p></div><nav aria-label="Command line"><h2 class="ef-site-footer__heading">Command line</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../../id/index.html#inventory">Inventaris</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#safety">Keamanan</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#install">Instal</a></li><li><a class="ef-site-footer__link" href="../../../id/docs/">Dokumentasi</a></li><li><a class="ef-site-footer__link" href="https://github.com/sgnd/komando" target="_blank" rel="noopener noreferrer">Kode sumber di GitHub<span class="ef-site-footer__sr"> (membuka tab baru)</span></a></li></ul></nav><nav aria-label="Aplikasi Komando"><h2 class="ef-site-footer__heading">Aplikasi Komando</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../../id/index.html#agent">Agen</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#editions">Edisi</a></li><li><a class="ef-site-footer__link" href="../../../id/guide/">Panduan</a></li></ul></nav></div><div class="ef-site-footer__bottom"><span>© 2026 Komando</span><span>Nama produk dan logo adalah merek dagang pemiliknya.</span><a class="ef-site-footer__link" href="../../../docs/registry/" hreflang="en" lang="en" aria-label="Read this page in English">English</a></div></div></footer>
+<template id="icon-menu"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></template><template id="icon-x"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 6 6 18"></path>
+  <path d="m6 6 12 12"></path>
+</svg></span></template><template id="icon-play"><span aria-hidden="true" data-slot="icon" data-size="16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
+</svg></span></template><template id="icon-pause"><span aria-hidden="true" data-slot="icon" data-size="16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="14" y="3" width="5" height="18" rx="1"></rect>
+  <rect x="5" y="3" width="5" height="18" rx="1"></rect>
+</svg></span></template>
+<script type="module" src="../../../assets/meridian/browser/marketing.js"></script>
+<script type="module" src="../../../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Service, log, Docker, package, user · Dokumentasi komando</title>
+<meta name="description" content="Administrasi server sehari-hari, dengan hasil terstruktur sebagai ganti output terminal mentah.">
+<link rel="canonical" href="https://komando.efolusi.com/id/docs/system/">
+<link rel="alternate" hreflang="en" href="https://komando.efolusi.com/docs/system/">
+<link rel="alternate" hreflang="id" href="https://komando.efolusi.com/id/docs/system/">
+<link rel="alternate" hreflang="x-default" href="https://komando.efolusi.com/docs/system/">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<meta name="color-scheme" content="light dark">
+<script src="../../../assets/meridian/browser/theme-init.js"></script>
+<link rel="preload" href="../../../assets/meridian/assets/fonts/Figtree-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../assets/meridian/styles.css">
+<link rel="stylesheet" href="../../../assets/meridian/landing.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+<link rel="stylesheet" href="../../../guide/guide.css">
+<link rel="stylesheet" href="../../../docs/docs.css">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+</head>
+<body>
+<a href="#top" class="ef-skip">Langsung ke konten</a><header data-slot="site-header" class="ef-site-header"><div class="ef-site-header__inner"><a class="ef-site-header__brand" href="../../../id/index.html" aria-label="Beranda Komando"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><nav class="ef-site-header__nav" aria-label="Utama"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a></nav><div class="ef-site-header__actions"><a class="ef-site-header__link" href="../../../docs/system/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><button type="button" data-slot="theme-toggle" class="ef-theme-toggle" data-preference="system" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span data-theme-icon="light" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span><span data-theme-icon="system" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../../id/index.html#install">Instal komando</a></div><button type="button" class="ef-site-header__menu" aria-expanded="false" aria-controls="site-menu" aria-label="Menu"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></button></div><div id="site-menu" class="ef-site-header__panel"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a><a class="ef-site-header__link" href="../../../docs/system/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><div class="ef-site-header__panel-actions"><button type="button" data-slot="theme-toggle" class="ef-theme-toggle" data-preference="system" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span data-theme-icon="light" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span><span data-theme-icon="system" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../../id/index.html#install">Instal komando</a></div></div></header>
+<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid"><nav class="g-side" aria-label="Dokumentasi"><details class="g-side__fold" open><summary>Semua halaman dokumentasi</summary><p class="g-side__home"><a href="../">Beranda dokumentasi</a></p><p class="g-label g-side__group">Mulai di sini</p><ul><li><a href="../getting-started/">Mulai</a></li><li><a href="../switch-from-termius/">Pindah dari Termius</a></li></ul><p class="g-label g-side__group">Fitur</p><ul><li><a href="../install/">Instal, update, hapus</a></li><li><a href="../secrets/">Secret</a></li><li><a href="../windows/">Server Windows</a></li><li><a href="../import/">Pindah ke komando dan pindah komputer</a></li><li><a href="../targets/">Target</a></li><li><a href="../health/">Pemeriksaan kesehatan dan jaringan</a></li><li><a href="../system/" aria-current="page">Service, log, Docker, package, user</a></li><li><a href="../tunnels/">Server privat dan tunnel</a></li><li><a href="../caches/">Cache</a></li><li><a href="../cloud/">Login cloud</a></li><li><a href="../registry/">Container registry</a></li><li><a href="../rotate/">Rotasi key dan kata sandi, dan saat seseorang pergi</a></li><li><a href="../security-standards/">Standar keamanan</a></li><li><a href="../output/">Hasil dan error</a></li><li><a href="../error-codes/">Kode error</a></li><li><a href="../settings/">Pengaturan dan file</a></li><li><a href="../glossary/">Glosarium</a></li></ul><p class="g-side__home"><a href="../../../docs/" hreflang="en" lang="en">semua halaman dokumentasi (bahasa Inggris)</a></p></details></nav><article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">Dokumentasi</a> · Fitur</p><h1>Service, log, Docker, package, user</h1><p class="g-lead">Administrasi server sehari-hari, dengan hasil terstruktur sebagai ganti output terminal mentah.</p><nav class="g-toc" aria-label="Di halaman ini"><p class="g-label g-muted">Di halaman ini</p><ul><li><a href="#check-and-restart-a-service">Memeriksa dan me-restart service</a></li><li><a href="#logs">Log</a></li><li><a href="#docker">Docker</a></li><li><a href="#packages">Package</a></li><li><a href="#reboot">Reboot</a></li><li><a href="#users">User</a></li><li><a href="#scheduled-jobs-cron">Pekerjaan terjadwal (cron)</a></li><li><a href="#sudo">Sudo</a></li><li><a href="#whole-jobs-step-by-step">Pekerjaan utuh, langkah demi langkah</a></li><li><a href="#limits">Batasan</a></li><li><a href="#troubleshooting">Pemecahan masalah</a></li><li><a href="#reference">Referensi</a></li></ul></nav><div class="g-body"><h2 id="check-and-restart-a-service">Memeriksa dan me-restart service</h2>
+<p>Kebanyakan server Linux memulai dan mengawasi service-nya dengan systemd. systemd menyebut setiap service sebuah unit (<code>nginx</code>, <code>php8.2-fpm</code>).</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando svc status @web nginx                 # status, PID utama, jumlah restart, memori
+komando svc restart @web nginx --wait 10s     # gagal kecuali nginx aktif dalam 10 detik</code></pre>
+<p>Jika diketik tanpa argumen di terminal Anda, <code>komando svc restart</code> menanyakan server (dari daftar Anda), lalu service-nya, lalu berapa lama menunggu.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando svc list web1 --failed                # atau --state running
+komando svc enable web1 nginx --now           # aktifkan dan mulai
+komando svc stop web1 old-worker
+komando svc start web1 worker
+komando svc disable web1 old-worker --now     # jangan mulai saat boot, dan hentikan sekarang
+komando svc logs web1 nginx                   # journal unit itu (lihat Log)</code></pre>
+<p><code>start</code>, <code>stop</code>, <code>restart</code>, <code>reload</code>, <code>enable</code>, dan <code>disable</code> memakai sudo dan melaporkan statusnya sesudahnya (lihat <a href="#sudo">Sudo</a>).</p>
+<ul class="g-list g-list--ul"><li><code>--wait</code> menerima waktu dengan satuan (<code>10s</code>, <code>2m</code>); angka tanpa satuan ditolak, kecuali <code>0</code> (tanpa menunggu).</li><li>Menghentikan, menonaktifkan, atau me-mask server SSH (<code>ssh</code>, <code>sshd</code>, <code>ssh.socket</code>) butuh <code>--allow-dangerous</code>: Anda akan terkunci di luar.</li></ul>
+<p>Setelah Anda menulis atau mengubah file unit, muat ulang systemd agar membacanya:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando svc daemon-reload web1                # menyebut unit apa pun yang masih butuh dimuat ulang</code></pre>
+<h2 id="logs">Log</h2>
+<p><code>logs</code> membaca satu sumber: journal systemd (<code>--unit</code>), sebuah file (<code>--file</code>), atau container Docker (<code>--container</code>).</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando logs web1 --unit nginx --since 30m --grep &#39;error|crit&#39;</code></pre>
+<p>Jika diketik tanpa argumen, <code>komando logs</code> menanyakan server, lalu log mana dan dari berapa lama yang lalu.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando logs web1 --unit nginx --follow                 # terus pantau; Ctrl-C untuk berhenti
+komando logs web1 --unit nginx -p err --since today     # error dan yang lebih buruk
+komando logs @web --file /var/log/nginx/error.log -n 50 --sudo
+komando logs web1 --container api --since 10m --timestamps</code></pre>
+<p><code>komando svc logs TARGET UNIT</code> dan <code>komando docker logs TARGET CONTAINER</code> membaca hal yang sama dengan <code>logs --unit</code> dan <code>logs --container</code>. Flag-nya ada di <a href="#reference">Referensi</a>.</p>
+<p>Tanpa <code>--sudo</code>, journal hanya menampilkan entri milik Anda sendiri, dan komando memperingatkan Anda. File log yang tidak ada keluar dengan 3.</p>
+<h2 id="docker">Docker</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando docker ps web1                         # container yang berjalan (--all untuk yang berhenti juga)
+komando docker logs web1 api -n 100
+komando docker restart web1 api</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando docker stats web1                      # pemakaian CPU, memori, jaringan, dan disk
+komando docker images web1
+komando docker inspect web1 api                # sebuah container, image, atau objek lain secara lengkap
+komando docker pull web1 nginx:1.27            # ambil sebuah image
+komando docker stop web1 api                   # juga: start
+komando docker rm web1 old-api --dry-run       # hapus sebuah container
+komando docker exec web1 api -- php artisan migrate:status
+komando docker compose web1 --dir /srv/shop -- up -d --pull always</code></pre>
+<ul class="g-list g-list--ul"><li>Membaca (<code>ps</code>, <code>stats</code>, <code>images</code>, <code>inspect</code>, <code>logs</code>) tidak butuh tambahan apa pun.</li><li><code>start</code>, <code>stop</code>, <code>restart</code>, <code>pull</code>, <code>compose up</code>, dan <code>docker run</code> lewat <code>docker raw</code> mengubah sesuatu, jadi server yang dilindungi bertanya dulu.</li><li><code>rm</code>, <code>prune</code>, <code>compose down -v</code>, dan penghapusan lainnya menghapus untuk selamanya: di terminal Anda komando meminta Anda mengetik nama server; agen AI atau script menambahkan <code>--allow-dangerous</code> setelah seseorang setuju (<a href="../../../docs/safety/">Keamanan</a>).</li><li><code>docker exec</code> meneruskan kata-kata perintah apa adanya, tanpa shell, jadi image tidak butuh <code>sh</code>. Untuk pipe atau <code>&amp;&amp;</code>, tulis shell-nya sendiri: <code>-- sh -c &#39;ls /data | wc -l&#39;</code>. Tambahkan <code>--read-only</code> bila hanya melihat; perintah diperiksa seperti untuk <code>exec</code>: hanya perintah yang diketahui komando hanya membaca yang berjalan.</li><li><code>docker raw TARGET -- ARGS...</code> menjalankan sub-perintah docker lainnya, dengan aturan yang sama.</li><li><code>--sudo</code> menjalankan docker lewat sudo, bila user Anda tidak ada di grup <code>docker</code>.</li></ul>
+<h3 id="free-disk-space-docker-prune">Membebaskan ruang disk (docker prune)</h3>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando docker prune web1 --dry-run                          # apa yang akan hilang, dengan ukuran dan total
+komando docker prune web1 --older-than 30d --all --dry-run   # juga image bertag yang tidak terpakai, lebih tua dari 30 hari
+komando docker prune web1 --older-than 30d                   # jalankan (meminta Anda mengetik web1)</code></pre>
+<p><code>docker prune</code> menjalankan <code>docker system prune</code>: menghapus container yang berhenti, image dangling, jaringan yang tidak terpakai, dan build cache.</p>
+<ul class="g-list g-list--ul"><li><code>--dry-run</code> tidak mengubah apa pun. Perintah ini bertanya ke docker di server (hanya perintah yang mendaftar) dan menampilkan setiap container, image, dan volume yang akan hilang, build cache yang bisa dibebaskan docker, dan total. Ukuran image menghitung layer bersama di setiap image, jadi ruang yang benar-benar dibebaskan bisa lebih kecil.</li><li><code>--older-than 30d</code> mempertahankan semua yang dibuat dalam 30 hari terakhir (filter <code>until</code> milik docker).</li><li><code>--all</code> menghapus setiap image yang tidak dipakai container, bukan hanya yang dangling; deploy berikutnya menariknya lagi.</li><li><code>--volumes</code> juga menghapus volume anonim yang tidak terpakai. Itu data: lihat dry run dulu. Tidak bisa digabung dengan <code>--older-than</code> (docker tidak punya filter usia untuk volume).</li><li>Eksekusi sungguhan menghapus, jadi dikonfirmasi seperti <code>docker rm</code>.</li></ul>
+<h2 id="packages">Package</h2>
+<p><code>pkg</code> bekerja dengan apt, dnf, yum, apk, zypper, dan pacman; komando mencari tahu mana yang dipakai setiap server.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando pkg upgradable all --refresh            # segarkan indeks package dulu
+komando pkg install @web htop</code></pre>
+<p>Jika diketik tanpa argumen, <code>komando pkg install</code> menanyakan server, lalu package-nya.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando pkg rm web1 htop
+komando pkg installed web1 nginx openssl        # versi yang terinstal (semuanya tanpa nama)
+komando pkg upgrade web1 --dry-run              # apa yang akan di-upgrade
+komando pkg upgrade web1                        # semuanya, atau sebut package-nya
+komando pkg update web1                         # hanya segarkan indeks package</code></pre>
+<ul class="g-list g-list--ul"><li><code>install</code> dan <code>rm</code> melaporkan apa yang berubah (<code>changed: false</code> bila tidak ada yang perlu dikerjakan). Package yang tidak dikenal keluar dengan 3 (<code>PACKAGE_NOT_FOUND</code>).</li><li><code>upgradable</code> menyatakan seberapa lama indeks package, dan menyarankan <code>--refresh</code> bila lebih dari sehari. <code>--refresh</code> menulis ulang indeks package server sebagai root, jadi itu perubahan: di server yang dilindungi <code>pkg upgradable --refresh</code> dan <code>pkg security --refresh</code> butuh jawaban ya, dan dry run tidak pernah menyegarkan.</li><li>Menghapus package yang dibutuhkan server (openssh-server, sudo, systemd, libc, dan sejenisnya) butuh <code>--allow-dangerous</code>, bagaimanapun nama ditulis (<code>openssh-server:amd64</code>, <code>sudo.x86_64</code>, <code>openssh.server</code>). Di server apt, menghapus package yang akan membawa salah satunya ikut (<code>libssl3</code> membawa openssh-server) berhenti dengan <code>POLICY_BLOCKED</code> sebelum apa pun dihapus.</li><li>Nama package adalah nama yang persis: tanpa opsi, pola, atau <code>-</code> di akhir. Untuk <code>.deb</code> atau <code>.rpm</code> lokal, pakai <code>komando upload</code> dan <code>komando exec</code>.</li></ul>
+<h3 id="security-updates">Update keamanan</h3>
+<p><code>pkg security</code> dan <code>pkg upgrade --security</code> menangani satu putaran patch: hanya update keamanan, satu server sekali waktu, dengan melihat setiap server sebelum dan sesudahnya.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando pkg security @web --refresh              # apa yang menunggu, dan keadaan tiap server
+komando pkg upgrade @web --security --dry-run    # rencananya, dan penghentian apa pun yang akan ditemui
+komando pkg upgrade @web --security              # patch, satu server sekali waktu
+komando pkg upgrade @web --security --keep-going # jangan berhenti di server yang berubah</code></pre>
+<ul class="g-list g-list--ul"><li><code>pkg security</code> hanya melihat. Perintah ini mencantumkan update keamanan (apt: package dari pocket <code>-security</code>; dnf dan yum: update dengan pemberitahuan keamanan) dan keadaan server: container yang berjalan, unit yang gagal, update yang menunggu, apakah reboot dibutuhkan, dan service yang masih menjalankan kode lama (dari <code>needrestart</code> atau <code>needs-restarting</code>). Semuanya berasal dari pemeriksaan yang sama dengan <code>komando facts</code>, jadi keduanya menyatakan hal yang sama.</li><li>Perintah ini juga menilai OS (<code>os_support</code>, seperti di <code>komando facts</code>). Pada OS yang sudah lewat end of life, daftar bisa kosong sementara server tidak aman: repository tidak menerbitkan perbaikan baru untuknya. komando lalu menyatakannya di <code>warnings</code>.</li><li><code>pkg upgrade --security</code> hanya menginstal update itu. Di server apt komando memakai <code>unattended-upgrade</code> bila terinstal (memilih origin keamanan dan mengikuti pengaturan server sendiri), kalau tidak <code>apt-get install --only-upgrade</code> untuk package yang tercantum; file konfigurasi yang berubah dipertahankan. Bila unattended-upgrades server diatur untuk reboot sendiri, komando memakai apt-get sebagai gantinya. dnf dan yum menjalankan <code>upgrade --security</code>.</li><li>needrestart tidak me-restart service selama eksekusi. Hasilnya mencantumkan service yang perlu di-restart (<code>services_need_restart</code>): restart dengan <code>komando svc restart</code> saat waktunya cocok.</li><li>Setelah setiap server, komando membandingkan keadaannya dengan sebelumnya. Container yang berjalan berkurang, unit yang baru gagal, atau package esensial yang dihapus menghentikan putaran dengan <code>UNEXPECTED_CHANGE</code> (exit 8); server lain tetap seperti semula dan dicantumkan di <code>not_run</code>. komando menunggu sampai semenit agar container kembali lebih dulu. <code>--keep-going</code> melanjutkan setelah kegagalan atau perubahan.</li><li>komando tidak pernah mereboot. <code>reboot_required</code> menyatakan kapan server butuh reboot; pakai <code>komando reboot</code> (<a href="#reboot">Reboot</a>).</li><li>Upgrade berjalan terlepas di server, jadi koneksi yang putus tidak merusaknya di tengah jalan. <code>--security</code> menunggu sampai 30 menit per server; <code>--timeout</code> mengubahnya. Setelah <code>TIMEOUT</code> upgrade tetap berjalan: jalankan <code>pkg security</code> lagi nanti untuk melihat apa yang tersisa.</li><li>Ini perubahan seperti <code>pkg upgrade</code>: server yang dilindungi bertanya dulu. Update yang akan menghapus package esensial berhenti dengan <code>POLICY_BLOCKED</code> sebelum apa pun berubah (server apt).</li><li>Indeks package yang usang menyembunyikan perbaikan baru: komando memperingatkan bila lebih dari sehari; tambahkan <code>--refresh</code>.</li></ul>
+<h2 id="reboot">Reboot</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando reboot web1 --dry-run                 # apa yang akan berjalan, dan apakah akan diblokir
+komando reboot @web                           # satu server sekali waktu; meminta Anda mengetik jumlahnya
+komando reboot @web --wait 10m</code></pre>
+<p><code>komando reboot</code> me-restart satu server sekali waktu. Untuk setiap server, komando meminta reboot (<code>systemctl reboot</code>, lewat sudo), menunggu sampai SSH menjawab lagi, dan memeriksa bahwa server benar-benar mulai baru (boot ID baru). Baru setelah itu komando melanjutkan ke server berikutnya.</p>
+<ul class="g-list g-list--ul"><li><code>--wait</code> adalah berapa lama tiap server boleh kembali (default 5m).</li><li>Server yang tidak kembali tepat waktu menghentikan sisanya dengan <code>REBOOT_TIMEOUT</code> (exit 7). Kegagalan lain juga menghentikan sisanya. Server setelahnya dicantumkan di <code>not_rebooted</code>.</li><li>Reboot bersifat merusak: di terminal Anda komando meminta Anda mengetik nama server (beberapa: jumlahnya); agen AI atau script menambahkan <code>--allow-dangerous</code> setelah seseorang setuju.</li></ul>
+<h2 id="users">User</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando user list web1                       # NAME UID HOME SHELL ADMIN GROUP LOCKED
+komando user add web1 alice --key alice --admin</code></pre>
+<p>Jika diketik tanpa argumen, <code>komando user add</code> menanyakan server, lalu nama user.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando user list web1 --all                 # termasuk akun sistem
+komando user add @web app --pubkey &#39;ssh-ed25519 AAAA... app@example.com&#39; --shell /bin/sh
+komando user lock web1 alice                 # SSH key juga berhenti berfungsi
+komando user unlock web1 alice
+komando user rm web1 alice --remove-home --dry-run</code></pre>
+<ul class="g-list g-list--ul"><li><code>user add</code> aman dijalankan lagi: user yang sudah ada tidak dibuat dua kali, tetapi shell, key, dan grup admin-nya disesuaikan. <code>--key</code> mengotorisasi key dari daftar key komando, <code>--pubkey</code> sebaris key, dan <code>--admin</code> menambahkan user ke grup <code>sudo</code> (Debian) atau <code>wheel</code> (RHEL, Alpine). Berikan <code>--key</code> atau <code>--pubkey</code>, tidak keduanya.</li><li><code>user lock</code> mengunci kata sandi dan mengedarluwarsakan akun, sehingga SSH key juga berhenti berfungsi, tanpa menghapus apa pun. Mengunci atau menghapus <code>root</code> atau user yang dipakai komando untuk login butuh <code>--allow-dangerous</code>: komando tidak bisa login sesudahnya untuk membatalkannya, dan root adalah akun yang memperbaiki server. Hal yang sama berlaku untuk <code>user add --shell</code> dengan shell yang tidak bisa dipakai login siapa pun (<code>/usr/sbin/nologin</code>, <code>/bin/false</code>) untuk kedua akun itu.</li><li><code>user list</code> membaca status kunci lewat sudo (<code>--no-sudo</code> menghilangkannya). <code>admin_group</code> berarti &#34;ada di grup sudo, wheel, atau admin&#34;; aturan di <code>sudoers.d</code> tidak dibaca.</li><li><code>user rm</code> menghapus untuk selamanya: di terminal Anda komando meminta Anda mengetik nama server; agen AI atau script menambahkan <code>--allow-dangerous</code> setelah seseorang setuju. Coba <code>--dry-run</code> dulu.</li></ul>
+<h2 id="scheduled-jobs-cron">Pekerjaan terjadwal (cron)</h2>
+<p>komando mengelola entri crontab dengan ID yang Anda pilih. <code>cron set</code> dengan ID yang sama menggantikan entri, bukan menambah entri kedua, dan baris lain di crontab dipertahankan apa adanya.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cron set db1 nightly-backup &#39;/usr/local/bin/backup.sh &gt;&gt; /var/log/backup.log 2&gt;&amp;1&#39; --schedule &#39;0 2 * * *&#39;
+komando cron list db1</code></pre>
+<p>Jika diketik tanpa argumen, <code>komando cron set</code> menanyakan server, ID, perintah, dan jadwalnya.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cron set @web clean-tmp &#39;find /tmp -mtime +7 -delete&#39; --schedule @daily
+komando cron rm db1 nightly-backup           # data: {&#34;removed&#34;: 1}
+komando cron list db1 --user www-data        # crontab user lain (memakai sudo)
+komando cron list db1 --user root            # crontab root</code></pre>
+<ul class="g-list g-list--ul"><li>ID memakai huruf, angka, <code>-</code>, dan <code>_</code>.</li><li><code>--schedule</code> menerima lima field (<code>&#39;*/5 * * * *&#39;</code>) atau <code>@hourly</code>, <code>@daily</code>, <code>@weekly</code>, <code>@monthly</code>, <code>@yearly</code>, <code>@reboot</code>. Diperiksa sebelum apa pun ditulis.</li><li><code>%</code> di dalam perintah di-escape untuk Anda.</li></ul>
+<h2 id="sudo">Sudo</h2>
+<p>Perintah yang mengubah sesuatu memakai sudo kecuali Anda menambahkan <code>--no-sudo</code> (<code>svc</code>, <code>pkg</code>, <code>user</code>, <code>reboot</code>, <code>recipe run</code>): tambahkan saat Anda login sebagai root. Perintah yang membaca memakai sudo hanya bila Anda memintanya: <code>--sudo</code> untuk <code>logs</code>, <code>docker</code>, dan <code>net ports</code>, <code>--user</code> untuk crontab user lain.</p>
+<p>Bila sudo meminta kata sandi yang tidak dimiliki komando, atau user yang dipakai login tidak boleh memakai sudo, perintah berhenti dengan <code>PERMISSION_DENIED</code> dan hint yang menyebut perbaikannya (<code>komando host edit web1 --sudo-ref secret:web1-sudo</code>, lihat <a href="../../../docs/servers/#sudo-passwords-and-the-vault">Kata sandi sudo</a>). Server tanpa sudo sama sekali memberi <code>TOOL_MISSING</code> (tambahkan <code>--no-sudo</code> sebagai root). Hal yang sama berlaku untuk <code>pkg</code>, <code>user</code>, <code>cron --user</code>, setiap perintah <code>docker</code> dengan <code>--sudo</code> (sebagai root, hilangkan <code>--sudo</code>), dan recipe yang memakai sudo.</p>
+<h2 id="whole-jobs-step-by-step">Pekerjaan utuh, langkah demi langkah</h2>
+<p>Setiap langkah adalah sebuah perintah; orang dan agen AI mengetik perintah yang sama.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code># sebuah service bermasalah
+komando svc list web1 --failed                       # apa yang rusak?
+komando logs web1 --unit nginx --since 30m --grep error
+komando fs replace web1 /etc/nginx/nginx.conf --old A --new B --backup --dry-run
+komando svc restart web1 nginx --wait 10s --dry-run
+komando svc restart web1 nginx --wait 10s            # gagal kecuali aktif dalam 10 detik
+
+# satu putaran patch
+komando pkg security @web --refresh                  # apa yang menunggu, dan keadaan tiap server
+komando pkg upgrade @web --security --dry-run
+komando pkg upgrade @web --security                  # satu server sekali waktu
+komando reboot web1 --dry-run                        # saat reboot_required menyatakannya
+
+# seseorang bergabung, lalu pergi
+komando user add web1 alice --key alice --admin
+komando user lock web1 alice                         # menghentikan login, menyimpan file
+komando user rm web1 alice --remove-home --dry-run
+
+# pekerjaan malam hari
+komando cron set db1 nightly-backup &#39;/usr/local/bin/backup.sh&#39; --schedule &#39;0 2 * * *&#39;
+komando cron list db1
+komando cron rm db1 nightly-backup
+
+# disk penuh di server Docker
+komando recipe run disk web1
+komando docker prune web1 --older-than 30d --dry-run # apa yang akan hilang, dan seberapa banyak</code></pre>
+<h2 id="limits">Batasan</h2>
+<ul class="g-list g-list--ul"><li><code>svc</code> hanya bekerja pada service sistem: komando tidak mengelola unit milik user sendiri (<code>systemctl --user</code>); pakai <code>komando exec</code> untuk itu.</li><li><code>svc</code> dan <code>logs --unit</code> butuh systemd; server tanpanya (kebanyakan container) berhenti dengan <code>NO_SYSTEMD</code>.</li><li>Hanya di server apt, <code>pkg rm</code> dan <code>pkg upgrade --security</code> memeriksa apakah package esensial akan ikut hilang bersama package lain; package manager lain tidak diperiksa dengan cara ini.</li><li><code>pkg security</code> tidak mencantumkan apa pun di dnf/yum untuk repository tanpa pemberitahuan keamanan (misalnya CentOS). Server apk, zypper, dan pacman dicantumkan di <code>meta.skipped</code>: pakai <code>pkg upgrade</code> di sana.</li><li><code>pkg</code> hanya menerima nama package yang persis; untuk <code>.deb</code> atau <code>.rpm</code> lokal, pakai <code>upload</code> dan <code>exec</code>.</li><li><code>docker prune --volumes</code> tidak bisa digabung dengan <code>--older-than</code>.</li><li>komando tidak pernah mereboot sebagai bagian dari putaran patch.</li><li>Di Alpine, <code>user add</code>, <code>lock</code>, <code>unlock</code>, dan <code>rm</code> butuh package <code>shadow</code> (<code>useradd</code>, <code>usermod</code>, <code>userdel</code>).</li><li><code>user list</code> tidak membaca aturan di <code>sudoers.d</code>.</li><li><code>svc logs</code> tidak menerima <code>--file</code> atau <code>--container</code>; pakai <code>logs</code>.</li></ul>
+<h2 id="troubleshooting">Pemecahan masalah</h2>
+<div class="d-table" role="region" aria-label="Tabel" tabindex="0"><table><thead><tr><th scope="col">Kode error</th><th scope="col">Artinya</th><th scope="col">Yang perlu dilakukan</th></tr></thead><tbody><tr><td><code>UNIT_NOT_FOUND</code></td><td>tidak ada service dengan nama itu (exit 3)</td><td>periksa nama dengan <code>komando svc list TARGET</code></td></tr><tr><td><code>NO_SYSTEMD</code></td><td>server berjalan tanpa systemd (exit 3)</td><td>baca lognya dengan <code>--file</code> atau <code>komando docker logs</code></td></tr><tr><td><code>PERMISSION_DENIED</code></td><td>sudo meminta kata sandi yang tidak dimiliki komando, atau user tidak boleh memakai sudo</td><td>simpan kata sandi sudo: <code>komando host edit SERVER --sudo-ref secret:NAMA</code></td></tr><tr><td><code>TOOL_MISSING</code></td><td>sudo, atau tool yang dibutuhkan perintah, tidak terinstal (exit 3)</td><td>sebagai root tambahkan <code>--no-sudo</code>; di Alpine, <code>komando pkg install TARGET shadow</code> untuk <code>user</code></td></tr><tr><td><code>PACKAGE_NOT_FOUND</code></td><td>tidak ada package seperti itu di indeks package server</td><td>periksa nama; <code>komando pkg update TARGET</code> bila package-nya baru</td></tr><tr><td><code>UNEXPECTED_CHANGE</code></td><td>server berubah setelah di-patch (exit 8); sisanya belum di-patch</td><td>periksa dengan <code>komando docker ps</code> dan <code>komando svc list --failed</code>, lalu jalankan lagi atau tambahkan <code>--keep-going</code></td></tr><tr><td><code>REBOOT_TIMEOUT</code></td><td>server tidak kembali dalam <code>--wait</code> (exit 7)</td><td>periksa konsol server; server setelahnya belum direboot</td></tr><tr><td><code>TIMEOUT</code></td><td>upgrade <code>--security</code> berjalan lebih lama dari <code>--timeout</code>; upgrade berlanjut</td><td>jalankan <code>komando pkg security</code> nanti untuk melihat apa yang tersisa</td></tr><tr><td><code>POLICY_BLOCKED</code></td><td>penghapusan, reboot, atau penghapusan package esensial tanpa <code>--allow-dangerous</code></td><td>periksa dengan <code>--dry-run</code>, tanyakan kepada seseorang, lalu tambahkan <code>--allow-dangerous</code></td></tr></tbody></table></div>
+<h2 id="reference">Referensi</h2>
+<p>Flag <code>logs</code> (juga untuk <code>svc logs</code> dan <code>docker logs</code>, di tempat yang cocok):</p>
+<div class="d-table" role="region" aria-label="Tabel" tabindex="0"><table><thead><tr><th scope="col">Flag</th><th scope="col">Fungsinya</th></tr></thead><tbody><tr><td><code>-u</code>, <code>--unit UNIT</code></td><td>Membaca journal systemd service ini.</td></tr><tr><td><code>--file PATH</code></td><td>Membaca file log ini.</td></tr><tr><td><code>-c</code>, <code>--container NAMA</code></td><td>Membaca log container Docker ini.</td></tr><tr><td><code>-n</code>, <code>--limit N</code></td><td>N baris terakhir (default 200).</td></tr><tr><td><code>--grep REGEX</code></td><td>Hanya baris yang cocok (extended regex, huruf besar atau kecil).</td></tr><tr><td><code>--since</code> / <code>--until</code></td><td>Rentang waktu: waktu mundur dari sekarang (<code>30m</code>, <code>2h</code>, <code>7d</code>), <code>today</code>, <code>yesterday</code>, atau tanggal (<code>&#39;2026-01-02 10:00&#39;</code>). Untuk container, <code>today</code> dan <code>yesterday</code> adalah tengah malam server sendiri.</td></tr><tr><td><code>-p</code>, <code>--priority</code></td><td>Prioritas journal dan yang lebih buruk: <code>emerg</code> sampai <code>debug</code>, atau 0-7.</td></tr><tr><td><code>-f</code>, <code>--follow</code></td><td>Terus mencetak baris baru sampai Ctrl-C.</td></tr><tr><td><code>-s</code>, <code>--sudo</code></td><td>Membaca seluruh journal atau file yang dilindungi. Sebagai root, komando tidak membaca file lewat link yang dibuat user server lain (<code>IS_A_SYMLINK</code>), dan <code>--follow</code> terus membaca file yang dibukanya.</td></tr><tr><td><code>--timestamps</code></td><td>Menampilkan kapan setiap baris log container ditulis (hanya dengan <code>--container</code>; baris journal sudah punya waktunya).</td></tr></tbody></table></div></div><nav class="g-pager" aria-label="Halaman sebelumnya dan berikutnya"><a class="g-pn g-pn--prev" href="../health/"><span class="g-label g-muted">Sebelumnya</span>Pemeriksaan kesehatan dan jaringan</a><a class="g-pn g-pn--next" href="../tunnels/"><span class="g-label g-muted">Berikutnya</span>Server privat dan tunnel</a></nav><p class="g-path g-small g-muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/system.md">docs/features/system.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer data-slot="site-footer" class="ef-site-footer"><div class="ef-site-footer__inner"><div class="ef-site-footer__top"><div class="ef-site-footer__brand"><a class="ef-site-footer__brand-link" href="../../../id/index.html"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><p class="ef-site-footer__tagline">Satu command line yang aman untuk pekerjaan DevOps.</p></div><nav aria-label="Command line"><h2 class="ef-site-footer__heading">Command line</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../../id/index.html#inventory">Inventaris</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#safety">Keamanan</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#install">Instal</a></li><li><a class="ef-site-footer__link" href="../../../id/docs/">Dokumentasi</a></li><li><a class="ef-site-footer__link" href="https://github.com/sgnd/komando" target="_blank" rel="noopener noreferrer">Kode sumber di GitHub<span class="ef-site-footer__sr"> (membuka tab baru)</span></a></li></ul></nav><nav aria-label="Aplikasi Komando"><h2 class="ef-site-footer__heading">Aplikasi Komando</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../../id/index.html#agent">Agen</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#editions">Edisi</a></li><li><a class="ef-site-footer__link" href="../../../id/guide/">Panduan</a></li></ul></nav></div><div class="ef-site-footer__bottom"><span>© 2026 Komando</span><span>Nama produk dan logo adalah merek dagang pemiliknya.</span><a class="ef-site-footer__link" href="../../../docs/system/" hreflang="en" lang="en" aria-label="Read this page in English">English</a></div></div></footer>
+<template id="icon-menu"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></template><template id="icon-x"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 6 6 18"></path>
+  <path d="m6 6 12 12"></path>
+</svg></span></template><template id="icon-play"><span aria-hidden="true" data-slot="icon" data-size="16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
+</svg></span></template><template id="icon-pause"><span aria-hidden="true" data-slot="icon" data-size="16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="14" y="3" width="5" height="18" rx="1"></rect>
+  <rect x="5" y="3" width="5" height="18" rx="1"></rect>
+</svg></span></template>
+<script type="module" src="../../../assets/meridian/browser/marketing.js"></script>
+<script type="module" src="../../../assets/site.js"></script>
+</body>
+</html>
