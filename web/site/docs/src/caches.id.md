@@ -20,13 +20,13 @@ komando cache add prod-redis redis://default@10.0.0.7:6379/0 --via web1 --passwo
 
 `--via` menjangkau cache lewat bastion atau VPN, seperti conn lainnya (lihat [Tunnel](tunnels.md) dan [VPN](vpn.md)).
 
-Di terminal, perintah yang tidak menyebut cache atau key akan menanyakan hanya bagian itu, dengan daftar cache Anda untuk dipilih, lalu menampilkan perintah lengkapnya. Jika diketik tanpa argumen, `komando cache get` menanyakan cache mana, lalu key-nya. Agen AI, script, atau pipe tidak pernah mendapat pertanyaan: perintah yang sama berhenti dengan `USAGE` (exit 2) dan hint berisi contoh (`komando cache get prod-redis session:42`).
+Di terminal, perintah yang tidak menyebut cache atau key akan menanyakan hanya bagian itu, dengan daftar cache untuk dipilih, lalu menampilkan perintah lengkapnya. Jika diketik tanpa argumen, `komando cache get` menanyakan cache mana, lalu key-nya. Agen AI, script, atau pipe tidak pernah mendapat pertanyaan: perintah yang sama berhenti dengan `USAGE` (exit 2) dan hint berisi contoh (`komando cache get prod-redis session:42`).
 
 ### Enkripsi (TLS)
 
-`redis://` langsung lewat jaringan (tanpa `--via`, bukan ke komputer ini) mengirim kata sandi dan data tanpa enkripsi, jadi `cache add` (dan `conn edit --url`) menolaknya dengan `INSECURE_PROTOCOL`: pakai `rediss://` atau `--via`, atau tambahkan `?insecure=1` untuk menerima bahwa lalu lintasnya bisa dibaca di jalan (untuk agen AI butuh jawaban ya dari seseorang). Hal yang sama berlaku untuk `memcached://`. Conn seperti itu yang sudah ada di daftar Anda tetap berfungsi; `komando doctor` memperingatkannya dan mencetak baris yang mengubahnya.
+`redis://` langsung lewat jaringan (tanpa `--via`, bukan ke komputer ini) mengirim kata sandi dan data tanpa enkripsi, jadi `cache add` (dan `conn edit --url`) menolaknya dengan `INSECURE_PROTOCOL`: pakai `rediss://` atau `--via`, atau tambahkan `?insecure=1` untuk menerima bahwa lalu lintasnya bisa dibaca di jalan (untuk agen AI butuh jawaban ya dari seseorang). Hal yang sama berlaku untuk `memcached://`. Conn seperti itu yang sudah ada di daftar tetap berfungsi; `komando doctor` memperingatkannya dan mencetak baris yang mengubahnya.
 
-`rediss://` dan `memcacheds://` memeriksa sertifikat server terhadap CA tepercaya di komputer Anda, atau terhadap CA Anda sendiri dengan `?ca=secret:NAME` (CA privat, atau milik cloud):
+`rediss://` dan `memcacheds://` memeriksa sertifikat server terhadap CA tepercaya di komputer ini, atau terhadap CA sendiri dengan `?ca=secret:NAME` (CA privat, atau milik cloud):
 
 ```bash
 komando secret set prod-redis-ca < ca.pem
@@ -92,7 +92,7 @@ session:1  string  1h
 session:2  hash    none
 ```
 
-Di JSON, `items` mencantumkan key yang sama dengan `keys`, dalam urutan yang sama, masing-masing sebagai `{"key", "type", "ttl_seconds"}`: `ttl_seconds` bernilai -1 untuk tanpa kedaluwarsa dan null bila tidak diketahui, dan `type` bernilai null bila server menolak `TYPE` (ACL tanpa itu). Redis membaca `TYPE` dan `PTTL` seluruh halaman dalam satu round trip (satu per master di Cluster). Di memcached setiap tipe adalah `string` dan time to live berasal dari daftar LRU crawler. `--limit` di bawah 1 adalah error `USAGE`. Bila lebih banyak key yang cocok, daftar ditutup dengan `(first 100 keys; more match: narrow the pattern or raise --limit)`.
+Di JSON, `items` mencantumkan key yang sama dengan `keys`, dalam urutan yang sama, masing-masing sebagai `{"key", "type", "ttl_seconds"}`: `ttl_seconds` bernilai -1 untuk tanpa kedaluwarsa dan null bila tidak diketahui, dan `type` bernilai null bila server menolak `TYPE` (ACL tanpa itu). Redis membaca `TYPE` dan `PTTL` seluruh halaman dalam satu round trip (satu per master di Cluster). Di memcached setiap tipe adalah `string` dan time to live berasal dari daftar LRU crawler. `--limit` di bawah 1 adalah kesalahan `USAGE`. Bila lebih banyak key yang cocok, daftar ditutup dengan `(first 100 keys; more match: narrow the pattern or raise --limit)`.
 
 ## Mengubah data
 
@@ -105,7 +105,7 @@ komando cache set prod-redis feature:dark-mode on           # tanpa --ttl: tidak
 set maintenance (expires in 30m)
 ```
 
-- `cache set` menyimpan string dan menggantikan nilai lama apa pun. `--ttl` harus positif. `set` dan `get` sama-sama melaporkan `ttl_seconds` (`null` bila key tidak pernah kedaluwarsa).
+- `cache set` menyimpan string dan menggantikan nilai lama apa pun. `--ttl` wajib positif. `set` dan `get` sama-sama melaporkan `ttl_seconds` (`null` bila key tidak pernah kedaluwarsa).
 - Conn yang dilindungi bertanya kepada orang di terminal sebelum setiap perubahan; agen AI atau script menambahkan `--yes` setelah seseorang setuju (kalau tidak, `PROTECTED_TARGET`, exit 6).
 - Redis tidak bisa membatalkan, jadi `--dry-run` tidak mengirim perubahan sama sekali: `cache set` menyatakan apakah key ada dan akan digantikan, `cache rm` key mana yang ada.
 
@@ -122,11 +122,11 @@ would delete 1 key:
   session:43 (does not exist)
 ```
 
-`cache rm` menghapus key menurut nama persisnya (tanpa pola), dan key yang dihapus tidak bisa kembali. Di terminal Anda komando bertanya dulu: Anda mengetik nama key (untuk beberapa key, jumlahnya). Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju; tanpanya, mereka mendapat `POLICY_BLOCKED` (exit 6). Lihat [Keamanan](safety.md#what-needs-a-yes).
+`cache rm` menghapus key menurut nama persisnya (tanpa pola), dan key yang dihapus tidak bisa kembali. Di terminal, komando bertanya dulu: Anda mengetik nama key (untuk beberapa key, jumlahnya). Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju; tanpanya, mereka mendapat `POLICY_BLOCKED` (exit 6). Lihat [Keamanan](safety.md#what-needs-a-yes).
 
 ## Perintah Redis lainnya
 
-`cache run` mengirim perintah apa pun. Perintah ini hanya membaca kecuali Anda menambahkan `--write`:
+`cache run` mengirim perintah apa pun. Perintah ini hanya membaca kecuali ditambahkan `--write`:
 
 ```bash
 komando cache run prod-redis -- HGETALL user:42
@@ -135,7 +135,7 @@ komando cache run prod-redis --write -- EXPIRE session:42 3600
 komando cache run prod-redis -- "GET feature:dark-mode"   # satu baris dalam tanda kutip, dipecah seperti redis-cli
 ```
 
-Perintah yang menghapus, mengosongkan, memblokir, menjalankan script, atau mengonfigurasi ulang server (`DEL`, `FLUSHALL`, `KEYS`, `EVAL`, `CONFIG SET`, `SHUTDOWN`, ...) bersifat merusak, jadi bertanya seperti `cache rm` (`--allow-dangerous` untuk agen). Error menyebut perintah yang lebih aman sebagai gantinya (`cache keys` untuk `KEYS`, `cache rm` untuk `DEL`).
+Perintah yang menghapus, mengosongkan, memblokir, menjalankan script, atau mengonfigurasi ulang server (`DEL`, `FLUSHALL`, `KEYS`, `EVAL`, `CONFIG SET`, `SHUTDOWN`, ...) bersifat merusak, jadi bertanya seperti `cache rm` (`--allow-dangerous` untuk agen). Kesalahan menyebut perintah yang lebih aman sebagai gantinya (`cache keys` untuk `KEYS`, `cache rm` untuk `DEL`).
 
 - Script read-only (`EVAL_RO`, `EVALSHA_RO`, `FCALL_RO`) dihitung sebagai script: tidak bisa menulis, tetapi yang berputar membuat Redis menjawab `BUSY` kepada setiap klien sampai seseorang mengirim `SCRIPT KILL` (`FUNCTION KILL` untuk `FCALL_RO`).
 - Kode modul juga dihitung: fungsi Redis Stack (`TFCALL`, `TFCALLASYNC`) dan RedisGears (`RG.PYEXECUTE`, `RG.TRIGGER`).
@@ -159,7 +159,7 @@ komando conn rm prod-redis                    # hapus dari daftar Anda (cache-ny
 
 ### Backup cache
 
-komando tidak punya perintah backup untuk cache. Redis menyimpan snapshot-nya sendiri, yang lalu bisa Anda ambil dari servernya:
+komando tidak punya perintah backup untuk cache. Redis menyimpan snapshot-nya sendiri, yang lalu bisa diambil dari servernya:
 
 ```bash
 komando cache run prod-redis --write -- BGSAVE
@@ -195,7 +195,7 @@ komando cache run prod-memcached -- stats slabs
 
 ## Pemecahan masalah
 
-| Error | Artinya | Yang perlu dilakukan |
+| Kesalahan | Artinya | Yang perlu dilakukan |
 |-------|---------|----------------------|
 | `CACHE_CONNECT` | komando tidak bisa menjangkau cache, atau tidak bisa memeriksa sertifikatnya | `komando test prod-redis`; untuk CA privat tambahkan `?ca=secret:NAME`, atau jangkau `--via` sebuah server |
 | `CACHE_AUTH` | cache menolak login | periksa user di URL dan rujukan kata sandi (`komando conn show prod-redis`) |
@@ -207,7 +207,7 @@ komando cache run prod-memcached -- stats slabs
 | `PROTECTED_TARGET` | perubahan pada cache yang dilindungi tanpa `--yes` (exit 6) | jalankan di terminal, atau tambahkan flag setelah seseorang setuju |
 | `USAGE` | argumen hilang atau salah (exit 2) | hint menunjukkan contoh lengkap |
 
-Setiap kode ada di [Kode error](error-codes.md).
+Setiap kode ada di [Kode kesalahan](error-codes.md).
 
 ## Referensi
 

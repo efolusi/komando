@@ -22,20 +22,20 @@ Pengaturan paling aman adalah access key yang hanya bisa melakukan apa yang dibu
 
 Folder di URL adalah tempat conn dimulai. Key bersifat relatif terhadapnya dan tidak bisa keluar darinya (`../` ditolak, di dry run juga).
 
-Di terminal, perintah yang tidak menyebut storage atau file akan menanyakannya, dengan daftar storage Anda. Jika diketik tanpa argumen, `komando storage list` menanyakan storage mana. Agen AI atau script mendapat `USAGE` (exit 2) dengan contoh lengkap di hint.
+Di terminal, perintah yang tidak menyebut storage atau file akan menanyakannya, dengan daftar storage. Jika diketik tanpa argumen, `komando storage list` menanyakan storage mana. Agen AI atau script mendapat `USAGE` (exit 2) dengan contoh lengkap di hint.
 
 | Jenis | Contoh URL | Catatan |
 |-------|------------|---------|
 | S3 dan yang kompatibel | `s3://ACCESS_KEY_ID@my-bucket/backups?endpoint=https://minio.internal:9000&region=us-east-1` | AWS S3, MinIO, Cloudflare R2, Wasabi, DigitalOcean Spaces, Backblaze B2, Garage. Hilangkan `endpoint` untuk AWS. Bila DNS endpoint salah atau tidak ada, tambahkan `&resolve=IP` (atau `IP:PORT`): komando tersambung ke alamat itu dan tetap memeriksa sertifikat terhadap nama endpoint. |
 | Google Cloud Storage | `gs://my-bucket/backups` | Login seperti gcloud (application default credentials), atau dengan key service account di `--password-ref`. Lihat [Google Cloud dan Azure](#add-a-google-cloud-or-azure-bucket). |
 | Azure Blob Storage | `azblob://ACCOUNT@my-container/backups` | Key storage account, atau token SAS, di `--password-ref`. |
-| WebDAV | `webdavs://alice@cloud.example.com/remote.php/dav/files/alice` | Nextcloud, ownCloud, NAS, Apache, atau nginx. Tambahkan `?tls=skip-verify` hanya untuk sertifikat self-signed yang Anda percayai. `webdav://` (tanpa enkripsi) ditolak tanpa `?insecure=1`. |
-| FTPS | `ftps://deploy@files.example.com/public_html` | FTP dengan TLS. Tambahkan `?tls=skip-verify` hanya untuk sertifikat self-signed yang Anda percayai. |
-| SFTP | `sftp://deploy@files.example.com/uploads` | Akses file lewat SSH, untuk akun tanpa shell. Path dimulai dari root server (di hosting, sering folder home Anda). |
+| WebDAV | `webdavs://alice@cloud.example.com/remote.php/dav/files/alice` | Nextcloud, ownCloud, NAS, Apache, atau nginx. Tambahkan `?tls=skip-verify` hanya untuk sertifikat self-signed yang dipercayai. `webdav://` (tanpa enkripsi) ditolak tanpa `?insecure=1`. |
+| FTPS | `ftps://deploy@files.example.com/public_html` | FTP dengan TLS. Tambahkan `?tls=skip-verify` hanya untuk sertifikat self-signed yang dipercayai. |
+| SFTP | `sftp://deploy@files.example.com/uploads` | Akses file lewat SSH, untuk akun tanpa shell. Path dimulai dari root server (di hosting, sering folder home). |
 | SMB (share Windows) | `smb://alice@fileserver.corp.lan/team/reports?domain=CORP` | File server Windows, Samba, NAS, atau Azure Files. Bagian pertama path adalah share. Lihat [Share Windows](#add-a-windows-share-smb). |
 | FTP | `ftp://deploy@files.example.com/www?insecure=1` | Tanpa enkripsi: kata sandi dan file berjalan dalam teks polos. Ditolak tanpa `?insecure=1`. Pilih FTPS atau SFTP. |
 
-**Sertifikat dari CA Anda sendiri** (MinIO perusahaan, atau proxy yang memeriksa TLS): simpan CA dan sebut di URL, untuk S3, Google Cloud, dan Azure. komando lalu mempercayai CA itu selain yang lazim, dan tetap memeriksa sertifikat sepenuhnya. Tanpanya, error-nya `STORAGE_TLS` dengan hint ini.
+**Sertifikat dari CA sendiri** (MinIO perusahaan, atau proxy yang memeriksa TLS): simpan CA dan sebut di URL, untuk S3, Google Cloud, dan Azure. komando lalu mempercayai CA itu selain yang lazim, dan tetap memeriksa sertifikat sepenuhnya. Tanpanya, kesalahannya `STORAGE_TLS` dengan hint ini.
 
 ```bash
 komando secret set corp-ca < corp-ca.crt
@@ -44,7 +44,7 @@ komando storage add minio 's3://AKIAEXAMPLE@media?endpoint=https://minio.corp.la
 
 ### Login AWS (SSO, role, key sementara)
 
-Sebagai ganti key yang tersimpan, sebuah conn bisa memakai profil dari `~/.aws/config` (`default` memakai rantai login AWS yang lazim). komando membaca profil sendiri, tanpa aws CLI, dan mengambil key baru setiap kali, sehingga SSO, role yang di-assume, dan key sementara bekerja seperti yang Anda atur:
+Sebagai ganti key yang tersimpan, sebuah conn bisa memakai profil dari `~/.aws/config` (`default` memakai rantai login AWS yang lazim). komando membaca profil sendiri, tanpa aws CLI, dan mengambil key baru setiap kali, sehingga SSO, role yang di-assume, dan key sementara bekerja seperti yang diatur:
 
 ```bash
 komando storage add backups 's3://my-bucket/db?region=eu-west-1' --option aws_profile=prod
@@ -101,13 +101,13 @@ komando upload backups ./reports reports -r                 # seluruh folder
 
 `komando storage download` dan `komando storage upload` melakukan hal yang sama untuk conn storage saja, dan `komando cp` menulis salinan yang sama dengan `cp ./a.pdf backups:reports/`. Unggah folder (`-r`) hanya mengirim file yang baru dan berubah, seperti `komando sync`.
 
-- Unduhan tidak pernah menimpa file di komputer Anda kecuali Anda menambahkan `--overwrite`. File hanya bisa dibaca Anda. `--to` menerima nama file, folder (yang sudah ada, atau nama yang diakhiri `/`: file mempertahankan namanya di dalamnya), atau `-` untuk mengalirkannya ke stdout (`-o` apa pun: jawaban komando sendiri lalu menuju stderr). Unduhan folder mempertahankan file yang sudah ada di sana.
+- Unduhan tidak pernah menimpa file di komputer ini kecuali ditambahkan `--overwrite`. File hanya bisa dibaca Anda. `--to` menerima nama file, folder (yang sudah ada, atau nama yang diakhiri `/`: file mempertahankan namanya di dalamnya), atau `-` untuk mengalirkannya ke stdout (`-o` apa pun: jawaban komando sendiri lalu menuju stderr). Unduhan folder mempertahankan file yang sudah ada di sana.
 - `komando storage upload CONN - KEY` (atau `upload CONN - KEY`) mengalirkan stdin ke KEY; `--size N` membuat aliran dengan panjang lain gagal dengan `SIZE_CONFLICT` dan tidak mengganti apa pun. Lihat [Mengalirkan file lewat stdout atau stdin](files.md#stream-a-file-through-stdout-or-stdin).
 - Unggahan menggantikan objek dengan key yang sama; hasilnya menyatakan `"replaced": true`. Key yang diakhiri `/` adalah folder.
 - Di conn yang dilindungi, `upload` bertanya dulu kepada orang di terminal; agen AI atau script menambahkan `--yes` setelah seseorang setuju.
 - `--dry-run` tidak mengirim apa pun, tetapi memeriksa: `upload` menampilkan key dan apakah akan menggantikan objek, `download` ke mana file akan pergi dan ukurannya.
-- `--continue` melanjutkan satu file yang terputus. Unduhan mempertahankan bagian yang sudah ada di komputer Anda bila cocok dengan objek (sha256), mengambil sisanya, dan memeriksa seluruh file. Unggahan hanya bisa dilanjutkan di conn SFTP, FTP, FTPS, atau SMB; S3, Google Cloud Storage, Azure Blob, dan WebDAV menyimpan file secara utuh dan tidak bisa menambah ke satu file, jadi file yang terputus di sana berhenti dengan `RESUME_UNSUPPORTED` (unggah lagi tanpa `--continue`). Storage tidak bisa menghitung jumlah dari sebagian objek, jadi komando membaca bagian yang sudah disalin sekali lagi untuk memeriksanya.
-- `komando cp` juga menyalin antara dua conn storage, atau antara conn dan server: `komando cp backups:2026/db.sql.gz dr-backups:2026/`. Data mengalir lewat komputer Anda dan tidak pernah disimpan di disknya.
+- `--continue` melanjutkan satu file yang terputus. Unduhan mempertahankan bagian yang sudah ada di komputer ini bila cocok dengan objek (sha256), mengambil sisanya, dan memeriksa seluruh file. Unggahan hanya bisa dilanjutkan di conn SFTP, FTP, FTPS, atau SMB; S3, Google Cloud Storage, Azure Blob, dan WebDAV menyimpan file secara utuh dan tidak bisa menambah ke satu file, jadi file yang terputus di sana berhenti dengan `RESUME_UNSUPPORTED` (unggah lagi tanpa `--continue`). Storage tidak bisa menghitung jumlah dari sebagian objek, jadi komando membaca bagian yang sudah disalin sekali lagi untuk memeriksanya.
+- `komando cp` juga menyalin antara dua conn storage, atau antara conn dan server: `komando cp backups:2026/db.sql.gz dr-backups:2026/`. Data mengalir lewat komputer ini dan tidak pernah disimpan di disknya.
 - Untuk menjaga sebuah folder tetap sinkron dan hanya mengirim file yang baru dan berubah, pakai `komando sync` (lihat [File](files.md)):
 
 ```bash
@@ -152,7 +152,7 @@ would move db/old.sql.gz -> archive/old.sql.gz (48.1 MiB, by a copy that is chec
 ```
 
 - `mkdir` membuat folder dan folder di atasnya yang hilang. Folder yang sudah ada tidak masalah. S3, Google Cloud, dan Azure tidak punya folder sungguhan: `mkdir` menyimpan folder marker kosong (`reports/2026/`), seperti konsol web mereka, sehingga `storage list` menampilkan folder kosong itu.
-- `mv` memindahkan satu file atau folder di dalam satu conn. `DST` yang diakhiri `/` adalah folder: file pindah ke dalamnya dan mempertahankan namanya. File yang sudah ada di `DST` menghentikan pemindahan (`FILE_EXISTS`) kecuali Anda menambahkan `--overwrite`; folder di `DST` tidak pernah digantikan.
+- `mv` memindahkan satu file atau folder di dalam satu conn. `DST` yang diakhiri `/` adalah folder: file pindah ke dalamnya dan mempertahankan namanya. File yang sudah ada di `DST` menghentikan pemindahan (`FILE_EXISTS`) kecuali ditambahkan `--overwrite`; folder di `DST` tidak pernah digantikan.
 - Di file server (SFTP, FTP, FTPS, WebDAV, SMB) `mv` adalah satu rename di server, dan memindahkan folder juga. Bila server tidak bisa me-rename menimpa file, `--overwrite` lebih dulu memindahkan file lama ke samping (`.komando-old-NAME`) dan mengembalikannya bila rename gagal, sehingga pemindahan yang gagal tidak pernah menghilangkannya.
 - Path ditulis apa adanya: `.` atau `//` di dalamnya berhenti dengan `USAGE`.
 - S3, Google Cloud, dan Azure tidak bisa me-rename. Di sana `mv` menyalin objek di server, memeriksa bahwa salinan punya ukuran dan checksum yang sama, dan baru kemudian menghapus aslinya (`method: copy_then_delete` di hasilnya). Bila pemeriksaan gagal, aslinya tetap dan salinannya dihapus (`MOVE_FAILED`). Perintah ini memindahkan satu objek sekali waktu, bukan folder (`STORAGE_UNSUPPORTED`). Di bucket yang menyimpan versi lama, versi lama dari aslinya tetap ada.
@@ -174,11 +174,11 @@ SIZE      MODIFIED              KEY
 would delete 2 objects (96.1 MiB)
 ```
 
-Objek yang dihapus hilang (kecuali bucket menyimpan versi lama, lihat di bawah). Di terminal Anda komando bertanya dulu: Anda mengetik nama key, atau untuk beberapa objek jumlahnya. Dengan `--prefix`, komando lebih dulu mencantumkan apa yang akan hilang (20 objek pertama, jumlah, dan ukurannya). Jawaban lain membatalkan dan tidak menghapus apa pun. Agen AI atau script menambahkan `--allow-dangerous` (dan `--yes` di conn yang dilindungi) setelah seseorang setuju. Lihat [Keamanan](safety.md#what-needs-a-yes).
+Objek yang dihapus hilang (kecuali bucket menyimpan versi lama, lihat di bawah). Di terminal, komando bertanya dulu: Anda mengetik nama key, atau untuk beberapa objek jumlahnya. Dengan `--prefix`, komando lebih dulu mencantumkan apa yang akan hilang (20 objek pertama, jumlah, dan ukurannya). Jawaban lain membatalkan dan tidak menghapus apa pun. Agen AI atau script menambahkan `--allow-dangerous` (dan `--yes` di conn yang dilindungi) setelah seseorang setuju. Lihat [Keamanan](safety.md#what-needs-a-yes).
 
 - Tanpa `--prefix`, `rm` hanya menerima key yang persis, tanpa pola.
 - `--prefix` menghapus semua di bawah sebuah folder (`/` untuk seluruh conn); `--older-than` (`30d`, `12h`, `90m`) mempertahankan yang lebih baru.
-- `--prefix` menolak menghapus lebih dari `--max-remove` objek (1000 secara default; `TOO_MANY`). Periksa daftar dry run, dan naikkan batasnya bila itu memang maksud Anda.
+- `--prefix` menolak menghapus lebih dari `--max-remove` objek (1000 secara default; `TOO_MANY`). Periksa daftar dry run, dan naikkan batasnya bila itu memang disengaja.
 - `--dry-run` mencantumkan objek satu per baris dengan ukuran dan tanggal.
 
 ### Versi lama (versioning S3)
@@ -212,7 +212,7 @@ komando storage add files azblob://mystorageacct@uploads/2026 --password-ref sec
 
 ## Menambah file server (WebDAV, FTPS, SFTP, FTP)
 
-Web hosting dan sistem yang lebih tua sering hanya memberi Anda akses file. Tambahkan server sebagai conn:
+Web hosting dan sistem yang lebih tua sering hanya memberi akses file. Tambahkan server sebagai conn:
 
 ```bash
 komando secret set hosting-pass
@@ -223,12 +223,12 @@ komando download site logs/error.log
 ```
 
 - Unggahan menuju nama sementara dulu lalu di-rename ke tempatnya, jadi unggahan yang gagal tidak pernah meninggalkan setengah file di bawah nama sebenarnya. Folder yang hilang dibuat.
-- SFTP memeriksa identitas server seperti server SSH mana pun: diingat saat pertama kali, dan perubahan ditolak dengan `HOSTKEY_MISMATCH`. SFTP bisa memakai SSH key Anda juga selain kata sandi.
-- WebDAV membuat folder yang hilang saat mengunggah. Untuk Nextcloud dan ownCloud, path-nya `remote.php/dav/files/USER`, dan app password (Settings, Security) lebih aman daripada kata sandi Anda sendiri.
+- SFTP memeriksa identitas server seperti server SSH mana pun: diingat saat pertama kali, dan perubahan ditolak dengan `HOSTKEY_MISMATCH`. SFTP bisa memakai SSH key juga selain kata sandi.
+- WebDAV membuat folder yang hilang saat mengunggah. Untuk Nextcloud dan ownCloud, path-nya `remote.php/dav/files/USER`, dan app password (Settings, Security) lebih aman daripada kata sandi akun sendiri.
 
 ## Menambah share Windows (SMB)
 
-Folder bersama di server Windows, Samba, NAS, atau Azure Files (`\\fileserver\team` yang Anda buka di Explorer) juga sebuah conn:
+Folder bersama di server Windows, Samba, NAS, atau Azure Files (`\\fileserver\team` yang dibuka di Explorer) juga sebuah conn:
 
 ```bash
 komando secret set team-share
@@ -276,11 +276,11 @@ komando conn rm backups                       # komando melupakannya; file-nya t
 
 ## Pemecahan masalah
 
-| Error | Artinya | Yang perlu dilakukan |
+| Kesalahan | Artinya | Yang perlu dilakukan |
 |-------|---------|----------------------|
 | `STORAGE_AUTH` | storage menolak login, atau tidak ada (Google Cloud) | periksa key dengan `komando conn show backups`, atau login dengan gcloud |
 | `STORAGE_CONNECT` | komando tidak bisa menjangkau bucket atau file server | `komando test backups`; jangkau `--via` server atau VPN |
-| `STORAGE_TLS` | sertifikat tidak lolos pemeriksaan | sebut CA Anda dengan `?ca=secret:NAME` |
+| `STORAGE_TLS` | sertifikat tidak lolos pemeriksaan | sebut CA dengan `?ca=secret:NAME` |
 | `STORAGE_ERROR` | misalnya, program lain membuka file itu | tutup di sana dan jalankan lagi |
 | `BUCKET_NOT_FOUND` | bucket (atau share SMB) tidak ada | periksa nama di URL conn |
 | `FOLDER_NOT_FOUND` | folder kosong atau tidak ada (exit 3) | periksa dengan `komando storage list backups` |
@@ -293,4 +293,4 @@ komando conn rm backups                       # komando melupakannya; file-nya t
 | `HOSTKEY_MISMATCH` | identitas server SFTP berubah | jangan ubah apa pun; laporkan, mungkin itu serangan |
 | `POLICY_BLOCKED` | `rm` tanpa `--allow-dangerous` (exit 6) | jalankan di terminal, atau tambahkan flag setelah seseorang setuju |
 
-Setiap kode ada di [Kode error](error-codes.md).
+Setiap kode ada di [Kode kesalahan](error-codes.md).

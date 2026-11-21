@@ -11,7 +11,7 @@ komando svc status @web nginx                 # status, PID utama, jumlah restar
 komando svc restart @web nginx --wait 10s     # gagal kecuali nginx aktif dalam 10 detik
 ```
 
-Jika diketik tanpa argumen di terminal Anda, `komando svc restart` menanyakan server (dari daftar Anda), lalu service-nya, lalu berapa lama menunggu.
+Jika diketik tanpa argumen di terminal, `komando svc restart` menanyakan server (dari daftar), lalu service-nya, lalu berapa lama menunggu.
 
 ```bash
 komando svc list web1 --failed                # atau --state running
@@ -27,7 +27,7 @@ komando svc logs web1 nginx                   # journal unit itu (lihat Log)
 - `--wait` menerima waktu dengan satuan (`10s`, `2m`); angka tanpa satuan ditolak, kecuali `0` (tanpa menunggu).
 - Menghentikan, menonaktifkan, atau me-mask server SSH (`ssh`, `sshd`, `ssh.socket`) butuh `--allow-dangerous`: Anda akan terkunci di luar.
 
-Setelah Anda menulis atau mengubah file unit, muat ulang systemd agar membacanya:
+Setelah file unit ditulis atau diubah, muat ulang systemd agar membacanya:
 
 ```bash
 komando svc daemon-reload web1                # menyebut unit apa pun yang masih butuh dimuat ulang
@@ -52,7 +52,7 @@ komando logs web1 --container api --since 10m --timestamps
 
 `komando svc logs TARGET UNIT` dan `komando docker logs TARGET CONTAINER` membaca hal yang sama dengan `logs --unit` dan `logs --container`. Flag-nya ada di [Referensi](#reference).
 
-Tanpa `--sudo`, journal hanya menampilkan entri milik Anda sendiri, dan komando memperingatkan Anda. File log yang tidak ada keluar dengan 3.
+Tanpa `--sudo`, journal hanya menampilkan entri milik sendiri, dan komando memberi peringatan. File log yang tidak ada keluar dengan 3.
 
 ## Docker
 
@@ -75,10 +75,10 @@ komando docker compose web1 --dir /srv/shop -- up -d --pull always
 
 - Membaca (`ps`, `stats`, `images`, `inspect`, `logs`) tidak butuh tambahan apa pun.
 - `start`, `stop`, `restart`, `pull`, `compose up`, dan `docker run` lewat `docker raw` mengubah sesuatu, jadi server yang dilindungi bertanya dulu.
-- `rm`, `prune`, `compose down -v`, dan penghapusan lainnya menghapus untuk selamanya: di terminal Anda komando meminta Anda mengetik nama server; agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju ([Keamanan](safety.md)).
+- `rm`, `prune`, `compose down -v`, dan penghapusan lainnya menghapus untuk selamanya: di terminal, komando meminta Anda mengetik nama server; agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju ([Keamanan](safety.md)).
 - `docker exec` meneruskan kata-kata perintah apa adanya, tanpa shell, jadi image tidak butuh `sh`. Untuk pipe atau `&&`, tulis shell-nya sendiri: `-- sh -c 'ls /data | wc -l'`. Tambahkan `--read-only` bila hanya melihat; perintah diperiksa seperti untuk `exec`: hanya perintah yang diketahui komando hanya membaca yang berjalan.
 - `docker raw TARGET -- ARGS...` menjalankan sub-perintah docker lainnya, dengan aturan yang sama.
-- `--sudo` menjalankan docker lewat sudo, bila user Anda tidak ada di grup `docker`.
+- `--sudo` menjalankan docker lewat sudo, bila user tidak ada di grup `docker`.
 
 ### Membebaskan ruang disk (docker prune)
 
@@ -153,7 +153,7 @@ komando reboot @web --wait 10m
 
 - `--wait` adalah berapa lama tiap server boleh kembali (default 5m).
 - Server yang tidak kembali tepat waktu menghentikan sisanya dengan `REBOOT_TIMEOUT` (exit 7). Kegagalan lain juga menghentikan sisanya. Server setelahnya dicantumkan di `not_rebooted`.
-- Reboot bersifat merusak: di terminal Anda komando meminta Anda mengetik nama server (beberapa: jumlahnya); agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju.
+- Reboot bersifat merusak: di terminal, komando meminta Anda mengetik nama server (beberapa: jumlahnya); agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju.
 
 ## User
 
@@ -175,11 +175,11 @@ komando user rm web1 alice --remove-home --dry-run
 - `user add` aman dijalankan lagi: user yang sudah ada tidak dibuat dua kali, tetapi shell, key, dan grup admin-nya disesuaikan. `--key` mengotorisasi key dari daftar key komando, `--pubkey` sebaris key, dan `--admin` menambahkan user ke grup `sudo` (Debian) atau `wheel` (RHEL, Alpine). Berikan `--key` atau `--pubkey`, tidak keduanya.
 - `user lock` mengunci kata sandi dan membuat akun kedaluwarsa, sehingga SSH key juga berhenti berfungsi, tanpa menghapus apa pun. Mengunci atau menghapus `root` atau user yang dipakai komando untuk login butuh `--allow-dangerous`: komando tidak bisa login sesudahnya untuk membatalkannya, dan root adalah akun yang memperbaiki server. Hal yang sama berlaku untuk `user add --shell` dengan shell yang tidak bisa dipakai login siapa pun (`/usr/sbin/nologin`, `/bin/false`) untuk kedua akun itu.
 - `user list` membaca status kunci lewat sudo (`--no-sudo` menghilangkannya). `admin_group` berarti "ada di grup sudo, wheel, atau admin"; aturan di `sudoers.d` tidak dibaca.
-- `user rm` menghapus untuk selamanya: di terminal Anda komando meminta Anda mengetik nama server; agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju. Coba `--dry-run` dulu.
+- `user rm` menghapus untuk selamanya: di terminal, komando meminta Anda mengetik nama server; agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju. Coba `--dry-run` dulu.
 
 ## Pekerjaan terjadwal (cron)
 
-komando mengelola entri crontab dengan ID yang Anda pilih. `cron set` dengan ID yang sama menggantikan entri, bukan menambah entri kedua, dan baris lain di crontab dipertahankan apa adanya.
+komando mengelola entri crontab dengan ID yang dipilih. `cron set` dengan ID yang sama menggantikan entri, bukan menambah entri kedua, dan baris lain di crontab dipertahankan apa adanya.
 
 ```bash
 komando cron set db1 nightly-backup '/usr/local/bin/backup.sh >> /var/log/backup.log 2>&1' --schedule '0 2 * * *'
@@ -197,11 +197,11 @@ komando cron list db1 --user root            # crontab root
 
 - ID memakai huruf, angka, `-`, dan `_`.
 - `--schedule` menerima lima field (`'*/5 * * * *'`) atau `@hourly`, `@daily`, `@weekly`, `@monthly`, `@yearly`, `@reboot`. Diperiksa sebelum apa pun ditulis.
-- `%` di dalam perintah di-escape untuk Anda.
+- `%` di dalam perintah di-escape otomatis.
 
 ## Sudo
 
-Perintah yang mengubah sesuatu memakai sudo kecuali Anda menambahkan `--no-sudo` (`svc`, `pkg`, `user`, `reboot`, `recipe run`): tambahkan saat Anda login sebagai root. Perintah yang membaca memakai sudo hanya bila Anda memintanya: `--sudo` untuk `logs`, `docker`, dan `net ports`, `--user` untuk crontab user lain.
+Perintah yang mengubah sesuatu memakai sudo kecuali ditambahkan `--no-sudo` (`svc`, `pkg`, `user`, `reboot`, `recipe run`): tambahkan saat login sebagai root. Perintah yang membaca memakai sudo hanya bila diminta: `--sudo` untuk `logs`, `docker`, dan `net ports`, `--user` untuk crontab user lain.
 
 Bila sudo meminta kata sandi yang tidak dimiliki komando, atau user yang dipakai login tidak boleh memakai sudo, perintah berhenti dengan `PERMISSION_DENIED` dan hint yang menyebut perbaikannya (`komando host edit web1 --sudo-ref secret:web1-sudo`, lihat [Kata sandi sudo](servers.md#sudo-passwords-and-the-vault)). Server tanpa sudo sama sekali memberi `TOOL_MISSING` (tambahkan `--no-sudo` sebagai root). Hal yang sama berlaku untuk `pkg`, `user`, `cron --user`, setiap perintah `docker` dengan `--sudo` (sebagai root, hilangkan `--sudo`), dan recipe yang memakai sudo.
 
@@ -253,7 +253,7 @@ komando docker prune web1 --older-than 30d --dry-run # apa yang akan hilang, dan
 
 ## Pemecahan masalah
 
-| Kode error | Artinya | Yang perlu dilakukan |
+| Kode kesalahan | Artinya | Yang perlu dilakukan |
 |------------|---------|----------------------|
 | `UNIT_NOT_FOUND` | tidak ada service dengan nama itu (exit 3) | periksa nama dengan `komando svc list TARGET` |
 | `NO_SYSTEMD` | server berjalan tanpa systemd (exit 3) | baca lognya dengan `--file` atau `komando docker logs` |

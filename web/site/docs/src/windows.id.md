@@ -1,6 +1,6 @@
 # Server Windows
 
-Kelola server Windows di samping server Linux Anda: jalankan PowerShell, baca dan tulis file, salin file, serta mulai dan hentikan service.
+Kelola server Windows di samping server Linux: jalankan PowerShell, baca dan tulis file, salin file, serta mulai dan hentikan service.
 
 Halaman ini membahas server Windows yang dikelola komando. Untuk menjalankan komando itu sendiri di komputer Windows, lihat [Instal di Windows](install.md#install-on-windows).
 
@@ -12,7 +12,7 @@ komando test win1                                   # bisakah komando login? apa
 komando facts win1                                  # versi Windows, dukungan, update, port
 ```
 
-Jika diketik tanpa argumen di terminal Anda, `komando host add` menanyakan setiap bagian, termasuk apa yang dijalankan server dan, untuk Windows, apakah komando menjangkaunya lewat OpenSSH atau WinRM.
+Jika diketik tanpa argumen di terminal, `komando host add` menanyakan setiap bagian, termasuk apa yang dijalankan server dan, untuk Windows, apakah komando menjangkaunya lewat OpenSSH atau WinRM.
 
 komando menjangkau Windows lewat OpenSSH atau WinRM. Keduanya memberi perintah yang sama; pilih WinRM bila server sudah menyalakannya, misalnya untuk Ansible.
 
@@ -48,10 +48,10 @@ Opsi ditulis setelah `?`, digabung dengan `&`:
 
 | Opsi | Artinya |
 |------|---------|
-| `ca=secret:NAME` | sertifikat berasal dari CA Anda sendiri: simpan PEM-nya dengan `komando secret set NAME < ca.crt` (pemeriksaan tetap menyala) |
+| `ca=secret:NAME` | sertifikat berasal dari CA sendiri: simpan PEM-nya dengan `komando secret set NAME < ca.crt` (pemeriksaan tetap menyala) |
 | `auth=basic` | login Basic (hanya akun lokal) sebagai ganti NTLM; lewat HTTP polos (`tls=off`) ditolak (`WINRM_INSECURE`) |
 | `tls=skip-verify` | sertifikat tidak diperiksa (komando memperingatkan: siapa pun di tengah bisa menyamar sebagai server) |
-| `tls=off` | HTTP polos di port 5985: perintah dan output berjalan tanpa enkripsi, dan server harus mengizinkannya |
+| `tls=off` | HTTP polos di port 5985: perintah dan output berjalan tanpa enkripsi, dan server wajib mengizinkannya |
 | `:PORT` | port selain 5986 (5985 dengan `tls=off`) |
 
 `auth=basic`, `tls=skip-verify`, dan `tls=off` melepas satu perlindungan kata sandi atau pemeriksaan server, jadi agen AI yang mengaturnya (dengan `host add`, `host edit --address`, atau `import`) butuh jawaban ya dari Anda di jendela komando (kalau tidak, `SAFETY_SETTING`). Server yang sudah memiliki pengaturan itu tidak bertanya lagi.
@@ -82,7 +82,7 @@ komando exec win1 -e APP_ENV=prod -C 'C:\app' -- '.\migrate.exe'
 komando exec win1 --script ./deploy.ps1 --arg staging  # nilai --arg masuk ke param( ) atau $args
 ```
 
-- Exit code bekerja seperti di sh: `exit 3` memberi 3, dan perintah terakhir yang gagal (error, atau program yang keluar dengan kode bukan nol) membuatnya bukan nol.
+- Exit code bekerja seperti di sh: `exit 3` memberi 3, dan perintah terakhir yang gagal (kesalahan, atau program yang keluar dengan kode bukan nol) membuatnya bukan nol.
 - `--read-only` hanya menerima perintah baca yang sederhana di Windows (lihat di bawah).
 - Input dari `--stdin-file` dibaca dengan `[Console]::In.ReadToEnd()`.
 - Windows tidak punya sudo: `--sudo` dan `--pty` ditolak. Login sebagai user yang punya hak yang dibutuhkan pekerjaannya (administrator untuk service).
@@ -143,7 +143,7 @@ Aturan keamanan punya bentuk Windows: `Remove-Item -Recurse C:\`, `Format-Volume
 
 ## File
 
-Path adalah path Windows: `C:\inetpub\app.config` atau `C:/inetpub/app.config`. `~` dan path kosong adalah folder profil user yang dipakai login. Taruh path dengan backslash di dalam tanda kutip tunggal di shell Anda.
+Path adalah path Windows: `C:\inetpub\app.config` atau `C:/inetpub/app.config`. `~` dan path kosong adalah folder profil user yang dipakai login. Taruh path dengan backslash di dalam tanda kutip tunggal di shell.
 
 ```bash
 komando fs list win1 'C:\inetpub\logs' -r --limit 200
@@ -167,7 +167,7 @@ komando svc restart win1 W3SVC --wait 10s     # gagal kecuali berjalan dalam 10 
 komando svc enable win1 MyApp --now           # mulai otomatis, dan mulai sekarang
 ```
 
-Namanya adalah nama service (`W3SVC`) atau display name-nya. `--failed` mencantumkan service yang seharusnya mulai otomatis tetapi berhenti dengan error. `svc reload`, `svc daemon-reload`, dan `svc logs` tidak punya bentuk Windows.
+Namanya adalah nama service (`W3SVC`) atau display name-nya. `--failed` mencantumkan service yang seharusnya mulai otomatis tetapi berhenti dengan kesalahan. `svc reload`, `svc daemon-reload`, dan `svc logs` tidak punya bentuk Windows.
 
 ## Yang berfungsi di Windows
 
@@ -179,7 +179,7 @@ Namanya adalah nama service (`W3SVC`) atau display name-nya. `--failed` mencantu
 | `svc status`, `list`, `start`, `stop`, `restart`, `enable`, `disable` | `--sudo`, `--pty`, `--mode`, `--owner` |
 | `host trust`, `login`, `tunnel`, `--via` lewat server Windows (hanya SSH) | `shell`, tunnel, `host trust` lewat WinRM |
 
-Perintah yang belum tersedia berhenti dengan `NOT_SUPPORTED` sebelum apa pun berjalan; `fs restore` berhenti dengan error penggunaan (`USAGE`) yang menyebut `Copy-Item`. Sebagai gantinya, jalankan PowerShell dengan `exec`, misalnya `Get-WinEvent -LogName System -MaxEvents 50` untuk log, atau `Restart-Computer` (dengan `--allow-dangerous`) untuk restart.
+Perintah yang belum tersedia berhenti dengan `NOT_SUPPORTED` sebelum apa pun berjalan; `fs restore` berhenti dengan kesalahan penggunaan (`USAGE`) yang menyebut `Copy-Item`. Sebagai gantinya, jalankan PowerShell dengan `exec`, misalnya `Get-WinEvent -LogName System -MaxEvents 50` untuk log, atau `Restart-Computer` (dengan `--allow-dangerous`) untuk restart.
 
 ## Batasan
 
@@ -191,20 +191,20 @@ Perintah yang belum tersedia berhenti dengan `NOT_SUPPORTED` sebelum apa pun ber
 - Windows tidak punya sudo: `--sudo` dan `--pty` ditolak.
 - Target yang memilih server Windows dan server lain sekaligus ditolak untuk `exec` (`MIXED_OS`).
 - `--read-only` hanya menerima sebagian kecil PowerShell yang tercantum di atas.
-- komando menjalankan PowerShell tanpa profil Anda (`-NoProfile`).
+- komando menjalankan PowerShell tanpa profil (`-NoProfile`).
 
 ## Pemecahan masalah
 
-| Kode error | Artinya | Yang perlu dilakukan |
+| Kode kesalahan | Artinya | Yang perlu dilakukan |
 |------------|---------|----------------------|
 | `NOT_SUPPORTED` | perintah belum berfungsi di server Windows | jalankan PowerShell dengan `komando exec SERVER -- ...`, atau kecualikan: `TARGET,!os:windows` |
 | `MIXED_OS` | target memilih server Windows dan server lain | jalankan dua kali, dengan `TARGET,os:windows` dan `TARGET,!os:windows` |
 | `READ_ONLY_VIOLATION` | PowerShell-nya tidak termasuk bagian kecil yang diterima `--read-only` | hilangkan `--read-only`; server yang dilindungi lalu bertanya dulu |
 | `POWERSHELL_FAILED` | komando bisa login tetapi PowerShell tidak menjawab | periksa bahwa `powershell.exe` ada di PATH user yang dipakai login |
-| `WINRM_TLS` | sertifikat WinRM server tidak tepercaya | dari CA perusahaan Anda: tambahkan `?ca=secret:NAME` ke alamat |
+| `WINRM_TLS` | sertifikat WinRM server tidak tepercaya | dari CA perusahaan: tambahkan `?ca=secret:NAME` ke alamat |
 | `WINRM_INSECURE` | login Basic lewat HTTP polos akan mengirim kata sandi tanpa enkripsi | pakai HTTPS, atau NTLM (hilangkan `auth=basic`) |
-| `AUTH_FAILED` lewat WinRM | user atau kata sandi salah, atau user tidak boleh memakai WinRM | periksa keduanya; login Basic hanya untuk akun lokal, dan user harus administrator atau anggota Remote Management Users |
+| `AUTH_FAILED` lewat WinRM | user atau kata sandi salah, atau user tidak boleh memakai WinRM | periksa keduanya; login Basic hanya untuk akun lokal, dan user wajib administrator atau anggota Remote Management Users |
 | `USAGE` dari `fs restore` | `fs restore` tidak berfungsi di Windows | `komando exec SERVER -- Copy-Item ...` |
 
 - **`pending updates unknown`** di `facts`: Windows tidak mengizinkan banyak login jarak jauh mencari di Windows Update. Update terakhir yang terinstal tetap ditampilkan.
-- **Perintah berfungsi di PowerShell Anda sendiri tetapi tidak lewat komando**: komando menjalankan PowerShell tanpa profil Anda (`-NoProfile`), jadi alias dan modul dari profil Anda tidak ada di sana.
+- **Perintah berfungsi di PowerShell sendiri tetapi tidak lewat komando**: komando menjalankan PowerShell tanpa profil (`-NoProfile`), jadi alias dan modul dari profil tidak ada di sana.

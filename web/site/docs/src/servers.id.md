@@ -1,6 +1,6 @@
 # Server
 
-Tambahkan server Anda, pilih cara komando login ke sana, dan jaga daftarnya tetap rapi.
+Tambahkan server, pilih cara komando login ke sana, dan jaga daftarnya tetap rapi.
 
 ## Menambah server
 
@@ -23,7 +23,7 @@ NAME  KIND  RESULT  LATENCY  USER    SUDO  NOTE
 web1  host  ok      48ms     ubuntu  yes   -
 ```
 
-Jika diketik tanpa argumen di terminal Anda, `komando host add` menanyakan setiap bagian, satu baris sekali waktu: nama, alamat, user, port, cara komando login, dan apakah ini production. Perintah apa pun yang diketik dengan argumen yang kurang menanyakannya dengan cara yang sama (lihat [Menjalankan perintah](commands.md#at-your-terminal-komando-asks-for-what-is-missing)); script dan agen AI mendapat error penggunaan dengan contoh.
+Jika diketik tanpa argumen di terminal, `komando host add` menanyakan setiap bagian, satu baris sekali waktu: nama, alamat, user, port, cara komando login, dan apakah ini production. Perintah apa pun yang diketik dengan argumen yang kurang menanyakannya dengan cara yang sama (lihat [Menjalankan perintah](commands.md#at-your-terminal-komando-asks-for-what-is-missing)); script dan agen AI mendapat kesalahan penggunaan dengan contoh.
 
 Cara penulisan lainnya:
 
@@ -34,14 +34,14 @@ komando host add db1 admin@10.0.0.5 --via bastion            # dijangkau lewat b
 komando host add web2 --address 203.0.113.11 --user deploy --key deploy
 ```
 
-Flag yang paling sering Anda pakai:
+Flag yang paling sering dipakai:
 
 | Flag | Fungsinya |
 |------|-----------|
 | `-g`, `--group` / `-t`, `--tag` / `--label KEY=VALUE` | Mengelompokkan server agar satu [target](targets.md) bisa memilih banyak. |
 | `--key NAME` / `--identity PATH` | Login dengan key dari daftar key komando (`komando key`), atau dengan file key. |
 | `--password-ref` / `--sudo-ref` | Tempat kata sandi login atau sudo disimpan (lihat [Memakai kata sandi](#use-a-password)). |
-| `--login ask\|password\|key\|agent` | Cara komando login, dengan kata yang sama dengan yang dicetak `host show`: `ask` (Anda mengetik kata sandi di setiap koneksi, tidak pernah disimpan: lihat [Mengetik kata sandi setiap kali](#type-the-password-each-time---login-ask)), `password` (yang tersimpan, dengan `--ask-password` atau `--password-ref`), `key` (dengan `--key` atau `--identity`), `agent` (hanya ssh-agent dan `~/.ssh`). |
+| `--login ask\|password\|key\|agent` | Cara komando login, dengan kata yang sama dengan yang dicetak `host show`: `ask` (kata sandi diketik di setiap koneksi, tidak pernah disimpan: lihat [Mengetik kata sandi setiap kali](#type-the-password-each-time---login-ask)), `password` (yang tersimpan, dengan `--ask-password` atau `--password-ref`), `key` (dengan `--key` atau `--identity`), `agent` (hanya ssh-agent dan `~/.ssh`). |
 | `--via bastion` | Jangkau server lewat server lain atau VPN lebih dulu ([tunnel](tunnels.md)). |
 | `--protected` | Tandai server production (lihat [Melindungi server production](#protect-a-production-server)). |
 | `-e`, `--env KEY=VALUE` | Ekspor variabel sebelum setiap perintah di server ini. Nilai dari vault (`KEY=secret:NAME`) dikeluarkan dari perintah agen AI: agen bisa membacanya kembali tanpa disamarkan (`printenv KEY \| rev`). Nilai itu menuju `exec` atau `job start` milik agen hanya bila agen menambahkan `--yes` dan Anda mengizinkannya di jendela komando. |
@@ -49,9 +49,9 @@ Flag yang paling sering Anda pakai:
 | `--port N` | Port SSH (default 22); sama dengan `:N` setelah alamat. |
 | `--overwrite` | Menggantikan server yang sudah punya nama ini. |
 
-komando memeriksa apa yang Anda simpan: port (1-65535), nama user, bahwa alamat tidak diawali `-` (ssh akan membacanya sebagai opsi), bahwa setiap langkah `--via` ada dan tidak berputar kembali, dan bahwa file `--identity` ada. Jalur yang menyebut satu langkah dua kali (`--via a,b,a`) berhenti dengan `VIA_CYCLE`. Server di alamat dan port yang sama dengan yang dilindungi (dengan huruf besar atau kecil lain, dengan `.` di akhir, atau nama yang di-resolve ke IP yang sama) juga dilindungi, dengan peringatan. `komando doctor` memeriksa seluruh daftar dengan cara yang sama.
+komando memeriksa apa yang disimpan: port (1-65535), nama user, bahwa alamat tidak diawali `-` (ssh akan membacanya sebagai opsi), bahwa setiap langkah `--via` ada dan tidak berputar kembali, dan bahwa file `--identity` ada. Jalur yang menyebut satu langkah dua kali (`--via a,b,a`) berhenti dengan `VIA_CYCLE`. Server di alamat dan port yang sama dengan yang dilindungi (dengan huruf besar atau kecil lain, dengan `.` di akhir, atau nama yang di-resolve ke IP yang sama) juga dilindungi, dengan peringatan. `komando doctor` memeriksa seluruh daftar dengan cara yang sama.
 
-`komando test` memberi tahu Anda, per server, user yang dipakai login dan apakah sudo bekerja tanpa kata sandi (`SUDO`). `komando facts` melaporkan pemeriksaan sudo yang sama, ditambah jauh lebih banyak ([Kesehatan](health.md)).
+`komando test` menyatakan, per server, user yang dipakai login dan apakah sudo bekerja tanpa kata sandi (`SUDO`). `komando facts` melaporkan pemeriksaan sudo yang sama, ditambah jauh lebih banyak ([Kesehatan](health.md)).
 
 Server di belakang host `--via` yang sama berbagi satu koneksi ke host itu dalam satu perintah: `komando exec @db -P 10` login ke bastion sekali dan menjangkau sepuluh server lewatnya, seperti ControlMaster milik OpenSSH. Batas koneksi bastion (`MaxStartups`) dan log loginnya melihat satu klien.
 
@@ -72,7 +72,7 @@ komando host add win2 winrm://Administrator@10.0.0.9 --ask-password
 
 ### Server baru yang masih dimulai
 
-Tepat setelah Anda membuat atau membangun ulang server cloud, SSH mungkin belum menjawab. `--wait` menguji lagi setiap beberapa detik sampai setiap server lolos:
+Tepat setelah server cloud dibuat atau dibangun ulang, SSH mungkin belum menjawab. `--wait` menguji lagi setiap beberapa detik sampai setiap server lolos:
 
 ```bash
 komando test @new --wait 5m                                  # sampai SSH menjawab dan login berfungsi
@@ -103,7 +103,7 @@ Kata sandi tidak pernah masuk ke file: arahkan `password-ref` dan `sudo-ref` ke 
 
 ## Mengubah server
 
-`host edit` hanya mengubah opsi yang Anda berikan:
+`host edit` hanya mengubah opsi yang diberikan:
 
 ```bash
 komando host edit web1 --add-tag canary --port 2222
@@ -133,7 +133,7 @@ komando host edit web1 --protected
 
 Di server yang dilindungi, setiap perubahan pada server butuh jawaban ya. Untuk entrinya sendiri, begitu juga: mengubah cara komando login (alamat, port, user, key, kata sandi, `--via`), mengganti secret yang dipakainya, mematikan perlindungan, mengganti namanya, dan menghapusnya. Tag, grup, label, dan catatan berubah tanpa itu.
 
-Di terminal Anda komando bertanya dulu (`web1 (protected): this command changes it. Continue? [y/N]`); agen AI atau script menambahkan `--yes` setelah seseorang setuju, dan `--yes` milik agen membuka jendela persetujuan komando. Lihat [Keamanan](safety.md) untuk detailnya.
+Di terminal, komando bertanya dulu (`web1 (protected): this command changes it. Continue? [y/N]`); agen AI atau script menambahkan `--yes` setelah seseorang setuju, dan `--yes` milik agen membuka jendela persetujuan komando. Lihat [Keamanan](safety.md) untuk detailnya.
 
 ## Mengganti nama server
 
@@ -146,9 +146,9 @@ komando host rename web1 web-01
 
 Alamat, login, rujukan, tanda dilindungi, grup, tag, dan label tetap. Server, conn, dan tunnel yang lewat dengannya (`--via`), serta job dan tunnel-nya, mengikuti nama baru dalam langkah yang sama. Host key yang di-pin milik alamat, jadi `host trust` tidak dibutuhkan lagi. Mengganti nama server yang dilindungi bertanya dulu. `conn rename` dan `vpn rename` melakukan hal yang sama untuk conn dan VPN, `key rename` untuk key, dan `group rename` untuk grup.
 
-`komando rename OLD NEW` mencari jenisnya untuk Anda: perintah ini mengganti nama satu server, conn, VPN, secret, key, atau grup bernama OLD dengan rename milik jenis itu sendiri. Bila dua jenis berbagi nama, perintah menyebut dua perintah untuk dipilih.
+`komando rename OLD NEW` mencari jenisnya sendiri: perintah ini mengganti nama satu server, conn, VPN, secret, key, atau grup bernama OLD dengan rename milik jenis itu sendiri. Bila dua jenis berbagi nama, perintah menyebut dua perintah untuk dipilih.
 
-`key rename OLD NEW` mengganti nama satu key: server yang memakainya ikut. Key yang dibuat komando berada di store tersegel, jadi tidak ada file yang berpindah; key yang Anda tambahkan dengan `key add` tetap di tempatnya. Public key yang sudah terpasang di server mempertahankan komentarnya; key itu tetap berfungsi, karena key-nya sendiri tidak berubah.
+`key rename OLD NEW` mengganti nama satu key: server yang memakainya ikut. Key yang dibuat komando berada di store tersegel, jadi tidak ada file yang berpindah; key yang ditambahkan dengan `key add` tetap di tempatnya. Public key yang sudah terpasang di server mempertahankan komentarnya; key itu tetap berfungsi, karena key-nya sendiri tidak berubah.
 
 `group rename OLD NEW` mengganti nama grup pada setiap anggota (bertanya dulu bila ada server atau conn yang dilindungi di dalamnya). Untuk menggabungkan dua grup, pakai `group add NEW @OLD` lalu `group rm OLD`.
 
@@ -163,11 +163,11 @@ komando rename --starts-with shop- acme-shop- --in-notes --in-labels --dry-run  
 ```
 
 - Perintah ini mengganti setiap nama yang diawali `shop-`. Bila prefix lama berakhir dengan `-`, nama tanpanya juga diganti: grup `shop` menjadi `acme-shop`. `--kind host,conn` hanya mengganti sebagian jenis.
-- Setiap rujukan ikut: jalur `--via` (juga server di tengahnya, seperti `shop-vpn,shop-bastion`), rujukan kata sandi, sudo, key, preshared key, dan passphrase, opsi `secret:NAME` di URL conn, key yang dipakai server, keanggotaan grup, job, dan tunnel. Key yang dibuat komando (`key gen`) berada di store tersegel, jadi tidak ada file yang berpindah; file key yang Anda tambahkan tetap di tempatnya.
+- Setiap rujukan ikut: jalur `--via` (juga server di tengahnya, seperti `shop-vpn,shop-bastion`), rujukan kata sandi, sudo, key, preshared key, dan passphrase, opsi `secret:NAME` di URL conn, key yang dipakai server, keanggotaan grup, job, dan tunnel. Key yang dibuat komando (`key gen`) berada di store tersegel, jadi tidak ada file yang berpindah; file key yang ditambahkan tetap di tempatnya.
 - Tanda dilindungi, label, catatan, dan waktu pembuatan tetap. Nama di dalam URL milik resource, bukan milik komando, jadi pada `s3://shop-admin@shop-prod` user dan bucket tetap.
-- `--in-notes` juga mengganti nama lama di catatan, dan `--in-labels` di nilai label (nama label tetap). Hanya yang jelas berarti sebuah entri yang ikut: nama server, conn, VPN, dan secret sebagai kata utuh, grup yang ditulis `@shop`, dan pola seperti `shop-db-*` bila cocok dengan server, conn, dan VPN yang sama setelah penggantian nama. Ini tetap, karena sering berarti hal lain: prefix lama tanpa `-`-nya (`db shop` biasanya database, bukan grup), nama grup tanpa `@`, nama key (`bucket shop-dev`), dan nama yang juga adalah user, host, bucket, atau database di URL conn. Hasilnya mencantumkan masing-masing di `kept`, dengan alasannya, sehingga Anda bisa memperbaikinya secara manual.
+- `--in-notes` juga mengganti nama lama di catatan, dan `--in-labels` di nilai label (nama label tetap). Hanya yang jelas berarti sebuah entri yang ikut: nama server, conn, VPN, dan secret sebagai kata utuh, grup yang ditulis `@shop`, dan pola seperti `shop-db-*` bila cocok dengan server, conn, dan VPN yang sama setelah penggantian nama. Ini tetap, karena sering berarti hal lain: prefix lama tanpa `-`-nya (`db shop` biasanya database, bukan grup), nama grup tanpa `@`, nama key (`bucket shop-dev`), dan nama yang juga adalah user, host, bucket, atau database di URL conn. Hasilnya mencantumkan masing-masing di `kept`, dengan alasannya, sehingga bisa diperbaiki secara manual.
 - Tanpa `--in-labels`, setiap nilai label yang menyebut entri lama tetap dan dicantumkan di `kept` dengan apa yang akan menjadi nilainya. Label `host=` milik conn penting: `komando doctor` membacanya untuk memperingatkan bila conn dari server yang dilindungi tidak dilindungi sendiri. Tanpa `--in-notes`, satu peringatan menghitung catatan yang masih menyebut entri lama.
-- Perintah ini mengganti semuanya atau tidak sama sekali. Daftar Anda dan vault masing-masing ditulis sekali. Bila nama baru sudah dipakai, atau dua nama lama akan mendapat satu nama baru, tidak ada yang berubah (`NAME_TAKEN`, dengan setiap bentrokan dicantumkan). VPN yang tersambung harus diputus dulu (`VPN_IN_USE`).
+- Perintah ini mengganti semuanya atau tidak sama sekali. Daftar dan vault masing-masing ditulis sekali. Bila nama baru sudah dipakai, atau dua nama lama akan mendapat satu nama baru, tidak ada yang berubah (`NAME_TAKEN`, dengan setiap bentrokan dicantumkan). VPN yang tersambung wajib diputus dulu (`VPN_IN_USE`).
 - Server dan conn yang dilindungi di antaranya butuh satu jawaban ya untuk seluruh perintah. `--yes` milik agen AI membuka satu jendela untuk seseorang, yang menyatakan berapa banyak entri yang dilindungi yang dicakupnya. Mengarahkan rujukan ke nama baru dari secret, key, atau VPN yang sama tidak butuh jawaban ya: nilai yang sama menuju tempat yang sama.
 - Aman untuk diulang. Bila prefix baru diawali prefix lama (`team-` menjadi `team-ops-`), nama yang sudah punya prefix baru dibiarkan, jadi eksekusi kedua tidak mengubah apa pun.
 
@@ -191,7 +191,7 @@ Bila `ssh` sudah berfungsi di komputer ini, komando biasanya berfungsi juga: kom
 
 Key dengan passphrase berfungsi selama ssh-agent menyimpannya (setelah `ssh-add`, atau dari Keychain macOS), juga saat itu adalah `--key` atau `--identity` server (yang diatur `import ssh-config` dari `IdentityFile`): komando menemukan salinan agent menurut public key-nya, seperti `ssh`. Bila agent tidak menyimpannya, server gagal dengan `KEY_PASSPHRASE_REQUIRED`, dan hint menyatakan cara memuatnya atau menyimpan passphrase-nya di vault.
 
-Untuk memakai key baru, buat dan pasang di server Anda. komando login dengan login server saat ini (misalnya kata sandi) untuk memasangnya:
+Untuk memakai key baru, buat dan pasang di server. komando login dengan login server saat ini (misalnya kata sandi) untuk memasangnya:
 
 ```bash
 komando key gen deploy                           # ed25519; --type rsa|ecdsa, -b BITS, -C COMMENT
@@ -204,7 +204,7 @@ komando key show deploy --reveal                 # seseorang: private key dari k
 
 Key yang dibuat dengan `key gen` disegel di store komando (`store.db`); tidak pernah ditulis ke file. `host ssh-command` menyerahkannya ke ssh-agent yang sedang berjalan saat program lain membutuhkannya. Key RSA butuh paling sedikit 3072 bit.
 
-Untuk memakai file key yang sudah Anda punya, tambahkan ke daftar key komando. File tetap di tempatnya. Bila punya passphrase, simpan passphrase-nya di vault dulu:
+Untuk memakai file key yang sudah ada, tambahkan ke daftar key komando. File tetap di tempatnya. Bila punya passphrase, simpan passphrase-nya di vault dulu:
 
 ```bash
 komando secret set work-pass
@@ -227,16 +227,16 @@ komando key edit deploy --cert ~/Downloads/deploy-cert.pub   # --unset cert kemb
 
 komando membaca sertifikat pada setiap login, jadi file yang diperbarui langsung dipakai. Sertifikat untuk key lain ditolak (`KEY_INVALID`); yang tidak valid sekarang dikeluarkan (`key add` memperingatkan), dan key saja yang ditawarkan. ssh-agent yang menyimpan sertifikat juga menawarkannya.
 
-### Meminjamkan ssh-agent Anda ke jump host
+### Meminjamkan ssh-agent ke jump host
 
-Sebagian pekerjaan butuh key Anda di server itu sendiri, misalnya `git pull` di sana lewat SSH, atau hop yang tidak dibuat komando. `--forward-agent` meminjamkan key di ssh-agent Anda ke server selama komando tersambung, seperti `ssh -A`:
+Sebagian pekerjaan butuh key di server itu sendiri, misalnya `git pull` di sana lewat SSH, atau hop yang tidak dibuat komando. `--forward-agent` meminjamkan key di ssh-agent ke server selama komando tersambung, seperti `ssh -A`:
 
 ```bash
 komando host edit bastion --forward-agent        # bertanya dulu
 komando host edit bastion --unset forward-agent  # berhenti meminjamkan
 ```
 
-Siapa pun yang menjadi root di server itu bisa memakai key Anda selama komando tersambung ke sana, jadi ini mati secara default, diatur per server, dan menyalakannya bertanya dulu kepada Anda (`SAFETY_SETTING`; agen AI butuh jawaban ya Anda di jendela). `host ssh-command` menambahkan `-o ForwardAgent=yes` untuk server seperti itu. Agent Anda hanya menyimpan key yang Anda tambahkan (`ssh-add`); key yang disimpan tersegel oleh komando tidak pernah ada di dalamnya kecuali `host ssh-command` menaruhnya di sana.
+Siapa pun yang menjadi root di server itu bisa memakai key itu selama komando tersambung ke sana, jadi ini mati secara default, diatur per server, dan menyalakannya bertanya dulu kepada Anda (`SAFETY_SETTING`; agen AI butuh jawaban ya Anda di jendela). `host ssh-command` menambahkan `-o ForwardAgent=yes` untuk server seperti itu. Agent hanya menyimpan key yang ditambahkan (`ssh-add`); key yang disimpan tersegel oleh komando tidak pernah ada di dalamnya kecuali `host ssh-command` menaruhnya di sana.
 
 ### Security key (FIDO2)
 
@@ -265,14 +265,14 @@ komando key revoke ~/keys/alice.pub @web --all-users --dry-run   # file setiap u
 
 ## Memakai kata sandi
 
-Di terminal Anda, komando menanyakan kata sandi saat server menginginkannya, seperti `ssh` (`web1: Password:`, disembunyikan saat Anda mengetik). Simpan sekali untuk melewati pertanyaan itu, dan agar agen AI dan script bisa login: mereka tidak punya siapa pun untuk ditanya. Anda mengetiknya, tidak ada yang ditampilkan, dan disimpan terenkripsi di vault komando (lihat [Secret](secrets.md)). Dalam satu langkah, saat menambah server atau nanti:
+Di terminal, komando menanyakan kata sandi saat server menginginkannya, seperti `ssh` (`web1: Password:`, disembunyikan saat diketik). Simpan sekali untuk melewati pertanyaan itu, dan agar agen AI dan script bisa login: mereka tidak punya siapa pun untuk ditanya. Kata sandi diketik, tidak ada yang ditampilkan, dan disimpan terenkripsi di vault komando (lihat [Secret](secrets.md)). Dalam satu langkah, saat menambah server atau nanti:
 
 ```bash
 komando host add web2 root@203.0.113.20 --ask-password   # disimpan sebagai secret:web2-pass
 komando host edit web1 --ask-password                     # kata sandi baru (disimpan sebagai secret:web1-pass)
 ```
 
-`--ask-password` untuk orang di terminal (agen AI meminta Anda menjalankannya). Perintah ini tidak pernah menggantikan secret yang dipakai server atau conn lain. Hal yang sama dalam dua langkah, dengan nama pilihan Anda:
+`--ask-password` untuk orang di terminal (agen AI meminta Anda menjalankannya). Perintah ini tidak pernah menggantikan secret yang dipakai server atau conn lain. Hal yang sama dalam dua langkah, dengan nama pilihan sendiri:
 
 ```bash
 komando secret set web1-pass
@@ -283,7 +283,7 @@ komando host edit web1 --password-ref secret:web1-pass
 
 Kata sandi menuju alamat server pada setiap login. Jadi saat agen AI memberi server atau conn sebuah rujukan kata sandi, atau memindahkan yang punya satu ke alamat, port, atau jalur `--via` lain, seseorang mengizinkannya di jendela komando (`SECRET_DESTINATION`); lihat [Keamanan](safety.md#seatbelts-for-ai-agents).
 
-komando mengirim kata sandi tersimpan paling banyak sekali per login, dan hanya saat server meminta kata sandi (disembunyikan saat Anda mengetik); yang ditolak tidak dikirim lagi, jadi kata sandi yang salah di vault tidak bisa mengunci akun.
+komando mengirim kata sandi tersimpan paling banyak sekali per login, dan hanya saat server meminta kata sandi (disembunyikan saat diketik); yang ditolak tidak dikirim lagi, jadi kata sandi yang salah di vault tidak bisa mengunci akun.
 
 ### Mengetik kata sandi setiap kali (`--login ask`)
 
@@ -310,7 +310,7 @@ Pengaturannya juga menyatakannya sendiri: `--key` memberi `key`, `--password-ref
 Siapa yang mengetiknya, dan di mana:
 
 - **Anda, di terminal**: komando menanyakan `web1: Password:` (disembunyikan) saat server menginginkannya, setelah key mana pun, seperti `ssh`.
-- **Perintah agen AI**: komando membuka jendelanya sendiri di layar Anda. Jendela menyebut agen, server sebagai `user@address:port`, jalan yang ditempuh komando ke sana (VPN, setiap jump host dengan alamatnya, proxy command) dan perintahnya (atau menyatakan perintah itu disembunyikan), dan Anda mengetik kata sandi di sana. Agen tidak pernah melihatnya. Setiap perintah yang tersambung bertanya, bahkan yang hanya melihat (`komando test`, `fs ls`). Bila Anda menekan Cancel, perintah berhenti dengan `DECLINED`, dan jendela tetap tertutup untuk server itu selama semenit (mengganti nama tidak membukanya lagi) (perintah berikutnya langsung mendapat `DECLINED`), sehingga agen tidak bisa bertanya lagi dan lagi. Tanpa layar (sesi SSH, `KOMANDO_NO_DIALOG=1`, `ssh-gate`) perintah berhenti dengan `NEEDS_PERSON`.
+- **Perintah agen AI**: komando membuka jendelanya sendiri di layar. Jendela menyebut agen, server sebagai `user@address:port`, jalan yang ditempuh komando ke sana (VPN, setiap jump host dengan alamatnya, proxy command) dan perintahnya (atau menyatakan perintah itu disembunyikan), dan Anda mengetik kata sandi di sana. Agen tidak pernah melihatnya. Setiap perintah yang tersambung bertanya, bahkan yang hanya melihat (`komando test`, `fs ls`). Bila Anda menekan Cancel, perintah berhenti dengan `DECLINED`, dan jendela tetap tertutup untuk server itu selama semenit (mengganti nama tidak membukanya lagi) (perintah berikutnya langsung mendapat `DECLINED`), sehingga agen tidak bisa bertanya lagi dan lagi. Tanpa layar (sesi SSH, `KOMANDO_NO_DIALOG=1`, `ssh-gate`) perintah berhenti dengan `NEEDS_PERSON`.
 - **Script** (tanpa terminal): `NEEDS_PERSON`. Tidak ada yang bisa mengetiknya.
 - **Aplikasi** yang menjalankan komando mendapat pertanyaan yang sama di jendelanya sendiri.
 
@@ -335,7 +335,7 @@ komando login web1        # ketik kata sandi dan kode sekali
 komando logout web1       # akhiri lebih awal
 ```
 
-`komando login` menanyakan apa yang ditanyakan server lalu menjaga login itu tetap terbuka di latar belakang selama 8 jam (pengaturan `login_for`). Setiap perintah ke web1 memakainya, milik agen AI Anda juga, sehingga tidak ada yang mengetik kode lagi sampai berakhir; aturan, persetujuan, dan audit komando tetap berlaku untuk setiap perintah. Login ke jump host dipakai untuk setiap server di belakangnya. `komando status` mencantumkan login yang disimpan, dan login berakhir lebih awal saat server menutupnya atau alamatnya berubah.
+`komando login` menanyakan apa yang ditanyakan server lalu menjaga login itu tetap terbuka di latar belakang selama 8 jam (pengaturan `login_for`). Setiap perintah ke web1 memakainya, milik agen AI juga, sehingga tidak ada yang mengetik kode lagi sampai berakhir; aturan, persetujuan, dan audit komando tetap berlaku untuk setiap perintah. Login ke jump host dipakai untuk setiap server di belakangnya. `komando status` mencantumkan login yang disimpan, dan login berakhir lebih awal saat server menutupnya atau alamatnya berubah.
 
 Hanya orang di terminal yang bisa menjalankan `komando login`; `komando login web1 --dry-run` milik agen AI menampilkan rencananya (`would_log_in: false`, dan `meta.would_be_blocked` menyebut `NEEDS_PERSON`).
 
@@ -350,9 +350,9 @@ komando host edit web1 --sudo-ref secret:web1-sudo
 
 Semua hal lain tentang vault (mencantumkan, memeriksa, mengganti nama, dan menghapus secret, dan tempat key-nya disimpan) ada di satu halaman: [Secret](secrets.md).
 
-## Kata sandi dari password manager Anda
+## Kata sandi dari password manager
 
-Setiap `--password-ref` dan `--sudo-ref` (untuk server, conn, dan VPN) juga bisa menunjuk ke variabel lingkungan, file, atau password manager yang sudah dipakai tim Anda:
+Setiap `--password-ref` dan `--sudo-ref` (untuk server, conn, dan VPN) juga bisa menunjuk ke variabel lingkungan, file, atau password manager yang sudah dipakai tim:
 
 | Rujukan | Dibaca dari | Login yang dipakainya |
 |---------|-------------|-----------------------|
@@ -360,7 +360,7 @@ Setiap `--password-ref` dan `--sudo-ref` (untuk server, conn, dan VPN) juga bisa
 | `env:VAR` | variabel lingkungan | tidak dibutuhkan |
 | `file:PATH` | sebuah file | tidak dibutuhkan |
 | `vault:secret/shop#db_password` | HashiCorp Vault atau OpenBao, KV v1 atau v2 | `VAULT_ADDR` dan `VAULT_TOKEN` (atau `~/.vault-token`; `BAO_ADDR`, `BAO_TOKEN`, `~/.bao-token` milik OpenBao juga berfungsi), `VAULT_NAMESPACE`, `VAULT_CACERT` |
-| `aws-sm:shop/db#password` | AWS Secrets Manager; `#key` memilih field JSON | login AWS Anda (`AWS_PROFILE`, `~/.aws`, SSO lewat `komando login aws`) |
+| `aws-sm:shop/db#password` | AWS Secrets Manager; `#key` memilih field JSON | login AWS (`AWS_PROFILE`, `~/.aws`, SSO lewat `komando login aws`) |
 | `gcp-sm:db-pass@my-project` | Google Secret Manager, versi terbaru | Google application-default credentials (`GOOGLE_APPLICATION_CREDENTIALS`, atau di Google Cloud) |
 | `azure-kv:shop-vault/db-password#password` | Azure Key Vault, versi saat ini (`/VERSION` setelah nama memilih yang lain); `#key` memilih field JSON | service principal (`AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`), workload identity di AKS (`AZURE_FEDERATED_TOKEN_FILE`), token tersimpan Azure CLI, atau managed identity di Azure |
 | `bw://shop-db/password` | Bitwarden atau Vaultwarden; field-nya `password`, `username`, `notes`, `uri`, `totp`, atau field kustom | `KOMANDO_BW_EMAIL`, `KOMANDO_BW_PASSWORD` (mendekripsi vault di sini), `KOMANDO_BW_SERVER` untuk Vaultwarden atau bitwarden.eu, API key opsional `KOMANDO_BW_CLIENT_ID`/`KOMANDO_BW_CLIENT_SECRET` |
@@ -371,7 +371,7 @@ Setiap `--password-ref` dan `--sudo-ref` (untuk server, conn, dan VPN) juga bisa
 komando conn add prod-db postgres://app@10.0.0.5/shop --password-ref vault:secret/shop#db_password
 ```
 
-komando berbicara ke Vault, AWS, Google, Azure, Bitwarden, file KeePass, dan 1Password Connect sendiri: Anda tidak butuh program `vault`, `aws`, `gcloud`, `az`, `bw`, atau `op`. komando membaca nilainya hanya saat membutuhkannya dan tidak pernah menyimpannya. Login (dan MFA apa pun) tetap bersama Anda.
+komando berbicara ke Vault, AWS, Google, Azure, Bitwarden, file KeePass, dan 1Password Connect sendiri: program `vault`, `aws`, `gcloud`, `az`, `bw`, atau `op` tidak dibutuhkan. komando membaca nilainya hanya saat membutuhkannya dan tidak pernah menyimpannya. Login (dan MFA apa pun) tetap bersama Anda.
 
 **Azure Key Vault.** Tulis `azure-kv:VAULT/NAME`, dengan `VAULT` adalah nama vault (`shop-vault` untuk `shop-vault.vault.azure.net`) atau, di cloud Azure lain, seluruh nama host-nya (`shop-vault.vault.azure.cn`). komando mencoba login ini berurutan:
 
@@ -395,25 +395,25 @@ komando host add db1 me@ssh.example.com --proxy-command 'cloudflared access ssh 
 komando conn add prod-db postgres://app@mydb.xyz.rds.amazonaws.com/app --via web1   # database di belakangnya
 ```
 
-Tool `--proxy-command` harus terinstal dan login di komputer ini. Di Windows perintah berjalan di cmd.exe, jadi tulis untuk cmd.exe. Proxy command berjalan di komputer ini, jadi agen AI butuh jawaban ya dari seseorang untuk menambah atau mengimpornya.
+Tool `--proxy-command` wajib terinstal dan login di komputer ini. Di Windows perintah berjalan di cmd.exe, jadi tulis untuk cmd.exe. Proxy command berjalan di komputer ini, jadi agen AI butuh jawaban ya dari seseorang untuk menambah atau mengimpornya.
 
-Untuk `--ssm`, komando berbicara AWS Session Manager sendiri bila aws CLI atau session-manager-plugin-nya tidak terinstal. komando memakai login AWS Anda yang lazim (`komando login aws` untuk SSO). Atur `KOMANDO_EXPERIMENTAL=ssm` untuk memakai klien bawaan bahkan saat keduanya terinstal. Sesi yang dienkripsi account Anda dengan KMS juga berfungsi: komando meminta key sesi ke KMS dengan login Anda, jadi login itu butuh `kms:GenerateDataKey` pada key tersebut, seperti plugin.
+Untuk `--ssm`, komando berbicara AWS Session Manager sendiri bila aws CLI atau session-manager-plugin-nya tidak terinstal. komando memakai login AWS yang lazim (`komando login aws` untuk SSO). Atur `KOMANDO_EXPERIMENTAL=ssm` untuk memakai klien bawaan bahkan saat keduanya terinstal. Sesi yang dienkripsi account dengan KMS juga berfungsi: komando meminta key sesi ke KMS dengan login Anda, jadi login itu butuh `kms:GenerateDataKey` pada key tersebut, seperti plugin.
 
 ## Key server (host key)
 
 Saat pertama kali komando tersambung ke server, komando mengingat key server (fingerprint-nya) di `known_hosts` miliknya sendiri. Bila key berubah kemudian, komando menolak tersambung (`HOSTKEY_MISMATCH`), karena mungkin ada yang berpura-pura menjadi server Anda.
 
-Pada saat pertama itu, tidak ada yang membuktikan bahwa key itu benar milik server Anda. komando menyatakan di stderr key mana yang dipercayainya:
+Pada saat pertama itu, tidak ada yang membuktikan bahwa key itu benar milik server itu. komando menyatakan di stderr key mana yang dipercayainya:
 
 ```text
 komando: first connection to web1 (203.0.113.10:22): trusted its ssh-ed25519 host key SHA256:pVt2...
 ```
 
-Audit log juga menyimpannya (`host.key-pinned` di `komando audit`), dan jawaban JSON mencantumkannya di `meta.host_keys_pinned`, sehingga agen AI bisa menunjukkannya kepada Anda. Bandingkan fingerprint itu dengan milik server sendiri: jalankan `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` di konsol server, atau lihat di konsol cloud Anda (banyak yang menampilkan fingerprint host key di log boot pertama). Bila berbeda, berhenti memakai server itu dan tanyakan kepada yang menjalankannya: mungkin ada yang berada di tengah.
+Audit log juga menyimpannya (`host.key-pinned` di `komando audit`), dan jawaban JSON mencantumkannya di `meta.host_keys_pinned`, sehingga agen AI bisa menunjukkannya kepada Anda. Bandingkan fingerprint itu dengan milik server sendiri: jalankan `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` di konsol server, atau lihat di konsol cloud (banyak yang menampilkan fingerprint host key di log boot pertama). Bila berbeda, berhenti memakai server itu dan tanyakan kepada yang menjalankannya: mungkin ada yang berada di tengah.
 
 ### Mengganti key setelah dibangun ulang
 
-Setelah pembangunan ulang yang sebenarnya, periksa fingerprint baru dengan cara lain (konsol cloud Anda atau konsol server sendiri), lalu ganti key lama:
+Setelah pembangunan ulang yang sebenarnya, periksa fingerprint baru dengan cara lain (konsol cloud atau konsol server sendiri), lalu ganti key lama:
 
 ```bash
 komando host trust web1 --reset --dry-run   # berapa key yang di-pin akan hilang
@@ -422,16 +422,16 @@ komando host trust web1 --reset             # menampilkan key lama dan baru, ber
 
 Hanya orang di terminal yang mengganti key yang di-pin: komando menampilkan fingerprint lama dan baru dan bertanya sekali. Agen AI atau script mendapat `NEEDS_PERSON` (exit 6) flag apa pun yang ditambahkannya, karena agen yang mem-pin ulang key bisa sedang berbicara dengan penipu; hint-nya menyebut perintah untuk Anda jalankan. Tanpa `--reset`, `host trust` tidak pernah menambah key kedua: key yang berbeda berhenti dengan `HOSTKEY_MISMATCH`, dan server yang tidak bisa dijangkau mempertahankan key lamanya.
 
-Setelah Anda membangun ulang seluruh grup (alamat sama, key baru), berikan grup itu ke `host trust` sebagai ganti satu nama. Perintah ini menerima setiap jenis target, seperti `exec`: `@group`, `tag:`, `'web*'`, atau `a,b`.
+Setelah seluruh grup dibangun ulang (alamat sama, key baru), berikan grup itu ke `host trust` sebagai ganti satu nama. Perintah ini menerima setiap jenis target, seperti `exec`: `@group`, `tag:`, `'web*'`, atau `a,b`.
 
 ```bash
 komando host trust @web                 # server baru di-pin; key yang berubah ditolak
 komando host trust @web --reset         # setelah pembangunan ulang: satu jawaban ya untuk semuanya
 ```
 
-`data.results` (di `-o json`) mencantumkan setiap server dengan `fingerprint` barunya dan, bila key berubah, `old_fingerprints`-nya. Dengan `--reset` Anda menjawab sekali: pertanyaan menyebut setiap server yang key-nya berubah, dengan awal fingerprint barunya. Bandingkan dengan konsol cloud Anda dulu.
+`data.results` (di `-o json`) mencantumkan setiap server dengan `fingerprint` barunya dan, bila key berubah, `old_fingerprints`-nya. Dengan `--reset` Anda menjawab sekali: pertanyaan menyebut setiap server yang key-nya berubah, dengan awal fingerprint barunya. Bandingkan dengan konsol cloud dulu.
 
-`komando host rm` tidak melupakan key server. Bila Anda menghapus server dan menambahkannya lagi di alamat yang sama, ia tetap harus menunjukkan key yang sama, jadi `rm` ditambah `add` bukan jalan untuk menghindari `HOSTKEY_MISMATCH`. `host rm` menyatakan key mana yang dipertahankannya (`host_keys_kept`); setelah pembangunan ulang, ganti dengan `host trust --reset`.
+`komando host rm` tidak melupakan key server. Bila server dihapus lalu ditambahkan lagi di alamat yang sama, ia tetap perlu menunjukkan key yang sama, jadi `rm` ditambah `add` bukan jalan untuk menghindari `HOSTKEY_MISMATCH`. `host rm` menyatakan key mana yang dipertahankannya (`host_keys_kept`); setelah pembangunan ulang, ganti dengan `host trust --reset`.
 
 ### Mem-pin key sebelum koneksi pertama
 
@@ -444,13 +444,13 @@ komando config set host_key_policy strict   # key yang tidak dikenal berhenti de
 komando host trust web1                     # data.results[0] punya key_type dan fingerprint
 ```
 
-Bila Anda sudah punya fingerprint-nya (dari konsol server atau penyedia cloud Anda), biarkan komando membandingkannya untuk Anda: `--fingerprint` mem-pin key hanya bila server menunjukkan yang itu.
+Bila fingerprint-nya sudah ada (dari konsol server atau penyedia cloud), biarkan komando membandingkannya sendiri: `--fingerprint` mem-pin key hanya bila server menunjukkan yang itu.
 
 ```bash
 komando host trust web1 --fingerprint SHA256:pVt2...   # di-pin hanya bila cocok
 ```
 
-Key lain berhenti dengan `HOSTKEY_MISMATCH` (exit 4) dan tidak ada yang di-pin; pesan menampilkan kedua fingerprint. Berikan fingerprint dari jenis key yang ditawarkan server (`key_type` di jawaban; `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` di server mencetaknya). Perintah ini menerima satu server, dan jawabannya punya `expected_fingerprint` di samping `fingerprint`. Aturan lain tetap: dengan `strict`, pin pertama agen AI tetap butuh jawaban ya Anda, dan mengganti key yang di-pin tetap butuh `--reset` di terminal Anda.
+Key lain berhenti dengan `HOSTKEY_MISMATCH` (exit 4) dan tidak ada yang di-pin; pesan menampilkan kedua fingerprint. Berikan fingerprint dari jenis key yang ditawarkan server (`key_type` di jawaban; `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` di server mencetaknya). Perintah ini menerima satu server, dan jawabannya punya `expected_fingerprint` di samping `fingerprint`. Aturan lain tetap: dengan `strict`, pin pertama agen AI tetap butuh jawaban ya Anda, dan mengganti key yang di-pin tetap butuh `--reset` di terminal.
 
 `HOSTKEY_UNKNOWN` menyatakan fingerprint mana yang ditunjukkan server. Dengan `strict`, agen AI tidak bisa mem-pin key pertama sendiri: `host trust` butuh jawaban ya Anda di jendela komando, yang menampilkan fingerprint untuk dibandingkan (dengan `accept-new` yang default, login pertama mem-pin-nya juga).
 
@@ -465,7 +465,7 @@ $(komando host ssh-command web1 -o text)      # buka shell dengan OpenSSH
 
 Server di belakang `--via` mendapat satu `ProxyCommand` per hop, sehingga setiap hop memakai key-nya sendiri. VPN SOCKS menjadi `nc -X 5`. VPN yang berjalan di dalam komando tidak bisa dipakai OpenSSH; pakai `komando shell SERVER` untuk itu.
 
-Key yang dibuat dengan `komando key gen` disegel di store komando dan tidak pernah ditulis ke file. Untuk OpenSSH, `host ssh-command` menyerahkannya ke ssh-agent yang sudah dijalankan shell Anda (`SSH_AUTH_SOCK`), yang menyimpannya selama satu jam, dan baris yang dicetak memilihnya dengan public key-nya. Tanpa ssh-agent, perintah berhenti dengan `SSH_AGENT_NEEDED`: jalankan satu dengan `eval "$(ssh-agent)"`, atau pakai `komando shell SERVER`.
+Key yang dibuat dengan `komando key gen` disegel di store komando dan tidak pernah ditulis ke file. Untuk OpenSSH, `host ssh-command` menyerahkannya ke ssh-agent yang sudah dijalankan shell (`SSH_AUTH_SOCK`), yang menyimpannya selama satu jam, dan baris yang dicetak memilihnya dengan public key-nya. Tanpa ssh-agent, perintah berhenti dengan `SSH_AGENT_NEEDED`: jalankan satu dengan `eval "$(ssh-agent)"`, atau pakai `komando shell SERVER`.
 
 Hanya orang di terminal yang bisa menjalankan `host ssh-command`: perintah ini menulis salinan host key yang di-pin untuk OpenSSH, di folder sementara privat (`komando-ssh-*`). Baris yang dicetak lebih dari sehari lalu mungkin berhenti berfungsi: `host ssh-command` berikutnya menghapus salinan yang sudah selama itu. Agen AI mendapat `NEEDS_PERSON` dan diberi tahu untuk memakai `komando exec` atau `komando shell`.
 
@@ -477,14 +477,14 @@ Hanya orang di terminal yang bisa menjalankan `host ssh-command`: perintah ini m
 - Sertifikat host (`@cert-authority` di known_hosts) belum dibaca: komando mem-pin host key setiap server sendiri.
 - `--ask-password`, `komando login`, `host ssh-command`, dan mengganti host key yang di-pin (`host trust --reset`) butuh orang di terminal.
 - Kata sandi server `--login ask` diketik oleh seseorang: script, cron, atau job CI menjangkaunya hanya lewat `komando login` yang dimulai seseorang, dan koneksi pertamanya butuh orang di terminal. Server WinRM tidak punya `komando login`. Hanya orang yang mengubah ke mana kata sandi menuju, atau server atau VPN di jalannya, atau `default_user` selama server login-ask tidak punya user sendiri.
-- Apa yang tidak bisa dihentikan `--login ask`. komando mengenal agen AI hanya dari lingkungannya (`CLAUDECODE`, `KOMANDO_AGENT`, dan sejenisnya); program yang menyembunyikannya diperlakukan sebagai orang. Program apa pun milik user Anda bisa menggambar jendela yang tampak seperti milik komando, mengganti binary komando, atau membaca memori komando yang sedang berjalan. Ketik kata sandi hanya ke jendela yang dibuka oleh perintah yang Anda harapkan, dan jauhkan agen dari file akun Anda bila itu penting. Di Windows, jendela kata sandi komando adalah jendela persetujuannya, jadi tombolnya bertuliskan Deny dan "Allow once", dan spasi di sekitar kata sandi dibuang.
+- Apa yang tidak bisa dihentikan `--login ask`. komando mengenal agen AI hanya dari lingkungannya (`CLAUDECODE`, `KOMANDO_AGENT`, dan sejenisnya); program yang menyembunyikannya diperlakukan sebagai orang. Program apa pun milik user yang sama bisa menggambar jendela yang tampak seperti milik komando, mengganti binary komando, atau membaca memori komando yang sedang berjalan. Ketik kata sandi hanya ke jendela yang dibuka oleh perintah yang Anda harapkan, dan jauhkan agen dari file akun bila itu penting. Di Windows, jendela kata sandi komando adalah jendela persetujuannya, jadi tombolnya bertuliskan Deny dan "Allow once", dan spasi di sekitar kata sandi dibuang.
 - `op://` membaca 1Password hanya lewat server 1Password Connect: CLI 1Password bersifat closed source, dan komando hanya memakai bagian yang open source.
 - Token tersimpan Azure CLI berfungsi sekitar satu jam; komando tidak menjalankan `az` dan tidak bisa memperbaruinya.
 - Server yang dijangkau server lain lewat `--via` tidak bisa dihapus sampai server-server itu berubah.
 
 ## Pemecahan masalah
 
-| Kode error | Artinya | Yang perlu dilakukan |
+| Kode kesalahan | Artinya | Yang perlu dilakukan |
 |------------|---------|----------------------|
 | `AUTH_FAILED` | server menolak login, atau mengajukan pertanyaan (kode dua faktor) tanpa orang di terminal | periksa user dan kata sandi; untuk kode, jalankan `komando login SERVER` sekali |
 | `KEY_PASSPHRASE_REQUIRED` | key terenkripsi dan tidak ada ssh-agent yang menyimpannya | `ssh-add PATH`, atau simpan passphrase-nya dan pakai `--passphrase-ref` |

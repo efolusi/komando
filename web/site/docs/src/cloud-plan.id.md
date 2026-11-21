@@ -4,7 +4,7 @@ Command line komando gratis dan open source, dan aplikasi Komando untuk Mac, iPh
 
 ## Yang gratis sekarang
 
-- Setiap perintah, dalam teks atau JSON, di mesin Anda sendiri.
+- Setiap perintah, dalam teks atau JSON, di mesin sendiri.
 - Tanpa akun dan tanpa masa uji coba.
 
 ## Gratis saat aplikasinya dirilis
@@ -16,7 +16,7 @@ Aplikasinya belum dirilis. Saat dirilis, aplikasi gratis tanpa masa uji coba:
 
 ## Yang rencananya ditambahkan paket ini
 
-- Sinkronisasi antar perangkat Anda.
+- Sinkronisasi antar perangkat.
 - Tim.
 - AI bawaan, tanpa API key sendiri.
 - Menyetujui perubahan dari ponsel.

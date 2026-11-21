@@ -4,7 +4,7 @@ Lihat dan kerjakan message queue dengan aman: Apache Kafka, dan yang berbicara d
 
 Perintah yang sama berfungsi untuk kelimanya. Kafka menyimpan pesan di **topic**; RabbitMQ dan SQS menyimpannya di **queue**; NATS menyimpannya di **stream**; Pub/Sub menyimpannya di **subscription** milik sebuah topic. Bila halaman ini menyebut "topic", baca "queue" untuk RabbitMQ dan SQS dan "stream" untuk NATS. Apa yang berbeda untuk masing-masing ada di [RabbitMQ](#rabbitmq), [NATS JetStream](#nats-jetstream), [Amazon SQS](#amazon-sqs), dan [Google Cloud Pub/Sub](#google-cloud-pubsub) di bawah.
 
-Di Kafka, pesan disimpan berurutan di **partition** milik sebuah topic, dan **consumer group** adalah aplikasi yang membacanya dan mengingat sejauh mana ia membaca (committed offset-nya). **Lag** adalah berapa banyak pesan yang masih harus dibaca sebuah group.
+Di Kafka, pesan disimpan berurutan di **partition** milik sebuah topic, dan **consumer group** adalah aplikasi yang membacanya dan mengingat sejauh mana ia membaca (committed offset-nya). **Lag** adalah berapa banyak pesan yang belum dibaca sebuah group.
 
 ## Menambah cluster Kafka
 
@@ -26,16 +26,16 @@ komando queue add staging-kafka kafka://broker1.internal:9092 --via web1        
 
 | Opsi | Fungsinya |
 |---|---|
-| `tls=true` | TLS; sertifikat broker diperiksa terhadap CA komputer Anda |
-| `ca=secret:NAME` | juga percayai CA Anda sendiri (CA perusahaan, milik cloud); simpan dengan `komando secret set NAME < ca.pem` |
+| `tls=true` | TLS; sertifikat broker diperiksa terhadap CA komputer ini |
+| `ca=secret:NAME` | juga percayai CA sendiri (CA perusahaan, milik cloud); simpan dengan `komando secret set NAME < ca.pem` |
 | `tls=skip-verify` | TLS tanpa memeriksa sertifikat (`komando doctor` memperingatkan; pilih `ca=`) |
 | `sasl=plain`, `sasl=scram-sha-256`, `sasl=scram-sha-512` | cara login; butuh user di URL |
 | `insecure=1` | terima koneksi tanpa TLS yang melewati jaringan |
 
 - `kafka://` tanpa `tls=true`, langsung lewat jaringan (tanpa `--via`, bukan komputer ini), akan mengirim login dan pesan tanpa enkripsi, jadi `queue add` menolaknya dengan `INSECURE_PROTOCOL`: tambahkan `tls=true`, atau `--via`, atau `?insecure=1` untuk menerimanya (untuk agen AI itu butuh jawaban ya dari seseorang).
-- User tanpa `sasl=`, atau `sasl=` tanpa user, ditolak: komando tidak menebak bagaimana broker ingin Anda login.
+- User tanpa `sasl=`, atau `sasl=` tanpa user, ditolak: komando tidak menebak cara login yang diinginkan broker.
 
-Di terminal, perintah yang tidak menyebut conn atau topic akan menanyakannya, dengan daftar queue Anda. Jika diketik tanpa argumen, `komando queue peek` menanyakan queue mana, lalu topic mana. Agen AI atau script mendapat `USAGE` (exit 2) dengan contoh di hint.
+Di terminal, perintah yang tidak menyebut conn atau topic akan menanyakannya, dengan daftar queue. Jika diketik tanpa argumen, `komando queue peek` menanyakan queue mana, lalu topic mana. Agen AI atau script mendapat `USAGE` (exit 2) dengan contoh di hint.
 
 ### Lewat bastion atau VPN
 
@@ -73,7 +73,7 @@ orders  0          304112     304140  28   billing-1
 orders  1          303980     303989  9    billing-2
 ```
 
-- `queue list` menampilkan paling banyak 1000 topic (atau queue, atau stream), yang pertama menurut nama; `-n` mengubahnya. Daftar yang lebih panjang menyatakannya (`"truncated": true`, dan satu baris di teks) sehingga Anda bisa mempersempitnya dengan pola.
+- `queue list` menampilkan paling banyak 1000 topic (atau queue, atau stream), yang pertama menurut nama; `-n` mengubahnya. Daftar yang lebih panjang menyatakannya (`"truncated": true`, dan satu baris di teks) sehingga bisa dipersempit dengan pola.
 - Jumlah pesan adalah end offset dikurangi start offset setiap partition. Pada topic yang di-compact (`cleanup.policy=compact`) mungkin tersisa lebih sedikit pesan.
 - `describe` hanya menampilkan pengaturan yang berbeda dari default broker (misalnya `retention.ms`).
 
@@ -107,7 +107,7 @@ komando queue send prod-kafka orders --value test --dry-run   # memeriksa topic,
 sent 28 B to orders, partition 2, offset 304140
 ```
 
-- Topic harus sudah ada (`TOPIC_NOT_FOUND`): komando tidak pernah membiarkan broker membuatnya secara spontan. Buat dengan `queue create`.
+- Topic wajib sudah ada (`TOPIC_NOT_FOUND`): komando tidak pernah membiarkan broker membuatnya secara spontan. Buat dengan `queue create`.
 - `--key` memilih partition dengan cara lazim: key yang sama selalu menuju partition yang sama. `--partition N` memilih sendiri.
 - Nilai datang dari `--value`, dari `--from FILE` (`-` untuk stdin), atau dari data yang dialirkan lewat stdin. Kafka menerima sekitar 1 MiB per pesan secara default.
 - Conn yang dilindungi bertanya dulu kepada orang di terminal; agen AI atau script menambahkan `--yes` setelah seseorang setuju.
@@ -130,7 +130,7 @@ would delete 212 messages from orders-retry (3 partitions); the topic stays
 
 - `create --dry-run` meminta broker memeriksa topic tanpa membuatnya, jadi pengaturan yang buruk atau replika yang lebih banyak daripada broker terlihat sekarang.
 - Tanpa `--partitions` dan `--replicas`, default broker berlaku.
-- `purge` dan `rm` tidak bisa dibatalkan (aturan `queue-purge` dan `queue-delete` di `komando policy list`). `--dry-run` keduanya mencantumkan apa yang akan hilang. Di terminal Anda komando bertanya dulu: komando menyatakan apa yang akan dihapus dan meminta nama topic atau queue (jumlahnya, bila beberapa sekaligus).
+- `purge` dan `rm` tidak bisa dibatalkan (aturan `queue-purge` dan `queue-delete` di `komando policy list`). `--dry-run` keduanya mencantumkan apa yang akan hilang. Di terminal, komando bertanya dulu: komando menyatakan apa yang akan dihapus dan meminta nama topic atau queue (jumlahnya, bila beberapa sekaligus).
 
   ```
   $ komando queue purge prod-kafka orders-retry
@@ -153,14 +153,14 @@ komando queue list prod-rabbit                         # queue: pesan, ready, un
 komando queue peek prod-rabbit emails                # 10 pesan pertama; semuanya dikembalikan
 ```
 
-- `amqps://` adalah AMQP dengan TLS (port 5671 secara default); `amqp://` tanpa TLS (port 5672). Seperti `redis://`, `amqp://` langsung lewat jaringan (tanpa `--via`, bukan komputer ini) ditolak dengan `INSECURE_PROTOCOL` kecuali Anda menambahkan `?insecure=1`.
+- `amqps://` adalah AMQP dengan TLS (port 5671 secara default); `amqp://` tanpa TLS (port 5672). Seperti `redis://`, `amqp://` langsung lewat jaringan (tanpa `--via`, bukan komputer ini) ditolak dengan `INSECURE_PROTOCOL` kecuali ditambahkan `?insecure=1`.
 - Path adalah **virtual host** (vhost). Vhost default adalah `/`, ditulis `%2F` atau dihilangkan (`amqp://app@rabbit.internal/`).
 - Kata sandi user masuk ke vault (`--password-ref`), tidak pernah ke URL. URL tanpa user login sebagai `guest` (kata sandi `guest`, atau yang diberikan `--password-ref`). RabbitMQ hanya mengizinkan `guest` masuk dari server itu sendiri, jadi itu berfungsi `--via` SSH server itu.
 
 | Opsi | Fungsinya |
 |---|---|
 | `management=PORT` | juga pakai HTTP API management di port ini pada host yang sama (HTTPS untuk `amqps://`), untuk `queue list`, node dan total di `info`, dan detail di `describe` |
-| `ca=secret:NAME` | `amqps://`: juga percayai CA Anda sendiri (`komando secret set NAME < ca.pem`) |
+| `ca=secret:NAME` | `amqps://`: juga percayai CA sendiri (`komando secret set NAME < ca.pem`) |
 | `tls=skip-verify` | `amqps://` tanpa memeriksa sertifikat (`komando doctor` memperingatkan; pilih `ca=`) |
 | `insecure=1` | terima `amqp://` lewat jaringan tanpa TLS |
 
@@ -181,7 +181,7 @@ komando queue rm prod-rabbit emails
   - RabbitMQ menandai pesan yang dikembalikan sebagai redelivered. Consumer yang memperlakukan pesan redelivered secara berbeda akan melihat flag itu.
   - Selama peek memegangnya, tidak ada consumer yang mendapatkannya, dan queue yang sibuk mungkin membagikannya dalam urutan yang sedikit berbeda sesudahnya.
   - Bila koneksi putus, RabbitMQ mengembalikan pesan itu sendiri.
-  - **Quorum queue** menghitung setiap peek sebagai satu pengiriman (`x-delivery-count`). Setelah batas pengirimannya (20 secara default sejak RabbitMQ 4.0, atau `x-delivery-limit` milik queue sendiri atau policy) ia membuang pesan atau mengirimnya ke dead-letter queue. Jadi peek menampilkan hitungannya (`deliveries`) dan berhenti dengan `DELIVERY_LIMIT_NEAR` begitu sebuah pesan punya kurang dari 3 pengiriman tersisa: jangan peek queue itu lagi. Perintah tidak mengambil pesan setelah itu, jadi pesan di belakangnya tidak ikut dihitung mundur. Hanya API management yang menyebut tipe queue dan batasnya sendiri, jadi peek butuh `?management=` di URL conn: tanpanya (atau bila API management gagal) peek berhenti sebelum mengambil pesan (`NOT_SUPPORTED`, atau error dari API management).
+  - **Quorum queue** menghitung setiap peek sebagai satu pengiriman (`x-delivery-count`). Setelah batas pengirimannya (20 secara default sejak RabbitMQ 4.0, atau `x-delivery-limit` milik queue sendiri atau policy) ia membuang pesan atau mengirimnya ke dead-letter queue. Jadi peek menampilkan hitungannya (`deliveries`) dan berhenti dengan `DELIVERY_LIMIT_NEAR` begitu sebuah pesan punya kurang dari 3 pengiriman tersisa: jangan peek queue itu lagi. Perintah tidak mengambil pesan setelah itu, jadi pesan di belakangnya tidak ikut dihitung mundur. Hanya API management yang menyebut tipe queue dan batasnya sendiri, jadi peek butuh `?management=` di URL conn: tanpanya (atau bila API management gagal) peek berhenti sebelum mengambil pesan (`NOT_SUPPORTED`, atau kesalahan dari API management).
   - Queue bertipe stream tidak bisa di-peek dengan cara ini (`NOT_SUPPORTED`).
   - peek selalu membaca dari depan (`"from": "front"`), yang sudah paling lama; `--partition` dan `--idle` untuk Kafka.
 - `send` menaruh pesan langsung ke queue (lewat default exchange), sebagai pesan persisten, dan menunggu sampai server mengonfirmasinya. `--header KEY=VALUE` mengatur header-nya; tidak ada `--key` atau `--partition`.
@@ -204,12 +204,12 @@ komando queue list prod-nats                       # stream: subject, pesan, uku
 komando queue peek prod-nats ORDERS              # 10 pesan terbaru; tidak ada yang diambil
 ```
 
-- `tls://` adalah NATS dengan TLS; `nats://` tanpa TLS. Port default-nya 4222. Seperti `redis://`, `nats://` langsung lewat jaringan (tanpa `--via`, bukan komputer ini) ditolak dengan `INSECURE_PROTOCOL` kecuali Anda menambahkan `?insecure=1`.
+- `tls://` adalah NATS dengan TLS; `nats://` tanpa TLS. Port default-nya 4222. Seperti `redis://`, `nats://` langsung lewat jaringan (tanpa `--via`, bukan komputer ini) ditolak dengan `INSECURE_PROTOCOL` kecuali ditambahkan `?insecure=1`.
 - Cantumkan beberapa server milik sebuah cluster dengan koma. komando mencobanya dalam urutan itu dan hanya berbicara dengan server di URL (dengan `--via`, semuanya dijangkau lewat bastion atau VPN). komando mencoba setiap server sekali dan tidak menyambung ulang atau mengikuti server yang diiklankan cluster.
 - Cara komando login:
   - user di URL dan `--password-ref`: user dan kata sandi;
   - `--password-ref` tanpa user: kata sandi dikirim sebagai token;
-  - `?creds=secret:NAME`: file `.creds` (dari `nsc`, NGS, atau Synadia Cloud) yang Anda simpan di vault dengan `komando secret set NAME < user.creds`;
+  - `?creds=secret:NAME`: file `.creds` (dari `nsc`, NGS, atau Synadia Cloud) yang disimpan di vault dengan `komando secret set NAME < user.creds`;
   - tidak satu pun dari itu: tanpa login.
 - `komando test prod-nats` login dan menampilkan versi server.
 
@@ -217,7 +217,7 @@ komando queue peek prod-nats ORDERS              # 10 pesan terbaru; tidak ada y
 |---|---|
 | `creds=secret:NAME` | login dengan file `.creds` yang disimpan di vault |
 | `domain=NAME` | domain JetStream, untuk leaf node dengan JetStream sendiri |
-| `ca=secret:NAME` | `tls://`: juga percayai CA Anda sendiri (`komando secret set NAME < ca.pem`) |
+| `ca=secret:NAME` | `tls://`: juga percayai CA sendiri (`komando secret set NAME < ca.pem`) |
 | `tls=skip-verify` | `tls://` tanpa memeriksa sertifikat (`komando doctor` memperingatkan; pilih `ca=`) |
 | `insecure=1` | terima `nats://` lewat jaringan tanpa TLS |
 
@@ -239,7 +239,7 @@ komando queue rm prod-nats ORDERS
 
 - **`peek` membaca pesan menurut nomor sequence-nya.** Perintah ini tidak membuat consumer dan tidak mengakui apa pun, jadi tidak ada aplikasi yang menyadarinya dan tidak ada yang dihapus, juga dari stream work-queue (tempat pengakuan menghapus pesan). Secara default menampilkan `-n` pesan terbaru; `--oldest` menampilkan yang pertama. Pesan yang dihapus di antaranya dilewati. Di stream dengan lebih dari 100000 pesan yang dihapus, yang terbaru mungkin keluar tidak lengkap, dan peek menyatakannya; `--oldest` selalu berfungsi.
 - `send` menerima sebuah subject, bukan nama stream: `orders.new`, bukan `ORDERS`. komando lebih dulu memeriksa stream mana yang menyimpan subject itu; bila tidak ada, perintah berhenti dengan `STREAM_NOT_FOUND` (NATS biasa akan membuang pesan tanpa sepatah kata). Lalu perintah menunggu pengakuan stream dan menyatakan sequence pesan. Header `Nats-Msg-Id` (`--header Nats-Msg-Id=order-42`) membiarkan stream membuang duplikat. Tidak ada `--key` atau `--partition`.
-- `create` membuat stream di disk (`storage=file`) yang menyimpan pesan sampai ada batas (`retention=limits`). Subject-nya adalah nama stream kecuali Anda memberikan `--config subjects=a.>,b.*`. Pengaturan lain: `storage=memory`, `retention=interest|workqueue`, `discard=old|new`, `max_msgs`, `max_bytes`, `max_age` (`24h`, `7d`), `max_msg_size`, `max_msgs_per_subject`, `max_consumers`, `duplicate_window`, `description`. `--replicas 3` menyimpan 3 salinan di cluster. JetStream tidak bisa memeriksa stream tanpa membuatnya, jadi `create --dry-run` hanya memeriksa nama dan pengaturannya. Stream yang sudah ada adalah `STREAM_EXISTS`.
+- `create` membuat stream di disk (`storage=file`) yang menyimpan pesan sampai ada batas (`retention=limits`). Subject-nya adalah nama stream kecuali diberikan `--config subjects=a.>,b.*`. Pengaturan lain: `storage=memory`, `retention=interest|workqueue`, `discard=old|new`, `max_msgs`, `max_bytes`, `max_age` (`24h`, `7d`), `max_msg_size`, `max_msgs_per_subject`, `max_consumers`, `duplicate_window`, `description`. `--replicas 3` menyimpan 3 salinan di cluster. JetStream tidak bisa memeriksa stream tanpa membuatnya, jadi `create --dry-run` hanya memeriksa nama dan pengaturannya. Stream yang sudah ada adalah `STREAM_EXISTS`.
 - `purge` menghapus setiap pesan sebuah stream; stream dan consumer-nya tetap ada. `rm` menghapus stream, pesannya, dan consumer-nya. Keduanya tidak bisa dibatalkan, jadi bertanya dulu, seperti untuk [Kafka](#create-delete-and-empty-topics).
 - `groups` mencantumkan consumer. **Pending** adalah apa yang belum diberikan kepada consumer (ditampilkan sebagai lag-nya); **ack pending** adalah apa yang sudah diberikan dan belum diakuinya. `state` adalah `active` (push consumer dengan subscriber, atau pull consumer dengan permintaan yang menunggu), `idle`, atau `paused`.
 - Bucket key-value (`KV_NAME`) dan object store (`OBJ_NAME`) juga stream, dan `queue list` mencantumkannya.
@@ -249,7 +249,7 @@ komando queue rm prod-nats ORDERS
 
 ### Menambah region SQS
 
-Conn SQS adalah satu region AWS dari satu account. Anda memberikan nama queue ke setiap perintah, bukan di URL. komando login dengan login AWS Anda, dengan cara yang sama seperti untuk bucket S3 dan registry ECR, dan tidak butuh aws CLI:
+Conn SQS adalah satu region AWS dari satu account. Nama queue diberikan ke setiap perintah, bukan di URL. komando login dengan login AWS, dengan cara yang sama seperti untuk bucket S3 dan registry ECR, dan tidak butuh aws CLI:
 
 ```bash
 komando queue add prod-sqs sqs://eu-west-1 --option aws_profile=prod   # profil di ~/.aws (SSO, role, key)
@@ -269,10 +269,10 @@ komando queue peek prod-sqs orders                  # sampai 10 pesan; tidak ada
 | Opsi | Fungsinya |
 |---|---|
 | `endpoint=URL` | server SQS lain: VPC endpoint, atau emulator seperti LocalStack atau moto (`http://localhost:4566`; di localhost tanpa key atau profil, komando login dengan key `test`) |
-| `account=ID` | account AWS 12 digit yang memiliki queue, untuk memakai queue yang dibagikan account lain kepada Anda |
+| `account=ID` | account AWS 12 digit yang memiliki queue, untuk memakai queue yang dibagikan account lain |
 | `insecure=1` | terima endpoint `http://` lewat jaringan (tanpa `--via`, bukan komputer ini) |
 
-Endpoint `http://` langsung lewat jaringan ditolak dengan `INSECURE_PROTOCOL` kecuali Anda menambahkan `?insecure=1`: pesan dan session token login sementara akan berjalan tanpa enkripsi.
+Endpoint `http://` langsung lewat jaringan ditolak dengan `INSECURE_PROTOCOL` kecuali ditambahkan `?insecure=1`: pesan dan session token login sementara akan berjalan tanpa enkripsi.
 
 ### Apa yang dilakukan setiap perintah di SQS
 
@@ -299,7 +299,7 @@ komando queue rm prod-sqs old-jobs
 
 ### Menambah project Pub/Sub
 
-Conn Pub/Sub adalah satu project Google Cloud. Anda memberikan nama topic atau subscription ke setiap perintah, bukan di URL. komando login dengan cara yang sama seperti untuk bucket gs:// dan tidak butuh gcloud atau Google SDK:
+Conn Pub/Sub adalah satu project Google Cloud. Nama topic atau subscription diberikan ke setiap perintah, bukan di URL. komando login dengan cara yang sama seperti untuk bucket gs:// dan tidak butuh gcloud atau Google SDK:
 
 ```bash
 komando queue add prod-pubsub pubsub://my-project      # login gcloud (application default credentials)
@@ -312,8 +312,8 @@ komando queue groups prod-pubsub                       # subscription: topic, pe
 komando queue peek prod-pubsub billing                 # sampai 10 pesan dari subscription billing; semuanya dikembalikan
 ```
 
-- Cara komando login: key service account di `--password-ref`, atau kalau tidak, di endpoint Google sendiri (`*.googleapis.com`), application default credentials Anda (file `GOOGLE_APPLICATION_CREDENTIALS`, yang dibuat `gcloud auth application-default login`, atau akun milik server sendiri di Google Cloud). Beri login role yang dibutuhkannya: `roles/pubsub.viewer` untuk melihat, `roles/pubsub.subscriber` untuk peek, `roles/pubsub.publisher` untuk mengirim, `roles/pubsub.editor` untuk membuat dan menghapus.
-- `endpoint=` yang bukan milik Google tidak pernah mendapat login gcloud Anda: token itu berlaku untuk seluruh account Google Cloud Anda. Beri endpoint seperti itu key tersendiri dengan `--password-ref`, atau tanpa key.
+- Cara komando login: key service account di `--password-ref`, atau kalau tidak, di endpoint Google sendiri (`*.googleapis.com`), application default credentials (file `GOOGLE_APPLICATION_CREDENTIALS`, yang dibuat `gcloud auth application-default login`, atau akun milik server sendiri di Google Cloud). Beri login role yang dibutuhkannya: `roles/pubsub.viewer` untuk melihat, `roles/pubsub.subscriber` untuk peek, `roles/pubsub.publisher` untuk mengirim, `roles/pubsub.editor` untuk membuat dan menghapus.
+- `endpoint=` yang bukan milik Google tidak pernah mendapat login gcloud: token itu berlaku untuk seluruh account Google Cloud. Beri endpoint seperti itu key tersendiri dengan `--password-ref`, atau tanpa key.
 - Login hanya lewat HTTPS. Emulator (`http://`) tidak memakainya, jadi komando tidak mengirim apa pun ke sana: key di `--password-ref` pada endpoint `http://` ditolak (`USAGE`).
 - `komando test prod-pubsub` login dan mencantumkan satu topic.
 
@@ -322,13 +322,13 @@ komando queue peek prod-pubsub billing                 # sampai 10 pesan dari su
 | `endpoint=URL` | server Pub/Sub lain: endpoint regional (`https://europe-west1-pubsub.googleapis.com`), yang privat, atau emulator (`http://localhost:8085`) |
 | `insecure=1` | terima endpoint `http://` lewat jaringan (tanpa `--via`, bukan komputer ini) |
 
-Endpoint `http://` langsung lewat jaringan ditolak dengan `INSECURE_PROTOCOL` kecuali Anda menambahkan `?insecure=1`: pesan akan berjalan tanpa enkripsi.
+Endpoint `http://` langsung lewat jaringan ditolak dengan `INSECURE_PROTOCOL` kecuali ditambahkan `?insecure=1`: pesan akan berjalan tanpa enkripsi.
 
 ### Topic dan subscription
 
-Di Pub/Sub Anda mengirim ke sebuah topic, dan topic membagikan setiap pesan ke setiap subscription-nya. Pesan menunggu di sebuah subscription sampai program yang menariknya mengakuinya. Jadi subscription adalah tempat pesan berada, dan juga yang disebut sistem lain sebagai consumer group.
+Di Pub/Sub, pesan dikirim ke sebuah topic, dan topic membagikan setiap pesan ke setiap subscription-nya. Pesan menunggu di sebuah subscription sampai program yang menariknya mengakuinya. Jadi subscription adalah tempat pesan berada, dan juga yang disebut sistem lain sebagai consumer group.
 
-Nama yang Anda berikan adalah topic atau subscription:
+Nama yang diberikan adalah topic atau subscription:
 
 - `peek` dan `purge` menerima subscription (`billing`).
 - `describe`, `send`, `create`, dan `rm` menerima topic (`orders`); `describe` juga menemukan subscription bila tidak ada topic dengan nama itu.
@@ -376,14 +376,14 @@ komando conn rm prod-kafka                    # komando melupakannya; topic-nya 
 - SQS: komando tidak membaca `AWS_ENDPOINT_URL` atau `AWS_ENDPOINT_URL_SQS`: URL conn menyatakan ke mana perintah pergi. Pakai `?endpoint=` untuk server lain.
 - Pub/Sub: URL tidak punya user. Login Google tidak punya, dan user ditolak. Topic milik project lain butuh conn tersendiri.
 - Pub/Sub: pesan kosong tanpa `--header` ditolak.
-- Pub/Sub: `pushEndpoint` harus berupa alamat `https://`.
+- Pub/Sub: `pushEndpoint` wajib berupa alamat `https://`.
 - komando tidak punya perintah untuk mengganti nama, menyalin, atau mem-backup topic.
 
 ## Pemecahan masalah
 
-| Error | Artinya dan yang perlu dilakukan |
+| Kesalahan | Artinya dan yang perlu dilakukan |
 |---|---|
-| `QUEUE_CONNECT` | broker tidak bisa dijangkau, atau menginginkan TLS (`?tls=true`) atau login (`?sasl=`); dengan `--via`, alamat yang diiklankan harus bisa dijangkau dari sana |
+| `QUEUE_CONNECT` | broker tidak bisa dijangkau, atau menginginkan TLS (`?tls=true`) atau login (`?sasl=`); dengan `--via`, alamat yang diiklankan wajib bisa dijangkau dari sana |
 | `QUEUE_AUTH` | periksa user, mekanisme `sasl=`, dan kata sandi (`komando conn show NAME`); SQS: profil atau key AWS; Pub/Sub: key service account, atau `gcloud auth application-default login` |
 | `AWS_LOGIN_REQUIRED`, `AWS_PROFILE_NOT_FOUND` | SQS: seseorang menjalankan `komando login aws --profile NAME`, atau perbaiki opsi `aws_profile` milik conn |
 | `QUEUE_DENIED` | user tidak punya Kafka ACL untuk topic, group, atau cluster, izin RabbitMQ pada vhost atau queue, izin NATS pada subject atau JetStream API, izin IAM untuk SQS (`sqs:ReceiveMessage`, ...), atau role Pub/Sub (`roles/pubsub.subscriber`, ...; atau API Pub/Sub belum diaktifkan): tanyakan kepada admin |

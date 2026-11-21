@@ -1,6 +1,6 @@
 # Container registry
 
-Lihat image apa yang disimpan sebuah registry, salin image antar-registry, dan bersihkan yang lama. Berfungsi dengan Docker Hub, GHCR, GitLab, Harbor, Amazon ECR, Azure Container Registry, Google Artifact Registry, dan `registry:2` milik Anda sendiri.
+Lihat image apa yang disimpan sebuah registry, salin image antar-registry, dan bersihkan yang lama. Berfungsi dengan Docker Hub, GHCR, GitLab, Harbor, Amazon ECR, Azure Container Registry, Google Artifact Registry, dan `registry:2` milik sendiri.
 
 ## Melihat tag sebuah image
 
@@ -10,7 +10,7 @@ komando list kind:registry                     # nama yang diberikan impor (ghcr
 komando registry list ghcr myorg/api           # tag satu repository
 ```
 
-Jika diketik tanpa argumen di terminal, `komando registry list` menanyakan registry, dengan daftar milik Anda untuk dipilih, lalu repository (kosong mencantumkan semua repository).
+Jika diketik tanpa argumen di terminal, `komando registry list` menanyakan registry, dengan daftar untuk dipilih, lalu repository (kosong mencantumkan semua repository).
 
 ```text
 1.4.1
@@ -18,7 +18,7 @@ Jika diketik tanpa argumen di terminal, `komando registry list` menanyakan regis
 latest
 ```
 
-`list` dan `inspect` hanya membaca. `copy` menulis ke tujuan. `rm` dan `prune` menghapus image. Agen AI memberikan setiap argumen; argumen yang kurang adalah error `USAGE` (exit 2) yang hint-nya menunjukkan contoh.
+`list` dan `inspect` hanya membaca. `copy` menulis ke tujuan. `rm` dan `prune` menghapus image. Agen AI memberikan setiap argumen; argumen yang kurang adalah kesalahan `USAGE` (exit 2) yang hint-nya menunjukkan contoh.
 
 ## Menambah registry
 
@@ -31,9 +31,9 @@ komando registry add harbor 'registry://alice@harbor.lan:5000?tls=false' --via b
 
 Kata sandinya biasanya sebuah access token. Token butuh hak baca untuk melihat, hak tulis untuk menyalin ke registry, dan hak hapus untuk menghapus. Untuk Docker Hub pakai `registry://alice@docker.io`.
 
-`import docker` membaca setiap `docker login` dari `~/.docker/config.json`, dengan bertanya ke credential helper (`credsStore`, `credHelpers`) saat docker menyimpan login di sana. Amazon ECR, registry Google yang login lewat gcloud, dan registry Azure yang login dengan `az acr login` memegang token yang hanya bertahan beberapa jam: komando menambahkannya tanpa token itu dan login dengan login AWS, Google, atau Azure Anda setiap kali (lihat di bawah).
+`import docker` membaca setiap `docker login` dari `~/.docker/config.json`, dengan bertanya ke credential helper (`credsStore`, `credHelpers`) saat docker menyimpan login di sana. Amazon ECR, registry Google yang login lewat gcloud, dan registry Azure yang login dengan `az acr login` memegang token yang hanya bertahan beberapa jam: komando menambahkannya tanpa token itu dan login dengan login AWS, Google, atau Azure setiap kali (lihat di bawah).
 
-Untuk mengeluarkan registry dari daftar Anda: `komando conn rm ghcr` (registry-nya sendiri tidak disentuh).
+Untuk mengeluarkan registry dari daftar: `komando conn rm ghcr` (registry-nya sendiri tidak disentuh).
 
 ### Docker Hub
 
@@ -49,19 +49,19 @@ komando registry inspect dockerhub nginx        # image resmi: library/nginx:lat
 
 ### Amazon ECR
 
-Login ECR bertahan 12 jam, jadi komando mengambil yang baru dari AWS setiap kali, dengan login AWS Anda yang lazim (tidak butuh aws CLI). Hilangkan `--password-ref` dan sebut profil AWS-nya:
+Login ECR bertahan 12 jam, jadi komando mengambil yang baru dari AWS setiap kali, dengan login AWS yang lazim (tidak butuh aws CLI). Hilangkan `--password-ref` dan sebut profil AWS-nya:
 
 ```bash
 komando registry add ecr registry://AWS@123456789012.dkr.ecr.eu-west-1.amazonaws.com --option aws_profile=prod
 ```
 
-Bila login SSO sudah kedaluwarsa, error-nya `AWS_LOGIN_REQUIRED`: seseorang menjalankan `komando login aws --profile prod` sekali. Lihat [Login cloud](cloud.md).
+Bila login SSO sudah kedaluwarsa, kesalahannya `AWS_LOGIN_REQUIRED`: seseorang menjalankan `komando login aws --profile prod` sekali. Lihat [Login cloud](cloud.md).
 
-Login ECR berlaku untuk setiap repository yang dijangkau login AWS Anda, jadi komando mengirimnya hanya lewat https ke registry yang sertifikatnya diperiksa. Conn dengan `?tls=false` atau `?tls=skip-verify` berhenti dengan error penggunaan. Begitu juga conn registry cloud (ECR, Google, Azure) dengan `?ca=` atau `?resolve=` dan tanpa `--password-ref`: registry cloud punya sertifikat yang dipercayai setiap komputer, di alamatnya sendiri.
+Login ECR berlaku untuk setiap repository yang dijangkau login AWS, jadi komando mengirimnya hanya lewat https ke registry yang sertifikatnya diperiksa. Conn dengan `?tls=false` atau `?tls=skip-verify` berhenti dengan kesalahan penggunaan. Begitu juga conn registry cloud (ECR, Google, Azure) dengan `?ca=` atau `?resolve=` dan tanpa `--password-ref`: registry cloud punya sertifikat yang dipercayai setiap komputer, di alamatnya sendiri.
 
 ### Azure Container Registry
 
-Hilangkan `--password-ref` dan komando login dengan login Azure Anda, seperti yang dilakukan `az acr login`: komando mengambil token Azure dan menukarnya dengan registry untuk login registry yang bertahan beberapa jam. Ini dilakukan setiap kali, tidak menyimpan apa pun, dan tidak butuh program `az`:
+Hilangkan `--password-ref` dan komando login dengan login Azure, seperti yang dilakukan `az acr login`: komando mengambil token Azure dan menukarnya dengan registry untuk login registry yang bertahan beberapa jam. Ini dilakukan setiap kali, tidak menyimpan apa pun, dan tidak butuh program `az`:
 
 ```bash
 komando registry add acr registry://myregistry.azurecr.io
@@ -75,13 +75,13 @@ komando mencari login Azure dengan urutan ini:
 3. token yang disimpan Azure CLI setelah `az login` (Linux dan macOS). Token bertahan sekitar satu jam, dan perintah `az` apa pun memperbaruinya; komando membacanya tetapi tidak bisa memperbaruinya sendiri;
 4. managed identity mesin Azure tempat komando berjalan (`AZURE_CLIENT_ID` memilih yang user-assigned).
 
-Login butuh role `AcrPull` pada registry untuk melihat, `AcrPush` untuk menyalin image ke sana, dan `AcrDelete` untuk menghapus. Tanpa login, error-nya `AZURE_LOGIN_REQUIRED`; role yang hilang memberi `REGISTRY_AUTH`. Token registry atau user admin juga berfungsi: taruh user di URL dan berikan `--password-ref`, seperti untuk registry mana pun.
+Login butuh role `AcrPull` pada registry untuk melihat, `AcrPush` untuk menyalin image ke sana, dan `AcrDelete` untuk menghapus. Tanpa login, kesalahannya `AZURE_LOGIN_REQUIRED`; role yang hilang memberi `REGISTRY_AUTH`. Token registry atau user admin juga berfungsi: taruh user di URL dan berikan `--password-ref`, seperti untuk registry mana pun.
 
-Token Azure berlaku untuk seluruh subscription Anda, bukan hanya registry-nya, jadi komando mengirimnya hanya lewat https ke registry yang sertifikatnya diperiksa. Conn dengan `?tls=false` atau `?tls=skip-verify` berhenti dengan error penggunaan; pakai token registry dengan `--password-ref`.
+Token Azure berlaku untuk seluruh subscription, bukan hanya registry-nya, jadi komando mengirimnya hanya lewat https ke registry yang sertifikatnya diperiksa. Conn dengan `?tls=false` atau `?tls=skip-verify` berhenti dengan kesalahan penggunaan; pakai token registry dengan `--password-ref`.
 
 ### Google Artifact Registry dan Container Registry
 
-Host seperti `europe-west1-docker.pkg.dev`, `gcr.io`, `eu.gcr.io`, `us.gcr.io`, dan `asia.gcr.io` login dengan login Google Anda bila conn tidak punya `--password-ref`, seperti yang disiapkan `gcloud auth configure-docker`: komando mengambil access token Google (bertahan satu jam) setiap kali dan login sebagai `oauth2accesstoken`. Login itu adalah yang dipakai komando untuk storage `gs://` dan `gcp-sm:`: `GOOGLE_APPLICATION_CREDENTIALS` (file key service account), login dari `gcloud auth application-default login`, atau service account milik mesin di Google Cloud. Tidak butuh program `gcloud`:
+Host seperti `europe-west1-docker.pkg.dev`, `gcr.io`, `eu.gcr.io`, `us.gcr.io`, dan `asia.gcr.io` login dengan login Google bila conn tidak punya `--password-ref`, seperti yang disiapkan `gcloud auth configure-docker`: komando mengambil access token Google (bertahan satu jam) setiap kali dan login sebagai `oauth2accesstoken`. Login itu adalah yang dipakai komando untuk storage `gs://` dan `gcp-sm:`: `GOOGLE_APPLICATION_CREDENTIALS` (file key service account), login dari `gcloud auth application-default login`, atau service account milik mesin di Google Cloud. Tidak butuh program `gcloud`:
 
 ```bash
 komando registry add gar registry://europe-west1-docker.pkg.dev
@@ -95,11 +95,11 @@ komando secret set gar-key < key.json
 komando registry add gar registry://_json_key@europe-west1-docker.pkg.dev --password-ref secret:gar-key
 ```
 
-Login butuh role Artifact Registry Reader untuk melihat, Writer untuk menyalin image ke sana, dan Repository Administrator untuk menghapus. Tanpa login Google sama sekali, komando membaca tanpa login, jadi image publik tetap berfungsi; login yang sudah habis, atau file `GOOGLE_APPLICATION_CREDENTIALS` atau file login gcloud yang hilang atau rusak, memberi `GCP_LOGIN_REQUIRED`. Seperti Azure, token Google berlaku untuk seluruh project Anda, jadi hanya dikirim lewat https ke registry yang sertifikatnya diperiksa: tidak dengan `?tls=false` atau `?tls=skip-verify`.
+Login butuh role Artifact Registry Reader untuk melihat, Writer untuk menyalin image ke sana, dan Repository Administrator untuk menghapus. Tanpa login Google sama sekali, komando membaca tanpa login, jadi image publik tetap berfungsi; login yang sudah habis, atau file `GOOGLE_APPLICATION_CREDENTIALS` atau file login gcloud yang hilang atau rusak, memberi `GCP_LOGIN_REQUIRED`. Seperti Azure, token Google berlaku untuk seluruh project, jadi hanya dikirim lewat https ke registry yang sertifikatnya diperiksa: tidak dengan `?tls=false` atau `?tls=skip-verify`.
 
-### HTTPS dengan sertifikat Anda sendiri
+### HTTPS dengan sertifikat sendiri
 
-Secara default komando memeriksa sertifikat registry terhadap CA yang dipercayai komputer Anda. Registry dengan sertifikat dari CA privat (mkcert, CA internal) ditolak dengan `REGISTRY_TLS`. Dua cara memperbaikinya:
+Secara default komando memeriksa sertifikat registry terhadap CA yang dipercayai komputer ini. Registry dengan sertifikat dari CA privat (mkcert, CA internal) ditolak dengan `REGISTRY_TLS`. Dua cara memperbaikinya:
 
 ```bash
 komando secret set harbor-ca < ca.crt        # 1. lebih baik: percayai CA itu (sertifikat PEM-nya), pemeriksaan tetap menyala
@@ -118,7 +118,7 @@ komando registry add harbor 'registry://alice@harbor.lan?ca=secret:harbor-cert'
 
 ### Saat DNS menunjuk ke tempat lain
 
-Kadang DNS publik registry menunjuk ke tempat selain alamat yang dipakai server Anda, atau nama itu tidak punya DNS sama sekali. Ada dua jalan memutarnya.
+Kadang DNS publik registry menunjuk ke tempat selain alamat yang dipakai server, atau nama itu tidak punya DNS sama sekali. Ada dua jalan memutarnya.
 
 Lewat server (`--via`): komando mengirim nama registry ke server terakhir di jalur `--via`, dan server itu yang mencarinya, jadi `/etc/hosts` dan DNS-nya berlaku. Pemeriksaan sertifikat dan header `Host` tetap memakai nama di URL:
 
@@ -126,7 +126,7 @@ Lewat server (`--via`): komando mengirim nama registry ke server terakhir di jal
 komando registry add harbor 'registry://alice@registry.example.com?ca=secret:harbor-ca' --via web1
 ```
 
-Dengan `?resolve=`: bila Anda bisa menjangkau registry dari komputer Anda, Anda tidak butuh server untuk ini. Berikan alamat IP-nya di URL, seperti `curl --resolve`. komando tersambung ke alamat itu dan tetap mengirim nama, jadi opsi TLS bekerja seperti tanpanya: sertifikat diperiksa terhadap nama (dengan atau tanpa `ca=`), atau tidak diperiksa sama sekali dengan `tls=skip-verify`:
+Dengan `?resolve=`: bila registry bisa dijangkau dari komputer ini, server tidak dibutuhkan untuk ini. Berikan alamat IP-nya di URL, seperti `curl --resolve`. komando tersambung ke alamat itu dan tetap mengirim nama, jadi opsi TLS bekerja seperti tanpanya: sertifikat diperiksa terhadap nama (dengan atau tanpa `ca=`), atau tidak diperiksa sama sekali dengan `tls=skip-verify`:
 
 ```bash
 komando registry add harbor 'registry://alice@registry.example.com?ca=secret:harbor-ca&resolve=203.0.113.10'
@@ -197,7 +197,7 @@ latest is one of them: docker pull without a tag stops working
 
 komando memeriksa setiap tag repository (sampai 10000); bila lebih banyak, `tags_note` menyatakan tag lain mungkin menunjuk ke image itu juga.
 
-Penghapusan tidak bisa dibatalkan. Di terminal Anda komando bertanya dulu: komando menyebut image dan setiap tag yang akan hilang, dan Anda mengetik nama image (`Type the name shop/api:1.9 to continue`). Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju; registry yang dilindungi juga butuh `--yes`. Lihat [Keamanan](safety.md#what-needs-a-yes).
+Penghapusan tidak bisa dibatalkan. Di terminal, komando bertanya dulu: komando menyebut image dan setiap tag yang akan hilang, dan Anda mengetik nama image (`Type the name shop/api:1.9 to continue`). Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju; registry yang dilindungi juga butuh `--yes`. Lihat [Keamanan](safety.md#what-needs-a-yes).
 
 Ruang disk kembali setelah registry menjalankan garbage collection-nya.
 
@@ -208,10 +208,10 @@ komando registry prune harbor shop/api --keep 10 --dry-run   # apa yang akan hil
 komando registry prune harbor shop/api --keep 10 --older-than 30d --match '^v'
 ```
 
-`prune` menghapus image lama dari satu repository. Di terminal Anda komando bertanya dulu: ketik nama repository. Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju. Berikan `--keep`, `--older-than`, atau keduanya:
+`prune` menghapus image lama dari satu repository. Di terminal, komando bertanya dulu: ketik nama repository. Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju. Berikan `--keep`, `--older-than`, atau keduanya:
 
 - `--keep N` mempertahankan N tag terbaru yang cocok.
-- `--older-than 30d` hanya menghapus image yang dibuat sebelum usia itu. Dengan keduanya, sebuah tag harus lolos keduanya untuk dihapus.
+- `--older-than 30d` hanya menghapus image yang dibuat sebelum usia itu. Dengan keduanya, sebuah tag perlu lolos keduanya untuk dihapus.
 - `--match REGEX` membatasi pada tag yang cocok dengan pola ini (regular expression, seperti `^v` untuk tag yang diawali v).
 
 ```text
@@ -229,7 +229,7 @@ keeps 12 tags:
 ## Batasan
 
 - Docker Hub dan GHCR tidak punya daftar semua repository: sebut satu.
-- `list` menampilkan paling banyak 1000 entri kecuali Anda menaikkan `--limit`.
+- `list` menampilkan paling banyak 1000 entri kecuali dinaikkan `--limit`.
 - `rm` dan dry run-nya memeriksa setiap tag repository, sampai 10000, untuk tag lain pada image yang sama.
 - `prune` membaca digest setiap tag (8 sekaligus), lalu setiap image sekali, dan berhenti dengan `TOO_MANY_TAGS` di atas 10000 tag (`--match` tidak mengangkatnya, karena setiap tag dibaca): hapus beberapa dulu dengan `registry rm`.
 - Registry dengan penghapusan dimatikan (`registry:2` tanpa `REGISTRY_STORAGE_DELETE_ENABLED=true`) menjawab `rm` dan `prune` dengan `REGISTRY_UNSUPPORTED`.
@@ -257,7 +257,7 @@ Opsi URL pada conn `registry://`:
 
 | Opsi URL | Fungsinya |
 |---|---|
-| (tidak ada) | HTTPS, sertifikat diperiksa terhadap CA komputer Anda |
+| (tidak ada) | HTTPS, sertifikat diperiksa terhadap CA komputer ini |
 | `?ca=secret:NAME` | HTTPS, sertifikat diperiksa terhadap CA itu ditambah sertifikat PEM di secret vault `NAME`: sebuah CA, atau sertifikat registry sendiri |
 | `?resolve=IP` | tersambung ke alamat IP ini sebagai ganti yang diberikan DNS untuk nama itu (seperti `curl --resolve`). `IP:PORT` mengatur port juga; tulis IPv6 dalam kurung siku: `[2001:db8::1]:443`. TLS tetap memakai nama di URL. Bisa dipakai bersama setiap opsi lain di tabel ini; lihat [Saat DNS menunjuk ke tempat lain](#when-dns-points-somewhere-else) |
 | `?tls=skip-verify` | HTTPS, tetapi sertifikat tidak diperiksa (seperti `insecure-registries` milik Docker). Siapa pun di jalur bisa berpura-pura menjadi registry; `komando doctor` memperingatkannya |

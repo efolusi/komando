@@ -2,7 +2,7 @@
 
 Seberapa jauh komando memenuhi standar keamanan internasional yang cocok untuk tool DevOps yang menyimpan kredensial dan dijalankan oleh agen AI. · [Keamanan](safety.md)
 
-Ini adalah penilaian mandiri, dicek terhadap kode dan test. Ini bukan sertifikat: sertifikat (ISO 27001, SOC 2) diberikan kepada sebuah organisasi atas cara kerjanya, dan komando hanya bisa memberi Anda kontrol untuk dipakai di sana.
+Ini adalah penilaian mandiri, dicek terhadap kode dan test. Ini bukan sertifikat: sertifikat (ISO 27001, SOC 2) diberikan kepada sebuah organisasi atas cara kerjanya, dan komando hanya bisa memberi kontrol untuk dipakai di sana.
 
 Kolom status berisi *terpenuhi*, *sebagian terpenuhi* (dengan celah yang disebutkan), atau *tugas Anda* (langkah yang hanya bisa Anda ambil).
 
@@ -46,7 +46,7 @@ make fuzz               # fuzz parser yang membaca teks tak tepercaya
 |---|---|---|
 | SP 800-63B Panjang passphrase | `doctor` memperingatkan di bawah 15 karakter | Sebagian terpenuhi: diperingatkan, tidak dipaksakan |
 | SP 800-132 Key derivation | scrypt dengan cost yang tersimpan; vault lama naik tingkat pada perubahan berikutnya | Terpenuhi |
-| SP 800-53 AC-6 Hak akses minimum | Agen AI membaca secara default dan butuh seseorang untuk yang lebih; SSH key perangkat lain hanya menjalankan komando, read-only bila Anda pilih (`ssh-gate`) | Terpenuhi. Tugas Anda: beri komando user SSH yang hanya memiliki apa yang dibutuhkannya |
+| SP 800-53 AC-6 Hak akses minimum | Agen AI membaca secara default dan butuh seseorang untuk yang lebih; SSH key perangkat lain hanya menjalankan komando, read-only bila dipilih (`ssh-gate`) | Terpenuhi. Tugas Anda: beri komando user SSH yang hanya memiliki apa yang dibutuhkannya |
 | SP 800-53 AU-2, AU-3, AU-9 Peristiwa audit, isi, perlindungan | Lihat ASVS 7 | Sebagian terpenuhi |
 | SP 800-53 SC-8 Kerahasiaan transmisi | Lihat ASVS 9 | Sebagian terpenuhi |
 | SP 800-53 SI-7 Integritas software | Checksum rilis dan provenance build yang ditandatangani | Terpenuhi |
@@ -54,7 +54,7 @@ make fuzz               # fuzz parser yang membaca teks tak tepercaya
 
 ## ISO/IEC 27001:2022 Annex A dan CIS Controls v8
 
-komando memberi Anda kontrol untuk standar ini; sertifikatnya adalah tentang organisasi Anda.
+komando memberi kontrol untuk standar ini; sertifikatnya adalah tentang organisasi.
 
 | Kontrol | Bagian komando |
 |---|---|
@@ -70,7 +70,7 @@ komando memberi Anda kontrol untuk standar ini; sertifikatnya adalah tentang org
 | Pemeriksaan | Status |
 |---|---|
 | Security-Policy (SECURITY.md, laporan privat) | Terpenuhi |
-| Token-Permissions (CI hanya membaca; rilis hanya menulis yang harus ditulis) | Terpenuhi |
+| Token-Permissions (CI hanya membaca; rilis hanya menulis yang perlu ditulis) | Terpenuhi |
 | Pinned-Dependencies (action di-pin ke commit, tool ke versi) | Terpenuhi |
 | Dependency-Update-Tool (Dependabot) | Terpenuhi |
 | SAST dan Vulnerabilities (staticcheck, govulncheck) | Terpenuhi |
@@ -84,5 +84,5 @@ Yang tidak dicakup komando:
 
 - Agen AI adalah user Anda sendiri. komando menghentikan kesalahan dan instruksi yang disisipkan; komando tidak bisa menghentikan program yang berjalan sebagai Anda dan berniat jahat. Isolasi sungguhan butuh sandbox OS atau akun user terpisah untuk agen.
 - Key vault tidak berada di hardware key (YubiKey, TPM); keychain OS adalah tempat terkuat untuk komando menyimpannya.
-- Jendela persetujuan hanya satu klik, kecuali Anda menyalakan kode persetujuan (`komando config approval-code`): dengan itu jendela juga butuh kode 6 digit dari aplikasi authenticator Anda.
+- Jendela persetujuan hanya satu klik, kecuali kode persetujuan dinyalakan (`komando config approval-code`): dengan itu jendela juga butuh kode 6 digit dari aplikasi authenticator.
 - Guard hanya berjalan di tempat harness agen memintanya. `komando guide install` memasangnya untuk Claude Code, Cursor, Gemini CLI (v0.26+), dan Codex (setujui sekali di `/hooks`). Guard diuji dengan input hook yang didokumentasikan masing-masing. Agen tanpa hook hanya mendapat jendela persetujuan dan penyamaran, dan itu hanya bila komando mengenalinya: Claude Code, Codex, Cursor, Gemini CLI, atau agen apa pun dengan `KOMANDO_AGENT=1`.

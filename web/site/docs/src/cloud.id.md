@@ -1,6 +1,6 @@
 # Login cloud
 
-komando berbicara ke AWS sendiri, tanpa aws CLI: komando memakai profil di `~/.aws/config` Anda, dan seseorang memperbarui login SSO dengan satu perintah.
+komando berbicara ke AWS sendiri, tanpa aws CLI: komando memakai profil di `~/.aws/config`, dan seseorang memperbarui login SSO dengan satu perintah.
 
 ## Login ke AWS IAM Identity Center (SSO)
 
@@ -12,7 +12,7 @@ komando conn add backups 's3://my-bucket/db?region=eu-west-1' --option aws_profi
 komando storage list backups                                       # memakai login itu sampai habis masa berlakunya
 ```
 
-komando menampilkan sebuah kode dan membuka halaman login AWS di browser Anda. Konfirmasikan kode yang sama di sana. Login disimpan di tempat aws CLI menyimpannya (`~/.aws/sso/cache`, hanya bisa dibaca Anda), sehingga komando, AWS SDK, dan aws CLI semuanya memakainya.
+komando menampilkan sebuah kode dan membuka halaman login AWS di browser. Konfirmasikan kode yang sama di sana. Login disimpan di tempat aws CLI menyimpannya (`~/.aws/sso/cache`, hanya bisa dibaca Anda), sehingga komando, AWS SDK, dan aws CLI semuanya memakainya.
 
 - Tanpa `--profile`, komando memakai `AWS_PROFILE`, kalau tidak ada maka `default`. komando tidak bertanya: profil yang lazim adalah jawabannya.
 - `komando login aws --profile prod --dry-run` memeriksa profil dan menampilkan halaman login-nya (`sso_start_url`) dan regionnya, tanpa login ke mana pun.
@@ -67,7 +67,7 @@ komando logout aws --all            # setiap login SSO dari profil Anda
 
 Login Google Cloud dan Azure belum tersedia. Yang bisa dipakai sebagai gantinya:
 
-- **Google Cloud**: application default credentials Anda (`GOOGLE_APPLICATION_CREDENTIALS`, atau file yang disimpan gcloud), atau key service account di vault:
+- **Google Cloud**: application default credentials (`GOOGLE_APPLICATION_CREDENTIALS`, atau file yang disimpan gcloud), atau key service account di vault:
 
   ```bash
   komando secret set gcs-key < key.json
@@ -86,7 +86,7 @@ Registry di Google Cloud dan Azure login dengan cara yang sama: lihat [Container
 Login cloud hanya dikirim ke alamat login milik cloud itu sendiri:
 
 - File login Google yang menyebut alamat (file workload atau workforce identity, `external_account`; service account yang di-impersonate) dipakai hanya bila alamat itu adalah layanan token milik Google (`https://sts.googleapis.com/v1/token`, `https://iamcredentials.googleapis.com/...`).
-- `AZURE_AUTHORITY_HOST` harus salah satu host login milik Azure.
+- `AZURE_AUTHORITY_HOST` wajib salah satu host login milik Azure.
 - Login gcloud dan login registry cloud tidak pernah dikirim ke conn yang memiliki CA sendiri (`?ca=`) atau `?resolve=`.
 
 Untuk perintah agen AI, lebih banyak hal yang dikunci, karena agen mengatur variabel di command line-nya sendiri:
