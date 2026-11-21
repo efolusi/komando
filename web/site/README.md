@@ -34,7 +34,9 @@ A Meridian upgrade is a version bump in `package.json` and `pnpm-workspace.yaml`
 The docs home and the side navigation group the pages in the same order, in both languages (plan: brainOS `komando/2026-11-21-docs-grouping-plan.md`):
 
 - **Command line:** the sections in `sections` in `scripts/docsgen/main.go` (Start here, What komando manages, Safety and secrets, Reference). A page in no section stops the build, so a new feature page is placed on purpose. The section names are translated in `i18n/docs.id.json`.
-- **Apps:** the user guide (`/guide/`, URLs unchanged), shown on the docs home and in the side navigation under "Apps".
+- **Apps:** the user guide (`/guide/`, URLs unchanged), shown on the docs home and in the side navigation under "Apps". The guide home is the Apps landing: it names the apps, says they are not out yet, and points to four pages (`START` in `guide/build.py`). It has no download link and no date.
+- **Breadcrumbs:** `Docs > Apps > Page` on every guide page (`Docs > Apps` on the landing) and `Docs > Group > Page` on every docs page except the docs home. One `nav` with an ordered list, the last item `aria-current="page"`; `breadcrumb` in `guide/build.py` and in `scripts/docsgen/main.go`, styled by `.g-crumbs` in `guide/guide.css`. The label is translated ("Breadcrumb", "Jejak navigasi").
+- **Agent skill:** `docs/src/agent-skill.md` and `.id.md`, in the Reference section after `settings`. Written only from the `docs/features` pages at the commit the docs name (`install`, `safety`, `settings`, `security-standards`, `output`); the English feature pages cannot link to it, so the docs home lead and `getting-started` do.
 - **Cloud plan:** `docs/src/cloud-plan.md` and `.id.md`. The plan is not live: the page says so and names no price or date. Write the real pages at private beta.
 
 ## Languages

@@ -11,7 +11,7 @@ decided yet, so the pages link to each other with relative links; prefix these p
 
 | Path | Page | Source |
 |---|---|---|
-| `/guide/` | The guide's index | made by `build.py` |
+| `/guide/` | The Apps landing and the guide's index | made by `build.py` |
 | `/guide/first-ten-minutes/` | Your first ten minutes | `src/first-ten-minutes.md` |
 | `/guide/add-a-host/` | Add a server | `src/add-a-host.md` |
 | `/guide/log-in/` | Log in with a key or a password | `src/log-in.md` |

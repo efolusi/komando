@@ -134,3 +134,82 @@ test('a missing data-theme is not treated as light anywhere in the site scripts 
     assert.ok(!/hasAttribute\(\s*['"]data-theme/.test(text) && !/:not\(\[data-theme/.test(text), `${f} reads a missing data-theme as light`);
   }
 });
+
+test('the docs home lists the agent skill page in Reference, after Settings and before the Glossary, in both languages', () => {
+  for (const rel of ['docs/index.html', 'id/docs/index.html']) {
+    const html = pages.find((p) => p.rel === rel).html;
+    const section = /<section class="g-group" id="reference">(.*?)<\/section>/s.exec(html);
+    assert.ok(section, `${rel} has no Reference group`);
+    const slugs = [...section[1].matchAll(/<a class="g-card" href="([^"]+)\/">/g)].map((m) => m[1]);
+    const at = slugs.indexOf('agent-skill');
+    assert.ok(at > 0, `${rel}: agent-skill is not in Reference`);
+    assert.equal(slugs[at - 1], 'settings', rel);
+    assert.equal(slugs[at + 1], 'glossary', rel);
+  }
+});
+
+test('the docs home lead and Getting started link the agent skill page, because the pinned install page cannot', () => {
+  for (const rel of ['docs/index.html', 'id/docs/index.html', 'docs/getting-started/index.html', 'id/docs/getting-started/index.html']) {
+    const html = pages.find((p) => p.rel === rel).html;
+    const link = rel.endsWith('getting-started/index.html') ? '../agent-skill/' : 'agent-skill/';
+    assert.ok(html.includes(`<a href="${link}">`), `${rel} does not link the agent skill page`);
+  }
+  const install = pages.find((p) => p.rel === 'docs/install/index.html').html;
+  assert.ok(!/<div class="g-body">.*href="\.\.\/agent-skill\/".*<\/div><nav class="g-pager"/s.test(install), 'the install page text links agent-skill: its English source is pinned and must not change');
+});
+
+// Breadcrumbs: "Docs > Apps > Page" on the guide, "Docs > Group > Page" on the docs; the docs home and the home page have none.
+const decode = (s) => s.replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#34;|&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+const crumbNavs = (html) => [...html.matchAll(/<nav class="g-crumbs"[^>]*>.*?<\/nav>/gs)].map((m) => m[0]);
+const trailPages = pages.filter((p) => /^(id\/)?(guide|docs)\//.test(p.rel) && p.rel !== 'docs/index.html' && p.rel !== 'id/docs/index.html');
+
+test('every guide and docs page has one breadcrumb nav, named in its language, with an ordered list', () => {
+  assert.ok(trailPages.length > 100, `only ${trailPages.length} pages walked`);
+  for (const p of trailPages) {
+    const navs = crumbNavs(p.html);
+    assert.equal(navs.length, 1, `${p.rel}: ${navs.length} breadcrumb navs`);
+    assert.ok(navs[0].includes(`aria-label="${p.id ? 'Jejak navigasi' : 'Breadcrumb'}"`), `${p.rel}: label`);
+    assert.match(navs[0], /^<nav [^>]*><ol>.*<\/ol><\/nav>$/s, `${p.rel}: not an ol in a nav`);
+  }
+});
+
+test('the last breadcrumb item is the page itself, as text with aria-current, and the others are links', () => {
+  for (const p of trailPages) {
+    const items = [...crumbNavs(p.html)[0].matchAll(/<li( aria-current="page")?>(.*?)<\/li>/gs)];
+    assert.ok(items.length >= 2, `${p.rel}: ${items.length} items`);
+    items.forEach((m, i) => {
+      const last = i === items.length - 1;
+      assert.equal(Boolean(m[1]), last, `${p.rel}: aria-current on item ${i + 1} of ${items.length}`);
+      assert.equal(/^<a href="[^"]+">[^<]+<\/a>$/.test(m[2]), !last, `${p.rel}: item ${i + 1} ${last ? 'must be text' : 'must be a link'}`);
+    });
+    const h1 = decode(/<h1[^>]*>(.*?)<\/h1>/s.exec(p.html)[1]);
+    // the Apps landing is "Apps" in the trail and "Komando apps" as its h1
+    const current = p.english === 'guide/index.html' ? (p.id ? 'Aplikasi' : 'Apps') : h1;
+    assert.equal(decode(items.at(-1)[2]), current, `${p.rel}: the current item is not the page`);
+  }
+});
+
+test('the trail is as deep as the page: guide home 2, a guide page 3, a docs page 3, and the first item is the docs home', () => {
+  for (const p of trailPages) {
+    const hrefs = [...crumbNavs(p.html)[0].matchAll(/<li><a href="([^"]+)">/g)].map((m) => m[1]);
+    const total = hrefs.length + 1;
+    const guideHome = p.english === 'guide/index.html';
+    assert.equal(total, guideHome ? 2 : 3, `${p.rel}: ${total} items`);
+    assert.ok(exists(p, hrefs[0]) && resolve(dirname(p.path), hrefs[0]) === join(SITE, p.id ? 'id/docs' : 'docs'), `${p.rel}: the first item is not the docs home`);
+    if (p.english.startsWith('guide/') && !guideHome) {
+      assert.equal(resolve(dirname(p.path), hrefs[1]), dirname(join(SITE, p.id ? 'id' : '', 'guide', 'x', 'index.html')).replace(/\/x$/, ''), `${p.rel}: the second item is not the Apps landing`);
+    }
+    if (p.english.startsWith('docs/')) {
+      const [file, frag] = hrefs[1].split('#');
+      const home = pages.find((x) => x.rel === (p.id ? 'id/docs/index.html' : 'docs/index.html'));
+      assert.equal(resolve(dirname(p.path), file), dirname(home.path), `${p.rel}: the group links to the docs home`);
+      assert.ok(home.html.includes(`<section class="g-group" id="${frag}">`), `${p.rel}: the group anchor #${frag} is not on the docs home`);
+    }
+  }
+});
+
+test('the home pages and the docs home have no breadcrumb', () => {
+  for (const rel of ['index.html', 'id/index.html', 'docs/index.html', 'id/docs/index.html']) {
+    assert.equal(crumbNavs(pages.find((p) => p.rel === rel).html).length, 0, rel);
+  }
+});

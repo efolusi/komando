@@ -21,8 +21,15 @@
 .g-side__home { margin-bottom: var(--space-4); }
 
 .g-article { max-width: 720px; min-width: 0; }
-.g-crumb { margin-bottom: var(--space-3); }
-.g-crumb a, .g-status a, .g-path a { color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px; }
+/* breadcrumb: Docs > Apps > Page, a list that wraps on a narrow screen; the last step is the page and not a link */
+.g-crumbs { margin-bottom: var(--space-3); font-size: var(--text-sm); color: var(--text-secondary); }
+.g-crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-2); margin: 0; padding: 0; list-style: none; }
+.g-crumbs li { min-width: 0; overflow-wrap: anywhere; }
+.g-crumbs li:not(:last-child)::after { content: "\203A"; content: "\203A" / ""; margin-left: var(--space-2); }
+.g-crumbs a { display: inline-block; padding-block: var(--space-1); color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px; }
+.g-crumbs a:hover { text-decoration-thickness: 2px; }
+.g-crumbs [aria-current="page"] { padding-block: var(--space-1); color: var(--text-primary); font-weight: var(--weight-medium); }
+.g-status a, .g-path a { color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px; }
 .g-article h1 { font-size: clamp(var(--text-4xl), 2vw + 1.4rem, var(--text-5xl)); line-height: var(--leading-tight); margin-bottom: var(--space-4); }
 .g-lead { font-size: var(--text-lg); line-height: var(--leading-relaxed); color: var(--text-secondary); max-width: 60ch; margin-bottom: var(--space-5); }
 .g-status { font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: var(--space-5); }
@@ -73,6 +80,7 @@ a.g-pill:hover { border-color: currentColor; }
 /* the guide's and the docs' index */
 .g-article--index { max-width: 960px; }
 .g-intro { margin-bottom: var(--space-8); max-width: 64ch; display: grid; gap: var(--space-4); line-height: var(--leading-relaxed); }
+.g-intro > .g-status { margin-bottom: 0; }
 .g-group + .g-group { margin-top: var(--space-10); }
 .g-group h2 { font-size: var(--text-2xl); margin-bottom: var(--space-4); }
 .g-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-3); }

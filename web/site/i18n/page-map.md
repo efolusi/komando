@@ -1,15 +1,15 @@
 # Page map
 
-The site has 56 pages (counted 2026-11-21: home 1, guide 25, docs 30). Every page has an Indonesian twin under `/id/` (56 pages in all). Paths keep the English slugs, so a switch between languages is one prefix.
+The site has 57 pages (counted 2026-11-21: home 1, guide 25, docs 31). Every page has an Indonesian twin under `/id/` (57 pages in all). Paths keep the English slugs, so a switch between languages is one prefix.
 
 | Page | English | Indonesian | Built by | Source |
 |---|---|---|---|---|
 | Home | `/` | `/id/` | `build.mjs` | `content/home.en.mjs`, `content/home.id.mjs` (from `i18n/home.id.md`) |
-| User guide home | `/guide/` | `/id/guide/` | `guide/build.py` | `PAGES` in `guide/build.py`, `i18n/guide.id.json` |
+| User guide home (the Apps landing) | `/guide/` | `/id/guide/` | `guide/build.py` | `PAGES` in `guide/build.py`, `i18n/guide.id.json` |
 | User guide pages (24) | `/guide/<slug>/` | `/id/guide/<slug>/` | `guide/build.py` | `guide/src/<slug>.md`, `guide/src/<slug>.id.md` (the "What is coming" page: `COMING` in `guide/build.py`, `i18n/guide.id.json`) |
 | Docs home | `/docs/` | `/id/docs/` | `scripts/docsgen` | komando `docs/features/README.md`, `i18n/docs.id.json` (the Indonesian home lists the pages that have a twin) |
 | Docs feature pages (26) | `/docs/<slug>/` | `/id/docs/<slug>/` | `scripts/docsgen` | komando `docs/features/<slug>.md`, Indonesian twin in `docs/src/<slug>.id.md` |
-| Docs site pages (3) | `/docs/getting-started/`, `/docs/switch-from-termius/`, `/docs/cloud-plan/` | `/id/docs/getting-started/`, `/id/docs/switch-from-termius/`, `/id/docs/cloud-plan/` | `scripts/docsgen` | `docs/src/<slug>.md`, `docs/src/<slug>.id.md` |
+| Docs site pages (4) | `/docs/getting-started/`, `/docs/switch-from-termius/`, `/docs/cloud-plan/`, `/docs/agent-skill/` | `/id/docs/getting-started/`, `/id/docs/switch-from-termius/`, `/id/docs/cloud-plan/`, `/id/docs/agent-skill/` | `scripts/docsgen` | `docs/src/<slug>.md`, `docs/src/<slug>.id.md` |
 | 404 | (Worker default) | (Worker default) | none yet | add one page per language with W01 |
 
 Rules for the build:

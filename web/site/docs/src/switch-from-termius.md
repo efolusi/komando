@@ -53,7 +53,7 @@ Typed alone at your terminal, most of these ask for what is missing, one line at
 ## What works differently
 
 - **It is a command line.** Every task is a command you can type, put in a script, or hand to an AI agent. Free Komando apps for Mac, iPhone and iPad that run these same commands come next; the [user guide](site:guide/) describes them.
-- **AI agents use it safely.** Passwords stay in komando's vault, and an agent never sees them. Connect yours with `komando guide install` ([Getting started](getting-started.md#5-connect-your-ai-agent)).
+- **AI agents use it safely.** Passwords stay in komando's vault, and an agent never gets them from it. Connect yours with `komando guide install` ([Getting started](getting-started.md#5-connect-your-ai-agent)).
 - **Production asks first.** Mark a server with `komando host edit web1 --protected`, and every change on it needs a yes ([Safety](safety.md)).
 - **More than servers.** The same list holds databases, caches, queues, storage, clusters and VPNs.
 - **A record of everything.** `komando audit` shows what was done, and by whom.
