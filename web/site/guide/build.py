@@ -156,6 +156,7 @@ COMING = {
 }
 
 SLUGS = [p[1] for p in PAGES]
+START = ["first-ten-minutes", "updates", "iphone-and-ipad", "coming"]   # what the Apps landing points to first
 BUTTON_NAMES = "The app's own button names are in {bold}."
 
 
@@ -422,6 +423,21 @@ def foot(slug, lang):
     return shell("footer", root, lang, switch) + "\n</body>\n</html>\n"
 
 
+def breadcrumb(trail, lang):
+    """Docs > Apps > Page as a labelled nav with an ordered list; the step with no address is the page itself."""
+    items = "".join(
+        f'<li aria-current="page">{html.escape(text)}</li>' if href is None
+        else f'<li><a href="{html.escape(href)}">{html.escape(text)}</a></li>'
+        for text, href in trail)
+    return f'<nav class="g-crumbs" aria-label="{lang.ui("Breadcrumb")}"><ol>{items}</ol></nav>'
+
+
+def trail_head(slug, lang):
+    """The first two steps of every guide trail: the docs home, then the Apps landing (this guide's home)."""
+    docs_home = rel_root(slug, lang) + lang.base + "docs/"
+    return [(lang.ui("Docs"), docs_home), (lang.ui("Apps"), "../" if slug else None)]
+
+
 def sidebar(current, lang):
     up = "" if current is None else "../"
     parts, group = [], None
@@ -517,7 +533,7 @@ def build_language(lang, english_ids):
     pages["coming"] = cp
 
     guide_title = lang.ui("Komando guide")
-    for group, slug, title, summary in PAGES:
+    for _, slug, _, _ in PAGES:
         body, headings = bodies[slug]
         page = pages[slug]
         title, summary = lang.title(slug), lang.summary(slug)
@@ -528,7 +544,7 @@ def build_language(lang, english_ids):
                      f'<a href="../coming/">{lang.ui("What is coming")}</a></p>')
         doc = (head(f"{title} · {guide_title}", summary, slug, lang)
                + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(slug, lang)}'
-               + f'<article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">{lang.ui("Guide")}</a> · {html.escape(lang.group(group))}</p>'
+               + f'<article class="g-article">{breadcrumb(trail_head(slug, lang) + [(title, None)], lang)}'
                + f'<h1>{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{unreleased("../../" + ("../" if lang.code == "id" else ""), lang)}{badge}{toc(headings, lang)}'
                + f'<div class="g-body">{body}</div>{prev_next(slug, lang)}'
                + f'<p class="g-path g-small g-muted">{lang.ui("Help link for this page")}: <code>/{lang.base}guide/{slug}/</code></p>'
@@ -550,18 +566,19 @@ def build_language(lang, english_ids):
                      f'<span class="g-small g-muted">{html.escape(lang.summary(slug))}</span></a>')
     cards.append("</div></section>")
     bold = f"<b>{lang.ui('bold')}</b>"
-    intro = (unreleased("../" + ("../" if lang.code == "id" else ""), lang)
-             + f"<p>{lang.ui('How to use Komando, the free app for Mac, iPhone and iPad that runs the komando command line for you.')} "
-             f"{lang.ui('One page per thing you do.')} {lang.ui('New to Komando? Start with')} "
-             f'<a href="first-ten-minutes/">{html.escape(lang.title("first-ten-minutes"))}</a>.</p>'
+    begin = "".join(f'<li><a href="{slug}/">{html.escape(lang.title(slug))}</a>. {html.escape(lang.summary(slug))}</li>'
+                    for slug in START)
+    intro = (f"<p>{lang.ui('Komando runs the komando command line for you, as a free app: Komando for Mac, and Komando for iPhone and iPad.')}</p>"
+             + unreleased("../" + ("../" if lang.code == "id" else ""), lang)
+             + f'<p>{lang.ui("Where to begin:")}</p><ul class="g-list g-list--ul">{begin}</ul>'
              f"<p>{lang.ui(BUTTON_NAMES).replace('{bold}', bold)} "
              f"{lang.ui('Commands, addresses and file paths are in {mono}.').replace('{mono}', '<code>mono</code>')} "
              f"{lang.ui('A {pill} pill marks a part that is not built yet;').replace('{pill}', pill(lang))} "
              f'<a href="coming/">{lang.ui("What is coming")}</a> {lang.ui("lists them all.")}</p>')
-    index_title = lang.ui("Komando user guide")
-    doc = (head(index_title, lang.ui("How to use Komando for Mac, iPhone and iPad, one page per task."), None, lang)
+    index_title = lang.ui("Komando apps")
+    doc = (head(index_title, lang.ui("Komando for Mac, iPhone and iPad runs the komando command line for you. The apps are not out yet; this guide describes them."), None, lang)
            + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(None, lang)}'
-           + f'<article class="g-article g-article--index"><h1>{index_title}</h1><div class="g-body g-intro">{intro}</div>'
+           + f'<article class="g-article g-article--index">{breadcrumb(trail_head(None, lang), lang)}<h1>{index_title}</h1><div class="g-body g-intro">{intro}</div>'
            + "".join(cards)
            + f'<p class="g-path g-small g-muted">{lang.ui("Help link for this page")}: <code>/{lang.base}guide/</code></p></article></div></main>\n'
            + foot(None, lang))

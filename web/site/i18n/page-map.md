@@ -5,7 +5,7 @@ The site has 57 pages (counted 2026-11-21: home 1, guide 25, docs 31). Every pag
 | Page | English | Indonesian | Built by | Source |
 |---|---|---|---|---|
 | Home | `/` | `/id/` | `build.mjs` | `content/home.en.mjs`, `content/home.id.mjs` (from `i18n/home.id.md`) |
-| User guide home | `/guide/` | `/id/guide/` | `guide/build.py` | `PAGES` in `guide/build.py`, `i18n/guide.id.json` |
+| User guide home (the Apps landing) | `/guide/` | `/id/guide/` | `guide/build.py` | `PAGES` in `guide/build.py`, `i18n/guide.id.json` |
 | User guide pages (24) | `/guide/<slug>/` | `/id/guide/<slug>/` | `guide/build.py` | `guide/src/<slug>.md`, `guide/src/<slug>.id.md` (the "What is coming" page: `COMING` in `guide/build.py`, `i18n/guide.id.json`) |
 | Docs home | `/docs/` | `/id/docs/` | `scripts/docsgen` | komando `docs/features/README.md`, `i18n/docs.id.json` (the Indonesian home lists the pages that have a twin) |
 | Docs feature pages (26) | `/docs/<slug>/` | `/id/docs/<slug>/` | `scripts/docsgen` | komando `docs/features/<slug>.md`, Indonesian twin in `docs/src/<slug>.id.md` |

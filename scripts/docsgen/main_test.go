@@ -209,3 +209,26 @@ func TestAgentSkillIsASitePageInTheReferenceSectionBetweenSettingsAndGlossary(t 
 		t.Fatalf("agent-skill is at %d, settings at %d, glossary at %d: want it right after settings and before glossary", at, settings, glossary)
 	}
 }
+
+func TestBreadcrumbIsOneNavWithAnOrderedListAndTheLastItemCurrent(t *testing.T) {
+	en := &lang{code: "en"}
+	got := breadcrumb(en, []crumb{{"Docs", "../"}, {"Reference", "../#reference"}, {"Agent skill", ""}})
+	want := `<nav class="g-crumbs" aria-label="Breadcrumb"><ol>` +
+		`<li><a href="../">Docs</a></li>` +
+		`<li><a href="../#reference">Reference</a></li>` +
+		`<li aria-current="page">Agent skill</li></ol></nav>`
+	if got != want {
+		t.Fatalf("breadcrumb =\n%s\nwant\n%s", got, want)
+	}
+	if n := strings.Count(got, "<nav"); n != 1 {
+		t.Fatalf("%d nav elements, want 1", n)
+	}
+}
+
+func TestBreadcrumbEscapesTheTitleAndNamesItselfInTheLanguage(t *testing.T) {
+	id := &lang{code: "id", base: "id/", words: &words{UI: map[string]string{"Breadcrumb": "Jejak navigasi"}}}
+	got := breadcrumb(id, []crumb{{"Dokumentasi", "../"}, {"A <b> & C", ""}})
+	if !strings.Contains(got, `aria-label="Jejak navigasi"`) || !strings.Contains(got, `<li aria-current="page">A &lt;b&gt; &amp; C</li>`) {
+		t.Fatalf("breadcrumb = %s", got)
+	}
+}

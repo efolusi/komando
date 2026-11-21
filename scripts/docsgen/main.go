@@ -264,7 +264,8 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 		var b strings.Builder
 		b.WriteString(head(p.title+" · "+l.ui("komando docs"), p.lead, path, l, l.code == "id" || twin[p.slug]))
 		fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, p.slug))
-		fmt.Fprintf(&b, `<article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">%s</a> · %s</p>`, esc(l.ui("Docs")), esc(l.group(p.group)))
+		trail := []crumb{{l.ui("Docs"), "../"}, {l.group(p.group), "../#" + anchor(p.group)}, {p.title, ""}}
+		fmt.Fprintf(&b, `<article class="g-article">%s`, breadcrumb(l, trail))
 		fmt.Fprintf(&b, `<h1>%s</h1><p class="g-lead">%s</p>%s`, inline(p.title, p.slug, own, l), inline(p.lead, p.slug, own, l), toc(l, heads))
 		fmt.Fprintf(&b, `<div class="g-body">%s</div>%s`, body, pager(l, pages, i))
 		fmt.Fprintf(&b, `<p class="g-path g-small g-muted">%s</p></article></div></main>`+"\n", source(l, p, ref))
@@ -846,6 +847,25 @@ func sidebar(l *lang, pages []*page, current string) string {
 	}
 	return fmt.Sprintf(`<nav class="g-side" aria-label="%s"><details class="g-side__fold" open><summary>%s</summary>`+
 		`<p class="g-side__home"><a href="%s"%s>%s</a></p>%s</details></nav>`, esc(l.ui("Docs")), esc(l.ui("All docs pages")), home, homeCur, esc(l.ui("Docs home")), b.String())
+}
+
+// crumb is one step of a breadcrumb trail; an empty href marks the page itself.
+type crumb struct{ text, href string }
+
+// breadcrumb draws the trail "Docs > Group > Page" as a labelled nav with an ordered list. The last step is the
+// current page: it is text, not a link, and carries aria-current.
+func breadcrumb(l *lang, trail []crumb) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, `<nav class="g-crumbs" aria-label="%s"><ol>`, esc(l.ui("Breadcrumb")))
+	for _, c := range trail {
+		if c.href == "" {
+			fmt.Fprintf(&b, `<li aria-current="page">%s</li>`, esc(c.text))
+		} else {
+			fmt.Fprintf(&b, `<li><a href="%s">%s</a></li>`, esc(c.href), esc(c.text))
+		}
+	}
+	b.WriteString("</ol></nav>")
+	return b.String()
 }
 
 func toc(l *lang, heads []heading) string {
