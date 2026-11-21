@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Cache · Dokumentasi komando</title>
+<meta name="description" content="Baca dan ubah key di cache yang kompatibel dengan Redis (Redis, Valkey, KeyDB, Dragonfly) dan memcached dengan aman.">
+<link rel="canonical" href="https://komando.efolusi.com/id/docs/caches/">
+<link rel="alternate" hreflang="en" href="https://komando.efolusi.com/docs/caches/">
+<link rel="alternate" hreflang="id" href="https://komando.efolusi.com/id/docs/caches/">
+<link rel="alternate" hreflang="x-default" href="https://komando.efolusi.com/docs/caches/">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<meta property="og:image" content="https://komando.efolusi.com/share.jpg">
+<meta name="color-scheme" content="light dark">
+<script src="../../../assets/meridian/browser/theme-init.js"></script>
+<link rel="preload" href="../../../assets/meridian/assets/fonts/Figtree-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../assets/meridian/styles.css">
+<link rel="stylesheet" href="../../../assets/meridian/landing.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+<link rel="stylesheet" href="../../../guide/guide.css">
+<link rel="stylesheet" href="../../../docs/docs.css">
+<!-- built by scripts/docsgen from komando's docs/features and docs/src/; edit the source, not this file -->
+</head>
+<body>
+<a href="#top" class="ef-skip">Langsung ke konten</a><header data-slot="site-header" class="ef-site-header"><div class="ef-site-header__inner"><a class="ef-site-header__brand" href="../../../id/index.html" aria-label="Beranda Komando"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><nav class="ef-site-header__nav" aria-label="Utama"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a></nav><div class="ef-site-header__actions"><a class="ef-site-header__link" href="../../../docs/caches/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><button type="button" data-slot="theme-toggle" class="ef-theme-toggle" data-preference="system" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span data-theme-icon="light" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span><span data-theme-icon="system" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../../id/index.html#install">Instal komando</a></div><button type="button" class="ef-site-header__menu" aria-expanded="false" aria-controls="site-menu" aria-label="Menu"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></button></div><div id="site-menu" class="ef-site-header__panel"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a><a class="ef-site-header__link" href="../../../docs/caches/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><div class="ef-site-header__panel-actions"><button type="button" data-slot="theme-toggle" class="ef-theme-toggle" data-preference="system" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span data-theme-icon="light" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span><span data-theme-icon="system" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+  <line x1="8" x2="16" y1="21" y2="21"></line>
+  <line x1="12" x2="12" y1="17" y2="21"></line>
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../../id/index.html#install">Instal komando</a></div></div></header>
+<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid"><nav class="g-side" aria-label="Dokumentasi"><details class="g-side__fold" open><summary>Semua halaman dokumentasi</summary><p class="g-side__home"><a href="../">Beranda dokumentasi</a></p><p class="g-label g-side__group">Mulai di sini</p><ul><li><a href="../getting-started/">Mulai</a></li><li><a href="../switch-from-termius/">Pindah dari Termius</a></li></ul><p class="g-label g-side__group">Fitur</p><ul><li><a href="../install/">Instal, update, hapus</a></li><li><a href="../servers/">Server</a></li><li><a href="../secrets/">Secret</a></li><li><a href="../windows/">Server Windows</a></li><li><a href="../import/">Pindah ke komando dan pindah komputer</a></li><li><a href="../targets/">Target</a></li><li><a href="../commands/">Menjalankan perintah</a></li><li><a href="../health/">Pemeriksaan kesehatan dan jaringan</a></li><li><a href="../files/">File</a></li><li><a href="../system/">Service, log, Docker, package, user</a></li><li><a href="../tunnels/">Server privat dan tunnel</a></li><li><a href="../vpn/">VPN</a></li><li><a href="../databases/">Database</a></li><li><a href="../caches/" aria-current="page">Cache</a></li><li><a href="../queues/">Queue</a></li><li><a href="../storage/">Storage: bucket dan file server</a></li><li><a href="../cluster/">Cluster (Kubernetes dan Docker Swarm)</a></li><li><a href="../cloud/">Login cloud</a></li><li><a href="../registry/">Container registry</a></li><li><a href="../rotate/">Rotasi key dan kata sandi, dan saat seseorang pergi</a></li><li><a href="../safety/">Keamanan</a></li><li><a href="../security-standards/">Standar keamanan</a></li><li><a href="../output/">Hasil dan error</a></li><li><a href="../error-codes/">Kode error</a></li><li><a href="../settings/">Pengaturan dan file</a></li><li><a href="../glossary/">Glosarium</a></li></ul><p class="g-side__home"><a href="../../../docs/" hreflang="en" lang="en">semua halaman dokumentasi (bahasa Inggris)</a></p></details></nav><article class="g-article"><p class="g-crumb g-small g-muted"><a href="../">Dokumentasi</a> · Fitur</p><h1>Cache</h1><p class="g-lead">Baca dan ubah key di cache yang kompatibel dengan Redis (Redis, Valkey, KeyDB, Dragonfly) dan memcached dengan aman.</p><nav class="g-toc" aria-label="Di halaman ini"><p class="g-label g-muted">Di halaman ini</p><ul><li><a href="#add-a-cache">Menambah cache</a></li><li><a href="#look-at-data">Melihat data</a></li><li><a href="#change-data">Mengubah data</a></li><li><a href="#any-other-redis-command">Perintah Redis lainnya</a></li><li><a href="#check-change-rename-or-remove-a-cache">Memeriksa, mengubah, mengganti nama, atau menghapus cache</a></li><li><a href="#memcached">memcached</a></li><li><a href="#limits">Batasan</a></li><li><a href="#troubleshooting">Pemecahan masalah</a></li><li><a href="#reference">Referensi</a></li></ul></nav><div class="g-body"><h2 id="add-a-cache">Menambah cache</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache add prod-redis redis://default@10.0.0.7:6379/0 --via web1 --ask-password
+komando test prod-redis                       # bisakah komando menjangkaunya dan login?</code></pre>
+<p>Jika diketik tanpa argumen, <code>komando cache add</code> menanyakan setiap bagian selangkah demi selangkah.</p>
+<p>URL-nya <code>redis://USER@HOST:PORT/DB</code>; pakai <code>rediss://</code> untuk TLS. Kata sandi masuk ke vault, tidak pernah ke URL: <code>--ask-password</code> menanyakannya (disembunyikan), atau simpan dulu lalu rujuk:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando secret set prod-redis-pass            # tiap kata sandi sekali, diketik tersembunyi
+komando cache add prod-redis redis://default@10.0.0.7:6379/0 --via web1 --password-ref secret:prod-redis-pass</code></pre>
+<p><code>--via</code> menjangkau cache lewat bastion atau VPN, seperti conn lainnya (lihat <a href="../tunnels/">Tunnel</a> dan <a href="../vpn/">VPN</a>).</p>
+<p>Di terminal, perintah yang tidak menyebut cache atau key akan menanyakan hanya bagian itu, dengan daftar cache Anda untuk dipilih, lalu menampilkan perintah lengkapnya. Jika diketik tanpa argumen, <code>komando cache get</code> menanyakan cache mana, lalu key-nya. Agen AI, script, atau pipe tidak pernah mendapat pertanyaan: perintah yang sama berhenti dengan <code>USAGE</code> (exit 2) dan hint berisi contoh (<code>komando cache get prod-redis session:42</code>).</p>
+<h3 id="encryption-tls">Enkripsi (TLS)</h3>
+<p><code>redis://</code> langsung lewat jaringan (tanpa <code>--via</code>, bukan ke komputer ini) mengirim kata sandi dan data tanpa enkripsi, jadi <code>cache add</code> (dan <code>conn edit --url</code>) menolaknya dengan <code>INSECURE_PROTOCOL</code>: pakai <code>rediss://</code> atau <code>--via</code>, atau tambahkan <code>?insecure=1</code> untuk menerima bahwa lalu lintasnya bisa dibaca di jalan (untuk agen AI butuh jawaban ya dari seseorang). Hal yang sama berlaku untuk <code>memcached://</code>. Conn seperti itu yang sudah ada di daftar Anda tetap berfungsi; <code>komando doctor</code> memperingatkannya dan mencetak baris yang mengubahnya.</p>
+<p><code>rediss://</code> dan <code>memcacheds://</code> memeriksa sertifikat server terhadap CA tepercaya di komputer Anda, atau terhadap CA Anda sendiri dengan <code>?ca=secret:NAME</code> (CA privat, atau milik cloud):</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando secret set prod-redis-ca &lt; ca.pem
+komando cache add prod-redis &#39;rediss://default@cache.internal:6380/1?ca=secret:prod-redis-ca&#39; --password-ref secret:prod-redis-pass</code></pre>
+<h3 id="redis-cluster-and-sentinel">Redis Cluster dan Sentinel</h3>
+<p>Tambahkan Redis Cluster (atau cluster Valkey, atau ElastiCache dan MemoryDB dalam mode cluster) lewat alamat satu node dengan <code>?cluster=1</code>: komando menemukan node lainnya dari sana. Di balik Sentinel, tambahkan alamat satu Sentinel dengan <code>?sentinel=</code> dan nama master: komando menanyakan ke Sentinel di mana master sekarang, sehingga failover tidak butuh perubahan.</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache add sessions &#39;rediss://default@clustercfg.sessions.abc123.cache.amazonaws.com:6379?cluster=1&#39; --password-ref secret:sessions-pass
+komando cache add jobs-redis &#39;redis://default@sentinel1:26379/0?sentinel=mymaster&amp;sentinels=sentinel2,sentinel3&#39; --via web1 --password-ref secret:jobs-redis-pass</code></pre>
+<ul class="g-list g-list--ul"><li>Di Cluster, <code>cache keys</code> memindai setiap master dan <code>cache info</code> menjumlahkan memori, klien, dan key dari semuanya, beserta status cluster (<code>cluster_state</code>, <code>masters</code>). Perintah untuk satu key menuju node yang menyimpannya, dan <code>cache rm</code> menghapus key dari slot berbeda satu per satu. <code>cache run -- DBSIZE</code> menjumlahkan setiap master.</li><li>Sentinel mendengarkan di 26379 bila URL tidak menyebut port. Sentinel tambahan ditulis di <code>sentinels=HOST[:PORT],...</code>. Kata sandinya untuk Redis; bila Sentinel juga memintanya, tambahkan <code>&amp;sentinel_auth=same</code>.</li><li>Lewat <code>--via</code>, setiap node dan Sentinel dijangkau lewat bastion atau VPN yang sama, dengan TLS untuk <code>rediss://</code>.</li></ul>
+<p>Apa yang tidak bisa dilakukan Cluster ada di bawah <a href="#limits">Batasan</a>.</p>
+<h2 id="look-at-data">Melihat data</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache get prod-redis session:42       # tipe apa pun: string, hash, list, set, sorted set</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>key:   session:42
+type:  string
+ttl:   1740s
+size:  9 bytes
+value: logged-in</code></pre>
+<p>Perintah ini hanya membaca:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache info prod-redis                 # ringkasan
+komando cache info prod-redis memory          # satu bagian INFO mentah
+komando cache info prod-redis --all           # setiap field dari bagian INFO default
+komando cache keys prod-redis &#39;session:*&#39;     # key yang cocok dengan pola (sampai 100; --limit 1000)
+komando cache get prod-redis leaderboard --limit 10   # paling banyak 10 item dari hash atau list besar</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>version:   7.2.4 (standalone)
+role:      master
+uptime:    12d
+memory:    1.2 GiB used of 4.0 GiB (eviction: allkeys-lru)
+clients:   37
+keys db0:  48210 (31002 with a ttl)
+hit rate:  94.1% (1830211 hits, 114502 misses)
+(all fields: --all, or a section such as memory or stats)</code></pre>
+<p><code>cache keys</code> memakai <code>SCAN</code>, jadi aman di cache besar. Jangan pernah memakai <code>KEYS</code>. Setiap key menampilkan tipe dan time to live-nya, tidak pernah nilainya:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>KEY        TYPE    TTL
+queue      list    2s
+session:1  string  1h
+session:2  hash    none</code></pre>
+<p>Di JSON, <code>items</code> mencantumkan key yang sama dengan <code>keys</code>, dalam urutan yang sama, masing-masing sebagai <code>{&#34;key&#34;, &#34;type&#34;, &#34;ttl_seconds&#34;}</code>: <code>ttl_seconds</code> bernilai -1 untuk tanpa kedaluwarsa dan null bila tidak diketahui, dan <code>type</code> bernilai null bila server menolak <code>TYPE</code> (ACL tanpa itu). Redis membaca <code>TYPE</code> dan <code>PTTL</code> seluruh halaman dalam satu round trip (satu per master di Cluster). Di memcached setiap tipe adalah <code>string</code> dan time to live berasal dari daftar LRU crawler. <code>--limit</code> di bawah 1 adalah error <code>USAGE</code>. Bila lebih banyak key yang cocok, daftar ditutup dengan <code>(first 100 keys; more match: narrow the pattern or raise --limit)</code>.</p>
+<h2 id="change-data">Mengubah data</h2>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache set prod-redis maintenance on --ttl 30m       # --ttl menerima 30m, 24h, 7d
+komando cache set prod-redis feature:dark-mode on           # tanpa --ttl: tidak pernah kedaluwarsa</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>set maintenance (expires in 30m)</code></pre>
+<ul class="g-list g-list--ul"><li><code>cache set</code> menyimpan string dan menggantikan nilai lama apa pun. <code>--ttl</code> harus positif. <code>set</code> dan <code>get</code> sama-sama melaporkan <code>ttl_seconds</code> (<code>null</code> bila key tidak pernah kedaluwarsa).</li><li>Conn yang dilindungi bertanya kepada orang di terminal sebelum setiap perubahan; agen AI atau script menambahkan <code>--yes</code> setelah seseorang setuju (kalau tidak, <code>PROTECTED_TARGET</code>, exit 6).</li><li>Redis tidak bisa membatalkan, jadi <code>--dry-run</code> tidak mengirim perubahan sama sekali: <code>cache set</code> menyatakan apakah key ada dan akan digantikan, <code>cache rm</code> key mana yang ada.</li></ul>
+<h3 id="delete-keys">Menghapus key</h3>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache rm prod-redis session:42 session:43 --dry-run   # mana dari key ini yang ada
+komando cache rm prod-redis session:42 session:43</code></pre>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>would delete 1 key:
+  session:42
+  session:43 (does not exist)</code></pre>
+<p><code>cache rm</code> menghapus key menurut nama persisnya (tanpa pola), dan key yang dihapus tidak bisa kembali. Di terminal Anda komando bertanya dulu: Anda mengetik nama key (untuk beberapa key, jumlahnya). Agen AI atau script menambahkan <code>--allow-dangerous</code> setelah seseorang setuju; tanpanya, mereka mendapat <code>POLICY_BLOCKED</code> (exit 6). Lihat <a href="../safety/#what-needs-a-yes">Keamanan</a>.</p>
+<h2 id="any-other-redis-command">Perintah Redis lainnya</h2>
+<p><code>cache run</code> mengirim perintah apa pun. Perintah ini hanya membaca kecuali Anda menambahkan <code>--write</code>:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache run prod-redis -- HGETALL user:42
+komando cache run prod-redis -- ZREVRANGE leaderboard 0 9 WITHSCORES
+komando cache run prod-redis --write -- EXPIRE session:42 3600
+komando cache run prod-redis -- &#34;GET feature:dark-mode&#34;   # satu baris dalam tanda kutip, dipecah seperti redis-cli</code></pre>
+<p>Perintah yang menghapus, mengosongkan, memblokir, menjalankan script, atau mengonfigurasi ulang server (<code>DEL</code>, <code>FLUSHALL</code>, <code>KEYS</code>, <code>EVAL</code>, <code>CONFIG SET</code>, <code>SHUTDOWN</code>, ...) bersifat merusak, jadi bertanya seperti <code>cache rm</code> (<code>--allow-dangerous</code> untuk agen). Error menyebut perintah yang lebih aman sebagai gantinya (<code>cache keys</code> untuk <code>KEYS</code>, <code>cache rm</code> untuk <code>DEL</code>).</p>
+<ul class="g-list g-list--ul"><li>Script read-only (<code>EVAL_RO</code>, <code>EVALSHA_RO</code>, <code>FCALL_RO</code>) dihitung sebagai script: tidak bisa menulis, tetapi yang berputar membuat Redis menjawab <code>BUSY</code> kepada setiap klien sampai seseorang mengirim <code>SCRIPT KILL</code> (<code>FUNCTION KILL</code> untuk <code>FCALL_RO</code>).</li><li>Kode modul juga dihitung: fungsi Redis Stack (<code>TFCALL</code>, <code>TFCALLASYNC</code>) dan RedisGears (<code>RG.PYEXECUTE</code>, <code>RG.TRIGGER</code>).</li><li>Administrasi Cluster dan Sentinel juga dihitung: <code>CLUSTER MEET</code>, <code>ADDSLOTS</code>, <code>FLUSHSLOTS</code>, <code>REPLICATE</code> (node membuang datanya sendiri), <code>SENTINEL SET</code>, <code>FAILOVER</code>, <code>REMOVE</code>, <code>CONFIG SET</code>, dan sejenisnya. <code>CLUSTER NODES</code>, <code>CLUSTER REPLICAS</code>, <code>SENTINEL MASTERS</code>, <code>SENTINEL GET-MASTER-ADDR-BY-NAME</code>, dan <code>SENTINEL CONFIG GET</code> hanya membaca.</li><li>Begitu juga perintah yang menghapus key dengan cara lain: <code>FT.DROPINDEX ... DD</code>, <code>FT.DROP</code> tanpa <code>KEEPDOCS</code>, dan <code>SET</code> atau <code>GETEX</code> dengan waktu <code>EXAT</code> atau <code>PXAT</code> yang sudah lewat.</li><li><code>FUNCTION LOAD REPLACE</code> dan <code>TFUNCTION LOAD REPLACE</code> juga dihitung: keduanya menukar kode di balik fungsi yang sudah dipanggil aplikasi. <code>FUNCTION LOAD</code> biasa hanya butuh <code>--write</code>.</li><li><code>CONFIG GET</code> hanya membaca. Untuk agen AI, nilai pengaturan kata sandi (<code>requirepass</code>, <code>masterauth</code>, <code>tls-key-file-pass</code>, ...) dan hash kata sandi di <code>ACL LIST</code> dan <code>ACL GETUSER</code> tampil sebagai <code>[hidden]</code>, bahkan bila kata sandinya sebuah kata seperti <code>yes</code>. Field hash yang namanya seperti secret (<code>password</code>, <code>token</code>, ...) disembunyikan dengan cara yang sama lewat RESP2 dan RESP3.</li></ul>
+<h2 id="check-change-rename-or-remove-a-cache">Memeriksa, mengubah, mengganti nama, atau menghapus cache</h2>
+<p>Cache adalah sebuah conn, jadi perintah conn berfungsi padanya:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando test prod-redis                       # bisakah komando menjangkaunya dan login?
+komando conn show prod-redis                  # URL, jalan masuk, dan rujukan kata sandinya
+komando conn edit prod-redis --via web2       # jangkau dengan cara lain
+komando conn edit prod-redis --protected      # setiap perubahan lalu butuh jawaban ya dari seseorang
+komando conn rename prod-redis sessions-redis
+komando conn rm prod-redis                    # hapus dari daftar Anda (cache-nya tidak disentuh)</code></pre>
+<h3 id="back-up-a-cache">Backup cache</h3>
+<p>komando tidak punya perintah backup untuk cache. Redis menyimpan snapshot-nya sendiri, yang lalu bisa Anda ambil dari servernya:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache run prod-redis --write -- BGSAVE
+komando download web1 /var/lib/redis/dump.rdb --sudo --to ./</code></pre>
+<h2 id="memcached">memcached</h2>
+<p>Perintah yang sama berfungsi dengan memcached. URL-nya <code>memcached://HOST:11211</code>; pakai <code>memcacheds://</code> untuk TLS. Untuk server yang dijalankan dengan <code>memcached -Y</code>, berikan user di URL dan kata sandi sebagai rujukan:</p>
+<pre class="d-code" tabindex="0" role="region" aria-label="Kode"><code>komando cache add prod-memcached memcached://cache.internal:11211 --via web1
+komando cache add app-memcached memcached://app@cache.internal:11211 --via web1 --password-ref secret:app-memcached-pass
+komando cache get prod-memcached session:42   # nilainya, dan di 1.6+ time to live-nya
+komando cache keys prod-memcached &#39;session:*&#39; # lewat LRU crawler memcached
+komando cache info prod-memcached             # ringkasan `stats`; `info prod-memcached items` untuk satu bagian
+komando cache run prod-memcached -- stats slabs</code></pre>
+<ul class="g-list g-list--ul"><li><code>cache set</code> dan <code>cache rm</code> bekerja seperti di Redis, dengan aturan keamanan yang sama.</li><li><code>cache run</code> mengirim satu baris perintah dan hanya membaca kecuali <code>--write</code>. <code>flush_all</code> dan perintah yang mengubah atau menghentikan server bersifat merusak. Simpan nilai dengan <code>cache set</code>.</li><li>Baris dipecah pada spasi seperti cara memcached membacanya, dan kata perintah dikirim dalam huruf kecil.</li></ul>
+<h2 id="limits">Batasan</h2>
+<ul class="g-list g-list--ul"><li><code>cache rm</code> menerima nama key yang persis, tidak pernah pola.</li><li><code>cache run</code> mencetak satu balasan, jadi perintah yang tidak pernah berhenti mengirim (<code>MONITOR</code>, <code>SUBSCRIBE</code>, <code>PSUBSCRIBE</code>, <code>XREAD ... BLOCK</code>) berhenti dengan <code>NOT_SUPPORTED</code>. Di memcached, <code>watch</code> tidak pernah kembali, jadi berhenti dengan cara yang sama.</li><li>Di memcached, pindah baris atau karakter kontrol lain di baris <code>cache run</code> berhenti dengan <code>USAGE</code> (akan memulai perintah kedua).</li><li>Cluster hanya punya database 0.</li><li>Di Cluster, <code>SCAN</code>, <code>RANDOMKEY</code>, <code>KEYS</code>, <code>FLUSHALL</code>, <code>FLUSHDB</code>, dan <code>SWAPDB</code> hanya akan menjangkau satu master, jadi berhenti dengan <code>NOT_SUPPORTED</code> (pakai <code>cache keys</code>; untuk mengosongkan, tambahkan setiap master sebagai conn tersendiri). Perintah atas beberapa key dari slot berbeda (<code>MGET a b</code>) gagal dengan <code>CROSSSLOT</code>: pakai satu perintah per key, atau <code>{tag}</code> yang sama di nama key.</li><li><code>cache keys</code> di memcached butuh LRU crawler (menyala secara default sejak memcached 1.5).</li><li>komando tidak punya perintah backup untuk cache (lihat <a href="#back-up-a-cache">Backup cache</a>).</li></ul>
+<h2 id="troubleshooting">Pemecahan masalah</h2>
+<div class="d-table" role="region" aria-label="Tabel" tabindex="0"><table><thead><tr><th scope="col">Error</th><th scope="col">Artinya</th><th scope="col">Yang perlu dilakukan</th></tr></thead><tbody><tr><td><code>CACHE_CONNECT</code></td><td>komando tidak bisa menjangkau cache, atau tidak bisa memeriksa sertifikatnya</td><td><code>komando test prod-redis</code>; untuk CA privat tambahkan <code>?ca=secret:NAME</code>, atau jangkau <code>--via</code> sebuah server</td></tr><tr><td><code>CACHE_AUTH</code></td><td>cache menolak login</td><td>periksa user di URL dan rujukan kata sandi (<code>komando conn show prod-redis</code>)</td></tr><tr><td><code>CACHE_ERROR</code></td><td>memcached tidak bisa mencantumkan key</td><td>jalankan memcached dengan LRU crawler menyala; <code>cache get</code> berfungsi tanpanya</td></tr><tr><td><code>INSECURE_PROTOCOL</code></td><td><code>redis://</code> atau <code>memcached://</code> melewati jaringan tanpa enkripsi</td><td>pakai <code>rediss://</code> atau <code>memcacheds://</code>, atau <code>--via</code>, atau tambahkan <code>?insecure=1</code></td></tr><tr><td><code>NOT_FOUND</code></td><td><code>cache info</code> meminta bagian yang tidak dimiliki server</td><td><code>komando cache info prod-redis --all</code></td></tr><tr><td><code>NOT_SUPPORTED</code></td><td>perintah yang tidak pernah kembali, atau yang tidak bisa dijalankan Cluster di semua master</td><td>hint menyebut apa yang dipakai sebagai gantinya</td></tr><tr><td><code>POLICY_BLOCKED</code></td><td>perintah merusak tanpa <code>--allow-dangerous</code> (exit 6)</td><td>jalankan di terminal, atau tambahkan flag setelah seseorang setuju</td></tr><tr><td><code>PROTECTED_TARGET</code></td><td>perubahan pada cache yang dilindungi tanpa <code>--yes</code> (exit 6)</td><td>jalankan di terminal, atau tambahkan flag setelah seseorang setuju</td></tr><tr><td><code>USAGE</code></td><td>argumen hilang atau salah (exit 2)</td><td>hint menunjukkan contoh lengkap</td></tr></tbody></table></div>
+<p>Setiap kode ada di <a href="../error-codes/">Kode error</a>.</p>
+<h2 id="reference">Referensi</h2>
+<h3 id="output">Output</h3>
+<p>Output teks (<code>-o text</code>) tampak seperti <code>redis-cli</code>: satu item per baris, bernomor, balasan bersarang diberi indentasi. String diberi tanda kutip bila berisi spasi, tanda kutip, atau karakter kontrol (pindah baris tampil sebagai <code>\n</code>), jadi nilai tidak pernah merusak tata letak. Entri hash atau map tampil sebagai <code>name: value</code>.</p>
+<p>JSON menyimpan nilai persis apa adanya; nilai biner datang sebagai <code>{&#34;base64&#34;: &#34;...&#34;}</code>.</p></div><nav class="g-pager" aria-label="Halaman sebelumnya dan berikutnya"><a class="g-pn g-pn--prev" href="../databases/"><span class="g-label g-muted">Sebelumnya</span>Database</a><a class="g-pn g-pn--next" href="../queues/"><span class="g-label g-muted">Berikutnya</span>Queue</a></nav><p class="g-path g-small g-muted">Source: <a href="https://github.com/sgnd/komando/blob/main/docs/features/caches.md">docs/features/caches.md</a> in sgnd/komando at commit <code>52fa18d</code>.</p></article></div></main>
+<footer data-slot="site-footer" class="ef-site-footer"><div class="ef-site-footer__inner"><div class="ef-site-footer__top"><div class="ef-site-footer__brand"><a class="ef-site-footer__brand-link" href="../../../id/index.html"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><p class="ef-site-footer__tagline">Satu command line yang aman untuk pekerjaan DevOps.</p></div><nav aria-label="Command line"><h2 class="ef-site-footer__heading">Command line</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../../id/index.html#inventory">Inventaris</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#safety">Keamanan</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#install">Instal</a></li><li><a class="ef-site-footer__link" href="../../../id/docs/">Dokumentasi</a></li><li><a class="ef-site-footer__link" href="https://github.com/sgnd/komando" target="_blank" rel="noopener noreferrer">Kode sumber di GitHub<span class="ef-site-footer__sr"> (membuka tab baru)</span></a></li></ul></nav><nav aria-label="Aplikasi Komando"><h2 class="ef-site-footer__heading">Aplikasi Komando</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../../id/index.html#agent">Agen</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#editions">Edisi</a></li><li><a class="ef-site-footer__link" href="../../../id/guide/">Panduan</a></li></ul></nav></div><div class="ef-site-footer__bottom"><span>© 2026 Komando</span><span>Nama produk dan logo adalah merek dagang pemiliknya.</span><a class="ef-site-footer__link" href="../../../docs/caches/" hreflang="en" lang="en" aria-label="Read this page in English">English</a></div></div></footer>
+<template id="icon-menu"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16"></path>
+  <path d="M4 12h16"></path>
+  <path d="M4 19h16"></path>
+</svg></span></template><template id="icon-x"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 6 6 18"></path>
+  <path d="m6 6 12 12"></path>
+</svg></span></template><template id="icon-play"><span aria-hidden="true" data-slot="icon" data-size="16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
+</svg></span></template><template id="icon-pause"><span aria-hidden="true" data-slot="icon" data-size="16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="14" y="3" width="5" height="18" rx="1"></rect>
+  <rect x="5" y="3" width="5" height="18" rx="1"></rect>
+</svg></span></template>
+<script type="module" src="../../../assets/meridian/browser/marketing.js"></script>
+<script type="module" src="../../../assets/site.js"></script>
+</body>
+</html>

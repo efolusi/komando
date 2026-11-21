@@ -218,9 +218,7 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 		if err != nil {
 			fail("%s (%s): %v", p.slug, l.code, err)
 		}
-		for _, h := range heads {
-			ids[p.slug] = append(ids[p.slug], h.id)
-		}
+		ids[p.slug] = headingIDs(heads)
 		var b strings.Builder
 		b.WriteString(head(p.title+" · "+l.ui("komando docs"), p.lead, path, l, l.code == "id" || twin[p.slug]))
 		fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, p.slug))
@@ -279,6 +277,16 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 	b.WriteString("</article></div></main>\n")
 	b.WriteString(foot(l, "docs/", true))
 	write(filepath.Join(out, "index.html"), b.String())
+	return ids
+}
+
+// headingIDs lists the anchors of a page's headings. It is never nil, so a page without headings (the glossary) still
+// counts as an English page whose anchors an Indonesian twin can take.
+func headingIDs(heads []heading) []string {
+	ids := []string{}
+	for _, h := range heads {
+		ids = append(ids, h.id)
+	}
 	return ids
 }
 
