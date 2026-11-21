@@ -246,6 +246,30 @@ def mark_release(out, sha):
             fail(f"{rel.as_posix()} must carry exactly one release meta with {sha}, found {found}")
 
 
+ASSET_REF = re.compile(r'((?:src|href)=")([^"#?:]+\.(?:js|css))(")')
+
+
+def version_assets(out):
+    """Add ?v=<first 10 hex of the file's sha256> to every local script and stylesheet link.
+
+    Files under /assets/ are cached for a week under the same name. Without a version in the link, a returning
+    visitor keeps an old site.js beside a new page (the old script reset the theme to dark on a dark OS).
+    A changed file gets a new link, so the page and its files always match."""
+    root = out.resolve()
+    for rel in pages_of(out):
+        page = out / rel
+        text = page.read_text(encoding="utf-8")
+
+        def stamp(match):
+            target = (page.parent / match.group(2)).resolve()
+            if root not in target.parents or not target.is_file():
+                fail(f"{rel.as_posix()} links {match.group(2)}, which is not a file of the output")
+            digest = hashlib.sha256(target.read_bytes()).hexdigest()[:10]
+            return f"{match.group(1)}{match.group(2)}?v={digest}{match.group(3)}"
+
+        page.write_text(ASSET_REF.sub(stamp, text), encoding="utf-8")
+
+
 def page_url(rel):
     return SITE_URL + rel.as_posix().removesuffix("index.html")
 
@@ -328,6 +352,7 @@ def main():
     copy_site(out)
     check_output(out)
     mark_release(out, sha)
+    version_assets(out)
     hashes = script_hashes(out)
     write_headers(out, hashes)
     write_sitemap(out)
