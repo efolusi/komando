@@ -67,7 +67,7 @@ komando host edit web1 --protected
 komando guide install
 ```
 
-This connects your agent (Claude Code, Codex, Cursor or Gemini CLI) to komando. Passwords stay in komando's vault, and the agent never sees them. Run it again after each `komando update`.
+This connects your agent (Claude Code, Codex, Cursor or Gemini CLI) to komando. Passwords stay in komando's vault, and the agent never sees them. Run it again after each `komando update`. [Agent skill](agent-skill.md) says what it sets up and what still asks you first.
 
 ## Where to go next
 

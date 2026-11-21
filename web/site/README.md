@@ -35,6 +35,7 @@ The docs home and the side navigation group the pages in the same order, in both
 
 - **Command line:** the sections in `sections` in `scripts/docsgen/main.go` (Start here, What komando manages, Safety and secrets, Reference). A page in no section stops the build, so a new feature page is placed on purpose. The section names are translated in `i18n/docs.id.json`.
 - **Apps:** the user guide (`/guide/`, URLs unchanged), shown on the docs home and in the side navigation under "Apps".
+- **Agent skill:** `docs/src/agent-skill.md` and `.id.md`, in the Reference section after `settings`. Written only from the `docs/features` pages at the commit the docs name (`install`, `safety`, `settings`, `security-standards`, `output`); the English feature pages cannot link to it, so the docs home lead and `getting-started` do.
 - **Cloud plan:** `docs/src/cloud-plan.md` and `.id.md`. The plan is not live: the page says so and names no price or date. Write the real pages at private beta.
 
 ## Languages

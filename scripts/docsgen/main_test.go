@@ -179,3 +179,33 @@ func TestPlaceOrdersPagesBySectionAndNamesTheirGroup(t *testing.T) {
 		t.Fatalf("last page = %s in %q", got.slug, got.group)
 	}
 }
+
+func sectionOf(slug string) (name string, at int) {
+	for _, s := range sections {
+		for i, x := range s.slugs {
+			if x == slug {
+				return s.name, i
+			}
+		}
+	}
+	return "", -1
+}
+
+func TestAgentSkillIsASitePageInTheReferenceSectionBetweenSettingsAndGlossary(t *testing.T) {
+	site := false
+	for _, s := range sitePages {
+		site = site || s == "agent-skill"
+	}
+	if !site {
+		t.Fatal("agent-skill is written by this site, so it belongs in sitePages")
+	}
+	name, at := sectionOf("agent-skill")
+	if name != "Reference" {
+		t.Fatalf("agent-skill is in section %q, want Reference", name)
+	}
+	_, settings := sectionOf("settings")
+	_, glossary := sectionOf("glossary")
+	if at != settings+1 || at != glossary-1 {
+		t.Fatalf("agent-skill is at %d, settings at %d, glossary at %d: want it right after settings and before glossary", at, settings, glossary)
+	}
+}

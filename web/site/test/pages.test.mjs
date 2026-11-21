@@ -134,3 +134,26 @@ test('a missing data-theme is not treated as light anywhere in the site scripts 
     assert.ok(!/hasAttribute\(\s*['"]data-theme/.test(text) && !/:not\(\[data-theme/.test(text), `${f} reads a missing data-theme as light`);
   }
 });
+
+test('the docs home lists the agent skill page in Reference, after Settings and before the Glossary, in both languages', () => {
+  for (const rel of ['docs/index.html', 'id/docs/index.html']) {
+    const html = pages.find((p) => p.rel === rel).html;
+    const section = /<section class="g-group" id="reference">(.*?)<\/section>/s.exec(html);
+    assert.ok(section, `${rel} has no Reference group`);
+    const slugs = [...section[1].matchAll(/<a class="g-card" href="([^"]+)\/">/g)].map((m) => m[1]);
+    const at = slugs.indexOf('agent-skill');
+    assert.ok(at > 0, `${rel}: agent-skill is not in Reference`);
+    assert.equal(slugs[at - 1], 'settings', rel);
+    assert.equal(slugs[at + 1], 'glossary', rel);
+  }
+});
+
+test('the docs home lead and Getting started link the agent skill page, because the pinned install page cannot', () => {
+  for (const rel of ['docs/index.html', 'id/docs/index.html', 'docs/getting-started/index.html', 'id/docs/getting-started/index.html']) {
+    const html = pages.find((p) => p.rel === rel).html;
+    const link = rel.endsWith('getting-started/index.html') ? '../agent-skill/' : 'agent-skill/';
+    assert.ok(html.includes(`<a href="${link}">`), `${rel} does not link the agent skill page`);
+  }
+  const install = pages.find((p) => p.rel === 'docs/install/index.html').html;
+  assert.ok(!/<div class="g-body">.*href="\.\.\/agent-skill\/".*<\/div><nav class="g-pager"/s.test(install), 'the install page text links agent-skill: its English source is pinned and must not change');
+});

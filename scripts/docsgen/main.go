@@ -9,7 +9,7 @@
 // Two kinds of source, one renderer:
 //   - -src: the feature pages of the komando repository (docs/features/*.md), read only. Its README.md gives
 //     the order and the one-line summaries of the docs home (its "Every feature" table).
-//   - <out>/src: this site's own pages (getting-started.md, switch-from-termius.md), listed in sitePages.
+//   - <out>/src: this site's own pages, listed in sitePages.
 //
 // Two languages. Every page is built in English into <out>/<slug>/. A page with an Indonesian twin,
 // <out>/src/<slug>.id.md, is also built into web/site/id/docs/<slug>/ (the folder beside <out>'s parent), with its words
@@ -41,7 +41,7 @@ import (
 const repoBlob = "https://github.com/sgnd/komando/blob/main/docs/features/"
 
 // sitePages lists this site's own pages (in <out>/src).
-var sitePages = []string{"getting-started", "switch-from-termius", "cloud-plan"}
+var sitePages = []string{"getting-started", "switch-from-termius", "cloud-plan", "agent-skill"}
 
 // sections is the command line docs grouped for the docs home and the side navigation, in order. Every page is in
 // exactly one section; a page that is in none stops the build, so a new feature page is placed on purpose.
@@ -52,7 +52,7 @@ var sections = []struct {
 	{"Start here", []string{"getting-started", "install", "switch-from-termius"}},
 	{"What komando manages", []string{"servers", "databases", "caches", "queues", "storage", "files", "cluster", "registry", "vpn", "cloud", "tunnels", "windows", "targets", "system", "health"}},
 	{"Safety and secrets", []string{"safety", "secrets", "security-standards", "rotate"}},
-	{"Reference", []string{"commands", "output", "error-codes", "settings", "glossary", "import"}},
+	{"Reference", []string{"commands", "output", "error-codes", "settings", "agent-skill", "glossary", "import"}},
 	{"Cloud plan", []string{"cloud-plan"}},
 }
 
@@ -281,14 +281,22 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 	b.WriteString(head(l.ui("komando docs"), l.ui("How to use the komando command line, one page per feature."), "docs/", l, true))
 	fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, ""))
 	fmt.Fprintf(&b, `<article class="g-article g-article--index"><h1>%s</h1><div class="g-body g-intro">`, esc(l.ui("komando docs")))
-	start := "Getting started"
+	start, agent := "Getting started", ""
 	for _, p := range pages {
-		if p.slug == sitePages[0] {
+		switch p.slug {
+		case sitePages[0]:
 			start = p.title
+		case "agent-skill":
+			agent = p.title
 		}
 	}
-	fmt.Fprintf(&b, `<p>%s %s %s <a href="getting-started/">%s</a>.</p>`, esc(l.ui("How to use komando, the free command line for your servers, databases, caches, queues and more, for people and AI agents.")),
-		esc(l.ui("One page per feature.")), esc(l.ui("New to komando? Start with")), esc(start))
+	// the agent skill page is written in both languages; a language without it leaves the sentence out
+	agentLine := ""
+	if agent != "" {
+		agentLine = fmt.Sprintf(` %s <a href="agent-skill/">%s</a>.`, esc(l.ui("Connecting an AI agent? Read")), esc(agent))
+	}
+	fmt.Fprintf(&b, `<p>%s %s %s <a href="getting-started/">%s</a>.%s</p>`, esc(l.ui("How to use komando, the free command line for your servers, databases, caches, queues and more, for people and AI agents.")),
+		esc(l.ui("One page per feature.")), esc(l.ui("New to komando? Start with")), esc(start), agentLine)
 	fmt.Fprintf(&b, `<p>%s %s <code>komando &lt;command&gt; --help</code>.</p>`,
 		strings.Replace(esc(l.ui("Commands, flags and file paths are in {mono}.")), "{mono}", "<code>mono</code>", 1),
 		esc(l.ui("Help for any command:")))
