@@ -80,14 +80,13 @@ English is at `/`, Indonesian at `/id/`. Same slugs, so a switch between languag
 2. **Downloads for the apps**: where Komando for Mac comes from (Developer ID outside the store, as the sync design
    says) and the App Store link for iPhone and iPad. The page has no download link for either yet.
 3. **Privacy policy and terms**, before the page collects anything (an email form, a checkout).
-4. **Footer owner name**: decided 2026-11-21. See Decided.
+4. **Footer owner name**: `© 2026 Komando`, or the company (PT Efolusi Dunia Teknologi).
 5. **Marketing fonts**: the move to Meridian replaces Instrument Sans and DM Mono (owner, 2026-11-13) with
    Meridian's Figtree, Bricolage Grotesque and JetBrains Mono. Keep Meridian's, or keep the old pair as a brand
    override (`guidelines/theming.md`).
 
 ## Decided
 
-- **Footer** (owner, 2026-11-21): English pages say `© 2026 PT Efolusi Dunia Teknologi. Site source is a Meridian reference implementation.` Indonesian pages say `© 2026 PT Efolusi Dunia Teknologi. Sumber situs ini adalah contoh penerapan Meridian.`
 - **Fonts** (owner, 2026-11-13): the app screens drawn on the page (`.kmd`) use the system fonts like the apps
   (`-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif` and `ui-monospace, "SF Mono", Menlo,
   monospace`, from `design/tokens.json`). On a device without SF Pro the screens fall back to that system's own UI
