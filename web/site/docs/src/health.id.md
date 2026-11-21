@@ -102,7 +102,7 @@ Pemeriksaan yang punya perintah sendiri bukan recipe:
 | Pemeriksaan | Perintah |
 |-------------|----------|
 | port yang mendengarkan | `komando net ports TARGET --sudo` |
-| sebuah nama di DNS | `komando net dns TARGET NAMA` |
+| sebuah nama di DNS | `komando net dns TARGET NAME` |
 | sebuah URL menjawab | `komando net http TARGET URL` |
 | unit yang gagal | `komando svc list TARGET --failed` |
 | error di journal | `komando logs TARGET -p err --since 1h --sudo` |
@@ -135,7 +135,7 @@ komando cert check web1 --path /etc/ssl/private/site.pem
 ```
 
 - Di server, komando menemukan sertifikatnya sendiri: milik certbot (`/etc/letsencrypt/live/*/cert.pem`) dan file yang dipakai nginx (`ssl_certificate`), haproxy (`crt`), dan apache (`SSLCertificateFile`). Tambahkan lagi dengan `--path`. File yang butuh root dibaca dengan sudo hanya bila sudo bekerja tanpa kata sandi; komando tidak pernah memintanya. Hanya bagian sertifikat dari sebuah file yang dibaca: private key di file yang sama tidak pernah meninggalkan server. Bila certbot terinstal, hasilnya juga menampilkan timer pembaruannya dan apakah pembaruan terakhir gagal.
-- Untuk situs web (`https://NAMA`, `NAMA:PORT`) atau conn yang memakai TLS, komando tersambung dari komputer ini, atau lewat `--via` (server atau VPN), membaca sertifikat yang dikirim situs itu, dan memeriksa bahwa sertifikat itu tepercaya dan cocok dengan namanya.
+- Untuk situs web (`https://NAME`, `NAME:PORT`) atau conn yang memakai TLS, komando tersambung dari komputer ini, atau lewat `--via` (server atau VPN), membaca sertifikat yang dikirim situs itu, dan memeriksa bahwa sertifikat itu tepercaya dan cocok dengan namanya.
 - Setiap sertifikat menampilkan namanya, penerbit, tanggal kedaluwarsa, sisa hari, asalnya, dan sebuah status: `ok`, `expiring`, `expired`, `not_yet_valid`, `not_trusted`, atau `unreadable` (tidak ada, atau butuh root).
 
 | Hasil | Exit code |

@@ -25,7 +25,7 @@ komando menampilkan sebuah kode dan membuka halaman login AWS di browser Anda. K
 
 ## Memakai profil AWS di sebuah conn
 
-Sebuah conn menyebut profil dengan `--option aws_profile=NAMA`. komando membaca profil itu setiap kali, sehingga SSO, role yang di-assume, dan key sementara bekerja seperti yang dipakai aws CLI, dan tidak ada key yang disimpan di komando:
+Sebuah conn menyebut profil dengan `--option aws_profile=NAME`. komando membaca profil itu setiap kali, sehingga SSO, role yang di-assume, dan key sementara bekerja seperti yang dipakai aws CLI, dan tidak ada key yang disimpan di komando:
 
 ```bash
 komando conn add backups 's3://my-bucket/db?region=eu-west-1' --option aws_profile=prod   # S3
@@ -36,7 +36,7 @@ komando conn edit backups --option aws_profile=staging                          
 
 - Region berasal dari conn (`region=` untuk S3, alamatnya untuk SQS dan ECR), bukan dari profil.
 - `aws_profile=default` memakai rantai AWS yang lazim: variabel `AWS_*`, profil default, atau role mesin tempat komando berjalan.
-- Secret dari AWS Secrets Manager (`--password-ref aws-sm:NAMA`) juga memakai rantai yang lazim (`AWS_PROFILE` memilih profilnya).
+- Secret dari AWS Secrets Manager (`--password-ref aws-sm:NAME`) juga memakai rantai yang lazim (`AWS_PROFILE` memilih profilnya).
 
 Lihat [Storage](storage.md#aws-logins-sso-roles-temporary-keys), [Queue](queues.md#add-an-sqs-region), dan [Container registry](registry.md).
 
@@ -48,7 +48,7 @@ komando import aws                # satu conn storage per bucket dari setiap pro
 komando import aws ~/work/aws-config
 ```
 
-Setiap conn memakai profilnya (`aws_profile`), jadi tidak ada key yang disalin. Profil yang loginnya sudah habis, atau yang tidak punya key, dilewati dengan catatan tentang apa yang memperbaikinya: `komando login aws --profile NAMA` untuk profil SSO, file credentials untuk yang lain. Setelah itu jalankan impor lagi. Lihat [Pindah ke komando dan pindah komputer](import.md).
+Setiap conn memakai profilnya (`aws_profile`), jadi tidak ada key yang disalin. Profil yang loginnya sudah habis, atau yang tidak punya key, dilewati dengan catatan tentang apa yang memperbaikinya: `komando login aws --profile NAME` untuk profil SSO, file credentials untuk yang lain. Setelah itu jalankan impor lagi. Lihat [Pindah ke komando dan pindah komputer](import.md).
 
 Dengan sebuah FILE, conn hanya menyimpan nama tiap profil: perintah berikutnya membaca `~/.aws/config` (atau `AWS_CONFIG_FILE`), jadi taruh profilnya di sana juga, kalau tidak perintah berhenti dengan `AWS_PROFILE_NOT_FOUND`.
 
@@ -74,7 +74,7 @@ Login Google Cloud dan Azure belum tersedia. Yang bisa dipakai sebagai gantinya:
   komando conn add media gs://my-bucket/site --password-ref secret:gcs-key
   ```
 
-- **Azure**: conn Azure blob menerima key storage account atau token SAS. Secret Key Vault (`--password-ref azure-kv:VAULT/NAMA`) memakai service principal (`AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`), token yang disimpan Azure CLI, atau managed identity milik mesin.
+- **Azure**: conn Azure blob menerima key storage account atau token SAS. Secret Key Vault (`--password-ref azure-kv:VAULT/NAME`) memakai service principal (`AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`), token yang disimpan Azure CLI, atau managed identity milik mesin.
 
   ```bash
   komando secret set blob-key
@@ -104,7 +104,7 @@ Untuk perintah agen AI, lebih banyak hal yang dikunci, karena agen mengatur vari
 
 | Kode | Yang terjadi | Yang perlu dilakukan |
 |---|---|---|
-| `AWS_LOGIN_REQUIRED` (exit 4) | login SSO profil sudah habis, atau belum pernah dibuat | seseorang menjalankan `komando login aws --profile NAMA`, perintah di petunjuk |
+| `AWS_LOGIN_REQUIRED` (exit 4) | login SSO profil sudah habis, atau belum pernah dibuat | seseorang menjalankan `komando login aws --profile NAME`, perintah di petunjuk |
 | `AWS_FAILED` (exit 4) | profil tidak memakai SSO dan tidak memberi key, atau role yang di-assume ditolak | petunjuk menyebut yang mana: tambahkan key ke `~/.aws/credentials`, atau periksa role dan profil sumbernya |
 | `AWS_PROFILE_NOT_FOUND` (exit 3) | profil tidak ada di `~/.aws/config` atau `~/.aws/credentials` | tambahkan, atau perbaiki `--option aws_profile` milik conn |
 | `NEEDS_PERSON` (exit 6) | agen AI menjalankan `komando login aws` | orangnya menjalankannya di terminalnya sendiri |

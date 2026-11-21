@@ -1,6 +1,6 @@
 # Secret
 
-Simpan kata sandi, passphrase key, atau token sekali, lalu rujuk sebagai `secret:NAMA` alih-alih mengetiknya. komando menampilkan nilai yang tersimpan hanya kepada orang yang memintanya dengan `--reveal` (`secret show`, `key show`), di terminal atau setelah "Allow once" di jendela komando, dan tidak pernah kepada agen AI.
+Simpan kata sandi, passphrase key, atau token sekali, lalu rujuk sebagai `secret:NAME` alih-alih mengetiknya. komando menampilkan nilai yang tersimpan hanya kepada orang yang memintanya dengan `--reveal` (`secret show`, `key show`), di terminal atau setelah "Allow once" di jendela komando, dan tidak pernah kepada agen AI.
 
 ## Menyimpan kata sandi dan memakainya
 
@@ -15,7 +15,7 @@ Jika diketik tanpa argumen, `komando secret set` menanyakan nama, lalu nilainya 
 
 ## Menyimpan satu secret
 
-Di terminal Anda, `komando secret set NAMA` menanyakan nilainya dan menyembunyikannya saat Anda mengetik atau menempel:
+Di terminal Anda, `komando secret set NAME` menanyakan nilainya dan menyembunyikannya saat Anda mengetik atau menempel:
 
 ```text
 Paste or type the value for web1-pass, then press Enter (it stays hidden):
@@ -30,12 +30,12 @@ pbpaste | komando secret set vpn-pass          # dari clipboard (xclip -o di Lin
 komando secret set tls-key < server.key        # nilai berisi beberapa baris
 ```
 
-- Nilai di command line (`komando secret set NAMA NILAI`) ditolak dengan `SECRET_IN_ARGS`: nilai itu akan tertinggal di riwayat shell Anda.
+- Nilai di command line (`komando secret set NAME VALUE`) ditolak dengan `SECRET_IN_ARGS`: nilai itu akan tertinggal di riwayat shell Anda.
 - Tempelan lebih dari satu baris di prompt berhenti dengan `USAGE` dan tidak menyimpan apa pun: kalau tidak, shell akan menjalankan baris lainnya.
 - Nilai kosong (pipe kosong, variabel kosong, Enter di prompt) berhenti dengan `USAGE` dan tidak menyimpan apa pun.
 - Dari pipe, pindah baris di akhir bukan bagian dari nilai. Spasi dipertahankan; komando memperingatkan bila nilai diawali atau diakhiri spasi.
 - `secret set` pada nama yang sudah ada menggantikan nilainya. Bila server atau conn yang dilindungi memakainya, komando bertanya dulu kepada Anda; agen AI atau script menambahkan `--yes` setelah seseorang setuju.
-- `secret set NAMA --new` hanya menyimpan secret baru: bila NAMA sudah ada di vault, perintah berhenti dengan `SECRET_EXISTS` (exit 8) dan nilai yang tersimpan tetap. Nilainya masuk seperti tanpa `--new`. Bila beberapa perintah komando menyimpan nama yang sama dengan `--new` bersamaan, tepat satu yang menyimpannya dan yang lain berhenti dengan `SECRET_EXISTS`. Dengan `--dry-run` jawabannya sama: `SECRET_EXISTS` untuk nama yang sudah dipakai, `"action": "would_store"` untuk nama yang masih bebas.
+- `secret set NAME --new` hanya menyimpan secret baru: bila NAMA sudah ada di vault, perintah berhenti dengan `SECRET_EXISTS` (exit 8) dan nilai yang tersimpan tetap. Nilainya masuk seperti tanpa `--new`. Bila beberapa perintah komando menyimpan nama yang sama dengan `--new` bersamaan, tepat satu yang menyimpannya dan yang lain berhenti dengan `SECRET_EXISTS`. Dengan `--dry-run` jawabannya sama: `SECRET_EXISTS` untuk nama yang sudah dipakai, `"action": "would_store"` untuk nama yang masih bebas.
 
 ```bash
 komando secret set api-token --new --from-env TOKEN   # tidak pernah menggantikan yang ada
@@ -74,7 +74,7 @@ komando key show deploy --reveal > deploy.key     # private key dari key yang di
 
 - **Di terminal**, komando mencetak nilainya: Anda sendiri yang mengetik perintahnya.
 - **Dari program tanpa terminal**, seperti aplikasi Komando untuk Mac, komando lebih dulu bertanya kepada Anda di jendelanya sendiri, menyebut secret, perintah, dan program yang memulainya ("Started from: Komando"). Nilai ditampilkan hanya setelah **Allow once**; dengan `komando config approval-code` menyala, jendela juga meminta kode 6 digit. Desktop Linux atau BSD hanya mendapat jendela itu bersama kode persetujuan, dan tanpa layar perintah berhenti dengan `REVEAL_NEEDS_TERMINAL`: jalankan di terminal.
-- **Agen AI tidak pernah mendapat nilai atau private key**, bahkan dengan jawaban ya dari Anda: komando menolak dengan `REVEAL_NEEDS_TERMINAL` dan tidak membuka jendela. Agen memakai `secret:NAMA` dalam sebuah perintah. Key lewat `ssh-gate` (aplikasi iPhone dan iPad) juga ditolak.
+- **Agen AI tidak pernah mendapat nilai atau private key**, bahkan dengan jawaban ya dari Anda: komando menolak dengan `REVEAL_NEEDS_TERMINAL` dan tidak membuka jendela. Agen memakai `secret:NAME` dalam sebuah perintah. Key lewat `ssh-gate` (aplikasi iPhone dan iPad) juga ditolak.
 - Dry run tidak menampilkan nilai dan tidak bertanya kepada siapa pun.
 - Setiap nilai yang ditampilkan masuk ke audit log, sebagai `secret.reveal` atau `key.reveal`, dengan cara Anda mengizinkannya (`via`: `terminal` atau `window`) dan program yang memulai komando (`started_from`); setiap penolakan juga masuk ke sana, dengan nama secret atau key-nya. Nilainya tidak pernah.
 - `key show --reveal` hanya mencetak key yang dibuat komando (`key gen`), yang disimpannya di store tersegel; untuk key yang ditambahkan dari file, komando menyebut file itu.
@@ -88,7 +88,7 @@ komando secret cp db-pass db-pass-old                          # sebuah salinan;
 komando secret rm old-pass other-old-pass                      # semuanya, atau tidak sama sekali
 ```
 
-- `secret rename` mengarahkan setiap server, conn, key, dan VPN yang memakai `secret:LAMA` ke `secret:BARU` dalam satu langkah (juga opsi URL conn seperti `?ca=secret:LAMA`). Script dan file milik Anda sendiri tidak diubah.
+- `secret rename` mengarahkan setiap server, conn, key, dan VPN yang memakai `secret:OLD` ke `secret:NEW` dalam satu langkah (juga opsi URL conn seperti `?ca=secret:OLD`). Script dan file milik Anda sendiri tidak diubah.
 - Bila BARU sudah ada, tambahkan `--overwrite`; apa yang memakai BARU lalu mendapat nilai LAMA. Bila server atau conn yang dilindungi memakai BARU, komando bertanya dulu kepada Anda (`--yes` untuk agen AI atau script).
 - `secret rm` ditolak selama ada yang memakai sebuah nama (`SECRET_IN_USE` mencantumkan apa yang memakainya); arahkan pemakainya ke secret lain dulu, atau ganti namanya.
 - Secret yang dihapus tidak punya salinan, jadi di terminal Anda mengetik nama secret-nya dulu (beberapa sekaligus: jumlahnya). Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju (kalau tidak, `POLICY_BLOCKED`).
@@ -114,14 +114,14 @@ komando mengeluarkan `KOMANDO_VAULT_PASS` dan variabel unlock password manager d
 
 ## Untuk agen AI
 
-Agen tidak pernah melihat nilai: output menampilkan `[secret:NAMA]` atau `[hidden]`.
+Agen tidak pernah melihat nilai: output menampilkan `[secret:NAME]` atau `[hidden]`.
 
 | Agen ingin | Agen menjalankan | Atau mendapat |
 |---|---|---|
-| menyimpan kata sandi yang diketahui pengguna | meminta pengguna menjalankan `komando secret set NAMA` | `NEEDS_PERSON` |
-| menyimpan token yang dibuat sebuah program | `echo "$TOKEN" \| komando secret set NAMA` atau `--from-env VAR` | |
+| menyimpan kata sandi yang diketahui pengguna | meminta pengguna menjalankan `komando secret set NAME` | `NEEDS_PERSON` |
+| menyimpan token yang dibuat sebuah program | `echo "$TOKEN" \| komando secret set NAME` atau `--from-env VAR` | |
 | melihat pratinjau perubahan | perintah yang sama dengan `--dry-run` | `meta.would_be_blocked` menyebut apa yang dibutuhkan eksekusi sungguhan |
-| memakai secret | `secret:NAMA` di sebuah flag | `SECRET_DESTINATION`: seseorang mengizinkan ke mana secret itu pergi |
+| memakai secret | `secret:NAME` di sebuah flag | `SECRET_DESTINATION`: seseorang mengizinkan ke mana secret itu pergi |
 | mengganti nama, menyalin, menghapus | `secret rename`, `secret cp`, `secret rm` | |
 | membaca atau membandingkan nilai | bertanya kepada pengguna (`secret show --reveal`, `key show --reveal`, `secret check`) | `REVEAL_NEEDS_TERMINAL`, `NEEDS_PERSON` |
 
@@ -138,12 +138,12 @@ Agen tidak pernah meminta kata sandi di chat: hint menyebut perintah yang dijala
 
 | Error | Artinya | Yang perlu dilakukan |
 |-------|---------|----------------------|
-| `SECRET_IN_ARGS` (exit 2) | nilai ada di command line | `komando secret set NAMA`, lalu ketik setelah prompt |
-| `USAGE` (exit 2) | nilai kosong, atau tempelan beberapa baris | ketik lagi, atau berikan beberapa baris lewat stdin: `komando secret set NAMA < FILE` |
+| `SECRET_IN_ARGS` (exit 2) | nilai ada di command line | `komando secret set NAME`, lalu ketik setelah prompt |
+| `USAGE` (exit 2) | nilai kosong, atau tempelan beberapa baris | ketik lagi, atau berikan beberapa baris lewat stdin: `komando secret set NAME < FILE` |
 | `SECRET_NOT_FOUND`, `SECRET_UNRESOLVED` (exit 3) | tidak ada secret dengan nama itu, atau rujukan yang tidak bisa dibaca | `komando secret list` |
-| `SECRET_EXISTS` (exit 8) | `secret rename` atau `secret cp` ke nama yang sudah dipakai, atau `secret set --new` pada nama yang sudah tersimpan | pilih nama lain; untuk menggantikannya, tambahkan `--overwrite` (rename, cp) atau jalankan `komando secret set NAMA` tanpa `--new` |
+| `SECRET_EXISTS` (exit 8) | `secret rename` atau `secret cp` ke nama yang sudah dipakai, atau `secret set --new` pada nama yang sudah tersimpan | pilih nama lain; untuk menggantikannya, tambahkan `--overwrite` (rename, cp) atau jalankan `komando secret set NAME` tanpa `--new` |
 | `SECRET_IN_USE` (exit 8) | `secret rm` pada secret yang masih dipakai sesuatu | arahkan pemakainya ke secret lain, atau `secret rename` |
-| `SECRET_MISMATCH` (exit 1) | `secret check`: nilai yang Anda ketik bukan yang tersimpan | `data.difference` menjelaskan perbedaannya; `komando secret set NAMA` menyimpan yang benar |
+| `SECRET_MISMATCH` (exit 1) | `secret check`: nilai yang Anda ketik bukan yang tersimpan | `data.difference` menjelaskan perbedaannya; `komando secret set NAME` menyimpan yang benar |
 | `NEEDS_PERSON` (exit 6) | hanya orang yang bisa melakukan ini (`secret set` untuk agen, `secret check`, `secret keychain`, `secret passphrase`) | orangnya menjalankannya di terminalnya sendiri |
 | `VAULT_LOCKED` (exit 1) | vault punya passphrase dan `KOMANDO_VAULT_PASS` belum diatur | atur `KOMANDO_VAULT_PASS` di shell yang menjalankan komando (agen AI bertanya kepada pengguna) |
 | `VAULT_DECRYPT` (exit 1) | `KOMANDO_VAULT_PASS` bukan passphrase vault ini | atur yang benar; tidak ada yang hilang. `komando doctor` menyebut mode mana yang dipakai |

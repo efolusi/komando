@@ -79,7 +79,7 @@ komando secret rm prod-kubeconfig        # kubeconfig-nya, setelah tidak ada yan
 
 ## Menyebut objek
 
-Setiap perintah menyebut objek seperti kubectl: `TIPE NAMA` atau `TIPE/NAMA` (`deployment api`, `deploy/api`, `deployment.apps/api`). Bila Anda salah mengetik jenisnya, error menyarankan yang mungkin Anda maksud.
+Setiap perintah menyebut objek seperti kubectl: `TYPE NAME` atau `TYPE/NAME` (`deployment api`, `deploy/api`, `deployment.apps/api`). Bila Anda salah mengetik jenisnya, error menyarankan yang mungkin Anda maksud.
 
 - Sebut namespace (lihat [Glosarium](glossary.md)) dengan `--namespace`, atau `-n` seperti di kubectl. Tanpanya, komando memakai namespace lazim cluster: yang disebut context kubeconfig-nya, kalau tidak `default`. Ubah secara permanen dengan `komando conn edit prod-k8s --option namespace=shop`.
 - Berapa banyak baris atau objek yang ditampilkan adalah `--limit` (tidak punya bentuk pendek di perintah cluster). Angka setelah `-n` (`-n 50`) ditolak, dengan hint: tulis `--limit 50`, atau `--namespace=50` untuk namespace bernama 50.
@@ -182,7 +182,7 @@ Jika diketik tanpa argumen di terminal, `komando cluster deploy` menanyakan clus
 
 Dengan beberapa container di satu pod, sebut container yang mendapat image dengan `--container` (atau `--image CONTAINER=IMAGE`).
 
-`--wait` bertahan sampai setiap replika menjalankan versi baru. `--wait` berhenti dengan:
+`--wait` bertahan sampai setiap replika menjalankan versi baru. Perintah berhenti dengan:
 
 | Kode | Kapan |
 |------|-------|

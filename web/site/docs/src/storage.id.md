@@ -153,7 +153,7 @@ would move db/old.sql.gz -> archive/old.sql.gz (48.1 MiB, by a copy that is chec
 
 - `mkdir` membuat folder dan folder di atasnya yang hilang. Folder yang sudah ada tidak masalah. S3, Google Cloud, dan Azure tidak punya folder sungguhan: `mkdir` menyimpan folder marker kosong (`reports/2026/`), seperti konsol web mereka, sehingga `storage list` menampilkan folder kosong itu.
 - `mv` memindahkan satu file atau folder di dalam satu conn. `DST` yang diakhiri `/` adalah folder: file pindah ke dalamnya dan mempertahankan namanya. File yang sudah ada di `DST` menghentikan pemindahan (`FILE_EXISTS`) kecuali Anda menambahkan `--overwrite`; folder di `DST` tidak pernah digantikan.
-- Di file server (SFTP, FTP, FTPS, WebDAV, SMB) `mv` adalah satu rename di server, dan memindahkan folder juga. Bila server tidak bisa me-rename menimpa file, `--overwrite` lebih dulu memindahkan file lama ke samping (`.komando-old-NAMA`) dan mengembalikannya bila rename gagal, sehingga pemindahan yang gagal tidak pernah menghilangkannya.
+- Di file server (SFTP, FTP, FTPS, WebDAV, SMB) `mv` adalah satu rename di server, dan memindahkan folder juga. Bila server tidak bisa me-rename menimpa file, `--overwrite` lebih dulu memindahkan file lama ke samping (`.komando-old-NAME`) dan mengembalikannya bila rename gagal, sehingga pemindahan yang gagal tidak pernah menghilangkannya.
 - Path ditulis apa adanya: `.` atau `//` di dalamnya berhenti dengan `USAGE`.
 - S3, Google Cloud, dan Azure tidak bisa me-rename. Di sana `mv` menyalin objek di server, memeriksa bahwa salinan punya ukuran dan checksum yang sama, dan baru kemudian menghapus aslinya (`method: copy_then_delete` di hasilnya). Bila pemeriksaan gagal, aslinya tetap dan salinannya dihapus (`MOVE_FAILED`). Perintah ini memindahkan satu objek sekali waktu, bukan folder (`STORAGE_UNSUPPORTED`). Di bucket yang menyimpan versi lama, versi lama dari aslinya tetap ada.
 - `chmod` mengatur mode Unix file atau folder, dalam angka (`0644`, `640`, `2775`), dan hasilnya menyatakan mode lamanya juga. Hanya server SFTP yang punya mode; di jenis lain perintah berhenti dengan `STORAGE_UNSUPPORTED` sebelum komando menghubungi storage.
@@ -280,7 +280,7 @@ komando conn rm backups                       # komando melupakannya; file-nya t
 |-------|---------|----------------------|
 | `STORAGE_AUTH` | storage menolak login, atau tidak ada (Google Cloud) | periksa key dengan `komando conn show backups`, atau login dengan gcloud |
 | `STORAGE_CONNECT` | komando tidak bisa menjangkau bucket atau file server | `komando test backups`; jangkau `--via` server atau VPN |
-| `STORAGE_TLS` | sertifikat tidak lolos pemeriksaan | sebut CA Anda dengan `?ca=secret:NAMA` |
+| `STORAGE_TLS` | sertifikat tidak lolos pemeriksaan | sebut CA Anda dengan `?ca=secret:NAME` |
 | `STORAGE_ERROR` | misalnya, program lain membuka file itu | tutup di sana dan jalankan lagi |
 | `BUCKET_NOT_FOUND` | bucket (atau share SMB) tidak ada | periksa nama di URL conn |
 | `FOLDER_NOT_FOUND` | folder kosong atau tidak ada (exit 3) | periksa dengan `komando storage list backups` |

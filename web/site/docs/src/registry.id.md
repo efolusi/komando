@@ -244,7 +244,7 @@ keeps 12 tags:
 | `REPOSITORY_NOT_FOUND` (exit 3) | tidak ada repository seperti itu | `komando registry list harbor` menampilkan repository |
 | `REGISTRY_UNSUPPORTED` (exit 5) | registry tidak mengizinkannya: tanpa daftar semua repository, atau penghapusan dimatikan | sebut repository-nya; nyalakan penghapusan di registry |
 | `REGISTRY_RATE_LIMIT` (exit 5) | terlalu banyak permintaan (batas pull Docker Hub) | tunggu selama yang disebut hint, atau login |
-| `REGISTRY_TLS` (exit 4) | sertifikat berasal dari CA privat, atau untuk nama lain | tambahkan `?ca=secret:NAMA`, atau pakai nama yang dituju sertifikat |
+| `REGISTRY_TLS` (exit 4) | sertifikat berasal dari CA privat, atau untuk nama lain | tambahkan `?ca=secret:NAME`, atau pakai nama yang dituju sertifikat |
 | `CONN_UNREACHABLE` (exit 4) | registry tidak menjawab | `komando test harbor`, dan periksa jalur `--via`-nya |
 | `AWS_LOGIN_REQUIRED` (exit 4) | login AWS profil ECR sudah habis | seseorang menjalankan `komando login aws --profile prod` |
 | `AZURE_LOGIN_REQUIRED` (exit 4) | tidak ada login Azure | atur service principal, atau seseorang menjalankan `az login` |
@@ -258,7 +258,7 @@ Opsi URL pada conn `registry://`:
 | Opsi URL | Fungsinya |
 |---|---|
 | (tidak ada) | HTTPS, sertifikat diperiksa terhadap CA komputer Anda |
-| `?ca=secret:NAMA` | HTTPS, sertifikat diperiksa terhadap CA itu ditambah sertifikat PEM di secret vault `NAMA`: sebuah CA, atau sertifikat registry sendiri |
+| `?ca=secret:NAME` | HTTPS, sertifikat diperiksa terhadap CA itu ditambah sertifikat PEM di secret vault `NAME`: sebuah CA, atau sertifikat registry sendiri |
 | `?resolve=IP` | tersambung ke alamat IP ini sebagai ganti yang diberikan DNS untuk nama itu (seperti `curl --resolve`). `IP:PORT` mengatur port juga; tulis IPv6 dalam kurung siku: `[2001:db8::1]:443`. TLS tetap memakai nama di URL. Bisa dipakai bersama setiap opsi lain di tabel ini; lihat [Saat DNS menunjuk ke tempat lain](#when-dns-points-somewhere-else) |
 | `?tls=skip-verify` | HTTPS, tetapi sertifikat tidak diperiksa (seperti `insecure-registries` milik Docker). Siapa pun di jalur bisa berpura-pura menjadi registry; `komando doctor` memperingatkannya |
 | `?tls=false` | HTTP polos, tidak ada yang dienkripsi (`registry:2` di jaringan privat) |

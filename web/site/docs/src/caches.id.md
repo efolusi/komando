@@ -26,7 +26,7 @@ Di terminal, perintah yang tidak menyebut cache atau key akan menanyakan hanya b
 
 `redis://` langsung lewat jaringan (tanpa `--via`, bukan ke komputer ini) mengirim kata sandi dan data tanpa enkripsi, jadi `cache add` (dan `conn edit --url`) menolaknya dengan `INSECURE_PROTOCOL`: pakai `rediss://` atau `--via`, atau tambahkan `?insecure=1` untuk menerima bahwa lalu lintasnya bisa dibaca di jalan (untuk agen AI butuh jawaban ya dari seseorang). Hal yang sama berlaku untuk `memcached://`. Conn seperti itu yang sudah ada di daftar Anda tetap berfungsi; `komando doctor` memperingatkannya dan mencetak baris yang mengubahnya.
 
-`rediss://` dan `memcacheds://` memeriksa sertifikat server terhadap CA tepercaya di komputer Anda, atau terhadap CA Anda sendiri dengan `?ca=secret:NAMA` (CA privat, atau milik cloud):
+`rediss://` dan `memcacheds://` memeriksa sertifikat server terhadap CA tepercaya di komputer Anda, atau terhadap CA Anda sendiri dengan `?ca=secret:NAME` (CA privat, atau milik cloud):
 
 ```bash
 komando secret set prod-redis-ca < ca.pem
@@ -197,7 +197,7 @@ komando cache run prod-memcached -- stats slabs
 
 | Error | Artinya | Yang perlu dilakukan |
 |-------|---------|----------------------|
-| `CACHE_CONNECT` | komando tidak bisa menjangkau cache, atau tidak bisa memeriksa sertifikatnya | `komando test prod-redis`; untuk CA privat tambahkan `?ca=secret:NAMA`, atau jangkau `--via` sebuah server |
+| `CACHE_CONNECT` | komando tidak bisa menjangkau cache, atau tidak bisa memeriksa sertifikatnya | `komando test prod-redis`; untuk CA privat tambahkan `?ca=secret:NAME`, atau jangkau `--via` sebuah server |
 | `CACHE_AUTH` | cache menolak login | periksa user di URL dan rujukan kata sandi (`komando conn show prod-redis`) |
 | `CACHE_ERROR` | memcached tidak bisa mencantumkan key | jalankan memcached dengan LRU crawler menyala; `cache get` berfungsi tanpanya |
 | `INSECURE_PROTOCOL` | `redis://` atau `memcached://` melewati jaringan tanpa enkripsi | pakai `rediss://` atau `memcacheds://`, atau `--via`, atau tambahkan `?insecure=1` |
@@ -213,6 +213,6 @@ Setiap kode ada di [Kode error](error-codes.md).
 
 ### Output
 
-Output teks (`-o text`) tampak seperti `redis-cli`: satu item per baris, bernomor, balasan bersarang diberi indentasi. String diberi tanda kutip bila berisi spasi, tanda kutip, atau karakter kontrol (pindah baris tampil sebagai `\n`), jadi nilai tidak pernah merusak tata letak. Entri hash atau map tampil sebagai `nama: nilai`.
+Output teks (`-o text`) tampak seperti `redis-cli`: satu item per baris, bernomor, balasan bersarang diberi indentasi. String diberi tanda kutip bila berisi spasi, tanda kutip, atau karakter kontrol (pindah baris tampil sebagai `\n`), jadi nilai tidak pernah merusak tata letak. Entri hash atau map tampil sebagai `name: value`.
 
 JSON menyimpan nilai persis apa adanya; nilai biner datang sebagai `{"base64": "..."}`.

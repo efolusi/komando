@@ -257,7 +257,7 @@ komando docker prune web1 --older-than 30d --dry-run # apa yang akan hilang, dan
 |------------|---------|----------------------|
 | `UNIT_NOT_FOUND` | tidak ada service dengan nama itu (exit 3) | periksa nama dengan `komando svc list TARGET` |
 | `NO_SYSTEMD` | server berjalan tanpa systemd (exit 3) | baca lognya dengan `--file` atau `komando docker logs` |
-| `PERMISSION_DENIED` | sudo meminta kata sandi yang tidak dimiliki komando, atau user tidak boleh memakai sudo | simpan kata sandi sudo: `komando host edit SERVER --sudo-ref secret:NAMA` |
+| `PERMISSION_DENIED` | sudo meminta kata sandi yang tidak dimiliki komando, atau user tidak boleh memakai sudo | simpan kata sandi sudo: `komando host edit SERVER --sudo-ref secret:NAME` |
 | `TOOL_MISSING` | sudo, atau tool yang dibutuhkan perintah, tidak terinstal (exit 3) | sebagai root tambahkan `--no-sudo`; di Alpine, `komando pkg install TARGET shadow` untuk `user` |
 | `PACKAGE_NOT_FOUND` | tidak ada package seperti itu di indeks package server | periksa nama; `komando pkg update TARGET` bila package-nya baru |
 | `UNEXPECTED_CHANGE` | server berubah setelah di-patch (exit 8); sisanya belum di-patch | periksa dengan `komando docker ps` dan `komando svc list --failed`, lalu jalankan lagi atau tambahkan `--keep-going` |
@@ -273,7 +273,7 @@ Flag `logs` (juga untuk `svc logs` dan `docker logs`, di tempat yang cocok):
 |------|-----------|
 | `-u`, `--unit UNIT` | Membaca journal systemd service ini. |
 | `--file PATH` | Membaca file log ini. |
-| `-c`, `--container NAMA` | Membaca log container Docker ini. |
+| `-c`, `--container NAME` | Membaca log container Docker ini. |
 | `-n`, `--limit N` | N baris terakhir (default 200). |
 | `--grep REGEX` | Hanya baris yang cocok (extended regex, huruf besar atau kecil). |
 | `--since` / `--until` | Rentang waktu: waktu mundur dari sekarang (`30m`, `2h`, `7d`), `today`, `yesterday`, atau tanggal (`'2026-01-02 10:00'`). Untuk container, `today` dan `yesterday` adalah tengah malam server sendiri. |

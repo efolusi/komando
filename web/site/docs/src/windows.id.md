@@ -48,7 +48,7 @@ Opsi ditulis setelah `?`, digabung dengan `&`:
 
 | Opsi | Artinya |
 |------|---------|
-| `ca=secret:NAMA` | sertifikat berasal dari CA Anda sendiri: simpan PEM-nya dengan `komando secret set NAMA < ca.crt` (pemeriksaan tetap menyala) |
+| `ca=secret:NAME` | sertifikat berasal dari CA Anda sendiri: simpan PEM-nya dengan `komando secret set NAME < ca.crt` (pemeriksaan tetap menyala) |
 | `auth=basic` | login Basic (hanya akun lokal) sebagai ganti NTLM; lewat HTTP polos (`tls=off`) ditolak (`WINRM_INSECURE`) |
 | `tls=skip-verify` | sertifikat tidak diperiksa (komando memperingatkan: siapa pun di tengah bisa menyamar sebagai server) |
 | `tls=off` | HTTP polos di port 5985: perintah dan output berjalan tanpa enkripsi, dan server harus mengizinkannya |
@@ -201,7 +201,7 @@ Perintah yang belum tersedia berhenti dengan `NOT_SUPPORTED` sebelum apa pun ber
 | `MIXED_OS` | target memilih server Windows dan server lain | jalankan dua kali, dengan `TARGET,os:windows` dan `TARGET,!os:windows` |
 | `READ_ONLY_VIOLATION` | PowerShell-nya tidak termasuk bagian kecil yang diterima `--read-only` | hilangkan `--read-only`; server yang dilindungi lalu bertanya dulu |
 | `POWERSHELL_FAILED` | komando bisa login tetapi PowerShell tidak menjawab | periksa bahwa `powershell.exe` ada di PATH user yang dipakai login |
-| `WINRM_TLS` | sertifikat WinRM server tidak tepercaya | dari CA perusahaan Anda: tambahkan `?ca=secret:NAMA` ke alamat |
+| `WINRM_TLS` | sertifikat WinRM server tidak tepercaya | dari CA perusahaan Anda: tambahkan `?ca=secret:NAME` ke alamat |
 | `WINRM_INSECURE` | login Basic lewat HTTP polos akan mengirim kata sandi tanpa enkripsi | pakai HTTPS, atau NTLM (hilangkan `auth=basic`) |
 | `AUTH_FAILED` lewat WinRM | user atau kata sandi salah, atau user tidak boleh memakai WinRM | periksa keduanya; login Basic hanya untuk akun lokal, dan user harus administrator atau anggota Remote Management Users |
 | `USAGE` dari `fs restore` | `fs restore` tidak berfungsi di Windows | `komando exec SERVER -- Copy-Item ...` |

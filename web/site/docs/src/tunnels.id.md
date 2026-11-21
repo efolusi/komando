@@ -97,7 +97,7 @@ export NO_PROXY=.internal,10.0.0.0/8     # nama dan jaringan yang dijangkau lang
 | Apa | Cara keluarnya |
 |---|---|
 | API web: cluster Kubernetes (juga `cluster exec`, `cluster forward`, `cluster shell`), registry, storage S3, secret store (Vault, 1Password, Bitwarden, AWS, GCP, Azure), login dan tunnel VPN AnyConnect, Fortinet, GlobalProtect, F5, dan Pulse, serta `komando update` | lewat `HTTPS_PROXY` (dan `HTTP_PROXY` untuk alamat `http://`), kecuali yang disebut `NO_PROXY` |
-| Server (SSH), database, cache, FTP, dan SFTP | tidak lewat `HTTPS_PROXY`: `ssh` dan `psql` juga tidak membacanya, dan proxy perusahaan biasanya hanya mengizinkan lalu lintas web keluar. Jangkau lewat proxy yang ditambahkan sebagai VPN, lalu `--via NAMA`: proxy HTTP dengan `komando vpn add NAMA proxy --proxy-address HOST:PORT`, proxy SOCKS dengan `komando vpn add NAMA socks --proxy-address HOST:PORT`; atau lewat bastion |
+| Server (SSH), database, cache, FTP, dan SFTP | tidak lewat `HTTPS_PROXY`: `ssh` dan `psql` juga tidak membacanya, dan proxy perusahaan biasanya hanya mengizinkan lalu lintas web keluar. Jangkau lewat proxy yang ditambahkan sebagai VPN, lalu `--via NAME`: proxy HTTP dengan `komando vpn add NAME proxy --proxy-address HOST:PORT`, proxy SOCKS dengan `komando vpn add NAME socks --proxy-address HOST:PORT`; atau lewat bastion |
 | VPN WireGuard, L2TP/IPsec, IPsec, dan IKEv2 | tidak lewat proxy: VPN ini memakai UDP, yang tidak bisa dibawa proxy web |
 
 - `HTTPS_PROXY`, `HTTP_PROXY`, dan `NO_PROXY` hanya berlaku saat seseorang menjalankan komando. Saat agen AI yang menjalankannya, lingkungannya milik agen, dan komando tidak mengambil proxy darinya: kalau tidak, agen bisa mengirim setiap login lewat proxy miliknya sendiri. Jika perintah agen harus lewat proxy perusahaan, tambahkan proxy itu sebagai VPN dan pakai `--via`, atau untuk cluster taruh `proxy-url` di kubeconfig-nya.
@@ -125,5 +125,5 @@ export NO_PROXY=.internal,10.0.0.0/8     # nama dan jaringan yang dijangkau lang
 | `PORT_IN_USE` | port lokal sudah dipakai (exit 8); untuk `-R`, sshd di server mungkin mematikan `AllowTcpForwarding` | pilih port lain, atau `0` untuk port yang bebas |
 | `CANCELLED` | Ctrl-C menghentikan tunnel sebelum aktif; tidak ada yang tersisa berjalan | mulai lagi |
 | `TUNNEL_NOT_FOUND` | tidak ada tunnel dengan ID itu | lihat daftarnya dengan `komando tunnel list` |
-| `VPN_DOWN` | VPN atau proxy di jalur tidak aktif, atau proxy menolak port | baca pesannya; `komando vpn test NAMA` mencoba lagi |
+| `VPN_DOWN` | VPN atau proxy di jalur tidak aktif, atau proxy menolak port | baca pesannya; `komando vpn test NAME` mencoba lagi |
 | `HOST_IN_USE` | server yang ingin Anda hapus masih menjadi langkah di jalur `--via` server lain | ubah `--via` mereka dulu |

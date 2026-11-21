@@ -21,7 +21,7 @@ Kata-kata yang dipakai di dokumentasi ini, dalam bahasa sehari-hari.
 | Exit code | Angka hasil sebuah program: 0 berarti berhasil, selain itu berarti ada masalah. Lihat [Hasil dan error](output.md). |
 | Fingerprint / host key | Kartu identitas server. Jika berubah, komando tidak menyambung (`HOSTKEY_MISMATCH`). |
 | Flag | Opsi yang ditambahkan ke perintah, seperti `--yes` atau `--dry-run`. |
-| Grup (group) | Kumpulan server dan conn bernama, dipakai sebagai target dengan `@nama` (misalnya `@web`). |
+| Grup (group) | Kumpulan server dan conn bernama, dipakai sebagai target dengan `@name` (misalnya `@web`). |
 | Host | Kata perintah untuk server: `komando host add`, `komando host edit`. Hasil perintah menyebut setiap target di field bernama `host`. |
 | Job | Tugas panjang yang dibiarkan berjalan di server, dimulai dengan `komando job start`. |
 | JSON | Teks terstruktur yang mudah dibaca program. komando menjawab agen dan script dalam JSON. |
@@ -30,8 +30,8 @@ Kata-kata yang dipakai di dokumentasi ini, dalam bahasa sehari-hari.
 | Object storage | Layanan yang menyimpan file sebagai objek di dalam bucket, dijangkau lewat internet: S3, MinIO, R2. |
 | Pod | Unit terkecil yang dijalankan Kubernetes: satu container atau lebih bersama-sama. |
 | Protected (dilindungi) | Server, conn, atau VPN yang ditandai dengan `--protected`, untuk production. Sebelum ada perubahan di sana, komando bertanya kepada Anda; agen AI atau script butuh `--yes`, yang disetujui oleh seseorang. Lihat [Keamanan](safety.md). |
-| Recipe | Perintah siap pakai atau tersimpan, dijalankan dengan `komando recipe run NAMA TARGET`. |
-| Secret | Kata sandi, token, atau key yang disimpan di vault terenkripsi milik komando, dirujuk sebagai `secret:NAMA`. |
+| Recipe | Perintah siap pakai atau tersimpan, dijalankan dengan `komando recipe run NAME TARGET`. |
+| Secret | Kata sandi, token, atau key yang disimpan di vault terenkripsi milik komando, dirujuk sebagai `secret:NAME`. |
 | Selector / target | Apa yang dikerjakan sebuah perintah: nama, grup (`@web`), tag (`tag:prod`), glob (`web-*`), atau `all`. Lihat [Target](targets.md). |
 | Server | Komputer (sering di cloud) yang menjalankan aplikasi Anda. |
 | Service | Program latar belakang, seperti nginx, yang dikelola oleh systemd (atau Windows). Dikelola dengan `komando svc`. |

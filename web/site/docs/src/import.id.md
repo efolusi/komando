@@ -22,7 +22,7 @@ Next: komando test @shop
 
 ## Mengimpor apa yang sudah Anda punya
 
-Tulis `komando import SUMBER [FILE]`. Tanpa file, komando membaca tempat yang lazim untuk sumber itu.
+Tulis `komando import SOURCE [FILE]`. Tanpa file, komando membaca tempat yang lazim untuk sumber itu.
 
 | Sumber | Yang dibaca (file default) | Yang ditambahkan |
 |--------|----------------------------|------------------|
@@ -53,7 +53,7 @@ Flag: `-g`/`--group` menambahkan semua yang diimpor ke sebuah grup, dan `--overw
 
 ### Apa yang terjadi pada kata sandi
 
-Kata sandi yang ditemukan di file-file ini masuk ke vault sebagai `<nama>-pass`. Kata sandi tidak pernah muncul di daftar, output, atau riwayat komando.
+Kata sandi yang ditemukan di file-file ini masuk ke vault sebagai `<name>-pass`. Kata sandi tidak pernah muncul di daftar, output, atau riwayat komando.
 
 ### Apa yang diperiksa komando
 
@@ -76,7 +76,7 @@ komando import putty putty.reg --dry-run
 komando import putty putty.reg
 ```
 
-PuTTY tidak menyimpan kata sandi, jadi atur dengan `komando secret set` atau pakai key. Key dalam format PuTTY sendiri (`.ppk`) dicantumkan: konversikan dengan `puttygen KEY.ppk -O private-openssh -o KEY`, lalu `komando key add NAMA KEY`. Sesi yang menjangkau servernya lewat proxy juga dicantumkan: atur jalan ke sana dengan `komando host edit NAMA --via JUMP`.
+PuTTY tidak menyimpan kata sandi, jadi atur dengan `komando secret set` atau pakai key. Key dalam format PuTTY sendiri (`.ppk`) dicantumkan: konversikan dengan `puttygen KEY.ppk -O private-openssh -o KEY`, lalu `komando key add NAME KEY`. Sesi yang menjangkau servernya lewat proxy juga dicantumkan: atur jalan ke sana dengan `komando host edit NAME --via JUMP`.
 
 ### Datang dari MobaXterm
 
@@ -118,7 +118,7 @@ komando secret set prod-db-pass               # impor mencantumkan kata sandi ya
 
 File ekspor tidak berisi kata sandi, hanya namanya, jadi atur lagi dengan `komando secret set`. Impor menambahkan aturan deny Anda (aturan itu hanya menghentikan lebih banyak), tetapi tidak mengubah pengaturan apa pun: impor mencantumkan pengaturan yang berbeda, masing-masing dengan perintah `komando config set` yang mengaturnya, karena file dari orang lain tidak boleh mematikan sebuah pemeriksaan. Bila komando menolak sesuatu di dalam file, sisanya tetap masuk dan impor berakhir dengan `IMPORT_INCOMPLETE` (exit 1): perbaiki entri itu dan impor lagi (yang sudah masuk dilewati).
 
-Private key juga tidak pernah ada di file ekspor. Saat server login dengan key dari `komando key`, `export` menyebut key itu (`keys_needed`) dan file-nya (`key_files`): salin file itu sendiri ke komputer lain. Key yang dibuat komando (`key gen`) disegel di dalam komando dan tidak punya file (`keys_sealed`): buat yang baru di komputer lain dengan `komando key gen NAMA` dan pasang di server dengan `komando key deploy`. Impor tetap menambahkan server, menyebut key mana yang dibutuhkan, dan membiarkan key itu kosong sampai Anda membawanya (ssh-agent atau key default Anda mungkin bisa login sementara itu):
+Private key juga tidak pernah ada di file ekspor. Saat server login dengan key dari `komando key`, `export` menyebut key itu (`keys_needed`) dan file-nya (`key_files`): salin file itu sendiri ke komputer lain. Key yang dibuat komando (`key gen`) disegel di dalam komando dan tidak punya file (`keys_sealed`): buat yang baru di komputer lain dengan `komando key gen NAME` dan pasang di server dengan `komando key deploy`. Impor tetap menambahkan server, menyebut key mana yang dibutuhkan, dan membiarkan key itu kosong sampai Anda membawanya (ssh-agent atau key default Anda mungkin bisa login sementara itu):
 
 ```bash
 komando key add deploy ~/Downloads/deploy     # file key yang disalin
@@ -127,9 +127,9 @@ komando host edit db1 --key deploy
 
 File ekspor bisa berasal dari orang lain, jadi komando mengimpornya dengan batasan ini:
 
-- `ProxyCommand` dibuang, karena akan berjalan di komputer ini. Atur sendiri dengan `komando host edit NAMA --proxy-command ...`.
+- `ProxyCommand` dibuang, karena akan berjalan di komputer ini. Atur sendiri dengan `komando host edit NAME --proxy-command ...`.
 - Rujukan kata sandi dipertahankan hanya bila menyebut `secret:` yang belum ada di sini. Yang lain dibuang, sehingga file tidak bisa mengarahkan kata sandi Anda yang sudah ada ke server miliknya.
-- Recipe yang ditandai read-only diimpor sebagai perubahan. Tandai lagi sebagai read-only sendiri dengan `komando recipe add NAMA ... --read-only --overwrite`.
+- Recipe yang ditandai read-only diimpor sebagai perubahan. Tandai lagi sebagai read-only sendiri dengan `komando recipe add NAME ... --read-only --overwrite`.
 
 Setiap pengaturan yang dibuang dicantumkan di hasilnya.
 

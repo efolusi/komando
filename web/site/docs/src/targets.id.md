@@ -26,7 +26,7 @@ komando exec @web -- uptime            # jalankan di setiap server dalam grup we
 
 Beri tanda kutip pada target yang mengandung `*` atau `!` agar shell Anda tidak mengubahnya: `'web-*'`, `'@prod,!web2'`.
 
-Nama, grup, dan tag cocok dalam huruf besar atau kecil: `WEB1` menemukan `web1` bila hanya ada satu. Nama, `@grup`, atau `tag:` yang salah eja mendapat saran "did you mean".
+Nama, grup, dan tag cocok dalam huruf besar atau kecil: `WEB1` menemukan `web1` bila hanya ada satu. Nama, `@group`, atau `tag:` yang salah eja mendapat saran "did you mean".
 
 Di terminal Anda, perintah yang diketik tanpa target akan menanyakannya: pilih satu baris dengan nomornya, ketik sebagian nama untuk mempersempit daftar, atau ketik target seperti di atas ([detail](commands.md#at-your-terminal-komando-asks-for-what-is-missing)).
 
@@ -93,4 +93,4 @@ Menghapus grup dengan lebih dari 3 anggota bertanya dulu: di terminal Anda koman
 | `NO_MATCHING_TARGETS` | target hanya memilih hal yang tidak bisa dipakai perintah ini (exit 3) | petunjuk menyebut perintah untuk apa yang dipilih |
 | `TARGET_NOT_FOUND` | tidak ada server dengan nama itu (exit 3) | lihat "did you mean", atau `komando host list` |
 | `USAGE` | perintah yang butuh tepat satu conn mendapat target berisi beberapa | sebut satu conn itu |
-| `CONFIRM_REQUIRED` | `group rm` pada grup dengan lebih dari 3 anggota, dari agen AI atau script tanpa `--yes` | periksa anggotanya dengan `komando group list GRUP`, lalu tambahkan `--yes` setelah seseorang setuju |
+| `CONFIRM_REQUIRED` | `group rm` pada grup dengan lebih dari 3 anggota, dari agen AI atau script tanpa `--yes` | periksa anggotanya dengan `komando group list GROUP`, lalu tambahkan `--yes` setelah seseorang setuju |

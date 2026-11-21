@@ -46,7 +46,7 @@ office   wireguard      -     -       db1       connects for each command
 
 ## Menambah VPN
 
-VPN yang login dengan kata sandi, pre-shared key, atau auth key membacanya dari vault: simpan dulu dengan `komando secret set NAMA` (menanyakannya, disembunyikan), lalu sebut di `--password-ref` atau `--psk-ref`. Atau ketik saat Anda menambah VPN: `--ask-password` menyimpannya sebagai `secret:NAMA-pass`, dan `--ask-psk` menyimpan pre-shared key sebagai `secret:NAMA-psk`.
+VPN yang login dengan kata sandi, pre-shared key, atau auth key membacanya dari vault: simpan dulu dengan `komando secret set NAME` (menanyakannya, disembunyikan), lalu sebut di `--password-ref` atau `--psk-ref`. Atau ketik saat Anda menambah VPN: `--ask-password` menyimpannya sebagai `secret:NAME-pass`, dan `--ask-psk` menyimpan pre-shared key sebagai `secret:NAME-psk`.
 
 Pilih baris untuk jenis VPN Anda:
 
@@ -65,8 +65,8 @@ komando vpn add office proxy --proxy-address proxy.corp.example:3128
 ```
 
 - `--check host:port` adalah alamat yang hanya menjawab lewat VPN. `komando test` dan `komando vpn up` tersambung ke sana untuk membuktikan VPN berfungsi. Selalu tambahkan satu; VPN `system` dan `openvpn` membutuhkannya. Tanpanya, VPN proxy SOCKS atau HTTP diperiksa dengan tersambung ke proxy itu sendiri.
-- `--config` menerima file `.conf` WireGuard atau `.ovpn` OpenVPN. komando menyimpannya di vault, bersama key-nya. File aslinya masih memuat private key, jadi hapus bila Anda tidak lagi membutuhkannya. Secret di vault dinamai menurut VPN: `NAMA-key` dan `NAMA-psk` (WireGuard) atau `NAMA-config` (OpenVPN). Bila secret dengan nama itu sudah ada, `vpn add` berhenti dengan `SECRET_EXISTS` dan tidak menyimpan apa pun, jadi tidak pernah menggantikan secret yang dipakai server atau file. Pilih nama VPN lain, atau pindahkan secret-nya dulu (`komando secret rename`, atau `komando secret rm` bila VPN sebelumnya dengan nama itu yang meninggalkannya). `--overwrite` boleh memakai ulang secret milik VPN yang digantikannya, bila tidak ada yang lain memakainya, dan secret yang tidak dipakai apa pun dan sudah berisi key yang sama (file yang sama ditambahkan lagi setelah `vpn rm`) juga dipakai ulang.
-- `--password-ref` bekerja seperti di mana pun di komando: `secret:NAMA`, `env:VAR`, password manager, dan seterusnya (lihat [Server](servers.md)). Untuk Tailscale itu adalah auth key. VPN mengirimnya (dan `--psk-ref`) ke servernya setiap kali tersambung, jadi saat agen AI menambah VPN dengannya, atau mengarahkan VPN ke server atau alamat lain, seseorang mengizinkannya: `--yes` dan klik di jendela komando, yang menyebut rujukan dan servernya (`SECRET_DESTINATION`).
+- `--config` menerima file `.conf` WireGuard atau `.ovpn` OpenVPN. komando menyimpannya di vault, bersama key-nya. File aslinya masih memuat private key, jadi hapus bila Anda tidak lagi membutuhkannya. Secret di vault dinamai menurut VPN: `NAME-key` dan `NAME-psk` (WireGuard) atau `NAME-config` (OpenVPN). Bila secret dengan nama itu sudah ada, `vpn add` berhenti dengan `SECRET_EXISTS` dan tidak menyimpan apa pun, jadi tidak pernah menggantikan secret yang dipakai server atau file. Pilih nama VPN lain, atau pindahkan secret-nya dulu (`komando secret rename`, atau `komando secret rm` bila VPN sebelumnya dengan nama itu yang meninggalkannya). `--overwrite` boleh memakai ulang secret milik VPN yang digantikannya, bila tidak ada yang lain memakainya, dan secret yang tidak dipakai apa pun dan sudah berisi key yang sama (file yang sama ditambahkan lagi setelah `vpn rm`) juga dipakai ulang.
+- `--password-ref` bekerja seperti di mana pun di komando: `secret:NAME`, `env:VAR`, password manager, dan seterusnya (lihat [Server](servers.md)). Untuk Tailscale itu adalah auth key. VPN mengirimnya (dan `--psk-ref`) ke servernya setiap kali tersambung, jadi saat agen AI menambah VPN dengannya, atau mengarahkan VPN ke server atau alamat lain, seseorang mengizinkannya: `--yes` dan klik di jendela komando, yang menyebut rujukan dan servernya (`SECRET_DESTINATION`).
 - `--portal` adalah server VPN untuk `anyconnect`, `fortinet`, `globalprotect`, `f5`, dan `pulse`.
 - `--server` adalah server VPN untuk `l2tp`, `ipsec`, dan `ikev2`, dan `--psk-ref` pre-shared key-nya ("shared secret"; untuk `ipsec` kata sandi grup), sebagai rujukan seperti `--password-ref`. Lihat [Detail L2TP/IPsec, IPsec, dan IKEv2](#l2tpipsec-ipsec-and-ikev2-details).
 - `--service` (hanya `system`) adalah nama VPN di pengaturan komputer Anda. Dengannya, `komando vpn up` menyambungkan VPN untuk Anda (macOS: `scutil`; Linux: NetworkManager). Tanpanya, sambungkan VPN sendiri; komando memeriksanya dengan `--check`.
@@ -141,7 +141,7 @@ komando vpn edit tag:prod --protected         # tandai VPN sebagai dilindungi (s
 - `vpn edit` dan `vpn rm` menerima beberapa nama atau selector (`@office`, `tag:lab`), seperti `host edit` dan `host rm`.
 - VPN yang dilindungi (`--protected`) butuh jawaban ya dari seseorang sebelum diubah, digantikan, atau dihapus (`PROTECTED_TARGET`). Di terminal Anda komando bertanya dulu; agen AI atau script menambahkan `--yes` setelah seseorang setuju. Mematikan perlindungannya (`--protected=false`) atau mematikan `--mfa` melemahkan sebuah pemeriksaan, jadi juga butuh jawaban ya itu (`SAFETY_SETTING`). Lihat [Keamanan](safety.md#what-needs-a-yes).
 - Untuk memberi VPN WireGuard atau OpenVPN file konfigurasi baru, tambahkan lagi dengan `--overwrite`.
-- `vpn rename` menolak VPN yang sedang aktif: jalankan `komando vpn down NAMA` dulu. Secret vault yang dibuat `vpn add` dengan namanya (`LAMA-key`, `LAMA-psk`, `LAMA-config`, `LAMA-pass`) pindah ke nama baru bila hanya VPN ini yang memakainya, sehingga VPN baru bisa memakai nama lama.
+- `vpn rename` menolak VPN yang sedang aktif: jalankan `komando vpn down NAME` dulu. Secret vault yang dibuat `vpn add` dengan namanya (`OLD-key`, `OLD-psk`, `OLD-config`, `OLD-pass`) pindah ke nama baru bila hanya VPN ini yang memakainya, sehingga VPN baru bisa memakai nama lama.
 
 ## Detail OpenVPN
 
@@ -149,7 +149,7 @@ komando punya klien OpenVPN sendiri. Klien ini mendukung UDP dan TCP, `tls-auth`
 
 - Profil diperiksa saat Anda menambahkannya. Opsi yang tidak dipahami klien ditolak menurut namanya (`OVPN_UNSUPPORTED`), dan apa yang perlu diketahui seseorang tentangnya (tanpa pemeriksaan sertifikat server, di bawah) ada di `warnings` jawabannya.
 - Sertifikat server harus berasal dari `<ca>` profil. Klien juga memeriksa apa yang diminta profil, seperti OpenVPN: `remote-cert-tls server` (sertifikat harus menyatakan serverAuth), `ns-cert-type server`, `remote-cert-eku`, `remote-cert-ku`, dan `verify-x509-name` (secara default seluruh subject harus cocok persis, atribut demi atribut dan berurutan, seperti `"C=US, O=Corp, CN=vpn.corp.com"`).
-- Profil yang tidak meminta satu pun dari ini tetap mendapat satu pemeriksaan: sertifikat server harus ditandai untuk server (serverAuth, atau nsCertType server yang lebih lama). Kalau tidak, sertifikat user lain dari CA yang sama bisa berpura-pura menjadi server; OpenVPN sendiri hanya memperingatkan di sini. Bila sertifikat server Anda tidak ditandai untuk keduanya, error menampilkan nama di dalamnya. Periksa nama itu dengan admin VPN, lalu tambahkan `verify-x509-name NAMA name` ke profil (atau minta sertifikat diterbitkan lagi dengan serverAuth).
+- Profil yang tidak meminta satu pun dari ini tetap mendapat satu pemeriksaan: sertifikat server harus ditandai untuk server (serverAuth, atau nsCertType server yang lebih lama). Kalau tidak, sertifikat user lain dari CA yang sama bisa berpura-pura menjadi server; OpenVPN sendiri hanya memperingatkan di sini. Bila sertifikat server Anda tidak ditandai untuk keduanya, error menampilkan nama di dalamnya. Periksa nama itu dengan admin VPN, lalu tambahkan `verify-x509-name NAME name` ke profil (atau minta sertifikat diterbitkan lagi dengan serverAuth).
 - Saat server mendorong `auth-token`, komando login dengannya saat key diperbarui, jadi kode sekali pakai tidak ditanyakan lagi. Token tidak pernah dicatat di log.
 - Kompresi (`comp-lzo yes`, `compress lz4`) juga ditolak: mengompresi sebelum mengenkripsi membocorkan data (serangan VORACLE). `comp-lzo no` dan `compress stub-v2` tidak masalah.
 - Dengan `auth-user-pass` di profil, berikan `--user` dan `--password-ref`, atau `--mfa` untuk mengetik kata sandi (dengan PIN atau kode sekali pakai, untuk Pritunl) saat `komando vpn up`. Profil OpenVPN biasa yang diekspor dari Pritunl berfungsi.
@@ -204,7 +204,7 @@ komando vpn add office l2tp --server vpn.example.com --psk-ref secret:office-psk
 komando test office
 ```
 
-- Tanpa `--password-ref`, seseorang mengetik kata sandi saat `komando vpn up NAMA` (kata sandi dengan kode sekali pakai juga berfungsi).
+- Tanpa `--password-ref`, seseorang mengetik kata sandi saat `komando vpn up NAME` (kata sandi dengan kode sekali pakai juga berfungsi).
 - `l2tp` login ke PPP dengan MS-CHAPv2, dan memeriksa juga bukti dari server bahwa ia mengetahui kata sandi Anda. Dengan pre-shared key yang dibagi bersama, siapa pun yang mengetahui key itu bisa berpura-pura menjadi server, jadi server yang meminta login lebih lemah diminta MS-CHAPv2 sebagai gantinya: PAP menyerahkan kata sandi Anda sendiri kepada server, dan CHAP-MD5 atau tanpa login tidak membuktikan apa pun tentang server. Server yang bersikeras berhenti dengan error yang menyatakannya. Tautan tidak pernah aktif sebelum login. Bila server tidak bisa lebih baik dan Anda menerimanya, izinkan login lemah untuk VPN itu saja: `komando vpn edit office --allow-pap`.
 - `ipsec` dengan nama grup (`--id`) login dengan IKEv1 aggressive mode, seperti klien Cisco sendiri. Siapa pun yang melihat login itu bisa menebak kata sandi grup secara offline, dan dengannya berpura-pura menjadi server. Log sesi dan `komando doctor` memperingatkannya; pakai `ikev2` bila server menawarkannya.
 - `ikev2` dengan login user memeriksa sertifikat server terhadap CA tepercaya di komputer Anda, atau terhadap `--ca`, dan bahwa sertifikat itu dibuat atas nama server (atau `--remote-id`). komando tidak pernah melewati pemeriksaan itu.
@@ -212,7 +212,7 @@ komando test office
 - Cipher untuk IKEv1 (`l2tp`, `ipsec`): AES dengan SHA-256 atau SHA-1 dan DH group 14 (2048-bit) atau 19; ESP dengan AES-GCM atau AES-CBC. Server hanya bisa memilih salah satunya, tidak ada yang lebih lemah. 3DES dan DH group 2 dan 5 lemah (penyerang yang berdana besar bisa memecahkannya) dan tidak ditawarkan: server yang menginginkannya berhenti dengan error yang menyatakannya. Bila admin-nya tidak bisa mengubahnya, izinkan untuk VPN itu saja: `komando vpn edit office --legacy-crypto`. Cipher itu lalu ditaruh setelah yang kuat, dan log sesi memperingatkan saat server memilih salah satunya. IKEv2: AES-GCM dan AES-CBC dengan SHA-2 atau SHA-1, DH group 14, 19, 20, 31 (dan 2 untuk server lama). DES tunggal dan MD5 tidak pernah dipakai.
 - `--legacy-crypto` dan `--allow-pap` membuat login lebih lemah, jadi menyalakan salah satunya butuh jawaban ya dari seseorang: di terminal Anda komando bertanya dulu; agen AI atau script menambahkan `--yes` setelah seseorang setuju. Nyalakan saat Anda menambah VPN (`komando vpn add office l2tp ... --legacy-crypto`) atau nanti dengan `komando vpn edit`; `--legacy-crypto=false` dan `--allow-pap=false` mematikannya lagi. `komando doctor` mencantumkan setiap VPN yang menyalakan salah satunya.
 - Saat sesi berakhir sendiri, `komando vpn status` menampilkan alasannya di `last_end`.
-- Bila server tidak menjawab, jalankan `KOMANDO_IPSEC_DEBUG=1 komando vpn up NAMA`: log sesi lalu mencantumkan setiap pesan IKE yang dikirim dan diterima (ukuran dan tipe, tidak pernah key). Hanya mengirim dan tidak ada yang diterima berarti UDP 500 tidak tembus, atau server mengabaikan tawaran komando.
+- Bila server tidak menjawab, jalankan `KOMANDO_IPSEC_DEBUG=1 komando vpn up NAME`: log sesi lalu mencantumkan setiap pesan IKE yang dikirim dan diterima (ukuran dan tipe, tidak pernah key). Hanya mengirim dan tidak ada yang diterima berarti UDP 500 tidak tembus, atau server mengabaikan tawaran komando.
 
 ## Batasan
 
@@ -228,12 +228,12 @@ komando test office
 
 | Kode | Artinya | Yang perlu dilakukan |
 |------|---------|----------------------|
-| `VPN_DOWN` (exit 4) | VPN tidak menjawab | hint bergantung pada jenisnya: sambungkan VPN `system`; jalankan proxy SOCKS (`komando tunnel start bastion -D 1080`); periksa bahwa proxy HTTP menjawab dan membiarkan port lewat (banyak proxy perusahaan hanya mengizinkan 443); periksa bahwa endpoint WireGuard bisa dijangkau dan key-nya cocok; untuk VPN sesi, sambungkan ulang dengan `komando vpn down NAMA` dan `komando vpn up NAMA` |
+| `VPN_DOWN` (exit 4) | VPN tidak menjawab | hint bergantung pada jenisnya: sambungkan VPN `system`; jalankan proxy SOCKS (`komando tunnel start bastion -D 1080`); periksa bahwa proxy HTTP menjawab dan membiarkan port lewat (banyak proxy perusahaan hanya mengizinkan 443); periksa bahwa endpoint WireGuard bisa dijangkau dan key-nya cocok; untuk VPN sesi, sambungkan ulang dengan `komando vpn down NAME` dan `komando vpn up NAME` |
 | `VPN_DOWN` saat `vpn up` pada WireGuard | tidak ada yang menjawab di `--check` lewat tunnel (belum ada handshake) | periksa endpoint dan key (`komando vpn show office`) |
-| `VPN_LOGIN_REQUIRED` (exit 4) | VPN butuh login dari seseorang dan tidak punya sesi | seseorang menjalankan `komando vpn up NAMA` |
+| `VPN_LOGIN_REQUIRED` (exit 4) | VPN butuh login dari seseorang dan tidak punya sesi | seseorang menjalankan `komando vpn up NAME` |
 | `VPN_CLIENT_MISSING` (exit 3) | `openconnect` atau `ocproxy` tidak terinstal | instal program yang disebut pesan |
 | `VPN_IN_USE` (exit 8) | `vpn rm` pada VPN yang masih ada di jalur `--via` | ubah jalur `--via` itu dulu |
-| `VPN_CONFIG` (exit 2) | pengaturan tersimpan atau file konfigurasi salah | perbaiki dengan `komando vpn add NAMA ... --overwrite` |
+| `VPN_CONFIG` (exit 2) | pengaturan tersimpan atau file konfigurasi salah | perbaiki dengan `komando vpn add NAME ... --overwrite` |
 | `OVPN_UNSUPPORTED` (exit 2) | profil OpenVPN punya opsi yang tidak didukung klien komando | ubah profilnya; pesan menyebut opsinya |
 | `SECRET_EXISTS` (exit 8) | secret vault dengan nama VPN itu sudah ada | pilih nama VPN lain, atau pindahkan secret-nya dulu |
 

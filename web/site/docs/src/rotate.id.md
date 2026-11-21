@@ -28,7 +28,7 @@ komando host edit web1 --ask-password        # ketik yang baru (disimpan sebagai
 komando test web1
 ```
 
-Untuk kata sandi yang dipakai bersama oleh beberapa server, jalankan `komando secret set NAMA` dengan nama secret-nya (`komando secret list` menunjukkan apa yang memakai tiap secret).
+Untuk kata sandi yang dipakai bersama oleh beberapa server, jalankan `komando secret set NAME` dengan nama secret-nya (`komando secret list` menunjukkan apa yang memakai tiap secret).
 
 ## Rotasi kata sandi database
 
@@ -72,7 +72,7 @@ Pada conn yang dilindungi, `db user passwd` dan `conn edit` bertanya dulu kepada
 ## Batasan
 
 - `key rm` ditolak selama masih ada server yang memakai key itu: arahkan server tersebut ke key baru dulu (`key deploy --set-default` melakukannya).
-- `key revoke` menghapus key dari `~/.ssh/authorized_keys` milik user yang dipakai login, atau milik `--user NAMA` (dengan sudo). Key di file user lain tidak disentuh.
+- `key revoke` menghapus key dari `~/.ssh/authorized_keys` milik user yang dipakai login, atau milik `--user NAME` (dengan sudo). Key di file user lain tidak disentuh.
 - `audit --actor` hanya menemukan apa yang dilakukan lewat komando.
 
 ## Pemecahan masalah
@@ -81,6 +81,6 @@ Pada conn yang dilindungi, `db user passwd` dan `conn edit` bertanya dulu kepada
 |-------|---------|----------------------|
 | `POLICY_BLOCKED` (exit 6) | `key revoke` pada key yang dipakai komando untuk login | deploy key lain dengan `--set-default` dulu |
 | `KEY_IN_USE` (exit 8) | `key rm` pada key yang masih dipakai server | arahkan server ke key lain dulu |
-| `KEY_EXISTS` (exit 8) | `key gen` ke nama yang sudah dipakai | pilih nama lain, atau jalankan `komando key rm NAMA` dulu |
+| `KEY_EXISTS` (exit 8) | `key gen` ke nama yang sudah dipakai | pilih nama lain, atau jalankan `komando key rm NAME` dulu |
 | `PROTECTED_TARGET`, `PROTECTED_TARGET` (exit 6) | perubahan di server atau conn yang dilindungi | di terminal Anda komando bertanya dulu; script menambahkan `--yes` |
 | `AUTH_FAILED` (exit 4) | key atau kata sandi baru tidak bisa login | periksa sebelum Anda mencabut yang lama; lihat [Hasil dan error](output.md#troubleshooting) |
