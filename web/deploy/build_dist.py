@@ -258,9 +258,10 @@ ASSET_REF = re.compile(r'((?:src|href)=")([^"#?:]+\.(?:js|css))(")')
 def version_assets(out):
     """Add ?v=<first 10 hex of the file's sha256> to every local script and stylesheet link.
 
-    Files under /assets/ are cached for a week under the same name. Without a version in the link, a returning
-    visitor keeps an old site.js beside a new page (the old script reset the theme to dark on a dark OS).
-    A changed file gets a new link, so the page and its files always match."""
+    /assets/* is served no-cache, which only governs copies fetched after it was set. A browser that cached a
+    file earlier (under the old week-long header) keeps it fresh and would run it beside a new page (an old
+    site.js reset the theme to dark on a dark OS). The versioned link is a new URL for it, so the page and its
+    files match at once. A changed file gets a new link; what scripts and stylesheets import is covered by no-cache."""
     root = out.resolve()
     for rel in pages_of(out):
         page = out / rel
