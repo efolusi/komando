@@ -27,7 +27,7 @@ komando menyebut database sebuah **conn** (lihat [glosarium](glossary.md)). Jeni
 
 `komando conn kinds` mencantumkan setiap jenis, termasuk cache, queue, storage, cluster, dan registry.
 
-Jangan pernah menaruh kata sandi di URL; komando menolaknya. `--ask-password` menanyakannya (disembunyikan) dan menyimpannya di vault sebagai `secret:prod-db-pass`. Atau simpan dulu, atau arahkan ke password manager Anda (lihat [Secret](secrets.md)):
+Jangan pernah menaruh kata sandi di URL; komando menolaknya. `--ask-password` menanyakannya (disembunyikan) dan menyimpannya di vault sebagai `secret:prod-db-pass`. Atau simpan dulu, atau arahkan ke password manager (lihat [Secret](secrets.md)):
 
 ```bash
 komando secret set prod-db-pass
@@ -46,11 +46,11 @@ komando conn edit prod-db --login ask        # berhenti memakai kata sandi tersi
 komando conn edit prod-db --login password --ask-password   # kembali ke yang tersimpan
 ```
 
-`--login` menerima kata yang dicetak `conn show` dan `list` di field `login`-nya: `ask` (seseorang mengetik kata sandi di setiap koneksi; tidak pernah disimpan), `password` (yang tersimpan: `--ask-password` atau `--password-ref`), atau `none` (komando tidak mengirim kata sandi apa pun miliknya sendiri: login milik URL, login cloud, atau tidak ada). Conn login-ask bertanya seperti [server login-ask](servers.md#type-the-password-each-time---login-ask): di terminal Anda (disembunyikan), di jendela aplikasi, atau, untuk perintah agen AI, di jendela komando sendiri, yang menyebut conn, user, alamat, jalan ke sana (`--via`), dan perintahnya; agen tidak pernah melihat kata sandinya. Pembatalan menghentikan perintah dengan `DECLINED`, dan jendela tetap tertutup untuk conn itu selama semenit. Script, atau agen tanpa layar, mendapat `NEEDS_PERSON`. Hanya Anda yang menentukan ke mana kata sandi menuju: agen AI yang menambah conn login-ask, mengubah URL atau `--via`-nya, mengubah satu menjadi `--login ask`, mengubah server atau VPN di jalannya, atau mengganti secret yang disebut URL-nya (`ca=secret:`) mendapat `NEEDS_PERSON`; seperti untuk kata sandi tersimpan (di atas), setiap pengaturan URL kecuali beberapa yang tidak memindahkan apa pun dihitung sebagai ke mana kata sandi menuju. `db dump` dan `db restore` milik agen pada conn seperti itu juga berhenti: tool dump akan mendapat kata sandi di lingkungannya, tempat program agen sendiri bisa membacanya; jalankan itu sendiri. File (SQLite) atau cluster tidak punya kata sandi untuk diketik: `--login ask` ditolak di sana. Conn tidak punya `komando login`, jadi setiap perintah bertanya; pakai TLS (`sslmode=verify-full`, `tls=true`) agar server diperiksa sebelum kata sandi keluar.
+`--login` menerima kata yang dicetak `conn show` dan `list` di field `login`-nya: `ask` (seseorang mengetik kata sandi di setiap koneksi; tidak pernah disimpan), `password` (yang tersimpan: `--ask-password` atau `--password-ref`), atau `none` (komando tidak mengirim kata sandi apa pun miliknya sendiri: login milik URL, login cloud, atau tidak ada). Conn login-ask bertanya seperti [server login-ask](servers.md#type-the-password-each-time---login-ask): di terminal (disembunyikan), di jendela aplikasi, atau, untuk perintah agen AI, di jendela komando sendiri, yang menyebut conn, user, alamat, jalan ke sana (`--via`), dan perintahnya; agen tidak pernah melihat kata sandinya. Pembatalan menghentikan perintah dengan `DECLINED`, dan jendela tetap tertutup untuk conn itu selama semenit. Script, atau agen tanpa layar, mendapat `NEEDS_PERSON`. Hanya Anda yang menentukan ke mana kata sandi menuju: agen AI yang menambah conn login-ask, mengubah URL atau `--via`-nya, mengubah satu menjadi `--login ask`, mengubah server atau VPN di jalannya, atau mengganti secret yang disebut URL-nya (`ca=secret:`) mendapat `NEEDS_PERSON`; seperti untuk kata sandi tersimpan (di atas), setiap pengaturan URL kecuali beberapa yang tidak memindahkan apa pun dihitung sebagai ke mana kata sandi menuju. `db dump` dan `db restore` milik agen pada conn seperti itu juga berhenti: tool dump akan mendapat kata sandi di lingkungannya, tempat program agen sendiri bisa membacanya; jalankan itu sendiri. File (SQLite) atau cluster tidak punya kata sandi untuk diketik: `--login ask` ditolak di sana. Conn tidak punya `komando login`, jadi setiap perintah bertanya; pakai TLS (`sslmode=verify-full`, `tls=true`) agar server diperiksa sebelum kata sandi keluar.
 
-`--via web1` berarti "database hanya bisa dijangkau dari web1". komando tersambung lewat web1 melalui SSH dengan sendirinya: tidak ada tunnel yang dimulai dan tidak ada port yang terbuka di komputer Anda. `--via` juga bisa berupa rantai atau VPN (lihat [Tunnel](tunnels.md) dan [VPN](vpn.md)). Conn yang langsung lewat jaringan sebaiknya memakai TLS: lihat [Enkripsi (TLS)](#encryption-tls).
+`--via web1` berarti "database hanya bisa dijangkau dari web1". komando tersambung lewat web1 melalui SSH dengan sendirinya: tidak ada tunnel yang dimulai dan tidak ada port yang terbuka di komputer ini. `--via` juga bisa berupa rantai atau VPN (lihat [Tunnel](tunnels.md) dan [VPN](vpn.md)). Conn yang langsung lewat jaringan sebaiknya memakai TLS: lihat [Enkripsi (TLS)](#encryption-tls).
 
-Di terminal, perintah yang tidak menyebut database atau SQL akan menanyakannya, dengan daftar database Anda, lalu mencetak perintah lengkapnya. Jika diketik tanpa argumen, `komando db query` menanyakan database mana, lalu SQL-nya. Agen AI atau script mendapat `USAGE` (exit 2) dengan contoh di hint. Setiap error berakhir dengan hint yang menyebut perintah berikutnya yang dijalankan, dengan conn Anda di dalamnya.
+Di terminal, perintah yang tidak menyebut database atau SQL akan menanyakannya, dengan daftar database, lalu mencetak perintah lengkapnya. Jika diketik tanpa argumen, `komando db query` menanyakan database mana, lalu SQL-nya. Agen AI atau script mendapat `USAGE` (exit 2) dengan contoh di hint. Setiap kesalahan berakhir dengan hint yang menyebut perintah berikutnya yang dijalankan, dengan conn itu di dalamnya.
 
 ### Memeriksa, mengubah, mengganti nama, atau menghapus conn database
 
@@ -83,7 +83,7 @@ orders  table  18230
 users   table  1204
 ```
 
-- `db schema` menampilkan tabel dalam urutan yang Anda sebut, dan menandai kolom `auto_increment` dan `generated always as identity`.
+- `db schema` menampilkan tabel dalam urutan yang disebut, dan menandai kolom `auto_increment` dan `generated always as identity`.
 - Tabel di schema `public` tampil tanpanya; yang lain sebagai `schema.table`.
 
 ## Menjalankan query
@@ -99,7 +99,7 @@ id    email
 (2 rows)
 ```
 
-Query hanya membaca kecuali Anda menambahkan `--write` (lihat [Mengubah data](#change-data)).
+Query hanya membaca kecuali ditambahkan `--write` (lihat [Mengubah data](#change-data)).
 
 ```bash
 komando db explain prod-db "select * from orders where user_id = 42"
@@ -112,7 +112,7 @@ Pakai `--arg` untuk nilai, bukan menempelkannya ke SQL. Placeholder-nya `$1`, `$
 komando db query prod-db "select * from users where email = $1" --arg bob@example.com
 ```
 
-Jumlah nilai `--arg` harus cocok dengan placeholder (`USAGE`, exit 2). Di SQL Oracle setiap placeholder mengambil `--arg` sendiri, juga nama yang dipakai dua kali (`where a = :1 or b = :1` mengambil dua); di blok PL/SQL nama yang dipakai dua kali mengambil satu.
+Jumlah nilai `--arg` wajib cocok dengan placeholder (`USAGE`, exit 2). Di SQL Oracle setiap placeholder mengambil `--arg` sendiri, juga nama yang dipakai dua kali (`where a = :1 or b = :1` mengambil dua); di blok PL/SQL nama yang dipakai dua kali mengambil satu.
 
 ### Mengekspor baris ke CSV atau TSV
 
@@ -122,7 +122,7 @@ Untuk spreadsheet dan script, `-o csv` atau `-o tsv` mencetak baris sebagai gant
 komando db query prod-db -o csv "select id, email from users" > users.csv
 ```
 
-Ekspor CSV atau TSV memuat setiap baris, kecuali Anda memberi `--limit` (komando lalu menyatakan di stderr saat berhenti di sana). Bila barisnya lebih dari `--max-output` byte, komando tidak mencetak apa pun dan gagal dengan `OUTPUT_TRUNCATED` (exit 1), sehingga file tidak pernah terpotong tanpa Anda ketahui: naikkan `--max-output`, atau untuk seluruh database pakai `komando db dump`. Error menuju stderr, jadi file hanya berisi baris.
+Ekspor CSV atau TSV memuat setiap baris, kecuali diberi `--limit` (komando lalu menyatakan di stderr saat berhenti di sana). Bila barisnya lebih dari `--max-output` byte, komando tidak mencetak apa pun dan gagal dengan `OUTPUT_TRUNCATED` (exit 1), sehingga file tidak pernah terpotong tanpa diketahui: naikkan `--max-output`, atau untuk seluruh database pakai `komando db dump`. Kesalahan menuju stderr, jadi file hanya berisi baris.
 
 ### Berapa banyak yang kembali, dan berapa lama boleh berjalan
 
@@ -148,9 +148,9 @@ Di output teks, tabel sejajar, juga dengan karakter CJK dan emoji. Bagaimana set
 
 ## Mengubah data
 
-`komando db query` tidak mengubah data Anda kecuali Anda menambahkan `--write`. Tanpanya, query berjalan di transaksi read-only dan database sendiri menolak perubahan.
+`komando db query` tidak mengubah data kecuali ditambahkan `--write`. Tanpanya, query berjalan di transaksi read-only dan database sendiri menolak perubahan.
 
-Mengubah data butuh dua langkah. Pertama dry run: SQL benar-benar berjalan, Anda melihat berapa baris yang disentuhnya, lalu semuanya di-rollback.
+Mengubah data butuh dua langkah. Pertama dry run: SQL benar-benar berjalan, terlihat berapa baris yang disentuhnya, lalu semuanya di-rollback.
 
 ```bash
 komando db query prod-db --write --dry-run "update users set plan = 'pro' where id = 42"
@@ -166,13 +166,13 @@ Sabuk pengamannya:
 
 - Conn yang dilindungi bertanya sebelum setiap `--write`, apa pun SQL-nya.
 - SQL yang merusak dihentikan: `DROP`, `TRUNCATE`, `DELETE` atau `UPDATE` tanpa `WHERE`, perubahan hak akses, kode yang menjangkau sistem operasi server (`CREATE EXTENSION`, fungsi dalam C atau `plpython3u`, `LOAD`, MySQL `INSTALL PLUGIN` dan `SONAME`, SQL Server `CREATE ASSEMBLY`), dan beberapa lagi. `komando policy list` menampilkan semuanya; `komando policy check --conn-kind postgres "..."` menguji sebuah query.
-- Di terminal Anda komando bertanya dulu (conn yang dilindungi: jawaban ya; SQL yang merusak: Anda mengetik nama conn); agen AI atau script menambahkan `--yes` (atau `--allow-dangerous`) setelah seseorang setuju. Tanpanya, mereka mendapat `PROTECTED_TARGET` atau `POLICY_BLOCKED` (exit 6). Lihat [Keamanan](safety.md#what-needs-a-yes).
+- Di terminal, komando bertanya dulu (conn yang dilindungi: jawaban ya; SQL yang merusak: Anda mengetik nama conn); agen AI atau script menambahkan `--yes` (atau `--allow-dangerous`) setelah seseorang setuju. Tanpanya, mereka mendapat `PROTECTED_TARGET` atau `POLICY_BLOCKED` (exit 6). Lihat [Keamanan](safety.md#what-needs-a-yes).
 - Beberapa fungsi admin yang tidak dihentikan transaksi read-only (mengakhiri sesi, membaca file server, `dblink`) diblokir oleh pemeriksaan komando sendiri.
 - `BEGIN` dan `COMMIT` ditolak: komando menjalankan semuanya dalam satu transaksi. Setiap pernyataan dikirim ke server sendiri-sendiri, dan bila ada yang tetap mengakhiri transaksi itu, komando berhenti sebelum yang berikutnya.
 - Tanpa `--write`, sesi juga read-only (di Postgres, kecuali pooler seperti PgBouncer menolak pengaturan itu; lalu hanya transaksinya).
 - SQL yang tidak bisa dibaca komando seperti server membacanya ditolak (`SQL_HIDDEN_CODE`): komentar MySQL `/*! ... */`, nama Postgres `U&"..."`, angka yang ditulis tepat sebelum `$` (`1abc$$`), MySQL `--` yang diikuti byte non-ASCII. Mengubah character set klien (`SET NAMES`, `client_encoding`) ditolak, begitu juga koneksi yang character set-nya bisa menyembunyikan backslash (SJIS, GBK, BIG5, dan sejenisnya).
-- Beberapa pernyataan tidak bisa di-rollback (`VACUUM`, `CREATE INDEX CONCURRENTLY`, `SET PASSWORD`, dan di MySQL setiap pernyataan selain `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `REPLACE`, `SHOW`, `SET`, dan beberapa pembacaan lain). Pernyataan itu harus dikirim sendirian, dan dry run hanya melaporkannya.
-- Dry run juga melewati apa yang tidak dibatalkan rollback: `setval()`, mengakhiri sesi, `COPY ... PROGRAM`, file server, `dblink`, dan kode yang tidak bisa dilihat komando (`DO`, `CALL`, `EXECUTE`). Bila eksekusi sungguhan akan diblokir (tanpa `--allow-dangerous`, atau conn yang dilindungi tanpa `--yes`), dry run tidak menjalankan apa pun dan hanya menampilkan rencananya. Fungsi yang Anda panggil dengan nama (`SELECT reset_ids()`) berjalan, dan apa yang dilakukannya di luar transaksi (sequence, file) tetap.
+- Beberapa pernyataan tidak bisa di-rollback (`VACUUM`, `CREATE INDEX CONCURRENTLY`, `SET PASSWORD`, dan di MySQL setiap pernyataan selain `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `REPLACE`, `SHOW`, `SET`, dan beberapa pembacaan lain). Pernyataan itu wajib dikirim sendirian, dan dry run hanya melaporkannya.
+- Dry run juga melewati apa yang tidak dibatalkan rollback: `setval()`, mengakhiri sesi, `COPY ... PROGRAM`, file server, `dblink`, dan kode yang tidak bisa dilihat komando (`DO`, `CALL`, `EXECUTE`). Bila eksekusi sungguhan akan diblokir (tanpa `--allow-dangerous`, atau conn yang dilindungi tanpa `--yes`), dry run tidak menjalankan apa pun dan hanya menampilkan rencananya. Fungsi yang dipanggil dengan nama (`SELECT reset_ids()`) berjalan, dan apa yang dilakukannya di luar transaksi (sequence, file) tetap.
 - `db explain --analyze` benar-benar menjalankan query, jadi query yang mengubah data butuh `--write` di sana juga.
 
 Pemeriksaan ini menangkap kesalahan. Untuk batas yang sungguhan, beri komando user database yang hanya punya hak yang dibutuhkannya.
@@ -218,13 +218,13 @@ komando db dump prod-db --to prod.dump --format custom --run-on db1     # pg_dum
 komando db restore staging-db --from prod.dump --run-on db1             # pg_restore berjalan di db1
 ```
 
-Restore bisa menimpa data. Di terminal Anda komando bertanya dulu; agen AI atau script menambahkan `--allow-dangerous` (dan `--yes` di conn yang dilindungi) setelah seseorang setuju. Lihat [Restore dengan aman](#restore-safely).
+Restore bisa menimpa data. Di terminal, komando bertanya dulu; agen AI atau script menambahkan `--allow-dangerous` (dan `--yes` di conn yang dilindungi) setelah seseorang setuju. Lihat [Restore dengan aman](#restore-safely).
 
 ### Ke mana backup pergi, dan siapa yang membuatnya
 
 Backup selalu menuju file di komputer ini, hanya bisa dibaca Anda. File yang sudah ada tidak pernah ditimpa. Tanpa `--to`, namanya `CONN-<tanggal>.sql.gz` di folder ini (`--format custom`: `CONN-<tanggal>.dump`; SQLite: `CONN-<tanggal>.db`); `--to` sebuah folder menaruh nama itu di dalamnya.
 
-`pg_dump` atau `mysqldump` berjalan di server yang memilikinya: yang Anda sebut dengan `--run-on HOST`, kalau tidak server terakhir di jalur `--via` milik conn. Kalau tidak (conn langsung atau VPN, atau server `--via` tanpa tool itu) komando membuat dump sendiri, dan tidak ada yang perlu diinstal. `runs_on` di jawaban (dan di `komando audit`) menyebut di mana tool berjalan. Restore SQL polos selalu dijalankan komando sendiri, lewat jalur `--via` yang sama, tidak pernah oleh `psql` atau `mysql`: keduanya akan menuruti perintah klien yang tersembunyi di file di server itu. Hanya arsip PostgreSQL yang menuju `pg_restore` di server. `tool` di jawaban menyatakan mana yang dipakai.
+`pg_dump` atau `mysqldump` berjalan di server yang memilikinya: yang disebut dengan `--run-on HOST`, kalau tidak server terakhir di jalur `--via` milik conn. Kalau tidak (conn langsung atau VPN, atau server `--via` tanpa tool itu) komando membuat dump sendiri, dan tidak ada yang perlu diinstal. `runs_on` di jawaban (dan di `komando audit`) menyebut di mana tool berjalan. Restore SQL polos selalu dijalankan komando sendiri, lewat jalur `--via` yang sama, tidak pernah oleh `psql` atau `mysql`: keduanya akan menuruti perintah klien yang tersembunyi di file di server itu. Hanya arsip PostgreSQL yang menuju `pg_restore` di server. `tool` di jawaban menyatakan mana yang dipakai.
 
 Kata sandi menuju tool di server lewat lingkungannya, tidak pernah di command line-nya, jadi user lain di server itu tidak bisa melihatnya. Untuk conn MySQL dengan `?tls=...`, pengaturan TLS yang sama diteruskan ke tool di server (klien MySQL dan MariaDB sama-sama berfungsi). Untuk Postgres, `pg_dump` dan `pg_restore` membaca URL conn sendiri: dengan `sslmode=verify-full` (atau `verify-ca`) keduanya memeriksa sertifikat database terhadap `~/.postgresql/root.crt` di server tempat keduanya berjalan, bukan terhadap CA sistem seperti yang dilakukan komando. Dengan `pg_dump` 16 atau lebih baru, komando menambahkan `sslrootcert=system`, sehingga keduanya memakai CA sistem juga. Yang lebih lama butuh CA di file itu di sana; tanpanya dump berhenti dengan `DB_CONNECT` dan hint (instal `postgresql-client` 16 atau lebih baru, taruh CA di `~/.postgresql/root.crt`, atau jangkau database `--via` server itu tanpa TLS).
 
@@ -232,20 +232,20 @@ Kata sandi menuju tool di server lewat lingkungannya, tidak pernah di command li
 
 Tool di server juga memeriksa sertifikat database terhadap CA milik conn, dengan pemeriksaan penuh yang sama seperti yang dilakukan komando: ditandatangani CA itu dan menyebut nama server. komando mengirim CA setelah kata sandi, lewat input tool, tidak pernah di command line-nya. CA mendarat di folder baru di `/tmp` yang hanya bisa dibuka user login, dan dihapus setelah tool berakhir. `pg_dump` dan `pg_restore` versi apa pun mendapatkannya sebagai `sslrootcert=` dengan `sslmode=verify-full` (sebagai ganti `ca=`, yang tidak dikenal libpq), jadi `~/.postgresql/root.crt` tidak dibutuhkan. `mysqldump` mendapat `--ssl-ca` dan koneksi TLS yang diperiksa, juga saat URL tidak punya `tls=`.
 
-### Menjalankan dump di server pilihan Anda (`--run-on HOST`)
+### Menjalankan dump di server pilihan (`--run-on HOST`)
 
-Ini membantu saat conn lewat VPN (komando lalu hanya bisa menulis SQL polos sendiri) tetapi server yang Anda kelola punya `pg_dump` dan bisa menjangkau database, sering server database itu sendiri:
+Ini membantu saat conn lewat VPN (komando lalu hanya bisa menulis SQL polos sendiri) tetapi server yang dikelola punya `pg_dump` dan bisa menjangkau database, sering server database itu sendiri:
 
 ```bash
 komando db dump prod-db --to prod.dump --format custom --run-on db1 --dry-run
 komando db dump prod-db --to prod.dump --format custom --run-on db1
 ```
 
-- `HOST` adalah server dari daftar Anda (nama atau selector yang memilih tepat satu); komando menjangkaunya dengan cara lazim, lewat `--via`-nya sendiri. Kata sandi conn menuju ke sana, jadi `user@address` yang tidak ada di daftar Anda ditolak, dan untuk agen AI server selain server `--via` milik conn sendiri butuh jawaban ya Anda (`SECRET_DESTINATION`).
+- `HOST` adalah server dari daftar (nama atau selector yang memilih tepat satu); komando menjangkaunya dengan cara lazim, lewat `--via`-nya sendiri. Kata sandi conn menuju ke sana, jadi `user@address` yang tidak ada di daftar ditolak, dan untuk agen AI server selain server `--via` milik conn sendiri butuh jawaban ya Anda (`SECRET_DESTINATION`).
 - Tool di sana tersambung ke alamat URL conn seperti yang dilihat server itu. Bila database hanya mendengarkan di `127.0.0.1` di server itu, tambahkan conn kedua untuk alamat itu yang dijangkau lewatnya (`komando db add prod-db-local postgres://app@127.0.0.1:5432/app --via db1 --password-ref secret:prod-db-pass`) dan dump yang itu; `CONN_UNREACHABLE` menyatakan hal ini saat terjadi.
 - Dump berjalan dengan prioritas rendah (`nice -n 10`, ditambah `ionice -c3` di tempat server memilikinya), sehingga server tetap melayani penggunanya. `low_priority` di jawaban menyatakannya.
 - Backup mengalir kembali lewat SSH ke `--to` di komputer ini (dikompres di sini bila berakhir `.gz`); tidak ada yang ditulis di server, kecuali sertifikat CA privat selama tool berjalan.
-- `pg_dump` menolak server yang lebih baru darinya. komando melaporkannya sebagai `TOOL_TOO_OLD` dengan kedua versi dan package yang diinstal (`postgresql-client-NN`). Server yang disebut dengan `--run-on` tidak pernah dilewati: tool yang hilang atau lama di sana adalah error, sedangkan server `--via` tanpa tool yang bisa dipakai kembali ke dump SQL polos milik komando sendiri.
+- `pg_dump` menolak server yang lebih baru darinya. komando melaporkannya sebagai `TOOL_TOO_OLD` dengan kedua versi dan package yang diinstal (`postgresql-client-NN`). Server yang disebut dengan `--run-on` tidak pernah dilewati: tool yang hilang atau lama di sana adalah kesalahan, sedangkan server `--via` tanpa tool yang bisa dipakai kembali ke dump SQL polos milik komando sendiri.
 - `db restore --run-on HOST` menjalankan `pg_restore` di sana untuk sebuah arsip, mengalirkan file ke sana lewat SSH. Perintah ini bertanya sama seperti restore mana pun. SQL polos selalu di-restore komando sendiri, jadi `--run-on` dengan file SQL ditolak.
 - Tool PostgreSQL 17 menulis `SET transaction_timeout`, yang tidak dikenal server sebelum 17. Restore SQL polos milik komando sendiri melewati baris itu di server seperti itu. `pg_restore` 17 tidak bisa memuat arsip ke sana, dan `pg_restore` yang lebih lama tidak bisa membaca arsip yang lebih baru: untuk server lama, dump dengan `--format custom` hanya dari `pg_dump` versi mayor yang sama, atau pakai SQL polos.
 
@@ -263,13 +263,13 @@ SQL polos yang juga bisa dibaca psql dan mysql:
 
 ### Restore dengan aman
 
-- Restore bisa menimpa data. Di terminal Anda, komando lebih dulu menawarkan menyimpan database seperti sekarang (`Save a copy of staging-db as it is now first, so you can go back? [Y/n]`), lalu meminta Anda mengetik nama conn sebagai ganti `--allow-dangerous`. Script dan agen AI tidak mendapat pertanyaan: jalankan `komando db dump CONN` dulu sendiri, lalu tambahkan `--allow-dangerous` (dan `--yes` di conn yang dilindungi) setelah seseorang setuju.
-- Restore PostgreSQL berjalan dalam satu transaksi: bila ada yang gagal, tidak ada yang berubah. MySQL menjalankan pernyataan berurutan dan berhenti pada error pertama; apa yang berjalan sebelumnya tetap (`RESTORE_FAILED`).
+- Restore bisa menimpa data. Di terminal, komando lebih dulu menawarkan menyimpan database seperti sekarang (`Save a copy of staging-db as it is now first, so you can go back? [Y/n]`), lalu meminta Anda mengetik nama conn sebagai ganti `--allow-dangerous`. Script dan agen AI tidak mendapat pertanyaan: jalankan `komando db dump CONN` dulu sendiri, lalu tambahkan `--allow-dangerous` (dan `--yes` di conn yang dilindungi) setelah seseorang setuju.
+- Restore PostgreSQL berjalan dalam satu transaksi: bila ada yang gagal, tidak ada yang berubah. MySQL menjalankan pernyataan berurutan dan berhenti pada kesalahan pertama; apa yang berjalan sebelumnya tetap (`RESTORE_FAILED`).
 - komando membaca seluruh file sebelum mengirim apa pun, seperti psql dan mysql akan membacanya. File dengan perintah klien yang bisa menjalankan program atau membaca file (`\!`, `system`, `\i`) ditolak (`UNSAFE_BACKUP`), begitu juga file yang tidak bisa diikuti komando: yang berakhir di dalam kutipan atau komentar, atau `SET` atau `set_config` yang mengubah `standard_conforming_strings` atau menambah `NO_BACKSLASH_ESCAPES`. File yang berpindah database (`\connect`, dari `pg_dump --create` atau `pg_dumpall`) juga ditolak (`RESTORE_UNSUPPORTED`): dump satu database tanpa `--create`. Dump satu database yang sebenarnya lolos. `db restore --dry-run` menjalankan pemeriksaan ini juga dan menyatakan apa yang akan menghentikan eksekusi sungguhan.
 - SQL di dalam file yang melakukan lebih dari menulis data disebut di samping `db-restore` dalam persetujuan dan di `POLICY_BLOCKED`, dengan baris tempat pertama kali muncul: `sql-program` (`COPY ... PROGRAM`, `CREATE EXTENSION`), `sql-server-file` (`INTO OUTFILE`, `pg_read_file`), `sql-server-config` (`ALTER SYSTEM`), `sql-privileges` (`GRANT`, `CREATE ROLE`), `sql-opaque` (`DO`, `PREPARE`), `sql-remote`, dan `sql-kill`. pg_dump dengan hak akses menyebut `sql-privileges`.
 - `--table` hanya menerima nama tabel; nilai yang diawali `-` ditolak.
 - `db restore` tidak menerima file SQLite: hentikan program yang memakai database, lalu salin backup menimpa file database.
-- Database besar butuh waktu: `dump` dan `restore` tidak punya timeout kecuali Anda memberikan `--timeout`.
+- Database besar butuh waktu: `dump` dan `restore` tidak punya timeout kecuali diberikan `--timeout`.
 
 ## Memeriksa sebuah database
 
@@ -298,7 +298,7 @@ komando db kill prod-db 4821              # batalkan query; klien tetap tersambu
 komando db kill prod-db 4821 --session    # akhiri seluruh koneksi
 ```
 
-Mengakhiri seluruh koneksi bersifat merusak: di terminal Anda komando bertanya dulu; agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju.
+Mengakhiri seluruh koneksi bersifat merusak: di terminal, komando bertanya dulu; agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju.
 
 - Output teks menampilkan ukuran (`7.5 MiB`) dan durasi (`3h`). JSON menyimpan angka mentahnya (`size_bytes`, `running_seconds`).
 - SQLite tidak punya sesi server, jadi `activity`, `locks`, dan `kill` tidak berlaku padanya.
@@ -336,7 +336,7 @@ komando db shell staging-db --write   # izinkan perubahan
 komando db shell prod-db              # conn yang dilindungi bertanya dulu
 ```
 
-`db shell` adalah shell SQL milik komando sendiri untuk PostgreSQL, MySQL/MariaDB, SQL Server, Oracle, ClickHouse, Snowflake, BigQuery, dan SQLite, sehingga tidak ada yang lain yang perlu diinstal. Shell tersambung lewat jalur `--via` milik conn, dan setiap pernyataan mendapat pemeriksaan yang sama dengan `db query`: read-only kecuali Anda memulainya dengan `--write`, pernyataan yang merusak hanya setelah Anda mengetik nama conn, dan masing-masing ditulis ke audit log. Pernyataan berakhir dengan `;` (blok PL/SQL Oracle: baris yang hanya berisi `/`) dan berjalan dalam transaksinya sendiri.
+`db shell` adalah shell SQL milik komando sendiri untuk PostgreSQL, MySQL/MariaDB, SQL Server, Oracle, ClickHouse, Snowflake, BigQuery, dan SQLite, sehingga tidak ada yang lain yang perlu diinstal. Shell tersambung lewat jalur `--via` milik conn, dan setiap pernyataan mendapat pemeriksaan yang sama dengan `db query`: read-only kecuali dimulai dengan `--write`, pernyataan yang merusak hanya setelah Anda mengetik nama conn, dan masing-masing ditulis ke audit log. Pernyataan berakhir dengan `;` (blok PL/SQL Oracle: baris yang hanya berisi `/`) dan berjalan dalam transaksinya sendiri.
 
 ```text
 staging-db> select id, name
@@ -379,7 +379,7 @@ Conn yang langsung lewat jaringan (tanpa `--via`, bukan ke komputer ini) sebaikn
 - Tanpa pengaturan, conn Postgres memakai TLS bila server menawarkannya, tetapi tidak memeriksa sertifikat dan melanjutkan tanpa TLS bila diminta. Conn MySQL tanpa `tls=` tidak terenkripsi, dan login MySQL 8 lalu mengenkripsi kata sandi dengan key yang dikirim server lewat koneksi polos yang sama, yang bisa ditukar orang di tengah. Conn SQL Server tanpa `encrypt=` (atau dengan `encrypt=false`) hanya mengenkripsi login, dan tanpa `encrypt=` juga tidak memeriksa sertifikat. Conn Oracle tanpa `tls=true` tidak memakai TLS; enkripsi jaringan milik Oracle sendiri, bila server menyalakannya, mengenkripsi tetapi tidak membuktikan siapa server itu. Conn ClickHouse tanpa `tls=true` adalah HTTP polos.
 - komando memeriksa secara default. Saat `db add` (atau `conn edit --url`) menyimpan conn seperti itu dan URL-nya tidak menyatakan cara memakai TLS, komando menambahkan `sslmode=verify-full` (Postgres), `tls=true` (MySQL, Oracle, ClickHouse, yang port 8123-nya menjadi 8443) atau `encrypt=true` (SQL Server) dan menyatakannya di `warnings`. URL yang menyebut sebuah pengaturan mempertahankannya, dan conn lewat `--via` atau ke komputer ini dibiarkan seperti ditulis. Bila server tidak punya TLS atau sertifikat dari CA-nya sendiri, hint koneksi pertama menyatakan apa yang dilakukan (baris di bawah).
 - Conn yang URL-nya mematikan pemeriksaan tetap berfungsi. `komando doctor` memperingatkan setiap conn tanpa TLS yang diperiksa dan mencetak baris `komando conn edit NAME --url ...` yang memperbaikinya.
-- Server yang sertifikatnya berasal dari CA privat (milik perusahaan Anda, atau milik cloud, seperti Amazon RDS atau Azure Database): simpan CA dan sebut dengan `?ca=`, untuk Postgres, MySQL, SQL Server, Oracle, ClickHouse, Snowflake, dan BigQuery (proxy yang memeriksa TLS). Sertifikat lalu diperiksa sepenuhnya: ditandatangani CA itu dan menyebut nama server, juga dengan `sslmode=require`, dan tidak pernah tanpa TLS:
+- Server yang sertifikatnya berasal dari CA privat (milik perusahaan, atau milik cloud, seperti Amazon RDS atau Azure Database): simpan CA dan sebut dengan `?ca=`, untuk Postgres, MySQL, SQL Server, Oracle, ClickHouse, Snowflake, dan BigQuery (proxy yang memeriksa TLS). Sertifikat lalu diperiksa sepenuhnya: ditandatangani CA itu dan menyebut nama server, juga dengan `sslmode=require`, dan tidak pernah tanpa TLS:
 
   ```bash
   komando secret set rds-ca < global-bundle.pem
@@ -438,9 +438,9 @@ komando db kill sales 57 --session
   - perubahan di mana pun dalam teks dihitung, jadi `select 1 delete from t` adalah `DELETE` tanpa `WHERE`;
   - kata pertama yang bukan pernyataan T-SQL adalah nama procedure yang dijalankan SQL Server (`sp_who`), jadi butuh `--write` dan bersifat merusak, seperti `EXEC`;
   - `BEGIN`, `COMMIT`, `ROLLBACK`, `SAVE TRANSACTION`, dan `SET IMPLICIT_TRANSACTIONS` ditolak di mana pun, jadi blok `BEGIN ... END` dan `TRY ... CATCH` sebaiknya ada di stored procedure;
-  - nama dan teks dengan huruf di luar ASCII harus dikutip (`[naïve]`, `N'café'`).
+  - nama dan teks dengan huruf di luar ASCII wajib dikutip (`[naïve]`, `N'café'`).
 
-  Procedure atau fungsi yang Anda panggil tetap bisa bertindak di luar transaksi (`xp_cmdshell`, linked server, mail). Untuk batas yang keras, beri conn login dengan hanya `db_datareader`.
+  Procedure atau fungsi yang dipanggil tetap bisa bertindak di luar transaksi (`xp_cmdshell`, linked server, mail). Untuk batas yang keras, beri conn login dengan hanya `db_datareader`.
 - **`CREATE PROCEDURE`, `FUNCTION`, dan `TRIGGER`** mengambil sisa teks sebagai body-nya, seperti SQL Server, juga setelah `;`. Membuatnya adalah perubahan; apa yang dilakukan body dihitung saat berjalan.
 - `BACKUP`, `RESTORE`, `CREATE DATABASE`, dan `ALTER DATABASE` tidak bisa berjalan dalam transaksi: kirim sendirian, dengan `--write`; dry run hanya melaporkannya.
 - `db explain` menampilkan rencana dengan `SET SHOWPLAN_TEXT`: tidak ada yang berjalan, jadi tidak butuh `--write` untuk perubahan juga. `--analyze` menjalankan query dengan `SET STATISTICS PROFILE` dan menampilkan jumlah baris sebenarnya. Menjelaskan panggilan stored procedure (`EXEC`) tetap butuh `--write` dan bersifat merusak. SQL tidak boleh menyalakan atau mematikan pengaturan `SHOWPLAN` sendiri.
@@ -466,7 +466,7 @@ komando db kill erp 371 --session                  # 371 adalah SID
 
 - **URL-nya.** Path adalah nama service, sering pluggable database (`ORCLPDB1`, `FREEPDB1`); `lsnrctl status` di server mencantumkannya. Database lama tanpa service: `oracle://app@db:1521?sid=ORCL`. Opsinya adalah `tls=` (`true`, `skip-verify`, `false`; TCPS mendengarkan di port sendiri, sering 2484) dan `ca=secret:NAME` untuk CA privat (dengan `tls=true`). Login adalah user dan kata sandi; wallet Oracle, Kerberos, dan login sistem operasi tidak didukung.
 - **Tanpa `--write` tidak ada yang berubah.** komando memulai setiap eksekusi dengan `SET TRANSACTION READ ONLY`, dan memeriksa setelah setiap pernyataan bahwa transaksi ini masih terbuka.
-- **DDL di-commit sendiri** di Oracle (`CREATE`, `ALTER`, `DROP`, `GRANT`, `TRUNCATE`, `COMMENT`, ...). Jadi selalu butuh `--write`, harus dikirim sendirian, dan dry run hanya melaporkannya. `ALTER SESSION` bukan DDL.
+- **DDL di-commit sendiri** di Oracle (`CREATE`, `ALTER`, `DROP`, `GRANT`, `TRUNCATE`, `COMMENT`, ...). Jadi selalu butuh `--write`, wajib dikirim sendirian, dan dry run hanya melaporkannya. `ALTER SESSION` bukan DDL.
 - **PL/SQL.** Blok (`BEGIN ... END;`, `DECLARE ...`) dan `WITH FUNCTION` menjalankan kode yang tidak bisa diikuti komando: butuh `--write`, bersifat merusak, dan dry run melewatinya. Blok berjalan sampai akhir teks atau sampai baris yang hanya berisi `/`, seperti di SQL*Plus:
 
   ```bash
@@ -479,7 +479,7 @@ komando db kill erp 371 --session                  # 371 adalah SID
   ```
 
   `CREATE PROCEDURE`, `FUNCTION`, `PACKAGE`, `TRIGGER`, dan `TYPE` bekerja dengan cara yang sama; membuatnya adalah perubahan, dan apa yang dilakukan body dihitung saat berjalan.
-- `COMMIT`, `ROLLBACK`, `SAVEPOINT`, `SET TRANSACTION`, dan `PRAGMA AUTONOMOUS_TRANSACTION` ditolak di mana pun, juga di dalam blok. Nama dan teks dengan huruf di luar ASCII harus dikutip (`"Straße"`, `'café'`). Kutipan `q'[...]'` berfungsi. Komentar `--` yang memuat karakter kontrol atau pindah baris yang tidak lazim ditolak, karena komando tidak bisa yakin di mana Oracle mengakhirinya.
+- `COMMIT`, `ROLLBACK`, `SAVEPOINT`, `SET TRANSACTION`, dan `PRAGMA AUTONOMOUS_TRANSACTION` ditolak di mana pun, juga di dalam blok. Nama dan teks dengan huruf di luar ASCII wajib dikutip (`"Straße"`, `'café'`). Kutipan `q'[...]'` berfungsi. Komentar `--` yang memuat karakter kontrol atau pindah baris yang tidak lazim ditolak, karena komando tidak bisa yakin di mana Oracle mengakhirinya.
 - Panggilan ke package yang menjangkau server atau file lain (`UTL_HTTP`, `UTL_FILE`, `DBMS_PIPE`, `DBMS_SCHEDULER`, ...) butuh `--write` dan bersifat merusak, begitu juga panggilan ke fungsi mana pun yang bukan milik Oracle sendiri (`app.close_month(1)`, `pkg.f(x)`): fungsi itu bisa melakukan commit sendiri (transaksi otonom), bahkan di dalam `SELECT`. Nama lewat database link (`orders@prodlink`) dan external table inline (`FROM EXTERNAL (...)`, yang membaca file di server database dan dengan `PREPROCESSOR` menjalankan program di sana) dihitung sama. Fungsi yang dipanggil tanpa `()` tampak seperti kolom, jadi komando tidak bisa melihatnya: untuk batas yang keras, beri conn user dengan hanya grant `SELECT` (atau `READ`).
 - `db explain` memakai `EXPLAIN PLAN` dan `DBMS_XPLAN`: tidak ada yang berjalan, jadi tidak butuh `--write` untuk perubahan juga, dan tidak untuk DDL yang diterima `EXPLAIN PLAN` (`CREATE TABLE`, `CREATE INDEX`, `ALTER INDEX`). DDL lain tidak bisa direncanakan. `--analyze` tidak tersedia di Oracle (`NOT_SUPPORTED`); rencana menampilkan perkiraan baris milik Oracle.
 - `db activity`, `locks`, `kill`, dan ukuran serta uptime di `db info`, membaca view `V$` dan `DBA_` milik Oracle: user conn butuh `SELECT_CATALOG_ROLE`. Tanpanya `db sizes` menampilkan tabel milik user sendiri dan yang lain menyatakan apa yang diberikan. Data `CLOB` dan `BLOB` sebuah tabel dihitung di `total_bytes`-nya (bukan di `table_bytes`, seperti TOAST PostgreSQL). `db kill` tanpa `--session` hanya menghentikan panggilan yang sedang berjalan (`ALTER SYSTEM CANCEL SQL`, Oracle 18c dan yang lebih baru).
@@ -505,7 +505,7 @@ komando db kill events 8078617214407497              # pid yang ditampilkan db a
 
 - **URL-nya.** Path adalah database (default milik user bila dihilangkan). Opsinya adalah `tls=` (`true`, `skip-verify`, `false`) dan `ca=secret:NAME` untuk CA privat (dengan `tls=true`). Tanpa port, 8443 dengan TLS dan 8123 tanpa. Port 9000 dan 9440 adalah protokol native ClickHouse, yang tidak dipahami komando: komando menyatakannya. Server yang hanya membuka port native tetap bisa dijangkau: tambahkan `--via` server yang bisa menjangkau port 8123 atau 8443-nya.
 - **Tanpa `--write` tidak ada yang berubah.** ClickHouse tidak punya transaksi, tetapi punya mode read-only sendiri: setiap permintaan yang dikirim komando tanpa `--write`, dan setiap query yang mengembalikan baris, membawa pengaturan `readonly=1`, dan server menolak penulisan, DDL, dan perubahan pengaturan. `SETTINGS` dan `SET` dalam pembacaan ditolak karena alasan yang sama. Setiap permintaan adalah sesi tersendiri, jadi `SET` tidak akan bertahan juga. Sesi ClickHouse dan transaksi eksperimentalnya tidak dipakai.
-- **Penulisan tidak bisa di-rollback.** `INSERT`, `ALTER`, `CREATE`, `OPTIMIZE`, dan setiap pernyataan lain yang bukan pembacaan butuh `--write`, harus dikirim sendirian, dan dry run hanya melaporkannya. Yang merusak, seperti biasa: `DROP`, `TRUNCATE`, `DETACH`, `ALTER ... DROP` atau `CLEAR`, `SYSTEM`, `KILL QUERY`, user, role, kuota, dan grant, `BACKUP`, dan `FREEZE`.
+- **Penulisan tidak bisa di-rollback.** `INSERT`, `ALTER`, `CREATE`, `OPTIMIZE`, dan setiap pernyataan lain yang bukan pembacaan butuh `--write`, wajib dikirim sendirian, dan dry run hanya melaporkannya. Yang merusak, seperti biasa: `DROP`, `TRUNCATE`, `DETACH`, `ALTER ... DROP` atau `CLEAR`, `SYSTEM`, `KILL QUERY`, user, role, kuota, dan grant, `BACKUP`, dan `FREEZE`.
 - **Membaca dari tempat lain.** `readonly=1` membiarkan pembacaan lewat, juga pembacaan yang menjangkau server lain atau file server. Jadi table function dan engine yang melakukannya (`url()`, `s3()`, `remote()`, `mysql()`, `postgresql()`, `file()`, `executable()`, `Kafka`, ...) butuh `--write` dan bersifat merusak, juga di dalam `DESCRIBE` atau `EXPLAIN`. Fungsi yang ditambahkan admin server sebagai program (executable user-defined function) berjalan di bawah `readonly=1` seperti fungsi mana pun: komando tidak bisa membedakannya dari fungsi bawaan ClickHouse menurut namanya.
 - **User read-only.** User yang settings profile-nya punya `readonly = 1` tidak boleh mengirim pengaturan apa pun, jadi komando tidak mengirim satu pun (`--timeout`-nya lalu hanya menghentikan penantian, bukan query). Profile dengan `readonly = 2` mendapat timeout dan pengaturan lain, tetapi komando tidak mengirim `readonly` untuknya. Untuk batas yang keras, beri conn user seperti itu dengan hanya grant `SELECT`. User yang settings profile-nya membaca query sebagai bahasa lain (`dialect = 'kusto'` atau `'prql'`) ditolak (`SQL_SAFE_SETTINGS_REQUIRED`): komando hanya memeriksa SQL ClickHouse.
 - Teks dalam `$$...$$` dan nama atau teks dengan huruf di luar ASCII di luar kutipan ditolak (`SQL_HIDDEN_CODE`): pakai `'...'` (dengan `\'` untuk kutipan) dan `` `...` ``. `FORMAT` dan `INTO OUTFILE` juga ditolak: komando membaca barisnya sendiri (`-o csv`, `-o tsv`).
@@ -530,7 +530,7 @@ komando db user show analytics APP_RO              # role-nya, dan apa yang bole
 
 - **URL-nya.** Account ditaruh di tempat jenis lain punya host: account identifier yang ditampilkan Snowflake (`myorg-myaccount`, atau locator dengan region seperti `xy12345.eu-central-1`; `...snowflakecomputing.com` juga berfungsi). Path adalah `/DATABASE/SCHEMA`, keduanya opsional; opsinya adalah `warehouse=`, `role=`, dan `ca=secret:NAME` (proxy yang memeriksa TLS). Selalu HTTPS di port 443 dengan sertifikat diperiksa.
 - **Login.** SQL API Snowflake tidak menerima kata sandi, jadi `--password-ref` berisi satu dari dua hal:
-  - **Private key** (PEM, `-----BEGIN PRIVATE KEY-----`) untuk login key-pair. komando menandatangani token berumur pendek dengannya untuk setiap jam pemakaian. Snowflake harus mengenal setengah publiknya: `ALTER USER APP_RO SET RSA_PUBLIC_KEY = '...'`. Simpan key tanpa passphrase (vault mengenkripsinya): `openssl pkcs8 -topk8 -nocrypt -in rsa_key.p8 | komando secret set analytics-key`. Key adalah key RSA, PKCS#8 (`BEGIN PRIVATE KEY`) atau PKCS#1 (`BEGIN RSA PRIVATE KEY`). Key dengan passphrase ditolak; error menampilkan baris `openssl` yang menghilangkannya. Saat Snowflake menolak key (`DB_AUTH`), hint menampilkan fingerprint key: bandingkan dengan `RSA_PUBLIC_KEY_FP` di `DESC USER APP_RO`.
+  - **Private key** (PEM, `-----BEGIN PRIVATE KEY-----`) untuk login key-pair. komando menandatangani token berumur pendek dengannya untuk setiap jam pemakaian. Snowflake perlu mengenal setengah publiknya: `ALTER USER APP_RO SET RSA_PUBLIC_KEY = '...'`. Simpan key tanpa passphrase (vault mengenkripsinya): `openssl pkcs8 -topk8 -nocrypt -in rsa_key.p8 | komando secret set analytics-key`. Key adalah key RSA, PKCS#8 (`BEGIN PRIVATE KEY`) atau PKCS#1 (`BEGIN RSA PRIVATE KEY`). Key dengan passphrase ditolak; kesalahan menampilkan baris `openssl` yang menghilangkannya. Saat Snowflake menolak key (`DB_AUTH`), hint menampilkan fingerprint key: bandingkan dengan `RSA_PUBLIC_KEY_FP` di `DESC USER APP_RO`.
   - **Programmatic access token** (`ALTER USER APP_RO ADD PROGRAMMATIC ACCESS TOKEN ...`), yang dibiarkan Snowflake menggantikan tempat kata sandi.
 
   Login browser (SSO) dan OAuth tidak didukung.
@@ -579,7 +579,7 @@ komando db kill warehouse 4387013457812345          # pid yang ditampilkan db ac
 
   Login gcloud hanya dikirim ke host milik Google sendiri (`https://*.googleapis.com`); emulator mendapat key yang disebut conn, atau tanpa login sama sekali. Login butuh `roles/bigquery.jobUser` pada project dan `roles/bigquery.dataViewer` pada dataset yang dibacanya; beri conn yang hanya membaca tidak lebih dari itu.
 - **Setiap pernyataan diperiksa BigQuery lebih dulu.** komando mengirim setiap pernyataan sebagai dry run (tidak menjalankan apa pun dan tidak berbiaya), yang menyatakan jenis pernyataan yang dilihat BigQuery dan berapa byte yang akan dibacanya. Tanpa `--write`, hanya apa yang disebut BigQuery `SELECT` yang berjalan, setelah pemeriksaan komando sendiri. Penulisan (`INSERT`, `CREATE`, `MERGE`, ...) butuh `--write` dan berjalan sendirian (setiap pernyataan adalah job tersendiri, jadi tidak ada yang bisa di-rollback).
-- **Biaya.** BigQuery menagih menurut byte yang dibaca query. Query yang akan membaca lebih dari `--max-bytes` (default `10GB`; `0` berarti tanpa batas) tidak dijalankan (`DB_BYTES_LIMIT`), dan setiap job membawa batas itu (`maximumBytesBilled`), sehingga BigQuery menghentikannya juga. Setiap hasil menyatakan `bytes_processed` (teks: `(BigQuery read 1.2 GiB)`). `--dry-run` (dengan atau tanpa `--write`) adalah dry run milik BigQuery sendiri untuk setiap pernyataan, juga `SELECT`: menampilkan apa yang akan dibaca masing-masing dan tidak menjalankan apa pun. Eksekusi yang timeout membatalkan job-nya. Ukuran dihitung dalam pangkat 1024: `10GB` adalah 10 GiB, `200GB` adalah 200 GiB. Setiap job yang dimulai komando dinamai `komando_` ditambah ID acak dan punya label `komando=<siapa yang menjalankan>`, sehingga Anda bisa menemukan job komando dan biayanya di riwayat job BigQuery.
+- **Biaya.** BigQuery menagih menurut byte yang dibaca query. Query yang akan membaca lebih dari `--max-bytes` (default `10GB`; `0` berarti tanpa batas) tidak dijalankan (`DB_BYTES_LIMIT`), dan setiap job membawa batas itu (`maximumBytesBilled`), sehingga BigQuery menghentikannya juga. Setiap hasil menyatakan `bytes_processed` (teks: `(BigQuery read 1.2 GiB)`). `--dry-run` (dengan atau tanpa `--write`) adalah dry run milik BigQuery sendiri untuk setiap pernyataan, juga `SELECT`: menampilkan apa yang akan dibaca masing-masing dan tidak menjalankan apa pun. Eksekusi yang timeout membatalkan job-nya. Ukuran dihitung dalam pangkat 1024: `10GB` adalah 10 GiB, `200GB` adalah 200 GiB. Setiap job yang dimulai komando dinamai `komando_` ditambah ID acak dan punya label `komando=<siapa yang menjalankan>`, sehingga job komando dan biayanya bisa ditemukan di riwayat job BigQuery.
 - **Placeholder** adalah `?`, dan nilai `--arg` masuk sebagai `STRING`: BigQuery tidak mengubah teks menjadi angka sendiri, jadi tulis `CAST(? AS INT64)`.
 - **Merusak:** `DROP`, `TRUNCATE`, `CREATE OR REPLACE` (menghapus apa yang memiliki nama itu), `LOAD DATA OVERWRITE`, `GRANT` dan `REVOKE`, row access policy, reservation, capacity commitment, dan opsi project atau organisasi, `EXPORT DATA` (menulis di luar BigQuery), `EXTERNAL_QUERY` dan remote function (menjangkau layanan lain), `CALL` dan `EXECUTE IMMEDIATE`.
 - **Script** (`DECLARE`, `SET`, `IF`, `BEGIN ... END`) ditolak: komando mengirim setiap pernyataan sebagai job tersendiri, jadi variabel tidak akan terbawa. `BEGIN` dan `COMMIT TRANSACTION` juga ditolak. `/*` di dalam komentar, raw string dengan backslash sebelum kutipan, dan nama atau teks dengan huruf di luar ASCII di luar kutipan ditolak (`SQL_HIDDEN_CODE`); komentar `#`, teks dengan tiga kutipan, dan `` `names` `` dibaca seperti BigQuery membacanya.
@@ -588,7 +588,7 @@ komando db kill warehouse 4387013457812345          # pid yang ditampilkan db ac
 
 ## Batasan
 
-- `--login ask` bergantung pada komando membedakan agen AI dari orang, hanya lewat lingkungan agen. Program apa pun milik user Anda bisa memalsukan jendela komando, mengganti binary-nya, atau membaca memorinya; lihat [Server](servers.md#limits). File di bawah `~/.postgresql` (`root.crt` di sana) dibaca seperti yang dilakukan Postgres.
+- `--login ask` bergantung pada komando membedakan agen AI dari orang, hanya lewat lingkungan agen. Program apa pun milik user yang sama bisa memalsukan jendela komando, mengganti binary-nya, atau membaca memorinya; lihat [Server](servers.md#limits). File di bawah `~/.postgresql` (`root.crt` di sana) dibaca seperti yang dilakukan Postgres.
 
 **SQL Server**
 
@@ -628,7 +628,7 @@ komando db kill warehouse 4387013457812345          # pid yang ditampilkan db ac
 
 ## Pemecahan masalah
 
-| Error | Exit | Artinya | Yang perlu dilakukan |
+| Kesalahan | Exit | Artinya | Yang perlu dilakukan |
 |-------|------|---------|----------------------|
 | `DB_AUTH` | 4 | nama user atau kata sandi salah | periksa dengan `komando conn show CONN`; perbaiki dengan `komando conn edit CONN --password-ref ...` |
 | `DB_NOT_FOUND` | 3 | database tidak ada | periksa path di URL conn |
@@ -647,7 +647,7 @@ komando db kill warehouse 4387013457812345          # pid yang ditampilkan db ac
 | `DB_USER_IN_USE` | 8 | user memiliki objek atau punya sesi | akhiri sesinya (`komando db activity CONN --all`, lalu `komando db kill CONN PID --session`) |
 | `NEEDS_TERMINAL` | 2 | `db shell` dijalankan tanpa terminal | pakai `db query` |
 
-`db dump` dan `db restore` melaporkan error koneksi yang sama dengan `db query`. Setiap kode ada di [Kode error](error-codes.md).
+`db dump` dan `db restore` melaporkan kesalahan koneksi yang sama dengan `db query`. Setiap kode ada di [Kode kesalahan](error-codes.md).
 
 ## Referensi
 

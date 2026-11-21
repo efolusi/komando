@@ -1,8 +1,8 @@
 # Pindah ke komando dan pindah komputer
 
-Bawa masuk server dan database yang sudah Anda punya, dan pindahkan semuanya ke komputer lain.
+Bawa masuk server dan database yang sudah ada, dan pindahkan semuanya ke komputer lain.
 
-## Mengimpor server Anda
+## Mengimpor server
 
 ```bash
 komando import ssh-config --dry-run              # lihat dulu apa yang akan ditambahkan
@@ -20,7 +20,7 @@ Impor ditutup dengan perintah yang memeriksa apa yang masuk:
 Next: komando test @shop
 ```
 
-## Mengimpor apa yang sudah Anda punya
+## Mengimpor apa yang sudah ada
 
 Tulis `komando import SOURCE [FILE]`. Tanpa file, komando membaca tempat yang lazim untuk sumber itu.
 
@@ -60,7 +60,7 @@ Kata sandi yang ditemukan di file-file ini masuk ke vault sebagai `<name>-pass`.
 - Mengimpor file yang sama lagi tidak mengubah apa pun. Database lain yang kebetulan bernama sama mendapat nama kosong berikutnya (`shop-2`).
 - Conn mendapat default TLS yang sama dengan `conn add`: URL database yang tidak menyebut TLS mendapat TLS yang memeriksa sertifikat (misalnya `sslmode=verify-full`, disebutkan dalam sebuah catatan), dan URL `redis://`, `amqp://`, atau URL teks polos lainnya ke komputer lain dilewati kecuali berakhir dengan `?insecure=1`.
 - Dengan `--overwrite`, hasilnya mencantumkan apa yang diganti. Tanpa jawaban ya, server, conn, atau VPN yang dilindungi dilewati, di dry run juga.
-- File tidak bisa menyalakan apa yang diminta `host edit` dan `vpn edit` dari seseorang: `forward_agent` pada server yang sebelumnya tidak meminjamkan ssh-agent Anda, `legacy_crypto` atau `allow_pap` pada VPN, dan, untuk VPN yang digantikannya, CA yang tidak lagi dipakai untuk memeriksa server atau `mfa` atau perlindungan yang dimatikan. Masing-masing berhenti dengan `SAFETY_SETTING` (exit 6) sampai Anda menjawab ya: di terminal Anda komando bertanya, script menambahkan `--yes`, dan jawaban ya dari agen AI datang dari Anda di jendela komando. Pengaturan di dalam file tidak pernah diterapkan; hasilnya mencantumkannya di `settings_differ` beserta perintah yang dijalankan.
+- File tidak bisa menyalakan apa yang diminta `host edit` dan `vpn edit` dari seseorang: `forward_agent` pada server yang sebelumnya tidak meminjamkan ssh-agent, `legacy_crypto` atau `allow_pap` pada VPN, dan, untuk VPN yang digantikannya, CA yang tidak lagi dipakai untuk memeriksa server atau `mfa` atau perlindungan yang dimatikan. Masing-masing berhenti dengan `SAFETY_SETTING` (exit 6) sampai Anda menjawab ya: di terminal, komando bertanya, script menambahkan `--yes`, dan jawaban ya dari agen AI datang dari Anda di jendela komando. Pengaturan di dalam file tidak pernah diterapkan; hasilnya mencantumkannya di `settings_differ` beserta perintah yang dijalankan.
 - Hasilnya menyebut perintah yang memeriksa apa yang masuk di `data.next`, dan seseorang melihatnya di stderr: `Next: komando test @shop`.
 - Server diperiksa seperti `host add` (port, user, `--via`). Yang buruk dilewati, dengan alasannya. Impor `csv` lebih ketat: satu baris yang buruk menghentikan seluruh impor, dan tidak ada yang ditambahkan.
 - Apa pun yang tidak bisa diimpor komando dicantumkan, dengan alasannya. Misalnya: baris `.pgpass` dengan `*`, jenis URL yang tidak dikenal komando, pola `Host *` (pengaturannya menjadi default untuk server lain), atau file `Include` yang hilang. `HostName %h.example.com` dipahami.
@@ -91,15 +91,15 @@ Sesi SSH masuk beserta host, port, dan user-nya, dan folder tempat sebuah sesi b
 
 ### Datang dari Termius atau TablePlus
 
-Termius dan TablePlus tidak punya format ekspor terbuka. Dari Termius, ekspor host Anda sebagai SSH config dan jalankan `komando import ssh-config FILE`. Untuk database, taruh URL-nya di file `.env` dan jalankan `komando import env FILE`.
+Termius dan TablePlus tidak punya format ekspor terbuka. Dari Termius, ekspor host sebagai SSH config dan jalankan `komando import ssh-config FILE`. Untuk database, taruh URL-nya di file `.env` dan jalankan `komando import env FILE`.
 
 ## Pindah ke komputer lain
 
-Ada tiga cara. Ekspor memindahkan server, conn, VPN, recipe, aturan deny Anda sendiri, dan pengaturan, tetapi tanpa kata sandi dan tanpa file key: Anda mengaturnya lagi. [Ekspor tersegel](#a-sealed-export-everything-with-passwords) memindahkan hal yang sama dengan kata sandi dalam satu file yang hanya terbuka dengan passphrase pilihan Anda. Menyalin folder memindahkan semuanya, termasuk kata sandi, setelah vault punya passphrase.
+Ada tiga cara. Ekspor memindahkan server, conn, VPN, recipe, aturan deny sendiri, dan pengaturan, tetapi tanpa kata sandi dan tanpa file key: Anda mengaturnya lagi. [Ekspor tersegel](#a-sealed-export-everything-with-passwords) memindahkan hal yang sama dengan kata sandi dalam satu file yang hanya terbuka dengan passphrase pilihan sendiri. Menyalin folder memindahkan semuanya, termasuk kata sandi, setelah vault punya passphrase.
 
 ### Ekspor dan impor (tanpa kata sandi)
 
-`export` menyimpan server, conn, dan VPN Anda, dan saat Anda mengekspor semuanya juga recipe tersimpan, aturan deny Anda sendiri (`policy deny`), dan pengaturan Anda:
+`export` menyimpan server, conn, dan VPN, dan saat mengekspor semuanya juga recipe tersimpan, aturan deny sendiri (`policy deny`), dan pengaturan:
 
 ```bash
 komando export --to komando-backup.json       # semuanya; tanpa kata sandi
@@ -107,7 +107,7 @@ komando export @prod --to prod.json           # hanya yang dipilih sebuah target
 komando export                                # cetak, bukan tulis ke file
 ```
 
-`export` menulis file dengan mode 0600, dan menolak menggantikan file yang sudah ada kecuali Anda menambahkan `--overwrite`.
+`export` menulis file dengan mode 0600, dan menolak menggantikan file yang sudah ada kecuali ditambahkan `--overwrite`.
 
 Di komputer lain:
 
@@ -116,9 +116,9 @@ komando import komando komando-backup.json
 komando secret set prod-db-pass               # impor mencantumkan kata sandi yang perlu diatur lagi
 ```
 
-File ekspor tidak berisi kata sandi, hanya namanya, jadi atur lagi dengan `komando secret set`. Impor menambahkan aturan deny Anda (aturan itu hanya menghentikan lebih banyak), tetapi tidak mengubah pengaturan apa pun: impor mencantumkan pengaturan yang berbeda, masing-masing dengan perintah `komando config set` yang mengaturnya, karena file dari orang lain tidak boleh mematikan sebuah pemeriksaan. Bila komando menolak sesuatu di dalam file, sisanya tetap masuk dan impor berakhir dengan `IMPORT_INCOMPLETE` (exit 1): perbaiki entri itu dan impor lagi (yang sudah masuk dilewati).
+File ekspor tidak berisi kata sandi, hanya namanya, jadi atur lagi dengan `komando secret set`. Impor menambahkan aturan deny (aturan itu hanya menghentikan lebih banyak), tetapi tidak mengubah pengaturan apa pun: impor mencantumkan pengaturan yang berbeda, masing-masing dengan perintah `komando config set` yang mengaturnya, karena file dari orang lain tidak boleh mematikan sebuah pemeriksaan. Bila komando menolak sesuatu di dalam file, sisanya tetap masuk dan impor berakhir dengan `IMPORT_INCOMPLETE` (exit 1): perbaiki entri itu dan impor lagi (yang sudah masuk dilewati).
 
-Private key juga tidak pernah ada di file ekspor. Saat server login dengan key dari `komando key`, `export` menyebut key itu (`keys_needed`) dan file-nya (`key_files`): salin file itu sendiri ke komputer lain. Key yang dibuat komando (`key gen`) disegel di dalam komando dan tidak punya file (`keys_sealed`): buat yang baru di komputer lain dengan `komando key gen NAME` dan pasang di server dengan `komando key deploy`. Impor tetap menambahkan server, menyebut key mana yang dibutuhkan, dan membiarkan key itu kosong sampai Anda membawanya (ssh-agent atau key default Anda mungkin bisa login sementara itu):
+Private key juga tidak pernah ada di file ekspor. Saat server login dengan key dari `komando key`, `export` menyebut key itu (`keys_needed`) dan file-nya (`key_files`): salin file itu sendiri ke komputer lain. Key yang dibuat komando (`key gen`) disegel di dalam komando dan tidak punya file (`keys_sealed`): buat yang baru di komputer lain dengan `komando key gen NAME` dan pasang di server dengan `komando key deploy`. Impor tetap menambahkan server, menyebut key mana yang dibutuhkan, dan membiarkan key itu kosong sampai key itu dibawa (ssh-agent atau key default mungkin bisa login sementara itu):
 
 ```bash
 komando key add deploy ~/Downloads/deploy     # file key yang disalin
@@ -128,7 +128,7 @@ komando host edit db1 --key deploy
 File ekspor bisa berasal dari orang lain, jadi komando mengimpornya dengan batasan ini:
 
 - `ProxyCommand` dibuang, karena akan berjalan di komputer ini. Atur sendiri dengan `komando host edit NAME --proxy-command ...`.
-- Rujukan kata sandi dipertahankan hanya bila menyebut `secret:` yang belum ada di sini. Yang lain dibuang, sehingga file tidak bisa mengarahkan kata sandi Anda yang sudah ada ke server miliknya.
+- Rujukan kata sandi dipertahankan hanya bila menyebut `secret:` yang belum ada di sini. Yang lain dibuang, sehingga file tidak bisa mengarahkan kata sandi yang sudah ada ke server miliknya.
 - Recipe yang ditandai read-only diimpor sebagai perubahan. Tandai lagi sebagai read-only sendiri dengan `komando recipe add NAME ... --read-only --overwrite`.
 
 Setiap pengaturan yang dibuang dicantumkan di hasilnya.
@@ -162,7 +162,7 @@ komando import komando move.kmdseal
 komando import komando move.kmdseal --overwrite   # juga menggantikan secret yang ada di sini dengan nilai lain (bertanya dulu)
 ```
 
-Impor mempertahankan batasan file ekspor mana pun (di bawah). Kata sandi dari file masuk ke vault bila nama itu belum ada di sini. Bila vault punya nama itu dengan nilai lain, vault mempertahankan miliknya, dan server dari file tidak mendapatkannya, kecuali Anda menambahkan `--overwrite` dan menjawab ya. Key dari file disimpan di store komando, seperti yang dibuat `key gen`; key dengan nama yang sudah ada di sini dikeluarkan.
+Impor mempertahankan batasan file ekspor mana pun (di bawah). Kata sandi dari file masuk ke vault bila nama itu belum ada di sini. Bila vault punya nama itu dengan nilai lain, vault mempertahankan miliknya, dan server dari file tidak mendapatkannya, kecuali ditambahkan `--overwrite` dan menjawab ya. Key dari file disimpan di store komando, seperti yang dibuat `key gen`; key dengan nama yang sudah ada di sini dikeluarkan.
 
 Passphrase yang salah, atau file yang diubah setelah disegel, berhenti dengan `WRONG_PASSPHRASE`; file yang rusak dengan `SEALED_FILE_INVALID`. Tidak ada yang diimpor saat itu.
 
@@ -182,7 +182,7 @@ Formatnya ada di [desain sealed file](../design/sealed-file.md).
 
 ### Menyalin folder (semuanya, dengan kata sandi)
 
-Key vault harus ikut berpindah, jadi beri vault passphrase dulu. Key di `store.key` atau di keychain sistem tidak ikut berpindah: folder yang disalin yang key-nya tertinggal di keychain komputer lama tidak bisa membuka secret-nya.
+Key vault wajib ikut berpindah, jadi beri vault passphrase dulu. Key di `store.key` atau di keychain sistem tidak ikut berpindah: folder yang disalin yang key-nya tertinggal di keychain komputer lama tidak bisa membuka secret-nya.
 
 ```bash
 komando secret passphrase                     # di komputer lama: ketik passphrase (15+ karakter)
@@ -191,11 +191,11 @@ export KOMANDO_VAULT_PASS='the passphrase'    # atau ketik saat komando bertanya
 komando doctor                                # vault terbuka, server ada di sana
 ```
 
-Di komputer baru Anda bisa kembali ke file key dan memindahkannya ke keychain: `komando secret passphrase --off --yes`, lalu `komando secret keychain`. Salin juga file SSH key yang disimpan di luar `~/.komando` (di `~/.ssh`).
+Di komputer baru, bisa kembali ke file key dan memindahkannya ke keychain: `komando secret passphrase --off --yes`, lalu `komando secret keychain`. Salin juga file SSH key yang disimpan di luar `~/.komando` (di `~/.ssh`).
 
 ### Memulihkan dari backup (Time Machine, komputer baru)
 
-Backup `~/.komando` (Time Machine, disk image, salinan) berisi store, tetapi tidak selalu key-nya. `komando doctor` menyatakan di mana key berada; periksa sebelum Anda membutuhkan backup itu:
+Backup `~/.komando` (Time Machine, disk image, salinan) berisi store, tetapi tidak selalu key-nya. `komando doctor` menyatakan di mana key berada; periksa sebelum backup itu dibutuhkan:
 
 | Key berada di | Backup di komputer ini | Backup di komputer baru |
 |---|---|---|
@@ -203,7 +203,7 @@ Backup `~/.komando` (Time Machine, disk image, salinan) berisi store, tetapi tid
 | `store.key` (di dalam folder) | terbuka | terbuka, jadi perlakukan backup seperti kata sandi itu sendiri |
 | keychain OS (default) | terbuka: keychain masih punya key-nya | secret-nya tidak terbuka: key tertinggal di keychain komputer lama |
 
-Jadi untuk backup yang bisa Anda bawa ke komputer baru, beri vault passphrase dulu (`komando secret passphrase`), atau simpan [ekspor](#export-and-import-no-passwords) di sampingnya dan atur lagi kata sandinya dari password manager Anda.
+Jadi untuk backup yang bisa dibawa ke komputer baru, beri vault passphrase dulu (`komando secret passphrase`), atau simpan [ekspor](#export-and-import-no-passwords) di sampingnya dan atur lagi kata sandinya dari password manager.
 
 Kembalikan folder saat komando tidak menjalankan apa pun (tanpa VPN, tunnel, atau job yang dimulai darinya; `komando status` menampilkannya), lalu:
 
@@ -217,7 +217,7 @@ Bila key ada di keychain, keychain juga mengingat berapa banyak perubahan yang d
 komando doctor --accept-old-copy
 ```
 
-Lalu periksa apa yang berubah sejak backup: server atau aturan yang Anda tambahkan kemudian, dan host key yang di-pin sejak itu (`komando host trust` bertanya lagi untuk server yang tidak lagi dikenalnya).
+Lalu periksa apa yang berubah sejak backup: server atau aturan yang ditambahkan kemudian, dan host key yang di-pin sejak itu (`komando host trust` bertanya lagi untuk server yang tidak lagi dikenalnya).
 
 ## Batasan
 
@@ -230,12 +230,12 @@ Lalu periksa apa yang berubah sejak backup: server atau aturan yang Anda tambahk
 
 ## Pemecahan masalah
 
-| Error | Artinya | Yang perlu dilakukan |
+| Kesalahan | Artinya | Yang perlu dilakukan |
 |-------|---------|----------------------|
 | `IMPORT_INCOMPLETE` (exit 1) | sebagian besar masuk, beberapa ditolak (lihat `skipped`) | perbaiki entri itu di file dan impor lagi; yang sudah masuk dilewati |
 | `USAGE` (exit 2) | sumber yang tidak dikenal, atau `komando` atau `csv` tanpa file | petunjuk mencantumkan sumber dan sebuah contoh |
 | `FILE_EXISTS` (exit 8) | `export --to` ke file yang sudah ada | tambahkan `--overwrite`, atau pilih file lain |
-| `PROTECTED_TARGET`, `PROTECTED_TARGET` (exit 6) | `--overwrite` pada entri yang dilindungi | di terminal Anda komando bertanya; script menambahkan `--yes` |
-| `SAFETY_SETTING` (exit 6) | file menyalakan agent forwarding, cipher VPN lama, atau PAP, atau melemahkan VPN yang digantikannya | periksa file; di terminal Anda komando bertanya, script menambahkan `--yes` |
-| `STORE_OLD_COPY` (exit 6) | backup folder dikembalikan; keychain mengingat store yang lebih baru | bila Anda memulihkannya dengan sengaja, jalankan `komando doctor --accept-old-copy` di terminal Anda sendiri; kalau tidak, cari tahu siapa yang mengembalikannya |
+| `PROTECTED_TARGET`, `PROTECTED_TARGET` (exit 6) | `--overwrite` pada entri yang dilindungi | di terminal, komando bertanya; script menambahkan `--yes` |
+| `SAFETY_SETTING` (exit 6) | file menyalakan agent forwarding, cipher VPN lama, atau PAP, atau melemahkan VPN yang digantikannya | periksa file; di terminal, komando bertanya, script menambahkan `--yes` |
+| `STORE_OLD_COPY` (exit 6) | backup folder dikembalikan; keychain mengingat store yang lebih baru | bila dipulihkan dengan sengaja, jalankan `komando doctor --accept-old-copy` di terminal Anda sendiri; kalau tidak, cari tahu siapa yang mengembalikannya |
 | `VAULT_LOCKED` (exit 1) | folder yang disalin yang vault-nya punya passphrase, tanpa `KOMANDO_VAULT_PASS` | atur `KOMANDO_VAULT_PASS`; lihat [Secret](secrets.md#troubleshooting) |

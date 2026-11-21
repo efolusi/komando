@@ -1,6 +1,6 @@
 # Menjalankan perintah
 
-Jalankan perintah dan script di satu atau banyak server, mulai tugas panjang, dan simpan perintah yang sering Anda pakai.
+Jalankan perintah dan script di satu atau banyak server, mulai tugas panjang, dan simpan perintah yang sering dipakai.
 
 ## Menjalankan perintah
 
@@ -12,11 +12,11 @@ komando exec web1 -- uptime
  10:42:01 up 34 days,  2:11,  1 user,  load average: 0.12, 0.08, 0.05
 ```
 
-Jika diketik tanpa argumen di terminal Anda, `komando exec` menanyakan server (dari daftar Anda), lalu perintahnya.
+Jika diketik tanpa argumen di terminal, `komando exec` menanyakan server (dari daftar), lalu perintahnya.
 
 Semua yang ada setelah `--` adalah perintahnya. Perintah berjalan lewat login shell server, di semua server terpilih secara paralel. Flag komando sendiri ditulis sebelum `--`: `exec web1 -- uptime --dry-run` ditolak, karena `--dry-run` di sana akan menjadi bagian dari perintah dan perintahnya benar-benar berjalan. Bila perintah di server menerima flag seperti itu sendiri (`apt-get upgrade --dry-run`), berikan sebagai satu string dengan `-c`.
 
-`--` wajib ada: `komando exec web1 apt-get install -y nginx` adalah error penggunaan (exit 2) dan tidak menjalankan apa pun, karena komando akan membaca `-y` sebagai `--yes` miliknya sendiri. Hal yang sama berlaku untuk setiap perintah yang menyerahkan kata-kata ke program lain: `job start`, `docker exec`, `docker compose`, `docker raw`, `cluster exec`, `cluster shell`, `cluster run`, dan `cache run`.
+`--` wajib ada: `komando exec web1 apt-get install -y nginx` adalah kesalahan penggunaan (exit 2) dan tidak menjalankan apa pun, karena komando akan membaca `-y` sebagai `--yes` miliknya sendiri. Hal yang sama berlaku untuk setiap perintah yang menyerahkan kata-kata ke program lain: `job start`, `docker exec`, `docker compose`, `docker raw`, `cluster exec`, `cluster shell`, `cluster run`, dan `cache run`.
 
 ```bash
 komando exec @web -P 20 -- 'df -h / | tail -1'           # sampai 20 server sekaligus
@@ -40,7 +40,7 @@ komando exec db1 --read-only -- 'df -h /var/lib/postgresql'   # SQL sendiri: kom
 
 ### Hasil dan exit code
 
-Setiap server mendapat output, error, exit code, dan waktu jalannya sendiri. Bila perintah gagal di server mana pun, komando keluar dengan 5. Bila komando tidak bisa tersambung atau login, komando keluar dengan 4, kecuali saat server tidak menjawab dalam `--connect-timeout` (`CONNECT_TIMEOUT`): itu keluar dengan 7, seperti timeout lainnya.
+Setiap server mendapat output, kesalahan, exit code, dan waktu jalannya sendiri. Bila perintah gagal di server mana pun, komando keluar dengan 5. Bila komando tidak bisa tersambung atau login, komando keluar dengan 4, kecuali saat server tidak menjawab dalam `--connect-timeout` (`CONNECT_TIMEOUT`): itu keluar dengan 7, seperti timeout lainnya.
 
 Dengan `-o text`, satu server dicetak seperti `ssh`: outputnya, errornya, dan penutup `Error: server web1 failed (exit 3)` saat gagal. Beberapa server mendapat satu blok masing-masing:
 
@@ -58,7 +58,7 @@ Dengan `--fail-fast`, server yang tidak pernah dimulai dilaporkan sebagai skippe
 
 Kadang tautan ke server putus saat perintah berjalan: VPN terputus, Wi-Fi berganti, firewall memutus koneksi. komando lalu tidak bisa tahu bagaimana perintah berakhir. Hasil server itu menyatakannya:
 
-- kode error `CONNECTION_LOST`, exit code 4 (server lain mempertahankan hasilnya sendiri; exit code terburuk yang menang, seperti biasa);
+- kode kesalahan `CONNECTION_LOST`, exit code 4 (server lain mempertahankan hasilnya sendiri; exit code terburuk yang menang, seperti biasa);
 - output yang tiba sebelum putus, dengan `exit_code` -1 (tidak diketahui);
 - di mode teks: `=== web2 [failed: connection lost, outcome unknown]`.
 
@@ -73,7 +73,7 @@ Bila server berhenti menjawab (VPN yang hilang tanpa kabar), komando mengetahuin
 
 Ini berbeda dari:
 
-| Apa yang terjadi | Kode error | Exit |
+| Apa yang terjadi | Kode kesalahan | Exit |
 |------------------|-----------|------|
 | tidak bisa tersambung sama sekali (perintah tidak pernah dimulai) | `CONN_UNREACHABLE`, `CONNECTION_REFUSED`, `AUTH_FAILED`, ... | 4 |
 | tautan putus sebelum perintah dimulai (tidak berjalan) | `CONNECTION_LOST`, pesan menyatakan "it did not run" | 4 |
@@ -85,7 +85,7 @@ Untuk tugas panjang, atau tugas apa pun lewat tautan yang tidak stabil, pakai [j
 
 ### Server yang dilindungi dan `--read-only`
 
-Di server yang dilindungi, perintah bertanya dulu (di terminal Anda komando bertanya kepada Anda; agen AI atau script menambahkan `--yes` setelah seseorang setuju; lihat [Keamanan](safety.md)), kecuali Anda menambahkan `--read-only` untuk menyatakan perintah hanya melihat.
+Di server yang dilindungi, perintah bertanya dulu (di terminal, komando bertanya kepada Anda; agen AI atau script menambahkan `--yes` setelah seseorang setuju; lihat [Keamanan](safety.md)), kecuali ditambahkan `--read-only` untuk menyatakan perintah hanya melihat.
 
 `--read-only` adalah allowlist yang ketat, di setiap server: perintah berjalan hanya bila komando mengetahui setiap bagiannya hanya membaca. Yang lain ditolak dengan `READ_ONLY_VIOLATION`; hilangkan `--read-only` dan konfirmasikan perubahannya. Yang lolos:
 
@@ -94,7 +94,7 @@ Di server yang dilindungi, perintah bertanya dulu (di terminal Anda komando bert
 - Perintah dengan sub-perintah, dalam bentuk yang membaca: `systemctl status`, `is-active`, `list-units`, `show`; `docker ps`, `logs`, `inspect`, `stats`; `kubectl get`, `describe`, `logs`, `top`; `ip addr`, `ip route`; `iptables -L`/`-S`; `apt list`, `dpkg -l`, `rpm -q`; `nginx -t`, `sshd -T`. Sub-perintah yang tidak dikenal komando ditolak, tidak diloloskan.
 - `sudo -n`, `sudo -u USER`, `timeout 10`, `nice`, `env NAME=VALUE`, `time`, dan `xargs` (dengan tool baca biasa) di depan perintah seperti itu, serta `set -e`, `-u`, dan `-o pipefail`.
 
-Yang tidak lolos, selain perubahan yang jelas (`rm`, `tee`, `> file`, `sed -i`, `systemctl restart`, `apt install`): program yang tidak dikenal komando (tool Anda sendiri, `curl`, `wget`, `nc`), `git` (konfigurasi repository sendiri bisa menjalankan program pada `git status` atau `git diff`), opsi atau sub-perintah yang belum dikenalnya, `kubectl --kubeconfig` dan pengaturan klien lainnya, `sudo -E`, kurung kurawal tanpa kutip (`{a,b}`), `${x@P}` dan expansion lain yang dievaluasi bash, `let`, `printf -v`, `test -v`, `set -x`, `psql` dan `mysql` (tidak ada yang menahannya pada transaksi read-only; pakai `komando db query`, yang menahannya), dan mengatur variabel dengan nama huruf besar (`PATH`, `PS4`, `TAR_OPTIONS`, `KUBECONFIG` ...: program membaca nama seperti itu sebagai pengaturan atau kode) dengan `NAME=`, `export`, `read`, `for`, atau `-e`. Pakai nama dengan huruf kecil (`-e dir=/var/log -- 'du -sh $dir'`); `LANG`, `LC_*`, `TZ`, `TERM`, dan `COLUMNS` tidak masalah. Perintah yang memakai nilai `-e` tidak punya tanda kutip ganda: di `"$dir"` nilainya satu kata yang tidak bisa diperiksa komando. Nilai dengan `*`, `?`, `[`, `{`, `~`, atau backslash ditolak: bash akan meng-expand-nya menjadi nama yang tidak terlihat komando. `kubectl config view --raw` juga ditolak: perintah itu mencetak kredensial kubeconfig. Untuk keadaan server, pembacaan komando sendiri tidak butuh perintah shell sama sekali: `komando facts`, `logs`, `svc status`, `fs read`, `docker ps`, `cert check`. `docker exec` dan `cluster exec` memeriksa `--read-only` mereka dengan cara yang sama.
+Yang tidak lolos, selain perubahan yang jelas (`rm`, `tee`, `> file`, `sed -i`, `systemctl restart`, `apt install`): program yang tidak dikenal komando (tool buatan sendiri, `curl`, `wget`, `nc`), `git` (konfigurasi repository sendiri bisa menjalankan program pada `git status` atau `git diff`), opsi atau sub-perintah yang belum dikenalnya, `kubectl --kubeconfig` dan pengaturan klien lainnya, `sudo -E`, kurung kurawal tanpa kutip (`{a,b}`), `${x@P}` dan expansion lain yang dievaluasi bash, `let`, `printf -v`, `test -v`, `set -x`, `psql` dan `mysql` (tidak ada yang menahannya pada transaksi read-only; pakai `komando db query`, yang menahannya), dan mengatur variabel dengan nama huruf besar (`PATH`, `PS4`, `TAR_OPTIONS`, `KUBECONFIG` ...: program membaca nama seperti itu sebagai pengaturan atau kode) dengan `NAME=`, `export`, `read`, `for`, atau `-e`. Pakai nama dengan huruf kecil (`-e dir=/var/log -- 'du -sh $dir'`); `LANG`, `LC_*`, `TZ`, `TERM`, dan `COLUMNS` tidak masalah. Perintah yang memakai nilai `-e` tidak punya tanda kutip ganda: di `"$dir"` nilainya satu kata yang tidak bisa diperiksa komando. Nilai dengan `*`, `?`, `[`, `{`, `~`, atau backslash ditolak: bash akan meng-expand-nya menjadi nama yang tidak terlihat komando. `kubectl config view --raw` juga ditolak: perintah itu mencetak kredensial kubeconfig. Untuk keadaan server, pembacaan komando sendiri tidak butuh perintah shell sama sekali: `komando facts`, `logs`, `svc status`, `fs read`, `docker ps`, `cert check`. `docker exec` dan `cluster exec` memeriksa `--read-only` mereka dengan cara yang sama.
 
 Perintah yang tidak bisa diikuti komando ditolak dengan cara yang sama: `eval`, `source`, nama perintah di dalam variabel (`$X file`), shell atau python yang membaca script yang tidak terlihat (`... | sh`, `python3 -c`). Teks setelah `sh -c` atau `bash -lc` diperiksa seperti perintahnya. Dengan `--stdin-file`, inputnya juga diperiksa, jadi `--read-only --stdin-file check.sh -- 'bash -s'` berfungsi bila script hanya melihat. `exec --script --read-only` membutuhkan shell sebagai interpreter (`sh`, `bash -eu`). Argumen script (`--arg`, atau kata setelah `bash -s --`) ditolak di bawah `--read-only`: taruh nilainya di dalam script. Argumen yang tidak terlihat pemeriksaan (`find /data $X`) ditolak untuk perintah yang argumennya menentukan apa yang dilakukannya (`find`, `sed`, `sort`, `kubectl` ...); nilai `-e` diisi lebih dulu. Input lain (CSV untuk `wc`) adalah data dan tidak dibaca sebagai perintah.
 
@@ -133,7 +133,7 @@ Interpreter berasal dari baris `#!` script, atau dari `--interpreter` (kalau tid
 
 ## Tugas panjang (job)
 
-Apa pun yang lambat (backup, upgrade, build) sebaiknya dijalankan sebagai *job*. Job terus berjalan di server bahkan bila Anda memutus koneksi, dan `job start` kembali seketika dengan satu ID job per server.
+Apa pun yang lambat (backup, upgrade, build) sebaiknya dijalankan sebagai *job*. Job terus berjalan di server bahkan bila koneksi diputus, dan `job start` kembali seketika dengan satu ID job per server.
 
 ```bash
 komando job start web1 -- 'tar czf /backup/www.tgz /var/www'
@@ -176,7 +176,7 @@ Baik diketahui:
 
 ## Recipe (perintah siap pakai dan tersimpan)
 
-Recipe adalah perintah tersimpan. komando datang dengan yang siap pakai (`health`, `disk`, `memory`, dan lainnya; lihat [Kesehatan](health.md)), dan Anda bisa menyimpan milik Anda sendiri di sampingnya.
+Recipe adalah perintah tersimpan. komando datang dengan yang siap pakai (`health`, `disk`, `memory`, dan lainnya; lihat [Kesehatan](health.md)), dan recipe sendiri bisa disimpan di sampingnya.
 
 ```bash
 komando recipe list                                   # bawaan dan tersimpan
@@ -188,16 +188,16 @@ komando recipe run disk-of web1 --var path=/srv
 komando recipe rm disk-of
 ```
 
-- `{{app}}` adalah isian yang Anda isi dengan `--var app=...`. `{{path=/}}` punya nilai default.
-- komando memperlakukan recipe sebagai perubahan, jadi server yang dilindungi bertanya dulu, kecuali Anda menyimpannya dengan `--read-only` karena hanya melihat. Recipe read-only diperiksa seperti `exec --read-only` saat Anda menyimpannya. Bila, dengan isiannya terisi, recipe tidak lagi lolos pemeriksaan itu, recipe berjalan sebagai perubahan.
+- `{{app}}` adalah isian yang diisi dengan `--var app=...`. `{{path=/}}` punya nilai default.
+- komando memperlakukan recipe sebagai perubahan, jadi server yang dilindungi bertanya dulu, kecuali disimpan dengan `--read-only` karena hanya melihat. Recipe read-only diperiksa seperti `exec --read-only` saat disimpan. Bila, dengan isiannya terisi, recipe tidak lagi lolos pemeriksaan itu, recipe berjalan sebagai perubahan.
 - Nilai `--var` tidak boleh diawali `-`, karena program akan membacanya sebagai opsi (`OPTION_LIKE_VAR`). Tulis path seperti itu sebagai `./-name`. Angka atau waktu relatif (`-5`, `-2h`) tidak masalah.
-- Nama bawaan (`disk`, `health`, ...) tidak bisa dipakai ulang. Ganti milik Anda sendiri dengan `--overwrite`.
+- Nama bawaan (`disk`, `health`, ...) tidak bisa dipakai ulang. Ganti recipe buatan sendiri dengan `--overwrite`.
 - `--var` yang tidak punya isian di recipe ditolak (`UNKNOWN_VAR`), jadi salah ketik tidak pernah menjalankan recipe dengan nilai default-nya.
 - `recipe run --no-sudo` melewati sudo bahkan saat recipe memintanya.
 
-## Di terminal Anda: komando menanyakan apa yang kurang
+## Di terminal: komando menanyakan apa yang kurang
 
-Hanya ada satu cara memakai komando: `komando NOUN VERB [TARGET] [FLAGS]`. Di terminal Anda sendiri, hilangkan sesuatu dan komando menanyakannya, satu baris sekali waktu, di layar biasa (scrollback Anda menyimpannya):
+Hanya ada satu cara memakai komando: `komando NOUN VERB [TARGET] [FLAGS]`. Di terminal Anda sendiri, hilangkan sesuatu dan komando menanyakannya, satu baris sekali waktu, di layar biasa (scrollback menyimpannya):
 
 ```text
 $ komando logs
@@ -210,13 +210,13 @@ Next time: komando logs web1
 ```
 
 - Komando hanya menanyakan apa yang dibutuhkan perintah: argumen yang kurang, flag yang wajib, dan beberapa nilai yang membuat perintah tidak berguna tanpanya (SQL dari `db query`, perintah dari `exec`). Labelnya adalah nama sebenarnya: `CONN (database):`, `TARGET:`, `--old:`. `?` menjelaskan pertanyaannya; Enter mengambil default di dalam kurung siku.
-- Daftar berasal dari apa yang diketahui komando: nomor memilih satu baris, sebagian nama mempersempit daftar, dan selector (`@web`, `tag:db`) atau nama baru diambil seperti diketik. Dengan satu item yang tidak dilindungi, komando memakainya dan menyatakannya (`Using prod-db (the only one of your databases)`); yang dilindungi tidak pernah dipilihkan untuk Anda. Dengan nol, komando menyatakan cara menambahkannya.
+- Daftar berasal dari apa yang diketahui komando: nomor memilih satu baris, sebagian nama mempersempit daftar, dan selector (`@web`, `tag:db`) atau nama baru diambil seperti diketik. Dengan satu item yang tidak dilindungi, komando memakainya dan menyatakannya (`Using prod-db (the only one of your databases)`); yang dilindungi tidak pernah dipilihkan otomatis. Dengan nol, komando menyatakan cara menambahkannya.
 - Komando lalu menampilkan seluruh baris (`$ komando ...`). Pembacaan langsung berjalan. Perubahan bertanya `Run it? [y/N, d = --dry-run first]` (Enter berarti Tidak; `d` menampilkan apa yang akan dilakukannya dan bertanya lagi). Yang menghapus untuk selamanya meminta Anda mengetik nama apa yang hilang (atau jumlahnya). Target yang dilindungi menanyakan pertanyaan lazimnya `web1 (protected): this command changes it. Continue? [y/N]` sebagai gantinya.
-- `komando host add` (atau `conn add`, `vpn add`, `db add`, `cache add`, `queue add`, `storage add`, `cluster add`, `registry add`) yang diketik tanpa argumen menanyakan pertanyaan khas jenis itu: jenis apa, nama, alamat atau bagian URL, user, port, cara Anda login, dan apakah ini production. Kata sandi tidak pernah ditanyakan di sini: perintahnya menanyakannya sendiri, disembunyikan (`--ask-password`). Kata sandi yang ditempel bersama alamat (`root:secret@10.0.0.5`) dikeluarkan sebelum digambar. Setelah penambahan, `komando test` menunjukkan bahwa server menjawab; bila tidak, komando menyebut perintah untuk mengubah, menguji lagi, atau menghapusnya.
-- Ctrl-C pada sebuah pertanyaan menghentikannya dan tidak ada yang berjalan. komando tidak pernah menambahkan `--yes`, `--allow-dangerous`, `--reveal`, atau `--write` untuk Anda.
-- Setelah perintah yang Anda jalankan berakhir dengan baik, komando bisa menyebut apa yang biasanya berikutnya, dalam satu baris di stderr dengan paling banyak tiga perintah (`Next: komando db info prod-db`). Setiap add, edit, rename, dan rm punya satu. Tidak ada "berikutnya" yang dicetak di stdout; script dan agen membaca `data.next`. `komando host show web1` (`conn show`, `vpn show`, `group list GROUP`, `key show`, `job status`, `secret show`, `config get`) berakhir dengan perintah untuk item itu.
+- `komando host add` (atau `conn add`, `vpn add`, `db add`, `cache add`, `queue add`, `storage add`, `cluster add`, `registry add`) yang diketik tanpa argumen menanyakan pertanyaan khas jenis itu: jenis apa, nama, alamat atau bagian URL, user, port, cara login, dan apakah ini production. Kata sandi tidak pernah ditanyakan di sini: perintahnya menanyakannya sendiri, disembunyikan (`--ask-password`). Kata sandi yang ditempel bersama alamat (`root:secret@10.0.0.5`) dikeluarkan sebelum digambar. Setelah penambahan, `komando test` menunjukkan bahwa server menjawab; bila tidak, komando menyebut perintah untuk mengubah, menguji lagi, atau menghapusnya.
+- Ctrl-C pada sebuah pertanyaan menghentikannya dan tidak ada yang berjalan. komando tidak pernah menambahkan `--yes`, `--allow-dangerous`, `--reveal`, atau `--write`.
+- Setelah perintah yang dijalankan berakhir dengan baik, komando bisa menyebut apa yang biasanya berikutnya, dalam satu baris di stderr dengan paling banyak tiga perintah (`Next: komando db info prod-db`). Setiap add, edit, rename, dan rm punya satu. Tidak ada "berikutnya" yang dicetak di stdout; script dan agen membaca `data.next`. `komando host show web1` (`conn show`, `vpn show`, `group list GROUP`, `key show`, `job status`, `secret show`, `config get`) berakhir dengan perintah untuk item itu.
 
-`komando` saja menampilkan perintah menurut kelompok, START lebih dulu. Perintah yang diketik lengkap berjalan seperti biasanya. Tidak ada yang pernah ditanyakan kepada agen AI, script, pipe, job CI (`CI` diatur), terminal dumb (`TERM=dumb`), atau output JSON: mereka mendapat error `USAGE` biasa yang menyebut apa yang kurang.
+`komando` saja menampilkan perintah menurut kelompok, START lebih dulu. Perintah yang diketik lengkap berjalan seperti biasanya. Tidak ada yang pernah ditanyakan kepada agen AI, script, pipe, job CI (`CI` diatur), terminal dumb (`TERM=dumb`), atau output JSON: mereka mendapat kesalahan `USAGE` biasa yang menyebut apa yang kurang.
 
 ## Shell interaktif (untuk manusia)
 
@@ -229,7 +229,7 @@ komando shell web1 --dry-run   # menampilkan server, alamat, user, dan jalur --v
 
 ### Di mana saya? (status line)
 
-Saat Anda mengetik perintah sendiri, komando mencetak satu baris yang menyatakan di mana Anda bekerja, sebelum tersambung. Ini dilakukan untuk perintah yang Anda tetap di dalamnya: `shell`, `db shell`, `cluster shell`, `cluster forward`, `logs --follow`, dan `cluster logs -f`.
+Saat perintah diketik sendiri, komando mencetak satu baris yang menyatakan di mana Anda bekerja, sebelum tersambung. Ini dilakukan untuk perintah yang Anda tetap di dalamnya: `shell`, `db shell`, `cluster shell`, `cluster forward`, `logs --follow`, dan `cluster logs -f`.
 
 ```text
 komando: shell on web1 (deploy@10.0.1.5) via vpn office → bastion
@@ -241,7 +241,7 @@ komando: following logs on web1, web2 (Ctrl-C stops)
 
 - `via` adalah jalan ke sana: VPN lebih dulu, lalu bastion.
 - Server atau database yang dilindungi menyatakan `PROTECTED`, dengan warna merah kecuali `NO_COLOR` diatur.
-- Di terminal yang tidak bisa menampilkannya (`TERM=dumb`, atau locale seperti `LANG=C` yang bukan UTF-8), komando menulis tanda di baris miliknya sendiri (error, hint, peringatan) dalam ASCII: `+` untuk ✓, `x` untuk ✗, `*` untuk ●, `->` untuk →, `-` untuk ·. Hasil (file, baris, baris log) selalu ditampilkan apa adanya.
+- Di terminal yang tidak bisa menampilkannya (`TERM=dumb`, atau locale seperti `LANG=C` yang bukan UTF-8), komando menulis tanda di baris miliknya sendiri (kesalahan, hint, peringatan) dalam ASCII: `+` untuk ✓, `x` untuk ✗, `*` untuk ●, `->` untuk →, `-` untuk ·. Hasil (file, baris, baris log) selalu ditampilkan apa adanya.
 - Saat `shell` atau `db shell` berakhir, satu baris lagi menyatakan bagaimana: `komando: left web1 (exit 0, 12m)` atau `komando: connection to web1 lost after 3m`.
 - Saat perintah menyambungkan VPN dengan sendirinya, komando menyatakan bahwa VPN tetap aktif dan cara menghentikannya.
 
@@ -272,9 +272,9 @@ Bila tidak ada yang berjalan, komando menyatakan `nothing running: no VPN sessio
 - Agen mendapat hal yang sama sebagai JSON (`vpns`, `logins`, `tunnels`, `jobs`).
 - VPN yang menganggur menutup setelah `vpn_idle` (lihat [Pengaturan](settings.md)).
 
-### Menampilkannya di prompt shell Anda
+### Menampilkannya di prompt shell
 
-`komando status --short` mencetak catatan singkat seperti `vpn:2 tun:1` (berapa VPN dan tunnel yang aktif), atau tidak ada bila tidak ada yang berjalan, sehingga prompt Anda bisa menampilkannya terus-menerus. Tambahkan sendiri; komando tidak pernah mengubah file shell Anda.
+`komando status --short` mencetak catatan singkat seperti `vpn:2 tun:1` (berapa VPN dan tunnel yang aktif), atau tidak ada bila tidak ada yang berjalan, sehingga prompt bisa menampilkannya terus-menerus. Tambahkan sendiri; komando tidak pernah mengubah file shell.
 
 zsh (juga dengan oh-my-zsh), di `~/.zshrc`:
 
@@ -307,15 +307,15 @@ Perintah ini hanya membaca nomor proses yang disimpan komando di samping store-n
 - `--read-only` hanya menjalankan perintah yang diketahui komando hanya membaca, di setiap target; argumen script (`--arg`, kata setelah `bash -s --`) ditolak di bawahnya.
 - `exec --script` tidak bisa digabung dengan `--stdin-file` atau `--pty`.
 - Nilai `--var` recipe tidak boleh diawali `-` (kecuali angka atau waktu mundur dari sekarang).
-- Nama recipe bawaan tidak bisa dipakai ulang untuk milik Anda sendiri.
+- Nama recipe bawaan tidak bisa dipakai ulang untuk recipe sendiri.
 - `shell` dan pertanyaan untuk argumen yang kurang butuh orang di terminal: tidak ada yang ditanyakan kepada agen AI, script, pipe, job CI (`CI` diatur), terminal dumb (`TERM=dumb`), atau output JSON.
 - `komando status` mencantumkan job dari catatan komando sendiri; hanya `job list --refresh` yang bertanya ke server.
 
 ## Pemecahan masalah
 
-| Kode error | Artinya | Yang perlu dilakukan |
+| Kode kesalahan | Artinya | Yang perlu dilakukan |
 |------------|---------|----------------------|
-| `USAGE` | argumen hilang, atau kata-kata perintah tidak ada setelah `--` (exit 2) | baca contoh di error; taruh perintah setelah `--` |
+| `USAGE` | argumen hilang, atau kata-kata perintah tidak ada setelah `--` (exit 2) | baca contoh di kesalahan; taruh perintah setelah `--` |
 | `COMMAND_FAILED` | perintah berjalan dan gagal di sebuah server (exit 5) | baca output dan `exit_code` server itu |
 | `CONNECTION_LOST` | tautan putus; perintah mungkin masih berjalan, atau sudah selesai (exit 4) | lihat dulu dengan perintah read-only; pakai job lewat tautan yang tidak stabil |
 | `CONNECT_TIMEOUT` | server tidak menjawab dalam `--connect-timeout` (exit 7) | periksa alamat dan jalur `--via` |

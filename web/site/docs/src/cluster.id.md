@@ -1,6 +1,6 @@
 # Cluster (Kubernetes dan Docker Swarm)
 
-Lihat dan ubah apa yang berjalan di Kubernetes dan Docker Swarm dengan satu set perintah. Anda tidak butuh `kubectl` atau `docker` di komputer Anda: komando berbicara ke cluster sendiri.
+Lihat dan ubah apa yang berjalan di Kubernetes dan Docker Swarm dengan satu set perintah. `kubectl` atau `docker` tidak dibutuhkan di komputer ini: komando berbicara ke cluster sendiri.
 
 ## Memeriksa kesehatan cluster
 
@@ -10,7 +10,7 @@ komando conn rename my-ctx-name prod-k8s   # beri nama pendek (impor menamainya 
 komando cluster status prod-k8s            # versi, node, dan setiap masalah
 ```
 
-Jika diketik tanpa argumen di terminal, `komando cluster status` menanyakan cluster mana, dengan daftar milik Anda untuk dipilih.
+Jika diketik tanpa argumen di terminal, `komando cluster status` menanyakan cluster mana, dengan daftar untuk dipilih.
 
 ```text
 prod-k8s: version v1.30.4, 3 of 3 nodes ready
@@ -20,7 +20,7 @@ pod/shop/api-7d9f-x2   api: CrashLoopBackOff
 deployment/shop/api    1 of 3 replicas ready
 ```
 
-`cluster status` mencantumkan setiap masalah menurut namanya: pod yang crash atau tidak bisa mulai, deployment, StatefulSet, dan DaemonSet yang kekurangan replika, dan node yang berada di bawah tekanan (`MemoryPressure`). Bila tidak ada, komando menyatakan `healthy: no problems found` (`healthy: true` di JSON). Di Swarm, komando mencantumkan node yang mati atau di-drain dan service yang kekurangan replika, dengan error setiap task yang tidak berjalan.
+`cluster status` mencantumkan setiap masalah menurut namanya: pod yang crash atau tidak bisa mulai, deployment, StatefulSet, dan DaemonSet yang kekurangan replika, dan node yang berada di bawah tekanan (`MemoryPressure`). Bila tidak ada, komando menyatakan `healthy: no problems found` (`healthy: true` di JSON). Di Swarm, komando mencantumkan node yang mati atau di-drain dan service yang kekurangan replika, dengan kesalahan setiap task yang tidak berjalan.
 
 Perintah yang sama berfungsi di Kubernetes dan di Docker Swarm.
 
@@ -28,7 +28,7 @@ Perintah yang sama berfungsi di Kubernetes dan di Docker Swarm.
 
 ### Kubernetes
 
-komando membaca kubeconfig Anda (file login yang dipakai `kubectl`, biasanya `~/.kube/config`) dan menambahkan satu conn per context (satu cluster dan user di file itu):
+komando membaca kubeconfig (file login yang dipakai `kubectl`, biasanya `~/.kube/config`) dan menambahkan satu conn per context (satu cluster dan user di file itu):
 
 ```bash
 komando import kubeconfig --dry-run           # lihat apa yang akan ditambahkan
@@ -36,15 +36,15 @@ komando import kubeconfig                     # membaca $KUBECONFIG, kalau tidak
 komando conn edit prod-k8s --via bastion      # API server di jaringan privat? jangkau seperti yang lain
 ```
 
-Jika diketik tanpa argumen di terminal, `komando cluster add` menanyakan apakah ini Kubernetes (lalu file kubeconfig Anda) atau Docker Swarm (lalu alamat sebuah manager).
+Jika diketik tanpa argumen di terminal, `komando cluster add` menanyakan apakah ini Kubernetes (lalu file kubeconfig) atau Docker Swarm (lalu alamat sebuah manager).
 
 Cara login bekerja:
 
 - komando menyimpan kubeconfig setiap context di vault.
-- komando membuat sendiri login EKS dan GKE (`aws eks get-token`, `aws-iam-authenticator`, `gke-gcloud-auth-plugin`), jadi Anda tidak butuh program itu. Login tersebut dibuat dari login AWS atau Google Cloud komputer ini dan dikirim ke server milik kubeconfig, jadi agen AI butuh jawaban ya dari seseorang (`--yes`) untuk mengimpor kubeconfig seperti itu. Login hanya dikirim lewat https dengan sertifikat server yang diperiksa: server di `http://`, atau `insecure-skip-tls-verify` tanpa CA, berhenti dengan error penggunaan.
+- komando membuat sendiri login EKS dan GKE (`aws eks get-token`, `aws-iam-authenticator`, `gke-gcloud-auth-plugin`), jadi program itu tidak dibutuhkan. Login tersebut dibuat dari login AWS atau Google Cloud komputer ini dan dikirim ke server milik kubeconfig, jadi agen AI butuh jawaban ya dari seseorang (`--yes`) untuk mengimpor kubeconfig seperti itu. Login hanya dikirim lewat https dengan sertifikat server yang diperiksa: server di `http://`, atau `insecure-skip-tls-verify` tanpa CA, berhenti dengan kesalahan penggunaan.
 - Program login lain yang disebut kubeconfig berjalan di komputer ini, jadi agen AI butuh jawaban ya dari seseorang (`--yes`) untuk mengimpornya, seperti `--proxy-command` milik server.
-- Impor Anda sendiri mencatat file mana program itu (path lengkapnya) dan `PATH` saat impor. Perintah agen AI menjalankan file itu dengan `PATH` tersebut, folder home Anda yang sebenarnya, dan hanya beberapa variabel biasa (user, bahasa, layar, folder temp) dari lingkungannya sendiri: apa yang dibutuhkan program di luar itu masuk ke `env` kubeconfig. Bila file itu bisa diganti oleh program milik user Anda (`bin` milik Homebrew, `~/.local/bin`, atau di Windows folder di bawah Program Files yang oleh installer dibuat bisa ditulis semua user) dan isinya berubah, misalnya setelah update, agen ditanya lagi sampai Anda mengimpor kubeconfig lagi.
-- Impor yang dibuat agen AI dengan jawaban ya Anda tidak mempercayai apa pun untuk selanjutnya: perintah cluster-nya bertanya kepada Anda setiap kali, dan setelah jawaban ya Anda program berjalan dengan `PATH` sistem. Impor kubeconfig sendiri untuk mempercayainya.
+- Impor sendiri mencatat file mana program itu (path lengkapnya) dan `PATH` saat impor. Perintah agen AI menjalankan file itu dengan `PATH` tersebut, folder home yang sebenarnya, dan hanya beberapa variabel biasa (user, bahasa, layar, folder temp) dari lingkungannya sendiri: apa yang dibutuhkan program di luar itu masuk ke `env` kubeconfig. Bila file itu bisa diganti oleh program milik user yang sama (`bin` milik Homebrew, `~/.local/bin`, atau di Windows folder di bawah Program Files yang oleh installer dibuat bisa ditulis semua user) dan isinya berubah, misalnya setelah update, agen ditanya lagi sampai kubeconfig diimpor ulang.
+- Impor yang dibuat agen AI dengan jawaban ya Anda tidak mempercayai apa pun untuk selanjutnya: perintah cluster-nya bertanya kepada Anda setiap kali, dan setelah jawaban ya program berjalan dengan `PATH` sistem. Impor kubeconfig sendiri untuk mempercayainya.
 - Bila program itu hilang, perintah cluster berhenti dengan `TOOL_MISSING` (exit 3) dan `installHint` milik kubeconfig. Bila program berjalan tetapi tidak bisa login (mungkin ia ingin seseorang login dulu), perintah berhenti dengan `LOGIN_FAILED` (exit 4).
 - Setelah seseorang mengimpor (atau mengizinkan) sebuah kubeconfig, agen memakai conn tanpa bertanya. Bila kubeconfig di vault berubah ke program lain atau apa pun di blok cluster-nya (server, CA-nya, `tls-server-name`, `proxy-url`, `insecure-skip-tls-verify`; `secret set`), atau membaca token dari file lokal (`tokenFile`), setiap perintah agen bertanya lagi, pembacaan juga, sampai seseorang mengimpornya lagi. Ini berlaku untuk login EKS dan GKE juga.
 
@@ -66,7 +66,7 @@ komando host add swarm1 admin@10.0.0.10 --tag swarm
 komando host edit swarm1 --add-tag swarm     # manager yang sudah ada di daftar Anda
 ```
 
-`komando cluster add` yang diketik tanpa argumen di terminal menambahkan tag untuk Anda saat Anda menjawab Docker Swarm.
+`komando cluster add` yang diketik tanpa argumen di terminal menambahkan tag saat Anda menjawab Docker Swarm.
 
 ### Menghapus cluster dari komando
 
@@ -79,7 +79,7 @@ komando secret rm prod-kubeconfig        # kubeconfig-nya, setelah tidak ada yan
 
 ## Menyebut objek
 
-Setiap perintah menyebut objek seperti kubectl: `TYPE NAME` atau `TYPE/NAME` (`deployment api`, `deploy/api`, `deployment.apps/api`). Bila Anda salah mengetik jenisnya, error menyarankan yang mungkin Anda maksud.
+Setiap perintah menyebut objek seperti kubectl: `TYPE NAME` atau `TYPE/NAME` (`deployment api`, `deploy/api`, `deployment.apps/api`). Bila jenisnya salah ketik, pesan kesalahan menyarankan yang mungkin dimaksud.
 
 - Sebut namespace (lihat [Glosarium](glossary.md)) dengan `--namespace`, atau `-n` seperti di kubectl. Tanpanya, komando memakai namespace lazim cluster: yang disebut context kubeconfig-nya, kalau tidak `default`. Ubah secara permanen dengan `komando conn edit prod-k8s --option namespace=shop`.
 - Berapa banyak baris atau objek yang ditampilkan adalah `--limit` (tidak punya bentuk pendek di perintah cluster). Angka setelah `-n` (`-n 50`) ditolak, dengan hint: tulis `--limit 50`, atau `--namespace=50` untuk namespace bernama 50.
@@ -130,7 +130,7 @@ Di JSON, setiap cluster adalah satu baris di `data.results[]` (`cluster`, `engin
 
 ### Release Helm (read-only)
 
-komando membaca release Helm yang tersimpan di cluster, tanpa program `helm`. komando hanya membaca: install, upgrade, dan rollback tetap di `helm`. Untuk mengubah apa yang berjalan dari komando, `cluster deploy` menetapkan image baru dengan rollout yang bisa Anda tunggu, dan `cluster apply` menerapkan manifest, misalnya output `helm template` (dry run di server memeriksanya lebih dulu).
+komando membaca release Helm yang tersimpan di cluster, tanpa program `helm`. komando hanya membaca: install, upgrade, dan rollback tetap di `helm`. Untuk mengubah apa yang berjalan dari komando, `cluster deploy` menetapkan image baru dengan rollout yang bisa ditunggu, dan `cluster apply` menerapkan manifest, misalnya output `helm template` (dry run di server memeriksanya lebih dulu).
 
 ```bash
 komando cluster helm list prod-k8s -A                                   # nama, revisi, status, chart, versi aplikasi
@@ -140,7 +140,7 @@ komando cluster helm values prod-k8s shop-api --namespace shop          # nilai 
 komando cluster helm values prod-k8s shop-api --namespace shop --all    # dengan default chart
 ```
 
-`--revision N` menampilkan revisi yang lebih lama di `status` dan `values`. Helm menyimpan release sebagai Secret, jadi user kubeconfig harus bisa mendaftar Secret di namespace itu (kalau tidak, `K8S_FORBIDDEN`). Untuk agen AI, kata sandi dan token di dalam values tampil sebagai `[hidden]`, seperti di mana pun.
+`--revision N` menampilkan revisi yang lebih lama di `status` dan `values`. Helm menyimpan release sebagai Secret, jadi user kubeconfig wajib bisa mendaftar Secret di namespace itu (kalau tidak, `K8S_FORBIDDEN`). Untuk agen AI, kata sandi dan token di dalam values tampil sebagai `[hidden]`, seperti di mana pun.
 
 ## Membaca log
 
@@ -191,7 +191,7 @@ Dengan beberapa container di satu pod, sebut container yang mendapat image denga
 
 Keduanya menyebut pod (atau task Swarm) yang macet, mengapa macet, dan image-nya. Jalankan `cluster rollback` untuk kembali.
 
-`rollback` tanpa `--revision` menuju revisi terbaru sebelumnya dengan image yang berbeda. Revisi yang digantikannya (yang rusak) lalu dilewati, jadi rollback dua kali tidak membawanya kembali. `--revision` memilih revisi mana pun: yang tidak ada mencantumkan yang ada, dan yang sedang berjalan tidak mengubah apa pun (`unchanged`). Di Swarm, rollback yang Anda mulai diikuti sampai selesai, tidak dilaporkan sebagai update yang gagal.
+`rollback` tanpa `--revision` menuju revisi terbaru sebelumnya dengan image yang berbeda. Revisi yang digantikannya (yang rusak) lalu dilewati, jadi rollback dua kali tidak membawanya kembali. `--revision` memilih revisi mana pun: yang tidak ada mencantumkan yang ada, dan yang sedang berjalan tidak mengubah apa pun (`unchanged`). Di Swarm, rollback yang dimulai diikuti sampai selesai, tidak dilaporkan sebagai update yang gagal.
 
 ## Mengubah cluster
 
@@ -213,7 +213,7 @@ komando cluster scale swarm1 service/web 4
 - Objek yang namespace-nya di file berbeda dari `--namespace` ditolak, seperti kubectl.
 - `scale` melaporkan `previous_replicas` (atau `unchanged`).
 - Cluster yang dilindungi butuh jawaban ya dari seseorang sebelum perubahan apa pun.
-- Scale ke 0 dan `rm` menghentikan sesuatu. Di terminal Anda komando bertanya dulu: ketik nama objek (`Type the name api-7d9f-x2 to continue`); jawaban lain, termasuk nama cluster, tidak mengubah apa pun. Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju. Lihat [Keamanan](safety.md#what-needs-a-yes).
+- Scale ke 0 dan `rm` menghentikan sesuatu. Di terminal, komando bertanya dulu: ketik nama objek (`Type the name api-7d9f-x2 to continue`); jawaban lain, termasuk nama cluster, tidak mengubah apa pun. Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju. Lihat [Keamanan](safety.md#what-needs-a-yes).
 
 ## Bekerja di dalam pod
 
@@ -239,7 +239,7 @@ komando cluster run swarm1 -- service ps web
 
 Di Kubernetes, `cluster run` adalah kubectl milik komando sendiri. Perintah ini memahami perintah kubectl dan mencetak apa yang dicetak kubectl, lewat jalur `--via` milik conn, tanpa kubectl terinstal. Di Swarm perintah dikirim ke docker di manager. Kata-kata setelah `--` adalah milik kubectl (atau docker), jadi `-n` di sana adalah flag namespace milik kubectl.
 
-- Perintah ini hanya membaca kecuali Anda menambahkan `--write`. Delete, drain, scale ke 0, dan sejenisnya juga butuh `--allow-dangerous`.
+- Perintah ini hanya membaca kecuali ditambahkan `--write`. Delete, drain, scale ke 0, dan sejenisnya juga butuh `--allow-dangerous`.
 - `--dry-run` mengirim perubahan ke server sebagai dry run server-side (`apply`, `create`, `delete`, `scale`, `patch`, ...). Perintah yang tidak bisa di-dry-run oleh server (`exec`, `cp`, `create token`, `config view`, `get` nilai Secret untuk seseorang) hanya ditampilkan, tidak dijalankan.
 - Untuk agen AI, nilai Secret dan nilai env yang namanya seperti secret (`DB_PASSWORD`) tampil tersembunyi di output `get`, seperti di `cluster get`, jadi `get secret -o yaml` adalah pembacaan untuk mereka. `apply`, `create`, dan `replace` menolak file yang masih memuat nilai tersembunyi (`HIDDEN_VALUE`): ubah satu field dengan `set image` atau `patch` sebagai gantinya.
 - Untuk agen AI, file di komputer ini yang akan menuju cluster (`-f`, `--from-file`, `cp` ke pod) tidak boleh berupa secret menurut namanya (`.env`, key) kecuali orangnya mengizinkan `--reveal`, dan tidak pernah folder komando sendiri (`SENSITIVE_FILE`).
@@ -261,7 +261,7 @@ Di Kubernetes, `cluster run` adalah kubectl milik komando sendiri. Perintah ini 
 
 | Kode | Artinya | Yang perlu dilakukan |
 |------|---------|----------------------|
-| `TOOL_MISSING` (exit 3) | program login yang disebut kubeconfig tidak terinstal | instal; error menampilkan `installHint` milik kubeconfig |
+| `TOOL_MISSING` (exit 3) | program login yang disebut kubeconfig tidak terinstal | instal; kesalahan menampilkan `installHint` milik kubeconfig |
 | `LOGIN_FAILED` (exit 4) | program login berjalan tetapi tidak bisa login | seseorang login dengan program itu, lalu jalankan lagi |
 | `CONN_UNREACHABLE` (exit 4) | API server tidak menjawab | `komando test prod-k8s`, dan periksa jalur `--via` atau VPN-nya |
 | `K8S_FORBIDDEN` (exit 4) | user kubeconfig tidak boleh melakukan ini (Helm: mendaftar Secret) | beri user itu haknya, atau sebut satu namespace dengan `--namespace` |
@@ -271,7 +271,7 @@ Di Kubernetes, `cluster run` adalah kubectl milik komando sendiri. Perintah ini 
 | `ROLLOUT_FAILED` (exit 5), `ROLLOUT_TIMEOUT` (exit 7) | versi baru tidak naik | `komando cluster describe prod-k8s deployment/api --namespace shop`, lalu `cluster rollback` |
 | `HIDDEN_VALUE` (exit 2) | file memuat nilai yang disembunyikan komando dari agen AI | hilangkan entri tersembunyi, atau ubah satu field dengan `cluster run ... --write -- set image` atau `patch` |
 | `NEEDS_TERMINAL` (exit 2) | `cluster shell` butuh seseorang | agen dan script memakai `cluster exec` |
-| `PARTIAL_FAILURE` (exit 1) | sebagian cluster dari sebuah selector gagal | baca error tiap cluster di output |
+| `PARTIAL_FAILURE` (exit 1) | sebagian cluster dari sebuah selector gagal | baca kesalahan tiap cluster di output |
 
 ## Referensi
 

@@ -17,7 +17,7 @@ komando key rm deploy                             # lalu dari komando (ditolak s
 
 Jika diketik tanpa argumen, `komando key deploy` menanyakan key, lalu server.
 
-`key revoke` berhenti sebelum mencabut key yang masih dipakai komando sendiri untuk login (Anda akan mengunci diri sendiri). Di terminal Anda, ketik nama key itu untuk melanjutkan. Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju.
+`key revoke` berhenti sebelum mencabut key yang masih dipakai komando sendiri untuk login (Anda akan mengunci diri sendiri). Di terminal, ketik nama key itu untuk melanjutkan. Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju.
 
 ## Rotasi kata sandi server
 
@@ -60,7 +60,7 @@ Pada conn yang dilindungi, `db user passwd` dan `conn edit` bertanya dulu kepada
    ```
 
 3. Ganti setiap kata sandi yang mereka tahu: `komando secret list` menunjukkan tiap secret dan apa yang memakainya; rotasi seperti di atas.
-4. Apakah mereka tahu passphrase vault? Beri passphrase baru: `komando secret passphrase` (lalu atur `KOMANDO_VAULT_PASS` yang baru di setiap tempat Anda memakainya).
+4. Apakah mereka tahu passphrase vault? Beri passphrase baru: `komando secret passphrase` (lalu atur `KOMANDO_VAULT_PASS` yang baru di setiap tempat yang memakainya).
 5. Lihat apa yang mereka lakukan dengan komando:
 
    ```bash
@@ -77,10 +77,10 @@ Pada conn yang dilindungi, `db user passwd` dan `conn edit` bertanya dulu kepada
 
 ## Pemecahan masalah
 
-| Error | Artinya | Yang perlu dilakukan |
+| Kesalahan | Artinya | Yang perlu dilakukan |
 |-------|---------|----------------------|
 | `POLICY_BLOCKED` (exit 6) | `key revoke` pada key yang dipakai komando untuk login | deploy key lain dengan `--set-default` dulu |
 | `KEY_IN_USE` (exit 8) | `key rm` pada key yang masih dipakai server | arahkan server ke key lain dulu |
 | `KEY_EXISTS` (exit 8) | `key gen` ke nama yang sudah dipakai | pilih nama lain, atau jalankan `komando key rm NAME` dulu |
-| `PROTECTED_TARGET`, `PROTECTED_TARGET` (exit 6) | perubahan di server atau conn yang dilindungi | di terminal Anda komando bertanya dulu; script menambahkan `--yes` |
-| `AUTH_FAILED` (exit 4) | key atau kata sandi baru tidak bisa login | periksa sebelum Anda mencabut yang lama; lihat [Hasil dan error](output.md#troubleshooting) |
+| `PROTECTED_TARGET`, `PROTECTED_TARGET` (exit 6) | perubahan di server atau conn yang dilindungi | di terminal, komando bertanya dulu; script menambahkan `--yes` |
+| `AUTH_FAILED` (exit 4) | key atau kata sandi baru tidak bisa login | periksa sebelum mencabut yang lama; lihat [Hasil dan kesalahan](output.md#troubleshooting) |

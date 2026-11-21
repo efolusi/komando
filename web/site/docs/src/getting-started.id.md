@@ -1,6 +1,6 @@
 # Mulai
 
-komando adalah satu program yang Anda jalankan di terminal. Di halaman ini Anda menginstalnya, menambah satu server, memeriksa bahwa komando bisa login, melihat-lihat isi server itu, lalu menghubungkan agen AI Anda.
+komando adalah satu program yang dijalankan di terminal. Di halaman ini Anda menginstalnya, menambah satu server, memeriksa bahwa komando bisa login, melihat-lihat isi server itu, lalu menghubungkan agen AI.
 
 ## 1. Instal komando
 
@@ -12,11 +12,11 @@ Lalu periksa bahwa komando berjalan:
 komando version
 ```
 
-Muncul `command not found`? Installer menaruh komando di folder yang belum dicari oleh terminal Anda. Jalankan baris `export PATH=...` yang dicetaknya, lalu tambahkan baris itu ke `~/.zshrc` (macOS) atau `~/.bashrc` (Linux) agar tetap berlaku.
+Muncul `command not found`? Installer menaruh komando di folder yang belum dicari oleh terminal. Jalankan baris `export PATH=...` yang dicetaknya, lalu tambahkan baris itu ke `~/.zshrc` (macOS) atau `~/.bashrc` (Linux) agar tetap berlaku.
 
 ## 2. Tambah server
 
-Ketik `komando host add` dan jawab satu pertanyaan per baris: nama, alamat, user, port, cara komando login, dan apakah ini production. Setelah itu komando menampilkan perintah lengkapnya, jadi lain kali Anda bisa mengetiknya sendiri:
+Ketik `komando host add` dan jawab satu pertanyaan per baris: nama, alamat, user, port, cara komando login, dan apakah ini production. Setelah itu komando menampilkan perintah lengkapnya, jadi lain kali bisa diketik sendiri:
 
 ```bash
 komando host add web1 ubuntu@203.0.113.10
@@ -53,7 +53,7 @@ Semua yang ada setelah `--` adalah perintah yang berjalan di server. [Menjalanka
 
 ## 4. Lindungi production
 
-Tandai server production sebagai protected. Setelah itu setiap perubahan di server itu bertanya dulu kepada Anda, di terminal Anda:
+Tandai server production sebagai protected. Setelah itu setiap perubahan di server itu bertanya dulu kepada Anda, di terminal:
 
 ```bash
 komando host edit web1 --protected
@@ -61,13 +61,13 @@ komando host edit web1 --protected
 
 [Keamanan](safety.md) menjelaskan apa yang dihentikan komando, dan apa yang perlu dilakukan saat komando menghentikan Anda.
 
-## 5. Hubungkan agen AI Anda
+## 5. Hubungkan agen AI
 
 ```bash
 komando guide install
 ```
 
-Perintah ini menghubungkan agen Anda (Claude Code, Codex, Cursor, atau Gemini CLI) ke komando. Kata sandi tetap di vault komando, dan agen tidak pernah mendapatkannya dari sana. Jalankan lagi setiap kali selesai `komando update`. [Skill agen](agent-skill.md) menjelaskan apa yang dipasangnya dan apa yang tetap bertanya dulu kepada Anda.
+Perintah ini menghubungkan agen (Claude Code, Codex, Cursor, atau Gemini CLI) ke komando. Kata sandi tetap di vault komando, dan agen tidak pernah mendapatkannya dari sana. Jalankan lagi setiap kali selesai `komando update`. [Skill agen](agent-skill.md) menjelaskan apa yang dipasangnya dan apa yang tetap bertanya dulu kepada Anda.
 
 ## Langkah berikutnya
 

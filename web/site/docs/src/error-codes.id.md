@@ -1,6 +1,6 @@
-# Kode error
+# Kode kesalahan
 
-Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, dan langkah berikutnya yang lazim. `hint` milik error itu sendiri menyebut apa yang dilakukan dalam kasus Anda. Halaman ini dibuat dari kode (`komando schema` mencantumkan hal yang sama di `error_codes`). [Hasil dan error](output.md) menjelaskan yang paling umum. Contoh pesan adalah kata-kata komando sendiri, jadi tetap dalam bahasa Inggris.
+Setiap kode kesalahan yang diberikan komando, dengan exit code-nya, contoh pesan, dan langkah berikutnya yang lazim. `hint` milik kesalahan itu sendiri menyebut apa yang dilakukan dalam kasus itu. Halaman ini dibuat dari kode (`komando schema` mencantumkan hal yang sama di `error_codes`). [Hasil dan kesalahan](output.md) menjelaskan yang paling umum. Contoh pesan adalah kata-kata komando sendiri, jadi tetap dalam bahasa Inggris.
 
 | Kode | Exit | Contoh pesan | Langkah berikutnya yang lazim |
 |------|------|--------------|-------------------------------|
@@ -14,7 +14,7 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `AZURE_FAILED` | 4 | …: … | periksa bahwa komputer ini menjangkau login.microsoftonline.com |
 | `AZURE_LOGIN_REQUIRED` | 4 | …: … | atur AZURE_TENANT_ID, AZURE_CLIENT_ID, dan AZURE_CLIENT_SECRET untuk service principal, jalankan komando di Azure dengan managed identity, atau seseorang menjalankan `az login` |
 | `BACKUP_FAILED` | 5 | could not make a backup of …: …; the file was not changed | periksa ruang kosong dengan `komando exec TARGET --read-only -- df -h`, atau jalankan tanpa --backup |
-| `BACKUP_NOT_FOUND` | 3 | no backup of … found (looked for ….bak) | komando menyimpan backup hanya bila Anda mengedit dengan --backup; berikan salinan lain dengan --copy PATH |
+| `BACKUP_NOT_FOUND` | 3 | no backup of … found (looked for ….bak) | komando menyimpan backup hanya saat mengedit dengan --backup; berikan salinan lain dengan --copy PATH |
 | `BAD_CA` | 2 | registry CA …: … | simpan sertifikat CA registry (PEM) dengan `komando secret set NAME < ca.crt` |
 | `BAD_FILE` | 2 | cannot read backup: … | file bukan SQL teks yang bisa dibaca |
 | `BAD_RELEASE` | 1 | … is … bytes, more than komando accepts; nothing was changed | laporkan di …/issues |
@@ -32,7 +32,7 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `CHECKSUM_MISMATCH` | 1 | … does not match checksums.txt of its release; nothing was changed | jalankan lagi, dan laporkan di …/issues bila terjadi lagi |
 | `CHMOD_FAILED` | 5 | cannot set mode … on …: …; the file was not changed | server SFTP ini tidak mengizinkan pengaturan mode file, dan file barunya lebih terbuka daripada yang diminta; bila server punya shell dan sudo, coba lagi dengan --sudo |
 | `CODE_WRONG` | 2 | that code does not match; nothing was changed | periksa jam ponsel dan jalankan lagi |
-| `COMMAND_FAILED` | 5 | exit code … | baca output error (stderr) untuk alasannya |
+| `COMMAND_FAILED` | 5 | exit code … | baca output kesalahan (stderr) untuk alasannya |
 | `COMMAND_NOT_FOUND` | 3 | no command … | jalankan `komando schema --compact` untuk melihat setiap perintah |
 | `CONFIRM_REQUIRED` | 6 | deleting group … takes … entries out of it | periksa dengan --dry-run, tanyakan kepada pengguna; setelah mereka setuju, jalankan lagi dengan --yes (komando lalu bertanya kepada mereka di jendela di layar mereka) |
 | `CONNECTION_LOST` | 4 | the connection to … broke while reading the job's status | jalankan lagi; job tetap berjalan di server |
@@ -101,13 +101,13 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `K8S_CONFLICT` | 8 | the object changed or exists already (the cluster's words follow) | objek berubah sementara itu atau sudah ada: lihat dengan `komando cluster get TARGET TYPE/NAME`, lalu jalankan lagi |
 | `K8S_CONTAINER_NOT_FOUND` | 3 | no container named … | container-nya: … |
 | `K8S_ERROR` | 5 | the Kubernetes API answered with an error (its words follow) | baca kata-kata cluster; `komando cluster events TARGET --warnings` menunjukkan apa yang salah belakangan ini |
-| `K8S_FORBIDDEN` | 4 | listing Helm releases: … | Helm menyimpan release sebagai Secret: user di kubeconfig harus bisa mendaftar secret di sana (atau sebut satu namespace dengan --namespace) |
+| `K8S_FORBIDDEN` | 4 | listing Helm releases: … | Helm menyimpan release sebagai Secret: user di kubeconfig wajib bisa mendaftar secret di sana (atau sebut satu namespace dengan --namespace) |
 | `K8S_INVALID` | 2 | the cluster refused the request as written (its words follow) | cluster menolaknya sebagaimana ditulis: periksa label selector (-l) atau YAML objek |
 | `K8S_NOT_FOUND` | 3 |  | daftarkan apa yang ada dengan `komando cluster list TARGET pods` (atau deployments, services ...) |
 | `K8S_POD_NOT_FOUND` | 3 | … has no running pod | periksa dengan `komando cluster list TARGET pods` |
 | `KEYCHAIN_FAILED` | 5 | …; the vault still uses store.key, nothing was lost | seseorang membuka kunci keychain (agen AI bertanya kepada pengguna), lalu jalankan lagi; di Linux butuh secret-tool dan keyring |
 | `KEYCHAIN_SLOW` | 1 | nothing was changed: the keychain did not answer in time, so komando could not check that … is the newest copy | jalankan lagi sebentar lagi; bila terus terjadi, jalankan `komando doctor` |
-| `KEYCHAIN_TAKEN` | 8 | …; the vault still uses store.key, nothing was lost | kembalikan vault yang Anda pindahkan, atau setelah tidak ada vault yang butuh key itu, seseorang menghapus item keychain (agen AI bertanya kepada pengguna), lalu jalankan lagi |
+| `KEYCHAIN_TAKEN` | 8 | …; the vault still uses store.key, nothing was lost | kembalikan vault yang dipindahkan, atau setelah tidak ada vault yang butuh key itu, seseorang menghapus item keychain (agen AI bertanya kepada pengguna), lalu jalankan lagi |
 | `KEYSCAN_FAILED` | 4 | cannot fetch host key from …: … | periksa alamat dan port dengan `komando host show …` |
 | `KEY_EXISTS` | 8 | key … already exists | pilih nama lain, atau `komando key rm …` dulu |
 | `KEY_FAILED` | 1 | could not read key …: …; nothing was written | periksa key dengan `komando key show …`, atau hilangkan --with-keys |
@@ -115,13 +115,13 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `KEY_IN_USE` | 8 | server … still uses this key | beri server key lain dulu: `komando host edit … --key OTHER` |
 | `KEY_PASSPHRASE_REQUIRED` | 2 | key … is encrypted and … | muat key ke ssh-agent dengan `ssh-add PATH`, atau simpan passphrase-nya dengan `komando secret set NAME` (hint memberikan perintah lengkapnya) |
 | `KEY_UNREADABLE` | 4 | cannot read key …: … | periksa path key (`komando key list` menampilkan key yang dikenal komando) |
-| `KILL_FAILED` | 5 | the server did not stop session … | Anda mungkin tidak punya hak untuk menghentikan sesi user lain |
+| `KILL_FAILED` | 5 | the server did not stop session … | mungkin tidak ada hak untuk menghentikan sesi user lain |
 | `KUBECONFIG` | 2 | conn …: … | impor lagi dengan `komando import kubeconfig` |
 | `LOGIN_FAILED` | 4 | the login to … ended early (…) | seseorang membaca seluruh log di … |
 | `MIXED_OS` | 2 | the target picks Windows servers (…) and other servers (…) | satu perintah ditulis untuk satu shell: jalankan dua kali, sekali dengan TARGET,os:windows (PowerShell) dan sekali dengan TARGET,!os:windows (sh) |
 | `MOVE_FAILED` | 5 | the copy on the server (…) ended badly: …; … was kept | jalankan lagi: `komando storage mv CONN … …` |
 | `NAME_TAKEN` | 8 | the rename clashes: …; nothing was renamed | pilih nama lain, atau ganti nama atau hapus yang menghalangi dulu |
-| `NEEDS_PERSON` | 6 | logging in to … needs a person at a terminal to answer its questions | minta seseorang menjalankan `komando login …` di terminal; setelah itu perintah Anda ke … tidak butuh login |
+| `NEEDS_PERSON` | 6 | logging in to … needs a person at a terminal to answer its questions | minta seseorang menjalankan `komando login …` di terminal; setelah itu perintah ke … tidak butuh login |
 | `NEEDS_TERMINAL` | 2 | cluster shell needs a person at a terminal | agen dan script memakai `komando cluster exec` |
 | `NOTHING_TO_RENAME` | 3 | no … starts with … | periksa LAMA dengan `komando list` dan `komando secret list`; nama dicocokkan dari awal, sebagaimana ditulis |
 | `NOT_A_FOLDER` | 8 | … is a file, not a folder | berikan path folder, bukan file |
@@ -147,16 +147,16 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `OPEN_BIND` | 6 | the tunnel would listen on … of …, open to its network (the default 127.0.0.1 keeps it to that computer) | periksa dengan --dry-run, tanyakan kepada pengguna; setelah mereka setuju, jalankan lagi dengan --yes (komando lalu bertanya kepada mereka di jendela di layar mereka) |
 | `OPTION_LIKE_VAR` | 2 | the value of … may not start with '-' (… would be read as an option) | untuk path yang diawali -, tulis ./… |
 | `OUTPUT_TRUNCATED` | 1 | the rows are more than the output size cap (--max-output) allows; nothing was printed | naikkan --max-output (dalam byte, misalnya --max-output 104857600), atau persempit SQL dengan WHERE atau LIMIT; seluruh database disalin dengan `komando db dump` |
-| `OVPN_UNSUPPORTED` | 2 | the OpenVPN profile has an option komando's own client does not support (the message names it) | ubah profilnya, atau laporkan opsi yang Anda butuhkan di …/issues |
+| `OVPN_UNSUPPORTED` | 2 | the OpenVPN profile has an option komando's own client does not support (the message names it) | ubah profilnya, atau laporkan opsi yang dibutuhkan di …/issues |
 | `PACKAGE_NOT_FOUND` | 3 | …: no such package in the server's package index | periksa namanya; segarkan indeks dengan `komando pkg update TARGET` bila package-nya baru |
-| `PARTIAL_FAILURE` | 1 | some targets failed and some worked (see each result) | baca error dan hint tiap target (data.results di -o json) |
+| `PARTIAL_FAILURE` | 1 | some targets failed and some worked (see each result) | baca kesalahan dan hint tiap target (data.results di -o json) |
 | `PARTIAL_TRANSFER` | 5 | … could not be copied; the other files were copied | perbaiki yang tercantum (izin?) dan jalankan lagi |
 | `PARTITION_NOT_FOUND` | 3 | topic … has no partition … (it has …) | partisi diberi nomor mulai dari 0; lihat dengan `komando queue describe CONN …` |
 | `PASSPHRASE_MISMATCH` | 2 | the two passphrases you typed differ; nothing was changed | jalankan lagi |
 | `PATH_NOT_FOUND` | 3 | … does not exist; nothing was changed | periksa path sumber |
 | `PERMISSION_DENIED` | 5 | cannot read … | tambahkan --sudo |
 | `PHONE_KEY_INVALID` | 2 | the key does not match the key check the phone shows; nothing was written | periksa bahwa file key berasal dari ponsel, lalu jalankan `komando export --for-phone --to FILE` lagi dan ketik key check yang ditampilkannya |
-| `PKG_FAILED` | 5 | pkg … failed (exit …) | baca output error (stderr) untuk pesan dari package manager |
+| `PKG_FAILED` | 5 | pkg … failed (exit …) | baca output kesalahan (stderr) untuk pesan dari package manager |
 | `POLICY_BLOCKED` | 6 | the command matches destructive rules [rm-rf]: deletes files recursively | periksa dengan --dry-run, tanyakan kepada pengguna; setelah mereka setuju, jalankan lagi dengan --allow-dangerous (komando lalu bertanya kepada mereka di jendela di layar mereka) |
 | `PORT_CLOSED` | 5 | cannot connect to … | periksa alamat, firewall, atau service di sisi lain |
 | `PORT_IN_USE` | 8 | cannot listen on 127.0.0.1:…: … | pilih port LOKAL lain (`komando tunnel list` menampilkan port yang dipegang komando) |
@@ -172,7 +172,7 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `QUEUE_NOT_FOUND` | 3 | no queue named … | daftarkan queue dengan `komando queue list CONN` (butuh ?management=PORT di URL conn); vhost adalah path URL |
 | `READ_FAILED` | 5 | cannot read …: … | jalankan lagi; output terpotong (naikkan --max-output?) |
 | `READ_ONLY_VIOLATION` | 6 | --read-only, but the command is not known to only read (…) | --read-only hanya menjalankan apa yang diketahui komando hanya membaca: untuk keadaan server pakai komando facts, logs, svc status, atau fs read; kalau tidak, beri tahu pengguna apa yang dilakukan perintah itu, lalu jalankan tanpa --read-only (server yang dilindungi juga butuh --yes) |
-| `REBOOT_FAILED` | 5 | the reboot command failed (exit …): … | baca output error (stderr); tanpa hak sudo, reboot ditolak |
+| `REBOOT_FAILED` | 5 | the reboot command failed (exit …): … | baca output kesalahan (stderr); tanpa hak sudo, reboot ditolak |
 | `REBOOT_TIMEOUT` | 7 | … did not come back within … | periksa konsol server; komando tidak mereboot server setelahnya |
 | `RECIPE_BUILTIN` | 8 | … is a built-in recipe | pilih nama lain; lihat `komando recipe list` |
 | `RECIPE_CHANGED` | 8 | recipe … changed while komando was starting | jalankan lagi |
@@ -213,7 +213,7 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `SECRET_UNRESOLVED` | 3 | registry CA …: … | simpan sertifikat CA dengan `komando secret set NAME < ca.crt` |
 | `SECURITY_UNSUPPORTED` | 3 | komando picks security updates on apt and dnf/yum servers only; … uses … | pakai `komando pkg upgrade TARGET` di server ini |
 | `SELF_NOT_FOUND` | 1 | cannot find the komando program that is running: … | jalankan komando dengan path lengkapnya, misalnya /usr/local/bin/komando update |
-| `SENSITIVE_FILE` | 6 | … is …, not … | pakai database Anda sendiri; data komando hanya dibaca lewat perintah komando (`komando list`, `komando secret list`) |
+| `SENSITIVE_FILE` | 6 | … is …, not … | pakai database sendiri; data komando hanya dibaca lewat perintah komando (`komando list`, `komando secret list`) |
 | `SESSION_NOT_FOUND` | 3 | no session … | daftarkan sesi dengan `komando db activity CONN --all` |
 | `SFTP_UNAVAILABLE` | 4 | sftp: … | aktifkan subsistem sftp di sshd_config |
 | `SHARED_FOLDER_CONFLICT` | 8 | … can be changed by …, not only by root and the SSH user: as root, komando does not write … there (that user could swap it for a link while root writes) | tulis sebagai … sebagai gantinya, misalnya `komando exec TARGET --sudo-user … --stdin-file FILE -- sh -c 'cat > "$0"' …` |
@@ -228,19 +228,19 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `SQL_TX_CONTROL` | 2 | … is not allowed in komando db | serahkan transaksi kepada komando: tanpa --write ia menjalankan transaksi read-only, dengan --write satu transaksi yang di-rollback oleh --dry-run |
 | `SSH_AGENT_NEEDED` | 2 | a key komando made is sealed in its store and never written to a file, so OpenSSH gets it from a running ssh-agent, and none was found (SSH_AUTH_SOCK) | jalankan satu dengan `eval "$(ssh-agent)"` dan jalankan ini lagi, atau pakai `komando shell SERVER`, yang login dengan key itu sendiri |
 | `SSH_AGENT_REFUSED` | 1 | the ssh-agent did not take key …: … | periksa ssh-agent, atau pakai `komando shell SERVER` |
-| `SSH_GATE_NETWORK_REQUIRED` | 6 | komando … is refused for a read key without network: … | key ini ditambahkan dengan --read-only dan tanpa --network: key ini hanya menjalankan pembacaan yang tetap berada di server dan conn di daftar Anda; seseorang menambahkan key untuk ini dengan `komando ssh-gate line --read-only --network`, atau menjalankannya di komputer komando |
+| `SSH_GATE_NETWORK_REQUIRED` | 6 | komando … is refused for a read key without network: … | key ini ditambahkan dengan --read-only dan tanpa --network: key ini hanya menjalankan pembacaan yang tetap berada di server dan conn di daftar; seseorang menambahkan key untuk ini dengan `komando ssh-gate line --read-only --network`, atau menjalankannya di komputer komando |
 | `SSH_GATE_PATH` | 1 | komando cannot tell its own full path, which the line needs | jalankan komando dengan path lengkapnya, misalnya /usr/local/bin/komando ssh-gate line ... |
 | `SSH_GATE_READ_ONLY` | 6 | komando … is refused for a read-only key: … | key ini ditambahkan dengan --read-only dan hanya menjalankan perintah yang membaca; pakai key yang boleh mengubah, atau komputer komando itu sendiri |
 | `SSH_GATE_REFUSED` | 6 | komando … needs a person at a terminal on this computer; a key cannot run it | seseorang menjalankannya di terminal di komputer komando itu sendiri |
 | `SSH_GATE_SYNTAX` | 2 | an ssh-gate key sent more than one komando command, or a character a shell would expand (the message names it) | kirim satu perintah komando; taruh argumen yang berisi ; \| & $ atau backquote di dalam tanda kutip tunggal ($ dan backquote ditolak bahkan di dalam tanda kutip ganda) |
 | `SSH_KEY_NOT_FOUND` | 3 | no SSH key named … | lihat dengan `komando key list` |
-| `SSM_FAILED` | 4 | AWS Session Manager could not open a session to the instance | periksa ID instance, agen SSM-nya, dan login AWS Anda (`komando login aws`) |
+| `SSM_FAILED` | 4 | AWS Session Manager could not open a session to the instance | periksa ID instance, agen SSM-nya, dan login AWS (`komando login aws`) |
 | `STATE_CORRUPT` | 1 | … does not open with the store's key | file ini hanya menyimpan sesi VPN, login, job, dan tunnel yang berjalan: pindahkan, lalu sambungkan lagi (VPN yang dimulai sebelum key store berubah diakhiri oleh `komando vpn down`) |
 | `STORAGE_AUTH` | 4 | an azblob conn needs the storage account's key or a SAS token | simpan key storage account atau token SAS dengan `komando secret set NAME` dan berikan --password-ref secret:NAMA |
 | `STORAGE_CONNECT` | 4 | komando could not reach the bucket or file server | jalankan `komando test TARGET` untuk memeriksa keterjangkauan |
 | `STORAGE_ERROR` | 5 | the file is in use | program lain membuka file itu; tutup di sana dan jalankan lagi |
-| `STORAGE_TLS` | 4 | the storage server's TLS certificate does not verify: … | bila server memakai sertifikat self-signed yang Anda percayai, tambahkan ?tls=skip-verify ke URL conn |
-| `STORAGE_UNSUPPORTED` | 2 | … is … storage, which has no file modes | chmod berfungsi di conn SFTP; `komando list kind:storage` mencantumkan milik Anda |
+| `STORAGE_TLS` | 4 | the storage server's TLS certificate does not verify: … | bila server memakai sertifikat self-signed yang dipercayai, tambahkan ?tls=skip-verify ke URL conn |
+| `STORAGE_UNSUPPORTED` | 2 | … is … storage, which has no file modes | chmod berfungsi di conn SFTP; `komando list kind:storage` mencantumkan conn storage |
 | `STORE_BUSY` | 8 | komando's store stayed busy for …, so the server's host key could not be checked: … | proses komando lain sedang menulis store komando, atau ada yang macet (`komando status` mencantumkan apa yang berjalan): tunggu sampai selesai, lalu jalankan lagi |
 | `STORE_CONFLICT` | 8 | nothing was done: … was replaced, given a new key or checked again while this command ran, and this command still held it as it was | jalankan perintah lagi: komando membuka store lagi dari awal; bila terus terjadi, jalankan `komando doctor` |
 | `STORE_KEY_CHANGED` | 1 | …: … | jalankan lagi: komando lain mengubah key store saat yang ini berjalan |
@@ -250,7 +250,7 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `STREAM_NOT_FOUND` | 3 | no stream named … | daftarkan stream dengan `komando queue list CONN` |
 | `SUBSCRIPTION_EXISTS` | 8 | subscription … already exists | pilih nama lain, atau lihat dengan `komando queue describe CONN subscriptions/…` |
 | `SUBSCRIPTION_NOT_FOUND` | 3 | no subscription named … | daftarkan subscription dengan `komando queue groups CONN`; `komando queue describe CONN TOPIC` menampilkan milik sebuah topic |
-| `SVC_FAILED` | 5 | systemctl daemon-reload failed (…) | baca output error (stderr) untuk alasan dari systemd; unit file yang salah disebut di sana |
+| `SVC_FAILED` | 5 | systemctl daemon-reload failed (…) | baca output kesalahan (stderr) untuk alasan dari systemd; unit file yang salah disebut di sana |
 | `SWARM_ERROR` | 5 | Docker Swarm answered with an error | periksa bahwa Docker berjalan di sana: `komando exec TARGET --read-only -- docker info` |
 | `SWARM_OBJECT_NOT_FOUND` | 3 | no … named … | daftarkan apa yang ada dengan `komando cluster list TARGET …s` |
 | `SWARM_SERVICE_NOT_FOUND` | 3 | no service named … | daftarkan service dengan `komando cluster list TARGET services` |
@@ -261,7 +261,7 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `TARGET_NOT_FOUND` | 3 | no VPN named … | lihat dengan `komando vpn list` |
 | `TIMEOUT` | 7 | redis did not answer in time | naikkan --timeout |
 | `TLS_HANDSHAKE_FAILED` | 4 | TLS handshake with … failed: … | server mengakhiri TLS handshake; jalankan lagi, dan periksa bahwa … adalah port TLS (bukan HTTP polos) |
-| `TOOL_FAILED` | 5 | kubectl exited … | baca output error (stderr) untuk alasannya; `komando cluster events TARGET --warnings` menampilkan masalah cluster belakangan ini |
+| `TOOL_FAILED` | 5 | kubectl exited … | baca output kesalahan (stderr) untuk alasannya; `komando cluster events TARGET --warnings` menampilkan masalah cluster belakangan ini |
 | `TOOL_MISSING` | 3 | curl is not installed | instal curl di server |
 | `TOOL_TOO_OLD` | 5 | … failed on … (exit …): … | pg_dump … lebih tua daripada server (…): instal postgresql-client-… di tempat tool berjalan, atau sebut server yang punya dengan --run-on HOST |
 | `TOO_MANY` | 8 | … objects match, more than --max-remove … | persempit --prefix atau --older-than, atau naikkan --max-remove di atas … setelah memeriksa daftarnya |
@@ -306,8 +306,8 @@ Setiap kode error yang diberikan komando, dengan exit code-nya, contoh pesan, da
 | `WINRM_ERROR` | 5 | …: … | baca pesannya; `winrm quickconfig` di server menyiapkan WinRM, dan user butuh hak untuk memakainya (administrator, atau grup Remote Management Users) |
 | `WINRM_INSECURE` | 2 | Basic login over plain HTTP sends the password unencrypted | pakai HTTPS (hilangkan tls=off), atau NTLM (hilangkan auth=basic), yang tidak pernah mengirim kata sandi |
 | `WINRM_NOT_HTTPS` | 4 | …: … | server berbicara HTTP polos di sana: pakai port 5986 untuk HTTPS, atau ?tls=off bila memang tidak punya HTTPS (perintah lalu berjalan tanpa enkripsi) |
-| `WINRM_TLS` | 4 | …: the WinRM server's certificate cannot be trusted: … | bila sertifikat server berasal dari CA Anda sendiri, simpan dengan `komando secret set NAME < ca.crt` dan tambahkan ?ca=secret:NAMA ke alamat winrm://-nya (`komando host edit … --address winrm://...`) |
-| `WRITE_FAILED` | 1 | …; nothing was changed | periksa bahwa Anda boleh menulis ke … |
+| `WINRM_TLS` | 4 | …: the WinRM server's certificate cannot be trusted: … | bila sertifikat server berasal dari CA sendiri, simpan dengan `komando secret set NAME < ca.crt` dan tambahkan ?ca=secret:NAMA ke alamat winrm://-nya (`komando host edit … --address winrm://...`) |
+| `WRITE_FAILED` | 1 | …; nothing was changed | periksa bahwa boleh menulis ke … |
 | `WRITE_REQUIRES_FLAG` | 6 | … needs --write | perintah ini mungkin mengubah data (atau tidak diketahui sebagai pembacaan); jalankan lagi dengan --write |
 | `WRONG_KIND` | 2 | … is a … URL, not one for `komando … add` | tambahkan dengan `komando … add` (atau `komando conn add`) |
 | `WRONG_PASSPHRASE` | 2 | that passphrase does not open the vault; nothing was changed | jalankan lagi dan ketik passphrase yang dimiliki vault sekarang |

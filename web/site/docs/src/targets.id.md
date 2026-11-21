@@ -22,13 +22,13 @@ komando exec @web -- uptime            # jalankan di setiap server dalam grup we
 | `all` | semuanya |
 | `@prod,!web2` | gabungkan dengan `,`; kecualikan dengan `!` |
 | `!web2` | semuanya kecuali `web2` (sama dengan `all,!web2`) |
-| `root@203.0.113.10:22` | server sekali pakai yang tidak ada di daftar Anda (`203.0.113.10` atau `203.0.113.10:22` memakai user default Anda) |
+| `root@203.0.113.10:22` | server sekali pakai yang tidak ada di daftar (`203.0.113.10` atau `203.0.113.10:22` memakai user default) |
 
-Beri tanda kutip pada target yang mengandung `*` atau `!` agar shell Anda tidak mengubahnya: `'web-*'`, `'@prod,!web2'`.
+Beri tanda kutip pada target yang mengandung `*` atau `!` agar shell tidak mengubahnya: `'web-*'`, `'@prod,!web2'`.
 
 Nama, grup, dan tag cocok dalam huruf besar atau kecil: `WEB1` menemukan `web1` bila hanya ada satu. Nama, `@group`, atau `tag:` yang salah eja mendapat saran "did you mean".
 
-Di terminal Anda, perintah yang diketik tanpa target akan menanyakannya: pilih satu baris dengan nomornya, ketik sebagian nama untuk mempersempit daftar, atau ketik target seperti di atas ([detail](commands.md#at-your-terminal-komando-asks-for-what-is-missing)).
+Di terminal, perintah yang diketik tanpa target akan menanyakannya: pilih satu baris dengan nomornya, ketik sebagian nama untuk mempersempit daftar, atau ketik target seperti di atas ([detail](commands.md#at-your-terminal-komando-asks-for-what-is-missing)).
 
 ## Periksa apa yang dipilih sebuah target
 
@@ -50,11 +50,11 @@ komando test @prod           # jangkau dan login ke masing-masing
 
 ## Apa yang dilakukan setiap perintah dengan sebuah target
 
-Setiap perintah memakai apa yang bisa dikerjakannya dan memberi tahu apa yang dilewatinya. Misalnya, `komando exec @prod -- uptime` berjalan di server dalam `prod` dan mencantumkan database di bawah "skipped". `komando db query @prod "..."` melakukan sebaliknya: perintah ini memakai satu database di `@prod` (perintah `db` butuh tepat satu) dan melewati server. Jika target tidak memilih apa pun yang bisa dipakai perintah itu, error menyebut perintah yang sebaiknya dipakai. Target yang tidak memilih apa pun adalah error, bukan hasil kosong.
+Setiap perintah memakai apa yang bisa dikerjakannya dan memberi tahu apa yang dilewatinya. Misalnya, `komando exec @prod -- uptime` berjalan di server dalam `prod` dan mencantumkan database di bawah "skipped". `komando db query @prod "..."` melakukan sebaliknya: perintah ini memakai satu database di `@prod` (perintah `db` butuh tepat satu) dan melewati server. Jika target tidak memilih apa pun yang bisa dipakai perintah itu, kesalahan menyebut perintah yang sebaiknya dipakai. Target yang tidak memilih apa pun adalah kesalahan, bukan hasil kosong.
 
 ## Grup, tag, dan label
 
-Atur saat Anda menambah atau mengedit server atau conn:
+Atur saat menambah atau mengedit server atau conn:
 
 ```bash
 komando host edit web1 --add-group prod --add-tag web --label dc=jkt
@@ -75,7 +75,7 @@ komando group rm old                    # lebih dari 3 anggota: bertanya dulu
 
 Jika diketik tanpa argumen, `komando group add` menanyakan grup, lalu apa yang masuk ke dalamnya.
 
-Menghapus grup dengan lebih dari 3 anggota bertanya dulu: di terminal Anda komando bertanya `[y/N]`; agen AI atau script menambahkan `--yes` setelah seseorang setuju ([Keamanan](safety.md)). Di terminal, `group rm` ditutup dengan jalan kembali: `Next: komando group add old TARGET...`.
+Menghapus grup dengan lebih dari 3 anggota bertanya dulu: di terminal, komando bertanya `[y/N]`; agen AI atau script menambahkan `--yes` setelah seseorang setuju ([Keamanan](safety.md)). Di terminal, `group rm` ditutup dengan jalan kembali: `Next: komando group add old TARGET...`.
 
 ## Batasan
 
@@ -87,7 +87,7 @@ Menghapus grup dengan lebih dari 3 anggota bertanya dulu: di terminal Anda koman
 
 ## Pemecahan masalah
 
-| Kode error | Artinya | Yang perlu dilakukan |
+| Kode kesalahan | Artinya | Yang perlu dilakukan |
 |------------|---------|----------------------|
 | `TARGET_EMPTY` | target tidak cocok dengan apa pun (exit 3) | `komando list` menampilkan server, conn, grup, dan tag |
 | `NO_MATCHING_TARGETS` | target hanya memilih hal yang tidak bisa dipakai perintah ini (exit 3) | petunjuk menyebut perintah untuk apa yang dipilih |

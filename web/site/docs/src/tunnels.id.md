@@ -1,6 +1,6 @@
 # Server privat dan tunnel
 
-Jangkau server dan layanan yang tidak ada di internet, lalu buka di aplikasi di komputer Anda.
+Jangkau server dan layanan yang tidak ada di internet, lalu buka di aplikasi di komputer ini.
 
 ## Menjangkau server privat lewat bastion
 
@@ -17,12 +17,12 @@ komando host add web2 admin@10.1.0.7 --via bastion,db1     # rantai: bastion, la
 komando conn add prod-db postgres://app@10.0.0.9/app --via bastion   # database di belakangnya
 ```
 
-- Rantai mencantumkan langkah-langkahnya berurutan, dari komputer Anda ke target.
+- Rantai mencantumkan langkah-langkahnya berurutan, dari komputer ini ke target.
 - `--via` bekerja sama untuk server dan conn (database, cache, storage). Rantai juga bisa diawali VPN: lihat [VPN](vpn.md).
-- komando membuka koneksi lewat bastion di dalam prosesnya sendiri. Tidak ada port yang terbuka di komputer Anda, dan pengaturan jaringan Anda tidak berubah.
+- komando membuka koneksi lewat bastion di dalam prosesnya sendiri. Tidak ada port yang terbuka di komputer ini, dan pengaturan jaringan tidak berubah.
 - Server di belakang bastion yang sama berbagi satu koneksi ke bastion itu dalam satu perintah (lihat [Server](servers.md#add-a-server)).
 
-## Membuka database privat di aplikasi Anda sendiri
+## Membuka database privat di aplikasi sendiri
 
 Untuk memakai TablePlus, DBeaver, psql, atau aplikasi lain pada database di belakang bastion, mulai tunnel dengan nama conn-nya. komando memilih port lokal yang bebas dan mencetaknya:
 
@@ -35,22 +35,22 @@ tunnel t1108-195255-ab12cd34 is up: 127.0.0.1:53412 (this computer) -> prod-db (
 stop it with: komando tunnel stop t1108-195255-ab12cd34
 ```
 
-Jika diketik tanpa argumen di terminal Anda, `komando tunnel start` menanyakan ke server atau conn mana tunnel itu menuju.
+Jika diketik tanpa argumen di terminal, `komando tunnel start` menanyakan ke server atau conn mana tunnel itu menuju.
 
 ```bash
 komando tunnel start prod-db --port 15432     # pilih port sendiri
 ```
 
-Arahkan aplikasi ke alamat itu, dengan nama user dan kata sandi database. Kata sandinya ada di vault komando: di terminal Anda, `komando secret show prod-db-pass --reveal | pbcopy` menyalinnya (macOS; `xclip` di Linux) tanpa menampilkannya. Agen AI tidak pernah mendapatkannya; mereka memakai `komando db query`. Tunnel berjalan di latar belakang sampai Anda menghentikannya dengan `komando tunnel stop`.
+Arahkan aplikasi ke alamat itu, dengan nama user dan kata sandi database. Kata sandinya ada di vault komando: di terminal, `komando secret show prod-db-pass --reveal | pbcopy` menyalinnya (macOS; `xclip` di Linux) tanpa menampilkannya. Agen AI tidak pernah mendapatkannya; mereka memakai `komando db query`. Tunnel berjalan di latar belakang sampai dihentikan dengan `komando tunnel stop`.
 
 ## Forward port apa pun
 
-Tunnel membuat layanan di server tampil di komputer Anda sendiri (atau sebaliknya). Ada tiga jenis:
+Tunnel membuat layanan di server tampil di komputer sendiri (atau sebaliknya). Ada tiga jenis:
 
 | Flag | Arah | Contoh | Artinya |
 |------|------|--------|---------|
-| `-L` | server → komputer Anda | `-L 15432:localhost:5432` | port 15432 di komputer *Anda* menuju port 5432 seperti yang terlihat dari server |
-| `-R` | komputer Anda → server | `-R 9000:localhost:3000` | port 9000 *di server* menuju port 3000 di komputer Anda |
+| `-L` | server → komputer ini | `-L 15432:localhost:5432` | port 15432 di komputer *Anda* menuju port 5432 seperti yang terlihat dari server |
+| `-R` | komputer ini → server | `-R 9000:localhost:3000` | port 9000 *di server* menuju port 3000 di komputer ini |
 | `-D` | proxy SOCKS5 | `-D 1080` | aplikasi yang diatur memakai proxy `localhost:1080` tersambung lewat server |
 
 ```bash
@@ -100,18 +100,18 @@ export NO_PROXY=.internal,10.0.0.0/8     # nama dan jaringan yang dijangkau lang
 | Server (SSH), database, cache, FTP, dan SFTP | tidak lewat `HTTPS_PROXY`: `ssh` dan `psql` juga tidak membacanya, dan proxy perusahaan biasanya hanya mengizinkan lalu lintas web keluar. Jangkau lewat proxy yang ditambahkan sebagai VPN, lalu `--via NAME`: proxy HTTP dengan `komando vpn add NAME proxy --proxy-address HOST:PORT`, proxy SOCKS dengan `komando vpn add NAME socks --proxy-address HOST:PORT`; atau lewat bastion |
 | VPN WireGuard, L2TP/IPsec, IPsec, dan IKEv2 | tidak lewat proxy: VPN ini memakai UDP, yang tidak bisa dibawa proxy web |
 
-- `HTTPS_PROXY`, `HTTP_PROXY`, dan `NO_PROXY` hanya berlaku saat seseorang menjalankan komando. Saat agen AI yang menjalankannya, lingkungannya milik agen, dan komando tidak mengambil proxy darinya: kalau tidak, agen bisa mengirim setiap login lewat proxy miliknya sendiri. Jika perintah agen harus lewat proxy perusahaan, tambahkan proxy itu sebagai VPN dan pakai `--via`, atau untuk cluster taruh `proxy-url` di kubeconfig-nya.
+- `HTTPS_PROXY`, `HTTP_PROXY`, dan `NO_PROXY` hanya berlaku saat seseorang menjalankan komando. Saat agen AI yang menjalankannya, lingkungannya milik agen, dan komando tidak mengambil proxy darinya: kalau tidak, agen bisa mengirim setiap login lewat proxy miliknya sendiri. Jika perintah agen perlu lewat proxy perusahaan, tambahkan proxy itu sebagai VPN dan pakai `--via`, atau untuk cluster taruh `proxy-url` di kubeconfig-nya.
 - komando memeriksa sertifikat terhadap CA milik komputer itu sendiri (dan `?ca=` milik conn, `--ca` milik VPN, atau CA milik kubeconfig). `SSL_CERT_FILE` dan `SSL_CERT_DIR` diabaikan, di Linux, macOS, dan Windows: proxy yang memeriksa TLS butuh CA-nya di trust store sistem, atau diberikan sebagai `?ca=` / `--ca`.
 - `proxy-url` di kubeconfig mengalahkan `HTTPS_PROXY` untuk cluster itu, seperti di `kubectl`. Nilainya boleh `http://`, `https://`, atau `socks5://`.
 - Server atau conn yang dijangkau dengan `--via` keluar lewat jalurnya sendiri, tidak pernah lewat proxy ini.
 - Proxy HTTP sebagai VPN (jenis `proxy`) membuat tunnel untuk setiap koneksi dengan CONNECT. `host ssh-command` mengubahnya menjadi `ProxyCommand` OpenSSH (`nc -X connect`) saat proxy tidak butuh login.
 - Alamat di komputer ini (`localhost`, port `127.0.0.1` milik tunnel) tidak pernah memakai proxy.
-- Nama user dan kata sandi di URL proxy (`http://user:password@proxy:3128`) dikirim ke proxy. Error menampilkan URL dengan kata sandi disembunyikan.
+- Nama user dan kata sandi di URL proxy (`http://user:password@proxy:3128`) dikirim ke proxy. Kesalahan menampilkan URL dengan kata sandi disembunyikan.
 
 ## Batasan
 
-- Tunnel mendengarkan di `127.0.0.1`, jadi hanya komputer Anda yang bisa memakainya. Untuk mendengarkan di alamat lain (`-L 0.0.0.0:8080:...`), tambahkan `--yes`; agen AI menambahkannya hanya setelah seseorang setuju ([Keamanan](safety.md)). Siapa pun di jaringan itu lalu bisa memakai tunnel tanpa login.
-- `-R` butuh server di ujung jalur: VPN tidak bisa mendengarkan untuk Anda.
+- Tunnel mendengarkan di `127.0.0.1`, jadi hanya komputer ini yang bisa memakainya. Untuk mendengarkan di alamat lain (`-L 0.0.0.0:8080:...`), tambahkan `--yes`; agen AI menambahkannya hanya setelah seseorang setuju ([Keamanan](safety.md)). Siapa pun di jaringan itu lalu bisa memakai tunnel tanpa login.
+- `-R` butuh server di ujung jalur: VPN tidak bisa mendengarkan.
 - Satu tunnel memakai tepat satu dari `-L`, `-R`, dan `-D`.
 - Banyak proxy perusahaan hanya mengizinkan port 443.
 - VPN WireGuard, L2TP/IPsec, IPsec, dan IKEv2 tidak bisa lewat proxy web.
@@ -119,11 +119,11 @@ export NO_PROXY=.internal,10.0.0.0/8     # nama dan jaringan yang dijangkau lang
 
 ## Pemecahan masalah
 
-| Kode error | Artinya | Yang perlu dilakukan |
+| Kode kesalahan | Artinya | Yang perlu dilakukan |
 |------------|---------|----------------------|
-| `OPEN_BIND` | tunnel akan mendengarkan di alamat yang bisa dijangkau komputer lain (exit 6) | pertahankan default `127.0.0.1`, atau tambahkan `--yes` bila Anda memang bermaksud begitu |
+| `OPEN_BIND` | tunnel akan mendengarkan di alamat yang bisa dijangkau komputer lain (exit 6) | pertahankan default `127.0.0.1`, atau tambahkan `--yes` bila memang bermaksud begitu |
 | `PORT_IN_USE` | port lokal sudah dipakai (exit 8); untuk `-R`, sshd di server mungkin mematikan `AllowTcpForwarding` | pilih port lain, atau `0` untuk port yang bebas |
 | `CANCELLED` | Ctrl-C menghentikan tunnel sebelum aktif; tidak ada yang tersisa berjalan | mulai lagi |
 | `TUNNEL_NOT_FOUND` | tidak ada tunnel dengan ID itu | lihat daftarnya dengan `komando tunnel list` |
 | `VPN_DOWN` | VPN atau proxy di jalur tidak aktif, atau proxy menolak port | baca pesannya; `komando vpn test NAME` mencoba lagi |
-| `HOST_IN_USE` | server yang ingin Anda hapus masih menjadi langkah di jalur `--via` server lain | ubah `--via` mereka dulu |
+| `HOST_IN_USE` | server yang ingin dihapus masih menjadi langkah di jalur `--via` server lain | ubah `--via` mereka dulu |

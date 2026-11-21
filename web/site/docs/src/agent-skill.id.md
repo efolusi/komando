@@ -8,7 +8,7 @@
 komando guide install
 ```
 
-Perintah ini menghubungkan agen Anda (Claude Code, Codex, Cursor, atau Gemini CLI) ke komando. Perintah itu memasang skill komando dan guard untuk agen yang Anda pakai. Kata sandi tetap di vault komando, dan agen tidak pernah mendapatkannya dari sana.
+Perintah ini menghubungkan agen (Claude Code, Codex, Cursor, atau Gemini CLI) ke komando. Perintah itu memasang skill komando dan guard untuk agen yang dipakai. Kata sandi tetap di vault komando, dan agen tidak pernah mendapatkannya dari sana.
 
 Agen menemukan komando lewat dua cara:
 
@@ -23,7 +23,7 @@ Script, dan Anda di terminal sendiri, tidak diperlakukan sebagai agen. Agen yang
 
 ## Yang bisa dilakukan agen
 
-- Menjalankan perintah komando. Saat agen menjalankan komando lewat pipe, agen mendapat satu objek JSON, bukan teks ([Hasil dan error](output.md#read-a-result)).
+- Menjalankan perintah komando. Saat agen menjalankan komando lewat pipe, agen mendapat satu objek JSON, bukan teks ([Hasil dan kesalahan](output.md#read-a-result)).
 - Membaca secara bawaan. `db query`, `cache run`, dan `cluster run` hanya membaca kecuali `--write` ditambahkan ([Keamanan](safety.md#the-seatbelts)).
 - Membaca file yang merupakan secret menurut namanya, seperti `.env`, dengan `fs cat`. Nilai secret yang dikenali komando tampil sebagai `[hidden]`.
 - Menaruh secret di server tanpa melihatnya. `fs replace` dengan `{{secret:NAME}}` di `--new` menulis nilai dari vault, setelah Anda mengizinkannya di jendela di bawah.
@@ -31,9 +31,9 @@ Script, dan Anda di terminal sendiri, tidak diperlakukan sebagai agen. Agen yang
 
 ## Yang selalu bertanya dulu
 
-Saat agen menambahkan `--yes`, `--allow-dangerous`, atau `--reveal`, komando membuka jendela di layar Anda. Jendela itu menampilkan seluruh perintah dan alasan komando menghentikannya. Perintah berjalan hanya saat Anda mengklik **Allow once**, dan agen tidak bisa mengkliknya.
+Saat agen menambahkan `--yes`, `--allow-dangerous`, atau `--reveal`, komando membuka jendela di layar. Jendela itu menampilkan seluruh perintah dan alasan komando menghentikannya. Perintah berjalan hanya saat Anda mengklik **Allow once**, dan agen tidak bisa mengkliknya.
 
-- Dengan `komando config approval-code`, jendela juga meminta kode dari aplikasi autentikator Anda, jadi satu klik saja tidak cukup ([Pengaturan dan file](settings.md#ask-for-a-code-before-an-agents-risky-command)).
+- Dengan `komando config approval-code`, jendela juga meminta kode dari aplikasi autentikator, jadi satu klik saja tidak cukup ([Pengaturan dan file](settings.md#ask-for-a-code-before-an-agents-risky-command)).
 - Bila tidak ada layar untuk membuka jendela (sesi SSH, server, atau `KOMANDO_NO_DIALOG` diatur), agen ditolak dan meminta Anda menjalankan perintah itu di terminal sendiri.
 - Jendela yang tidak dijawab siapa pun akan menutup. Agen diberi tahu bahwa tidak ada yang menjawab, lalu bertanya apakah perlu mencoba lagi.
 - Saat agen mengirim secret ke tempat baru, agen butuh `--yes`, dan jendela menyebut secret dan tempatnya.
@@ -45,7 +45,7 @@ Selengkapnya di [Keamanan](safety.md#seatbelts-for-ai-agents).
 ## Yang tidak didapat agen
 
 - Nilai di vault tidak pernah ditampilkan ke agen.
-- Di output dari server, file, dan database, komando menyembunyikan kata sandi, key, dan token yang dikenalinya sebagai `[hidden]`. Anda dan script Anda melihat nilai sebenarnya. Penyamaran ini bersifat upaya terbaik: secret dengan nama tak lazim, atau yang sangat pendek, masih bisa lolos. Lihat [batasannya](safety.md#limits) di halaman Keamanan.
+- Di output dari server, file, dan database, komando menyembunyikan kata sandi, key, dan token yang dikenalinya sebagai `[hidden]`. Anda dan script melihat nilai sebenarnya. Penyamaran ini bersifat upaya terbaik: secret dengan nama tak lazim, atau yang sangat pendek, masih bisa lolos. Lihat [batasannya](safety.md#limits) di halaman Keamanan.
 - `secret show --reveal` hanya untuk orang. Agen AI tidak pernah bisa.
 - Agen tidak bisa menyalin file yang merupakan secret menurut namanya (`.env`, private key, `credentials`) ke komputer ini.
 - Saat perintah menerima file lokal, komando tidak membaca `~/.komando`, private key, credential store, atau file yang merupakan secret menurut namanya untuk agen.
@@ -63,6 +63,6 @@ Guard memeriksa apa yang akan dilakukan agen di komputer ini. Sebelum agen memba
 
 ## Memperbarui atau mencabut
 
-Setelah `komando update`, jalankan `komando guide install` lagi, tanpa `sudo`, agar agen Anda mendapat skill versi baru. Sebelum itu, `komando doctor` menyatakan skill berasal dari versi lain ([Instal, update, hapus](install.md#update)).
+Setelah `komando update`, jalankan `komando guide install` lagi, tanpa `sudo`, agar agen mendapat skill versi baru. Sebelum itu, `komando doctor` menyatakan skill berasal dari versi lain ([Instal, update, hapus](install.md#update)).
 
-Untuk mencabut skill dan guard dari agen Anda, jalankan `komando guide uninstall`. Tambahkan `--project` di folder tempat Anda menjalankan `guide install --project` ([Instal, update, hapus](install.md#remove-komando)). Agen AI yang menjalankan `guide uninstall` butuh `--yes`, karena perintah itu mencabut guard dari pengaturan agen.
+Untuk mencabut skill dan guard dari agen, jalankan `komando guide uninstall`. Tambahkan `--project` di folder tempat Anda menjalankan `guide install --project` ([Instal, update, hapus](install.md#remove-komando)). Agen AI yang menjalankan `guide uninstall` butuh `--yes`, karena perintah itu mencabut guard dari pengaturan agen.

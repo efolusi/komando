@@ -15,7 +15,7 @@ Jika diketik tanpa argumen, `komando secret set` menanyakan nama, lalu nilainya 
 
 ## Menyimpan satu secret
 
-Di terminal Anda, `komando secret set NAME` menanyakan nilainya dan menyembunyikannya saat Anda mengetik atau menempel:
+Di terminal, `komando secret set NAME` menanyakan nilainya dan menyembunyikannya saat Anda mengetik atau menempel:
 
 ```text
 Paste or type the value for web1-pass, then press Enter (it stays hidden):
@@ -30,7 +30,7 @@ pbpaste | komando secret set vpn-pass          # dari clipboard (xclip -o di Lin
 komando secret set tls-key < server.key        # nilai berisi beberapa baris
 ```
 
-- Nilai di command line (`komando secret set NAME VALUE`) ditolak dengan `SECRET_IN_ARGS`: nilai itu akan tertinggal di riwayat shell Anda.
+- Nilai di command line (`komando secret set NAME VALUE`) ditolak dengan `SECRET_IN_ARGS`: nilai itu akan tertinggal di riwayat shell.
 - Tempelan lebih dari satu baris di prompt berhenti dengan `USAGE` dan tidak menyimpan apa pun: kalau tidak, shell akan menjalankan baris lainnya.
 - Nilai kosong (pipe kosong, variabel kosong, Enter di prompt) berhenti dengan `USAGE` dan tidak menyimpan apa pun.
 - Dari pipe, pindah baris di akhir bukan bagian dari nilai. Spasi dipertahankan; komando memperingatkan bila nilai diawali atau diakhiri spasi.
@@ -53,7 +53,7 @@ komando exec web1 --env DB_PASS=secret:prod-db-pass -- ./migrate.sh
 komando fs replace web1 /srv/app/.env --old 'DB_PASSWORD=[hidden]' --new 'DB_PASSWORD={{secret:prod-db-pass}}' --backup
 ```
 
-Rujukan juga bisa membaca kata sandi yang disimpan tim Anda di tempat lain: `env:VAR`, `file:PATH`, HashiCorp Vault atau OpenBao (`vault:PATH#FIELD`), secret manager AWS, Google, dan Azure (`aws-sm:`, `gcp-sm:`, `azure-kv:`), 1Password Connect (`op://`), Bitwarden atau Vaultwarden (`bw://`), dan file KeePass (`kdbx:`). Lihat [Kata sandi dari password manager Anda](servers.md#passwords-from-your-password-manager) untuk masing-masing dan login yang dipakainya. komando membaca nilai seperti itu hanya saat membutuhkannya dan tidak pernah menyimpannya.
+Rujukan juga bisa membaca kata sandi yang disimpan tim di tempat lain: `env:VAR`, `file:PATH`, HashiCorp Vault atau OpenBao (`vault:PATH#FIELD`), secret manager AWS, Google, dan Azure (`aws-sm:`, `gcp-sm:`, `azure-kv:`), 1Password Connect (`op://`), Bitwarden atau Vaultwarden (`bw://`), dan file KeePass (`kdbx:`). Lihat [Kata sandi dari password manager](servers.md#passwords-from-your-password-manager) untuk masing-masing dan login yang dipakainya. komando membaca nilai seperti itu hanya saat membutuhkannya dan tidak pernah menyimpannya.
 
 ## Memeriksa secret
 
@@ -88,7 +88,7 @@ komando secret cp db-pass db-pass-old                          # sebuah salinan;
 komando secret rm old-pass other-old-pass                      # semuanya, atau tidak sama sekali
 ```
 
-- `secret rename` mengarahkan setiap server, conn, key, dan VPN yang memakai `secret:OLD` ke `secret:NEW` dalam satu langkah (juga opsi URL conn seperti `?ca=secret:OLD`). Script dan file milik Anda sendiri tidak diubah.
+- `secret rename` mengarahkan setiap server, conn, key, dan VPN yang memakai `secret:OLD` ke `secret:NEW` dalam satu langkah (juga opsi URL conn seperti `?ca=secret:OLD`). Script dan file milik sendiri tidak diubah.
 - Bila BARU sudah ada, tambahkan `--overwrite`; apa yang memakai BARU lalu mendapat nilai LAMA. Bila server atau conn yang dilindungi memakai BARU, komando bertanya dulu kepada Anda (`--yes` untuk agen AI atau script).
 - `secret rm` ditolak selama ada yang memakai sebuah nama (`SECRET_IN_USE` mencantumkan apa yang memakainya); arahkan pemakainya ke secret lain dulu, atau ganti namanya.
 - Secret yang dihapus tidak punya salinan, jadi di terminal Anda mengetik nama secret-nya dulu (beberapa sekaligus: jumlahnya). Agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju (kalau tidak, `POLICY_BLOCKED`).
@@ -106,7 +106,7 @@ komando secret passphrase --off      # kembali ke key acak di store.key (komando
 komando secret passphrase --dry-run
 ```
 
-komando memakai keychain dengan sendirinya hanya saat store baru membuat key-nya, dan untuk menyimpan hitungan perubahan store di samping key yang ada di sana. komando membiarkan keychain dengan `KOMANDO_KEYCHAIN=off` (CI, container, test), di tempat yang tidak punya tool keychain, dan di Mac yang user-nya tidak punya keychain default (`HOME` yang diubah): key lalu masuk ke `store.key`, dan `komando doctor` menyatakannya. komando tidak pernah membuat macOS menanyakan di mana menyimpannya. `KOMANDO_KEYCHAIN=off` milik agen AI tetap membiarkan komando membaca dan menaikkan hitungan perubahan: agen tidak bisa mematikan pemeriksaan salinan lama dengan cara itu. Agen juga tidak bisa mengarahkan komando ke keychain lain: path `KOMANDO_KEYCHAIN` miliknya (file keychain di Mac) tidak dipakai, jadi panggilannya menyimpan key dan hitungan di keychain login. Store yang key-nya ada di file keychain Anda sendiri hanya dibuka oleh perintah Anda.
+komando memakai keychain dengan sendirinya hanya saat store baru membuat key-nya, dan untuk menyimpan hitungan perubahan store di samping key yang ada di sana. komando membiarkan keychain dengan `KOMANDO_KEYCHAIN=off` (CI, container, test), di tempat yang tidak punya tool keychain, dan di Mac yang user-nya tidak punya keychain default (`HOME` yang diubah): key lalu masuk ke `store.key`, dan `komando doctor` menyatakannya. komando tidak pernah membuat macOS menanyakan di mana menyimpannya. `KOMANDO_KEYCHAIN=off` milik agen AI tetap membiarkan komando membaca dan menaikkan hitungan perubahan: agen tidak bisa mematikan pemeriksaan salinan lama dengan cara itu. Agen juga tidak bisa mengarahkan komando ke keychain lain: path `KOMANDO_KEYCHAIN` miliknya (file keychain di Mac) tidak dipakai, jadi panggilannya menyimpan key dan hitungan di keychain login. Store yang key-nya ada di file keychain sendiri hanya dibuka oleh perintah Anda.
 
 Perintah-perintah ini mengubah tempat key berada, jadi hanya orang di terminal yang menjalankannya (`NEEDS_PERSON` untuk agen AI atau script); `--dry-run` menampilkan pratinjaunya untuk siapa pun. `--off` mematikan sebuah pemeriksaan, jadi komando bertanya dulu; script menambahkan `--yes`. Detail: [Pengaturan dan file](settings.md#where-the-vaults-key-lives).
 
@@ -130,20 +130,20 @@ Agen tidak pernah meminta kata sandi di chat: hint menyebut perintah yang dijala
 ## Batasan
 
 - Menyembunyikan nilai di output server adalah upaya terbaik (lihat [Keamanan](safety.md#limits)).
-- Secret dari password manager (`vault:`, `op://` ...) dibaca saat dibutuhkan dan tidak pernah disimpan, jadi manager itu harus bisa dijangkau setiap kali.
+- Secret dari password manager (`vault:`, `op://` ...) dibaca saat dibutuhkan dan tidak pernah disimpan, jadi manager itu wajib bisa dijangkau setiap kali.
 - Vault yang key-nya ada di keychain hanya terbuka di tempat keychain itu tidak terkunci. Folder yang disalin hanya membuka secret-nya dengan passphrase (lihat [Pindah ke komputer lain](import.md#copy-the-folder-everything-with-passwords)).
 - Apa pun yang berjalan sebagai user Anda sendiri bisa menjangkau key-nya; lihat [Pengaturan dan file](settings.md#limits).
 
 ## Pemecahan masalah
 
-| Error | Artinya | Yang perlu dilakukan |
+| Kesalahan | Artinya | Yang perlu dilakukan |
 |-------|---------|----------------------|
 | `SECRET_IN_ARGS` (exit 2) | nilai ada di command line | `komando secret set NAME`, lalu ketik setelah prompt |
 | `USAGE` (exit 2) | nilai kosong, atau tempelan beberapa baris | ketik lagi, atau berikan beberapa baris lewat stdin: `komando secret set NAME < FILE` |
 | `SECRET_NOT_FOUND`, `SECRET_UNRESOLVED` (exit 3) | tidak ada secret dengan nama itu, atau rujukan yang tidak bisa dibaca | `komando secret list` |
 | `SECRET_EXISTS` (exit 8) | `secret rename` atau `secret cp` ke nama yang sudah dipakai, atau `secret set --new` pada nama yang sudah tersimpan | pilih nama lain; untuk menggantikannya, tambahkan `--overwrite` (rename, cp) atau jalankan `komando secret set NAME` tanpa `--new` |
 | `SECRET_IN_USE` (exit 8) | `secret rm` pada secret yang masih dipakai sesuatu | arahkan pemakainya ke secret lain, atau `secret rename` |
-| `SECRET_MISMATCH` (exit 1) | `secret check`: nilai yang Anda ketik bukan yang tersimpan | `data.difference` menjelaskan perbedaannya; `komando secret set NAME` menyimpan yang benar |
+| `SECRET_MISMATCH` (exit 1) | `secret check`: nilai yang diketik bukan yang tersimpan | `data.difference` menjelaskan perbedaannya; `komando secret set NAME` menyimpan yang benar |
 | `NEEDS_PERSON` (exit 6) | hanya orang yang bisa melakukan ini (`secret set` untuk agen, `secret check`, `secret keychain`, `secret passphrase`) | orangnya menjalankannya di terminalnya sendiri |
 | `VAULT_LOCKED` (exit 1) | vault punya passphrase dan `KOMANDO_VAULT_PASS` belum diatur | atur `KOMANDO_VAULT_PASS` di shell yang menjalankan komando (agen AI bertanya kepada pengguna) |
 | `VAULT_DECRYPT` (exit 1) | `KOMANDO_VAULT_PASS` bukan passphrase vault ini | atur yang benar; tidak ada yang hilang. `komando doctor` menyebut mode mana yang dipakai |

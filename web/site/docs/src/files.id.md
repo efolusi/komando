@@ -1,6 +1,6 @@
 # File
 
-Baca, edit, dan salin file di server Anda dengan aman.
+Baca, edit, dan salin file di server dengan aman.
 
 ## Membaca file
 
@@ -8,7 +8,7 @@ Baca, edit, dan salin file di server Anda dengan aman.
 komando fs cat web1 /etc/nginx/nginx.conf --tail 50
 ```
 
-Jika diketik tanpa argumen di terminal Anda, `komando fs cat` menanyakan server (dari daftar Anda), lalu filenya.
+Jika diketik tanpa argumen di terminal, `komando fs cat` menanyakan server (dari daftar), lalu filenya.
 
 ```bash
 komando fs cat web1 /var/log/syslog --head 20 --line-numbers
@@ -16,7 +16,7 @@ komando fs cat web1 /var/log/auth.log --sudo          # file yang hanya bisa dib
 komando fs cat web1 '~/app/.env'
 ```
 
-`~` di sebuah path adalah folder home user yang dipakai login, seperti pada `scp`. Beri tanda kutip (`'~/app/.env'`) agar shell Anda sendiri tidak meng-expand-nya.
+`~` di sebuah path adalah folder home user yang dipakai login, seperti pada `scp`. Beri tanda kutip (`'~/app/.env'`) agar shell lokal tidak meng-expand-nya.
 
 `fs cat` menampilkan teks. Di `-o text`, file biner ditolak, sehingga `fs cat ... > file` tidak pernah menulis salinan yang rusak; simpan dengan `komando download` sebagai gantinya. File yang lebih panjang dari `--max-bytes` (1 MiB) dipotong: output menyatakannya, dan hash-nya adalah `sha256_read` (dari bagian yang dibaca), bukan `sha256`. `--tail` saja membaca akhir file, jadi baris terakhir adalah baris terakhir file yang sebenarnya; untuk file sepanjang itu `--line-numbers` tidak bisa mengetahui nomornya dan menghilangkannya (`note` menyatakannya).
 
@@ -109,7 +109,7 @@ komando svc reload web1 nginx                 # bila sebuah service membaca file
 
 Di server Windows `fs restore` belum berfungsi: salin backup kembali dengan `komando exec win1 -- Copy-Item ...` ([Server Windows](windows.md)).
 
-Tanpa `--backup` tidak ada salinan: `komando audit` menyatakan apa yang berubah, kapan, dan di mana (`komando audit --target web1 --since 2h`), sehingga Anda bisa mengembalikannya secara manual. Untuk perubahan database, pulihkan dari dump (`db dump` sebelum perubahan, `db restore` untuk kembali); untuk deployment Kubernetes, `cluster rollback`.
+Tanpa `--backup` tidak ada salinan: `komando audit` menyatakan apa yang berubah, kapan, dan di mana (`komando audit --target web1 --since 2h`), sehingga perubahan bisa dikembalikan secara manual. Untuk perubahan database, pulihkan dari dump (`db dump` sebelum perubahan, `db restore` untuk kembali); untuk deployment Kubernetes, `cluster rollback`.
 
 ## Memindahkan, menghapus, dan mengubah file
 
@@ -121,10 +121,10 @@ komando fs rm web1 /tmp/old.tar.gz --dry-run
 komando fs rm web1 /tmp/old.tar.gz
 ```
 
-Perintah-perintah ini berperilaku seperti perintah yang Anda kenal, dengan perbedaan keamanan berikut:
+Perintah-perintah ini berperilaku seperti perintah yang sudah dikenal, dengan perbedaan keamanan berikut:
 
-- `fs mv` tidak pernah menggantikan file yang sudah ada (`FILE_EXISTS`, exit 8) kecuali Anda menambahkan `--overwrite`. Memindahkan ke folder yang sudah ada menaruh file di dalamnya.
-- `fs rm` menghapus untuk selamanya. Di terminal Anda komando meminta Anda mengetik path (beberapa path: jumlahnya); agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju (kalau tidak, `POLICY_BLOCKED`; `--dry-run` menampilkan apa yang akan hilang). Lihat [Keamanan](safety.md). Pada path yang tidak ada, perintah menyatakan `not found` dan tetap berhasil, seperti `rm -f`.
+- `fs mv` tidak pernah menggantikan file yang sudah ada (`FILE_EXISTS`, exit 8) kecuali ditambahkan `--overwrite`. Memindahkan ke folder yang sudah ada menaruh file di dalamnya.
+- `fs rm` menghapus untuk selamanya. Di terminal, komando meminta Anda mengetik path (beberapa path: jumlahnya); agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju (kalau tidak, `POLICY_BLOCKED`; `--dry-run` menampilkan apa yang akan hilang). Lihat [Keamanan](safety.md). Pada path yang tidak ada, perintah menyatakan `not found` dan tetap berhasil, seperti `rm -f`.
 - Folder butuh `--recursive` juga, dengan pertanyaan yang sama (dan `--allow-dangerous` yang sama untuk agen atau script).
 - Path diambil secara harfiah: `'/tmp/*.log'` bukan pola. Pakai `komando exec` untuk itu.
 - Semuanya menerima `--sudo`; `fs chmod -r` mengubah seluruh folder. `fs chmod --sudo` tidak mengikuti link yang dibuat user server lain (`IS_A_SYMLINK`).
@@ -160,9 +160,9 @@ komando cp -r ./site web1:/var/www/site
 komando cp web1:/var/log/nginx/error.log ./logs/
 ```
 
-TARGET bisa berupa [target](targets.md) apa pun (`tag:edge:/srv/site`, `label:env=prod:/tmp/x`), server yang belum Anda tambahkan beserta portnya (`root@10.0.0.5:2222:/tmp/x`), atau alamat IPv6 dalam kurung siku (`[2001:db8::1]:/tmp/x`).
+TARGET bisa berupa [target](targets.md) apa pun (`tag:edge:/srv/site`, `label:env=prod:/tmp/x`), server yang belum ditambahkan beserta portnya (`root@10.0.0.5:2222:/tmp/x`), atau alamat IPv6 dalam kurung siku (`[2001:db8::1]:/tmp/x`).
 
-File lokal yang namanya punya titik dua (`a:b.txt`) dibaca sebagai lokal bila ada; kalau tidak tulis `./a:b.txt`. Penyalinan satu file melaporkan `sha256` sehingga Anda bisa memeriksanya.
+File lokal yang namanya punya titik dua (`a:b.txt`) dibaca sebagai lokal bila ada; kalau tidak tulis `./a:b.txt`. Penyalinan satu file melaporkan `sha256` sehingga bisa diperiksa.
 
 ### Mengalirkan file lewat stdout atau stdin
 
@@ -177,9 +177,9 @@ komando upload backups - photos/2026/a.jpg --size 2483117 < a.jpg
 pg_dump app | komando storage upload backups - dumps/app.sql
 ```
 
-- **stdout milik file.** Dengan `--to -`, stdout membawa byte file apa adanya, biner juga, dan tidak ada yang lain, apa pun kata `-o`. Jawaban komando sendiri menuju stderr: dengan `-o json` satu envelope di akhir, hasil atau error, dan exit code menyatakan yang mana. Hasilnya adalah `{"host": "web1", "path": "/etc/nginx/nginx.conf", "to": "stdout", "bytes": 1234, "sha256": "…"}` (`conn` dan `key` untuk storage). Di mode teks tidak ada yang dinyatakan bila berhasil.
-- Bila aliran terputus, byte yang sudah ada di stdout tetap di sana: exit code bukan 0 dan envelope di stderr menyatakan alasannya. Bandingkan `bytes` dan `sha256` bila Anda perlu yakin.
-- **Unggahan dari stdin** menuju satu server atau conn, ke DEST, yang harus menyebut file-nya (stdin tidak punya nama). Di server, isinya menuju file sementara yang dipindahkan ke tempatnya hanya di akhir; object store menyelesaikan unggahan hanya di akhir aliran. Hasilnya punya `"file": "-"`, `bytes`, dan `sha256`.
+- **stdout milik file.** Dengan `--to -`, stdout membawa byte file apa adanya, biner juga, dan tidak ada yang lain, apa pun kata `-o`. Jawaban komando sendiri menuju stderr: dengan `-o json` satu envelope di akhir, hasil atau kesalahan, dan exit code menyatakan yang mana. Hasilnya adalah `{"host": "web1", "path": "/etc/nginx/nginx.conf", "to": "stdout", "bytes": 1234, "sha256": "…"}` (`conn` dan `key` untuk storage). Di mode teks tidak ada yang dinyatakan bila berhasil.
+- Bila aliran terputus, byte yang sudah ada di stdout tetap di sana: exit code bukan 0 dan envelope di stderr menyatakan alasannya. Bandingkan `bytes` dan `sha256` bila perlu yakin.
+- **Unggahan dari stdin** menuju satu server atau conn, ke DEST, yang wajib menyebut file-nya (stdin tidak punya nama). Di server, isinya menuju file sementara yang dipindahkan ke tempatnya hanya di akhir; object store menyelesaikan unggahan hanya di akhir aliran. Hasilnya punya `"file": "-"`, `bytes`, dan `sha256`.
 - `--size N` menyatakan berapa byte yang dikirim stdin. Aliran yang berakhir lebih awal, atau mengirim lebih banyak, berhenti dengan `SIZE_CONFLICT` (exit 8) dan tidak mengganti apa pun. Tanpanya, apa pun yang tiba sampai stdin menutup adalah filenya: berikan `--size` setiap kali pengirim bisa terputus.
 - Isi yang memuat nilai yang disembunyikan komando (`[hidden]`, `[secret:NAME]`) ditolak (`HIDDEN_VALUE`): salinan yang disamarkan akan merusak nilai sebenarnya.
 - `--continue`, `-r`, dan beberapa server tidak cocok dengan `-` (`USAGE`). Aliran dari server dibaca sebagai user SSH; baca file yang hanya bisa dibaca root dengan `fs cat --sudo`. Unggahan dari stdin menerima `--sudo`, `-p`, dan `--mode` seperti unggahan mana pun.
@@ -196,7 +196,7 @@ komando cp -r web1:/var/www/site backups:sites/
 komando cp backups:2026/db.sql.gz dr-backups:2026/
 ```
 
-- Data mengalir lewat komputer Anda, dari sumber langsung ke tujuan, dan tidak pernah disimpan di disknya. Server tidak perlu saling menjangkau.
+- Data mengalir lewat komputer ini, dari sumber langsung ke tujuan, dan tidak pernah disimpan di disknya. Server tidak perlu saling menjangkau.
 - Setiap sisi adalah satu server atau satu conn (tanpa `@group`).
 - File di tujuan digantikan, seperti unggahan menggantikannya (`replaced: true`); file baru di server mendapat mode sumber. `-p` dan `--mode` berfungsi seperti untuk unggahan ke server.
 - Satu file melaporkan `sha256`-nya; hasilnya juga menyebut `source`. Folder (`-r`) mengikuti aturan di bawah.
@@ -239,14 +239,14 @@ Folder yang diberikan sebagai symbolic link (`./current -> releases/42`) disalin
 
 ### Apa yang digantikan sebuah salinan
 
-- Unduhan tidak pernah menggantikan file yang sudah ada di komputer Anda. Satu file berhenti dengan `FILE_EXISTS` (exit 8); folder (`-r`), dari server atau dari storage, mempertahankan file itu, menyalin sisanya, dan menyatakan berapa banyak yang dipertahankan (`kept`). Tambahkan `--overwrite` bila Anda memang bermaksud menggantikannya.
+- Unduhan tidak pernah menggantikan file yang sudah ada di komputer ini. Satu file berhenti dengan `FILE_EXISTS` (exit 8); folder (`-r`), dari server atau dari storage, mempertahankan file itu, menyalin sisanya, dan menyatakan berapa banyak yang dipertahankan (`kept`). Tambahkan `--overwrite` bila memang bermaksud menggantikannya.
 - Unggahan menggantikan file di server dan menyatakannya (`replaced: true`).
-- Setiap file, kedua arah, ditulis dengan nama sementara dulu dan dipindahkan ke tempatnya saat lengkap, sehingga koneksi yang putus tidak pernah meninggalkan setengah file (kecuali dengan `--continue`, di atas, yang sengaja menulis di tempat). (Memindahkan file baru ke tempatnya di server menjadikan user SSH sebagai pemiliknya; pakai `--sudo` untuk satu file yang pemiliknya harus tetap.)
+- Setiap file, kedua arah, ditulis dengan nama sementara dulu dan dipindahkan ke tempatnya saat lengkap, sehingga koneksi yang putus tidak pernah meninggalkan setengah file (kecuali dengan `--continue`, di atas, yang sengaja menulis di tempat). (Memindahkan file baru ke tempatnya di server menjadikan user SSH sebagai pemiliknya; pakai `--sudo` untuk satu file yang pemiliknya perlu tetap.)
 
 ### File besar dan Ctrl-C
 
 - Di terminal, file 8 MiB atau lebih yang menuju atau dari satu server menampilkan progresnya di stderr (`app.tar.gz: 120.0 of 512.0 MB`). Tidak ada yang ditampilkan bila stderr bukan terminal, atau untuk agen AI; stdout tidak pernah mendapatkannya.
-- Program yang menggambar progress bar sendiri (aplikasi, script, agen AI) menambahkan `--progress` ke `upload`, `download`, `cp`, `sync`, atau `storage upload/download` dengan `-o json`. Output error (stderr) lalu mendapat satu objek JSON per baris, paling banyak sekitar empat per detik, dan satu terakhir saat perintah berakhir; hasil di stdout tetap seperti semula. Totalnya `null` selama komando belum bisa mengetahuinya (folder dari server dibaca saat disalin). Baris di stderr yang bukan JSON (peringatan) bukan progress: lewati. Tanpa `-o json`, `--progress` tidak mengubah apa pun.
+- Program yang menggambar progress bar sendiri (aplikasi, script, agen AI) menambahkan `--progress` ke `upload`, `download`, `cp`, `sync`, atau `storage upload/download` dengan `-o json`. Output kesalahan (stderr) lalu mendapat satu objek JSON per baris, paling banyak sekitar empat per detik, dan satu terakhir saat perintah berakhir; hasil di stdout tetap seperti semula. Totalnya `null` selama komando belum bisa mengetahuinya (folder dari server dibaca saat disalin). Baris di stderr yang bukan JSON (peringatan) bukan progress: lewati. Tanpa `-o json`, `--progress` tidak mengubah apa pun.
 
   ```
   {"event":"progress","file":"site/index.html","bytes_done":1048576,"bytes_total":4194304,"files_done":3,"files_total":12}
@@ -274,26 +274,26 @@ komando sync backups:2026/ ./restore                               # dari storag
 - Setiap file ditulis dengan nama sementara dan dipindahkan ke tempatnya.
 - Folder tujuan yang belum ada dibuat (`--dry-run` menyatakannya).
 - `--exclude` melewati nama atau path (shell glob, bisa diulang).
-- `--delete` menghapus file untuk selamanya: di terminal Anda komando meminta Anda mengetik tujuannya (`web1:/var/www/site`); agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju.
-- Sumber yang tidak ada adalah error (`PATH_NOT_FOUND`, exit 3), dan `--delete` tidak pernah berjalan dari sumber kosong, jadi salah ketik tidak bisa mengosongkan tujuan.
-- `--delete` juga berhenti sebelum mengosongkan folder yang dicantumkan sumber sebagai kosong sementara tujuan masih punya file di dalamnya (`EMPTY_FOLDER_CONFIRM_REQUIRED`, exit 6): daftar yang terpotong, misalnya oleh koneksi FTP yang putus, tampak persis seperti itu. Error mencantumkan setiap folder dan berapa banyak file yang akan hilang (`error.details.folders` di JSON).
-  - Di terminal Anda, komando meminta Anda mengetik folder itu.
+- `--delete` menghapus file untuk selamanya: di terminal, komando meminta Anda mengetik tujuannya (`web1:/var/www/site`); agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju.
+- Sumber yang tidak ada adalah kesalahan (`PATH_NOT_FOUND`, exit 3), dan `--delete` tidak pernah berjalan dari sumber kosong, jadi salah ketik tidak bisa mengosongkan tujuan.
+- `--delete` juga berhenti sebelum mengosongkan folder yang dicantumkan sumber sebagai kosong sementara tujuan masih punya file di dalamnya (`EMPTY_FOLDER_CONFIRM_REQUIRED`, exit 6): daftar yang terpotong, misalnya oleh koneksi FTP yang putus, tampak persis seperti itu. Kesalahan mencantumkan setiap folder dan berapa banyak file yang akan hilang (`error.details.folders` di JSON).
+  - Di terminal, komando meminta Anda mengetik folder itu.
   - Agen AI menambahkan `--allow-dangerous` setelah seseorang setuju; komando lalu menyebut folder itu di jendelanya.
-  - Script menyebut setiap folder yang dikosongkannya dengan sengaja: `--emptied old-assets` (bisa diulang). `--allow-dangerous` saja tidak cukup di sini: eksekusi tanpa pengawas adalah yang akan kehilangan file tanpa ada yang melihat. Nama folder yang tidak cocok dengan apa pun adalah error.
+  - Script menyebut setiap folder yang dikosongkannya dengan sengaja: `--emptied old-assets` (bisa diulang). `--allow-dangerous` saja tidak cukup di sini: eksekusi tanpa pengawas adalah yang akan kehilangan file tanpa ada yang melihat. Nama folder yang tidak cocok dengan apa pun adalah kesalahan.
   - Cara lain: hapus folder di tujuan lebih dulu (`komando fs rm web1 /var/www/site/old-assets --recursive`, atau `komando storage rm CONN --prefix old-assets/`), lalu sync.
 - Symbolic link di dalam folder tidak disalin; dicantumkan sebagai `skipped`. Folder sumber yang diberikan sebagai link di-sync sebagai folder yang disebutnya.
 - Ctrl-C menghentikannya dalam sekejap; file yang sudah disalin tetap, dan eksekusi berikutnya mengirim sisanya.
-- `--sudo` menulis di server sebagai root, untuk folder yang tidak bisa ditulis user SSH (`komando sync ./conf.d web1:/etc/nginx/conf.d --sudo`): setiap file masuk seperti `upload --sudo` menaruhnya, ditahan di `/tmp` milik user SSH (hanya mereka yang bisa membacanya), diperiksa oleh root dan dipasang dengan mode file sumber, mempertahankan pemilik file yang sudah ada. Folder yang bisa diubah user lain menghentikannya (`SHARED_FOLDER_CONFLICT`). Folder harus bisa dibaca user SSH, dan `--sudo` untuk folder yang menuju server (untuk membaca file yang hanya bisa dibaca root, pakai `download --sudo`).
+- `--sudo` menulis di server sebagai root, untuk folder yang tidak bisa ditulis user SSH (`komando sync ./conf.d web1:/etc/nginx/conf.d --sudo`): setiap file masuk seperti `upload --sudo` menaruhnya, ditahan di `/tmp` milik user SSH (hanya mereka yang bisa membacanya), diperiksa oleh root dan dipasang dengan mode file sumber, mempertahankan pemilik file yang sudah ada. Folder yang bisa diubah user lain menghentikannya (`SHARED_FOLDER_CONFLICT`). Folder wajib bisa dibaca user SSH, dan `--sudo` untuk folder yang menuju server (untuk membaca file yang hanya bisa dibaca root, pakai `download --sudo`).
 
 Untuk satu file, pakai `komando upload` atau `komando download`.
 
 ## Batasan
 
-- `fs write` bekerja pada satu server per eksekusi; target yang memilih beberapa berhenti dengan error (pakai `komando upload` untuk banyak).
+- `fs write` bekerja pada satu server per eksekusi; target yang memilih beberapa berhenti dengan kesalahan (pakai `komando upload` untuk banyak).
 - `fs cat` membaca paling banyak `--max-bytes` (1 MiB secara default) dan menolak file biner di `-o text`.
 - `fs list` menampilkan sampai 1000 entri kecuali `--limit` menyatakan lain.
 - `fs rm` dan `fs chmod` menerima path secara harfiah: tanpa pola.
-- `--sudo` pada salinan hanya berfungsi untuk satu file (unduhan sampai 512 MiB). Untuk folder milik root, unggah ke tempat yang Anda miliki dan pindahkan dengan `komando exec web1 --sudo -- cp -r /tmp/site/. /var/www/site/`.
+- `--sudo` pada salinan hanya berfungsi untuk satu file (unduhan sampai 512 MiB). Untuk folder milik root, unggah ke tempat milik sendiri dan pindahkan dengan `komando exec web1 --sudo -- cp -r /tmp/site/. /var/www/site/`.
 - `sync` tidak punya `--sudo`: hanya menulis di tempat user yang dipakai login boleh menulis.
 - Symbolic link di dalam folder tidak disalin oleh `cp -r`, `upload -r`, `download -r`, atau `sync`.
 - Penulisan `--sudo` ditolak ke folder yang bisa diubah user server lain (menurut pemilik, grup, mode, atau access list: `SHARED_FOLDER_CONFLICT`); tulis file seperti itu sebagai user tersebut.
@@ -303,14 +303,14 @@ Untuk satu file, pakai `komando upload` atau `komando download`.
 
 ## Pemecahan masalah
 
-| Kode error | Artinya | Yang perlu dilakukan |
+| Kode kesalahan | Artinya | Yang perlu dilakukan |
 |------------|---------|----------------------|
 | `NO_MATCH` | `fs replace` tidak menemukan teks `--old` | baca file dengan `komando fs cat` dan salin teks persisnya (spasi berpengaruh) |
 | `VALIDATION_FAILED` | `--validate` menolak file baru; file tidak diubah | perbaiki isinya dan jalankan lagi |
 | `HIDDEN_VALUE` | edit akan memotong ke dalam, menyalin, atau membuka nilai yang disembunyikan komando dari agen AI | cocokkan seluruh `NAME=[hidden]`, atau tulis `{{secret:NAME}}` |
 | `SECRET_DESTINATION` | agen AI meminta menulis nilai vault ke sebuah file | seseorang mengizinkannya di jendela komando |
 | `FOLDER_NOT_FOUND` | folder untuk file baru tidak ada | tambahkan `-p` (`--parents`) |
-| `FILE_EXISTS` | `fs mv` atau unduhan akan menggantikan file | tambahkan `--overwrite` bila Anda memang bermaksud begitu |
+| `FILE_EXISTS` | `fs mv` atau unduhan akan menggantikan file | tambahkan `--overwrite` bila memang bermaksud begitu |
 | `PATH_NOT_FOUND` | sumber salinan atau sync tidak ada | periksa path-nya |
 | `PERMISSION_DENIED` | user yang dipakai login tidak boleh membaca atau menulis file | tambahkan `--sudo` |
 | `SHARED_FOLDER_CONFLICT` | `--sudo` ke folder yang bisa diubah user server lain | tulis file sebagai user itu, tanpa `--sudo` |

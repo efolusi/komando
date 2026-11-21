@@ -8,7 +8,7 @@ Cari tahu server apa ini, apakah sehat, dan apa yang bisa dijangkaunya.
 komando facts web1
 ```
 
-Jalankan `facts` lebih dulu pada server yang belum Anda kenal. Perintah ini melaporkan OS, CPU, memori, disk, beban, alamat IP, package manager, init system, dan tool yang terinstal, sehingga Anda (atau agen Anda) tahu perintah mana yang cocok. Perintah ini juga menyebut apa yang perlu diperhatikan. Jika diketik tanpa argumen di terminal Anda, `komando facts` menanyakan servernya (dari daftar Anda); `komando facts @web` memeriksa banyak server sekaligus.
+Jalankan `facts` lebih dulu pada server yang belum dikenal. Perintah ini melaporkan OS, CPU, memori, disk, beban, alamat IP, package manager, init system, dan tool yang terinstal, sehingga orang atau agen tahu perintah mana yang cocok. Perintah ini juga menyebut apa yang perlu diperhatikan. Jika diketik tanpa argumen di terminal, `komando facts` menanyakan servernya (dari daftar); `komando facts @web` memeriksa banyak server sekaligus.
 
 ```text
 ● web1  Ubuntu 20.04.6 LTS · x86_64 · 4 cpu · 7.8 GB RAM · disk / 63% · load 0.12 · up 34d
@@ -29,7 +29,7 @@ Jalankan `facts` lebih dulu pada server yang belum Anda kenal. Perintah ini mela
 | access | User yang dipakai login, dan apakah sudo bekerja tanpa kata sandi. |
 | docker | Versi Docker, peran Swarm (manager, worker, none), dan berapa container yang berjalan. |
 | pm2 | Aplikasi Node.js yang dijalankan PM2, di luar container. |
-| ports | Port yang mendengarkan dan program di balik masing-masing. Tanpa root atau sudo tanpa kata sandi, hanya program milik Anda yang punya nama. |
+| ports | Port yang mendengarkan dan program di balik masing-masing. Tanpa root atau sudo tanpa kata sandi, hanya program milik user sendiri yang punya nama. |
 | units | Service dan timer yang ditambahkan manual di `/etc/systemd/system` (bukan dari package). |
 
 Di JSON, `disks` mencantumkan setiap file system sungguhan: `mount`, `device`, `size_mb`, `used_mb`, `avail_mb`, dan `used_pct`.
@@ -40,7 +40,7 @@ Di JSON, `disks` mencantumkan setiap file system sungguhan: `mount`, `device`, `
 komando facts web1 --only load,mem,disks -o json
 ```
 
-`--only` hanya menjalankan probe untuk bagian yang Anda sebut, dalam sekitar satu detik, untuk aplikasi atau script yang melakukan polling: `load` (`load` 1, 5, dan 15 menit, `cpus`), `mem` (`mem_total_mb`, `mem_available_mb`, `swap_total_mb`, `swap_free_mb`), `disks` (`disks`, `disk_root_total_gb`, `disk_root_used_pct`), dan `system` (`os`, `os_version`, `os_pretty`, `uptime_sec`). Tanpa indeks package, Docker, port, unit, atau sudo; key dari bagian lain dihilangkan. Key ssh-gate yang read-only bisa menjalankannya. Nilai yang tidak dimiliki server adalah null; server tanpa `/etc/os-release` (macOS, BSD) memberi `os` dan `os_version` dari `uname`.
+`--only` hanya menjalankan probe untuk bagian yang disebut, dalam sekitar satu detik, untuk aplikasi atau script yang melakukan polling: `load` (`load` 1, 5, dan 15 menit, `cpus`), `mem` (`mem_total_mb`, `mem_available_mb`, `swap_total_mb`, `swap_free_mb`), `disks` (`disks`, `disk_root_total_gb`, `disk_root_used_pct`), dan `system` (`os`, `os_version`, `os_pretty`, `uptime_sec`). Tanpa indeks package, Docker, port, unit, atau sudo; key dari bagian lain dihilangkan. Key ssh-gate yang read-only bisa menjalankannya. Nilai yang tidak dimiliki server adalah null; server tanpa `/etc/os-release` (macOS, BSD) memberi `os` dan `os_version` dari `uname`.
 
 `facts` hanya membaca. Perintah ini tidak pernah menyegarkan indeks package atau memulai apa pun, dan memakai sudo hanya bila sudo sudah bekerja tanpa kata sandi (tidak pernah memintanya).
 
@@ -105,7 +105,7 @@ Pemeriksaan yang punya perintah sendiri bukan recipe:
 | sebuah nama di DNS | `komando net dns TARGET NAME` |
 | sebuah URL menjawab | `komando net http TARGET URL` |
 | unit yang gagal | `komando svc list TARGET --failed` |
-| error di journal | `komando logs TARGET -p err --since 1h --sudo` |
+| kesalahan di journal | `komando logs TARGET -p err --since 1h --sudo` |
 | update yang menunggu | `komando pkg upgradable TARGET` |
 | update keamanan | `komando pkg security TARGET` |
 | container | `komando docker ps TARGET --all` |
@@ -115,11 +115,11 @@ Pemeriksaan yang punya perintah sendiri bukan recipe:
 | sertifikat | `komando cert check TARGET` |
 | pembersihan Docker | `komando docker prune TARGET --dry-run` |
 
-Untuk menyimpan pemeriksaan Anda sendiri, lihat [Recipe](commands.md#recipes-ready-made-and-saved-commands).
+Untuk menyimpan pemeriksaan sendiri, lihat [Recipe](commands.md#recipes-ready-made-and-saved-commands).
 
 ## Memeriksa sertifikat TLS
 
-`cert check` memberi tahu kapan sertifikat kedaluwarsa, sebelum pengunjung Anda yang tahu. Perintah ini hanya membaca.
+`cert check` memberi tahu kapan sertifikat kedaluwarsa, sebelum pengunjung yang tahu. Perintah ini hanya membaca.
 
 ```bash
 komando cert check web1                               # sertifikat yang dipakai web server di web1
@@ -148,7 +148,7 @@ File `unreadable` dicantumkan tetapi tidak membuat perintah gagal.
 
 ## Memeriksa jaringan dari server
 
-Pemeriksaan ini berjalan *dari* server Anda, jadi Anda melihat apa yang mereka lihat:
+Pemeriksaan ini berjalan *dari* server, jadi terlihat apa yang mereka lihat:
 
 ```bash
 komando net check @web 10.0.0.5:5432 10.0.0.6:6379   # bisakah tiap server membuka koneksi TCP?
@@ -176,7 +176,7 @@ komando net dns web1 example.com --type MX            # MX, TXT, CNAME, NS ... (
 
 ## Batasan
 
-- `facts` memakai sudo hanya bila sudo bekerja tanpa kata sandi; tidak pernah memintanya. Tanpa root atau sudo tanpa kata sandi, hanya program milik Anda di `ports` yang punya nama.
+- `facts` memakai sudo hanya bila sudo bekerja tanpa kata sandi; tidak pernah memintanya. Tanpa root atau sudo tanpa kata sandi, hanya program milik user sendiri di `ports` yang punya nama.
 - `facts` tidak pernah menyegarkan indeks package, jadi `updates` sesegar indeks milik server itu sendiri.
 - Tanggal dukungan mencakup Ubuntu LTS, Debian, RHEL dan turunannya, Alpine, dan Amazon Linux; rilis lain adalah `unknown`.
 - `facts` hanya menyimpan nama, tidak pernah command line atau lingkungan.
@@ -188,7 +188,7 @@ komando net dns web1 example.com --type MX            # MX, TXT, CNAME, NS ... (
 
 ## Pemecahan masalah
 
-| Kode error | Artinya | Yang perlu dilakukan |
+| Kode kesalahan | Artinya | Yang perlu dilakukan |
 |------------|---------|----------------------|
 | `RECIPE_NOT_FOUND` | tidak ada recipe dengan nama itu (exit 3) | lihat daftarnya dengan `komando recipe list`; sebagian pemeriksaan adalah perintah (tabel di atas) |
 | `UNKNOWN_VAR` | `--var` menyebut isian yang tidak dimiliki recipe | periksa isiannya dengan `komando recipe list` |
@@ -198,4 +198,4 @@ komando net dns web1 example.com --type MX            # MX, TXT, CNAME, NS ... (
 | `UNEXPECTED_STATUS` | `net http --expect`: status lain yang kembali (exit 5) | periksa URL dan service di baliknya |
 | `NXDOMAIN` | `net dns`: nama tidak ter-resolve dari server ini (exit 3) | periksa nama dan DNS server (`/etc/resolv.conf`) |
 | `NO_RECORDS` | `net dns`: tidak ada record jenis itu (exit 3) | periksa nama dan `--type` |
-| `DIG_MISSING` | `net dns --type` tidak menemukan `dig` di server, dan komando tidak bisa menanyakan resolver-nya sendiri (tidak ada nameserver, atau tanpa TCP forwarding) | instal package yang disebut error |
+| `DIG_MISSING` | `net dns --type` tidak menemukan `dig` di server, dan komando tidak bisa menanyakan resolver-nya sendiri (tidak ada nameserver, atau tanpa TCP forwarding) | instal package yang disebut kesalahan |
