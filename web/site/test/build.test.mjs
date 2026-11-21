@@ -1,19 +1,49 @@
 // What web/site/build.mjs renders: the home page and the shell the guide and the docs read.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { themeInitScript } from '@efolusi/meridian/marketing/ThemeToggle.js';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { renderHome, renderShell } from '../build.mjs';
 import * as en from '../content/home.en.mjs';
 import * as id from '../content/home.id.mjs';
 
+const MERIDIAN = dirname(createRequire(import.meta.url).resolve('@efolusi/meridian/package.json'));
+const HERE = dirname(fileURLToPath(import.meta.url));
+const INIT = 'assets/meridian/browser/theme-init.js';
 const home = renderHome();
 const shell = renderShell();
 
-test('the theme init script is inline in the head, before any stylesheet', () => {
+test('the theme init script is Meridian\'s file, loaded from the head before any stylesheet', () => {
   const head = home.slice(0, home.indexOf('</head>'));
-  const script = head.indexOf(`<script>${themeInitScript()}</script>`);
-  assert.ok(script > 0, 'themeInitScript missing from <head>');
+  const script = head.indexOf(`<script src="${INIT}"></script>`);
+  assert.ok(script > 0, 'theme-init.js missing from <head>');
   assert.ok(script < head.indexOf('<link rel="stylesheet"'), 'the init script must run before the first stylesheet');
+});
+
+test('no page carries an inline script: the CSP needs no hash', () => {
+  for (const page of [home, renderHome(id), shell.head, shell.footer]) assert.doesNotMatch(page, /<script(?![^>]*\ssrc=)[^>]*>/);
+});
+
+test('the copied theme-init.js and marketing.js are the package files, byte for byte', () => {
+  for (const name of ['theme-init.js', 'theme.js', 'marketing.js']) {
+    const served = readFileSync(join(HERE, '..', 'assets', 'meridian', 'browser', name), 'utf8');
+    assert.equal(served, readFileSync(join(MERIDIAN, 'browser', name), 'utf8'), `${name} differs from @efolusi/meridian`);
+  }
+});
+
+test('Meridian\'s marketing.js runs before site.js, as modules', () => {
+  const marketing = home.indexOf('<script type="module" src="assets/meridian/browser/marketing.js"></script>');
+  assert.ok(marketing > 0 && marketing < home.indexOf('<script type="module" src="assets/site.js"></script>'));
+});
+
+test('the theme button is the plain markup marketing.js wires: three icons, no data-ef-react', () => {
+  const button = /<button[^>]*data-slot="theme-toggle"[^>]*>.*?<\/button>/s.exec(shell.header)[0];
+  assert.doesNotMatch(shell.header, /data-ef-react/);
+  assert.deepEqual([...button.matchAll(/data-theme-icon="([a-z]+)"/g)].map((m) => m[1]).sort(), ['dark', 'light', 'system']);
+  assert.match(button, /data-preference="system"/);
+  assert.match(button, /aria-label="System theme, switch to light theme"/);
 });
 
 test('nothing loads from another origin', () => {
@@ -57,7 +87,7 @@ test('the shell partials carry the root and the current-page markers the builder
   assert.match(shell.header, /data-nav="guide"/);
   assert.match(shell.header, /data-nav="docs"/);
   assert.match(shell.footer, /src="\{\{root\}\}assets\/site\.js"/);
-  assert.ok(shell.head.includes(themeInitScript()));
+  assert.match(shell.head, /<script src="\{\{root\}\}assets\/meridian\/browser\/theme-init\.js"><\/script>/);
 });
 
 const idHome = renderHome(id);

@@ -3,7 +3,8 @@
 //   cd web/site && pnpm install && node build.mjs
 //
 // Writes index.html and id/index.html, the shell partials _shell/{en,id}/{head,header,footer}.html that guide/build.py and
-// scripts/docsgen read, and copies Meridian's CSS and fonts from the pinned package into assets/meridian/. Every output is
+// scripts/docsgen read, and copies Meridian's CSS, fonts and plain browser scripts (browser/theme-init.js, theme.js and
+// marketing.js) from the pinned package into assets/meridian/. Every output is
 // committed, so serving the site needs no build step. Decision: brainOS 05-Knowledge/.../komando/2026-11-20-site-on-meridian-decision.md.
 //
 // In a partial, {{root}} is the way from the page up to web/site/ ("../" or "../../"), data-nav="ID" marks a nav
@@ -21,7 +22,7 @@ import { FeatureCard, FeatureGrid } from '@efolusi/meridian/marketing/FeatureCar
 import { Marquee } from '@efolusi/meridian/marketing/Marquee.js';
 import { SiteHeader } from '@efolusi/meridian/marketing/SiteHeader.js';
 import { SiteFooter } from '@efolusi/meridian/marketing/SiteFooter.js';
-import { ThemeToggle, themeInitScript } from '@efolusi/meridian/marketing/ThemeToggle.js';
+import { LABELS as THEME_LABELS } from '@efolusi/meridian/theme';
 import { Icon } from '@efolusi/meridian/icons/Icon.js';
 import * as en from './content/home.en.mjs';
 import * as id from './content/home.id.mjs';
@@ -53,8 +54,19 @@ const glyph = (name) => readFileSync(join(HERE, 'glyphs', `${name}.svg`), 'utf8'
 const LOGO = '<svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const brand = h(React.Fragment, null, raw('span', LOGO, { className: 'site-logo-wrap' }), 'Komando');
 
-// the icons site.js swaps in when a button changes state
-const SWAP_ICONS = ['sun', 'moon', 'monitor', 'menu', 'x', 'play', 'pause'];
+// the icons site.js swaps in when marketing.js changes a button's state; the theme button holds its three icons itself
+const SWAP_ICONS = ['menu', 'x', 'play', 'pause'];
+
+// Meridian's plain theme button (guidelines/theming.md, Plain HTML sites): marketing.js wires it, the CSS shows the icon
+// of data-preference. The React ThemeToggle marks itself data-ef-react and marketing.js would leave that one alone.
+const THEME_ICONS = [['light', 'sun'], ['dark', 'moon'], ['system', 'monitor']];
+function themeToggle(lang) {
+  const text = THEME_LABELS[lang];
+  return h('button', {
+    type: 'button', 'data-slot': 'theme-toggle', className: 'ef-theme-toggle', 'data-preference': 'system',
+    'aria-label': `${text.system}, ${text.next} ${text.light.toLowerCase()}`, title: text.system,
+  }, THEME_ICONS.map(([preference, name]) => h(Icon, { key: preference, name, size: 20, 'data-theme-icon': preference, 'aria-hidden': 'true' })));
+}
 
 /** Where a link goes from a page: a home section, a site page or an outside address. */
 function target(link, root, home, lang) {
@@ -77,7 +89,7 @@ function header(c, root, home, switchHref) {
   const lang = c.meta.lang;
   const links = c.shell.nav.map((l) => ({ href: target(l, root, home, lang), label: l.label, 'data-nav': l.id }));
   const actions = h(React.Fragment, null,
-    h(ThemeToggle, { lang }),
+    themeToggle(lang),
     h('a', { className: 'ef-btn ef-btn--primary ef-btn--sm', href: target({ section: 'install' }, root, home, lang) }, c.shell.install));
   let html = renderToStaticMarkup(h(SiteHeader, {
     brand, brandHref: home ? './' : `${root}${BASE[lang]}index.html`, brandLabel: c.shell.brandLabel, links, actions,
@@ -103,10 +115,10 @@ function footer(c, root, home, switchHref) {
   const s = switchLink(c, switchHref);
   const bottom = h(React.Fragment, null, h('span', null, c.shell.footer.rights), h('span', null, c.shell.footer.trademarks),
     h('a', { className: 'ef-site-footer__link', href: s.href, hrefLang: s.hrefLang, lang: s.hrefLang, 'aria-label': s.ariaLabel }, s.label));
-  const icons = SWAP_ICONS.map((name) => `<template id="icon-${name}">${renderToStaticMarkup(h(Icon, { name, size: name === 'menu' || name === 'x' ? 20 : name === 'play' || name === 'pause' ? 16 : 20, 'aria-hidden': 'true' }))}</template>`).join('');
+  const icons = SWAP_ICONS.map((name) => `<template id="icon-${name}">${renderToStaticMarkup(h(Icon, { name, size: name === 'play' || name === 'pause' ? 16 : 20, 'aria-hidden': 'true' }))}</template>`).join('');
   return lowerHreflang(renderToStaticMarkup(h(SiteFooter, {
     brand, brandHref: home ? './' : `${root}${BASE[lang]}index.html`, tagline: c.shell.footer.tagline, columns, bottom, lang,
-  }))) + `\n${icons}\n<script type="module" src="${root}assets/site.js"></script>`;
+  }))) + `\n${icons}\n<script type="module" src="${root}assets/meridian/browser/marketing.js"></script>\n<script type="module" src="${root}assets/site.js"></script>`;
 }
 
 /** The part of <head> every page shares, after its own title, description and canonical link. */
@@ -116,8 +128,9 @@ function headShared(root) {
     `<link rel="icon" href="${root}favicon.svg" type="image/svg+xml">`,
     `<meta property="og:image" content="${SITE_URL}share.jpg">`,
     '<meta name="color-scheme" content="light dark">',
-    // before any stylesheet, so the first frame already has the reader's theme
-    `<script>${themeInitScript()}</script>`,
+    // Meridian's file, before any stylesheet, so the first frame already has the reader's theme; same origin, so
+    // script-src 'self' covers it and the CSP holds no hash that a Meridian release could make stale
+    `<script src="${root}assets/meridian/browser/theme-init.js"></script>`,
     `<link rel="preload" href="${root}assets/meridian/assets/fonts/Figtree-Variable.woff2" as="font" type="font/woff2" crossorigin>`,
     `<link rel="stylesheet" href="${root}assets/meridian/styles.css">`,
     `<link rel="stylesheet" href="${root}assets/meridian/landing.css">`,
@@ -277,6 +290,8 @@ function copyMeridian() {
   mkdirSync(out, { recursive: true });
   for (const f of ['styles.css', 'components.css', 'landing.css', 'tokens']) cpSync(join(pkg, f), join(out, f), { recursive: true });
   cpSync(join(pkg, 'assets', 'fonts'), join(out, 'assets', 'fonts'), { recursive: true });
+  mkdirSync(join(out, 'browser'));
+  for (const f of ['theme-init.js', 'theme.js', 'marketing.js']) cpSync(join(pkg, 'browser', f), join(out, 'browser', f));
   cpSync(join(pkg, 'LICENSE'), join(out, 'LICENSE.txt'));
   const { version } = JSON.parse(readFileSync(join(pkg, 'package.json'), 'utf8'));
   writeFileSync(join(out, 'VERSION.txt'), `@efolusi/meridian ${version}\n`);

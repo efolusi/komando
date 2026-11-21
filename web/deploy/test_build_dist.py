@@ -197,6 +197,17 @@ class SymlinkTests(unittest.TestCase):
         headers = (self.out / "_headers").read_text()
         self.assertEqual(len(re.findall(r"'sha256-", headers)), 1)  # the one <script>1</script> of index.html
 
+    def test_a_script_file_needs_no_hash_and_a_data_script_neither(self):
+        # script-src 'self' covers a same-origin <script src>; JSON data blocks are never run
+        for rel in ("guide/start/index.html", "docs/install/index.html"):
+            p = self.site / rel
+            p.write_text(page("x").replace("</head>", '<script src="../../assets/meridian/browser/theme-init.js"></script>\n'
+                                           '<script type="module" src="../../assets/site.js"></script>\n'
+                                           '<script type="application/json">{}</script>\n</head>'))
+        build_dist.main()
+        headers = (self.out / "_headers").read_text()
+        self.assertEqual(len(re.findall(r"'sha256-", headers)), 1)  # still only the <script>1</script> of index.html
+
     def test_sitemap_lists_every_page_with_its_other_language(self):
         build_dist.main()
         xml = (self.out / "sitemap.xml").read_text(encoding="utf-8")

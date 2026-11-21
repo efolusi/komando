@@ -31,7 +31,8 @@ Three things are written at build time, never committed, so they cannot drift fr
 
 The _headers file (Cloudflare Workers static assets read it; wrangler.jsonc serves this folder) sets the Content-Security-Policy and a few other
 safety headers. script-src lists the sha256 hash of every inline <script> in the copied pages, worked out
-now, so a later page edit gets the right hash at the next build.
+now, so a later page edit gets the right hash at the next build. The site has no inline script (Meridian's
+theme-init.js and marketing.js are same-origin files, covered by 'self'), so today the list is empty.
 """
 
 import base64
