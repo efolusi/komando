@@ -101,6 +101,18 @@ func TestIndonesianSourceMustHaveTheEnglishHeadings(t *testing.T) {
 	}
 }
 
+func TestPageWithoutHeadingsStillHasItsAnchorList(t *testing.T) {
+	ids := headingIDs(nil)
+	if ids == nil {
+		t.Fatal("an English page with no headings must still give an empty, non-nil anchor list: the Indonesian twin looks it up by slug")
+	}
+	r := idRenderer()
+	r.fixed = ids
+	if _, _, err := r.run("Teks tanpa judul.\n"); err != nil {
+		t.Fatalf("a twin with no headings against a page with none: %v", err)
+	}
+}
+
 func TestSwitchAndAlternates(t *testing.T) {
 	en := &lang{code: "en"}
 	id := &lang{code: "id", base: "id/", words: testWords}
