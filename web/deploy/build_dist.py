@@ -7,7 +7,7 @@ Run it from the repository root:
 
 Only these parts of web/site are copied (an allowlist):
 
-    index.html, favicon.svg, share.jpg, glyphs/, assets/,
+    index.html, favicon.svg, share.jpg, assets/,
     guide/index.html, guide/<page>/index.html, guide/guide.css,
     docs/index.html, docs/<page>/index.html, docs/docs.css,
     id/index.html, id/guide/index.html, id/guide/<page>/index.html, id/docs/index.html, id/docs/<page>/index.html
@@ -53,7 +53,7 @@ DEFAULT_OUT = REPO / "web" / "dist"
 SITE_URL = "https://komando.efolusi.com/"
 
 TOP_FILES = ["index.html", "favicon.svg", "share.jpg"]
-TOP_DIRS = ["glyphs", "assets"]
+TOP_DIRS = ["assets"]
 GUIDE_FILES = ["guide/index.html", "guide/guide.css"]
 DOCS_FILES = ["docs/index.html", "docs/docs.css"]
 # the Indonesian tree: the homes of the three parts; its pages are found like the English ones

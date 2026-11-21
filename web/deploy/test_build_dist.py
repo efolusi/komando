@@ -47,7 +47,7 @@ class SymlinkTests(unittest.TestCase):
             "index.html": page("t").replace("</head>", "<script>1</script>\n</head>"),
             "favicon.svg": "<svg/>",
             "share.jpg": "jpg",
-            "glyphs/a.svg": "<svg/>",
+            "glyphs/a.svg": "<svg/>",  # a build input, never published
             "assets/site.css": "body{}",
             "guide/index.html": page("g"),
             "guide/guide.css": "p{}",
@@ -268,13 +268,13 @@ class SymlinkTests(unittest.TestCase):
         self.assertIn("User-agent: *\nAllow: /\n", robots)
         self.assertIn("Sitemap: https://komando.efolusi.com/sitemap.xml", robots)
 
+    def test_glyphs_are_a_build_input_and_not_published(self):
+        build_dist.main()
+        self.assertFalse((self.out / "glyphs").exists())
+
     def test_linked_file_in_assets_is_refused(self):
         os.symlink(self.secret, self.site / "assets" / "key.css")
         self.assert_refused("assets/key.css")
-
-    def test_linked_folder_in_glyphs_is_refused(self):
-        os.symlink(self.secret.parent, self.site / "glyphs" / "more")
-        self.assert_refused("glyphs/more")
 
     def test_linked_top_file_is_refused(self):
         (self.site / "favicon.svg").unlink()

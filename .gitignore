@@ -4,5 +4,7 @@ node_modules/
 .env.*
 .wrangler/
 web/dist/
+__pycache__/
+*.pyc
 web/site/.taste-skill/
 web/site/shots/

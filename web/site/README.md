@@ -109,8 +109,8 @@ The site lives in `efolusi/komando`, under `web/site/`. It deploys as a Cloudfla
 `main` (`.github/workflows/deploy-site.yml`). Never serve `web/site` itself; serve what `web/deploy/build_dist.py`
 writes to `web/dist/`:
 
-- It copies only what a visitor needs (an allowlist: `index.html`, `favicon.svg`, `share.jpg`, `glyphs/`, `assets/`,
-  the guide and the docs pages and their CSS, and the same pages under `id/`). `build.mjs`, `content/`, `_shell/`, `test/`, `node_modules/` and the
+- It copies only what a visitor needs (an allowlist: `index.html`, `favicon.svg`, `share.jpg`, `assets/`,
+  the guide and the docs pages and their CSS, and the same pages under `id/`). `build.mjs`, `content/`, `_shell/`, `glyphs/` (inlined into the pages at build time), `test/`, `node_modules/` and the
   notes stay behind. Hidden files and symbolic links are refused.
 - It puts the release marker in the head of every page (see "Where the facts come from"), checks that each page has
   exactly one, and writes `sitemap.xml` (every page, with `hreflang` alternates for the pages that exist in both
