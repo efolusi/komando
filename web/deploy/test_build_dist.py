@@ -199,6 +199,9 @@ class SymlinkTests(unittest.TestCase):
 
     def test_a_script_file_needs_no_hash_and_a_data_script_neither(self):
         # script-src 'self' covers a same-origin <script src>; JSON data blocks are never run
+        for rel in ("assets/meridian/browser/theme-init.js", "assets/site.js"):
+            (self.site / rel).parent.mkdir(parents=True, exist_ok=True)
+            (self.site / rel).write_text("x")
         for rel in ("guide/start/index.html", "docs/install/index.html"):
             p = self.site / rel
             p.write_text(page("x").replace("</head>", '<script src="../../assets/meridian/browser/theme-init.js"></script>\n'
@@ -207,6 +210,15 @@ class SymlinkTests(unittest.TestCase):
         build_dist.main()
         headers = (self.out / "_headers").read_text()
         self.assertEqual(len(re.findall(r"'sha256-", headers)), 1)  # still only the <script>1</script> of index.html
+
+    def test_assets_are_revalidated_on_every_use(self):
+        # a cached old script or stylesheet must never sit beside a new page, so /assets/* is never served from cache blind
+        build_dist.main()
+        headers = (self.out / "_headers").read_text()
+        block = headers.split("/assets/*", 1)[1].split("\n\n", 1)[0]
+        self.assertIn("Cache-Control: no-cache", block)
+        self.assertNotIn("max-age", block)
+        self.assertNotIn("immutable", block)
 
     def test_sitemap_lists_every_page_with_its_other_language(self):
         build_dist.main()

@@ -99,7 +99,11 @@ OTHER_HEADERS = [
 
 # the asset file names carry no version, so a year-long "immutable" cache would keep an old script after
 # a change; one week, then the browser checks again (and may use the old copy while it does)
-ASSET_CACHE = "public, max-age=604800, stale-while-revalidate=86400"
+# Files under /assets/ keep their names across releases, and pages import other files (a script imports
+# theme.js, a stylesheet @imports its tokens) without any version in the link. A week-long cache therefore kept
+# an old file beside a new page (the old theme.js reset the theme to dark). no-cache makes the browser ask each
+# time; Workers static assets answer with an ETag, so an unchanged file costs a 304, not a download.
+ASSET_CACHE = "no-cache"
 
 
 def fail(message):
