@@ -5,9 +5,14 @@ Command line komando gratis dan open source, dan aplikasi Komando untuk Mac, iPh
 ## Yang gratis sekarang
 
 - Setiap perintah, dalam teks atau JSON, di mesin Anda sendiri.
-- Tab terminal, klien database, dan port forwarding di aplikasi.
-- Perbaikan sekali klik, agen, dan menu bar di aplikasi.
 - Tanpa akun dan tanpa masa uji coba.
+
+## Gratis saat aplikasinya terbit
+
+Aplikasinya belum terbit. Saat terbit, aplikasi gratis tanpa masa uji coba:
+
+- Tab terminal, klien database, dan port forwarding.
+- Perbaikan sekali klik, agen, dan menu bar.
 
 ## Yang rencananya ditambahkan paket ini
 
