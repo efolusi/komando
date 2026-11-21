@@ -67,7 +67,7 @@ komando host edit web1 --protected
 komando guide install
 ```
 
-Perintah ini menghubungkan agen Anda (Claude Code, Codex, Cursor, atau Gemini CLI) ke komando. Kata sandi tetap di vault komando, dan agen tidak pernah melihatnya. Jalankan lagi setiap kali selesai `komando update`. [Skill agen](agent-skill.md) menjelaskan apa yang dipasangnya dan apa yang tetap bertanya dulu kepada Anda.
+Perintah ini menghubungkan agen Anda (Claude Code, Codex, Cursor, atau Gemini CLI) ke komando. Kata sandi tetap di vault komando, dan agen tidak pernah mendapatkannya dari sana. Jalankan lagi setiap kali selesai `komando update`. [Skill agen](agent-skill.md) menjelaskan apa yang dipasangnya dan apa yang tetap bertanya dulu kepada Anda.
 
 ## Langkah berikutnya
 

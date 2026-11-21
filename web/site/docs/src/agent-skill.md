@@ -8,7 +8,7 @@
 komando guide install
 ```
 
-This connects your agent (Claude Code, Codex, Cursor or Gemini CLI) to komando. It sets up komando's skill and a guard for the agents you use. Passwords stay in komando's vault, and the agent never sees them.
+This connects your agent (Claude Code, Codex, Cursor or Gemini CLI) to komando. It sets up komando's skill and a guard for the agents you use. Passwords stay in komando's vault, and the agent never gets them from it.
 
 An agent finds komando in two ways:
 
@@ -25,7 +25,7 @@ Scripts, and you at your own terminal, are not treated as an agent. An agent tha
 
 - Run komando commands. When an agent runs komando through a pipe, it gets one JSON object instead of text ([Results and errors](output.md#read-a-result)).
 - Read by default. `db query`, `cache run` and `cluster run` only read unless `--write` is added ([Safety](safety.md#the-seatbelts)).
-- Read a file that is secret by its name, such as `.env`, with `fs cat`. The secret values show as `[hidden]`.
+- Read a file that is secret by its name, such as `.env`, with `fs cat`. The secret values komando recognises show as `[hidden]`.
 - Put a secret on a server without seeing it. `fs replace` with `{{secret:NAME}}` in `--new` writes the vault value, once you allow it in the window below.
 - Rename a secret with `secret rename`, without seeing it. Every reference follows.
 
@@ -42,9 +42,10 @@ Some commands only a person runs, at their own terminal: `secret set` and `secre
 
 More in [Safety](safety.md#seatbelts-for-ai-agents).
 
-## What an agent never sees
+## What an agent does not get
 
-- Passwords, keys and tokens in any output show as `[hidden]`. You and your scripts see the real values.
+- Vault values are never shown to an agent.
+- In output from servers, files and databases, komando hides the passwords, keys and tokens it recognises as `[hidden]`. You and your scripts see the real values. Masking is a best effort: a secret under an unusual name, or a very short one, can still get through. See the [limits](safety.md#limits) on the Safety page.
 - `secret show --reveal` is for a person. An AI agent never can.
 - An agent cannot copy a file that is secret by its name (`.env`, private keys, `credentials`) to this computer.
 - When a command takes a local file, komando does not read `~/.komando`, private keys, credential stores or files that are secret by name for an agent.

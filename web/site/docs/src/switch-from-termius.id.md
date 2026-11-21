@@ -53,7 +53,7 @@ Kalau diketik tanpa argumen di terminal Anda, sebagian besar perintah ini menany
 ## Yang berbeda
 
 - **Ini command line.** Setiap tugas adalah perintah yang bisa Anda ketik, taruh di script, atau serahkan ke agen AI. Aplikasi Komando gratis untuk Mac, iPhone, dan iPad yang menjalankan perintah yang sama menyusul; [panduan pengguna](site:guide/) menjelaskannya.
-- **Agen AI memakainya dengan aman.** Kata sandi tetap di vault komando, dan agen tidak pernah melihatnya. Hubungkan agen Anda dengan `komando guide install` ([Mulai](getting-started.md#5-connect-your-ai-agent)).
+- **Agen AI memakainya dengan aman.** Kata sandi tetap di vault komando, dan agen tidak pernah mendapatkannya dari sana. Hubungkan agen Anda dengan `komando guide install` ([Mulai](getting-started.md#5-connect-your-ai-agent)).
 - **Production bertanya dulu.** Tandai server dengan `komando host edit web1 --protected`, dan setiap perubahan di server itu butuh persetujuan Anda ([Keamanan](safety.md)).
 - **Lebih dari server.** Daftar yang sama menyimpan database, cache, queue, storage, cluster, dan VPN.
 - **Catatan semua tindakan.** `komando audit` menampilkan apa yang dilakukan, dan oleh siapa.

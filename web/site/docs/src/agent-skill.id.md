@@ -8,7 +8,7 @@
 komando guide install
 ```
 
-Perintah ini menghubungkan agen Anda (Claude Code, Codex, Cursor, atau Gemini CLI) ke komando. Perintah itu memasang skill komando dan guard untuk agen yang Anda pakai. Kata sandi tetap di vault komando, dan agen tidak pernah melihatnya.
+Perintah ini menghubungkan agen Anda (Claude Code, Codex, Cursor, atau Gemini CLI) ke komando. Perintah itu memasang skill komando dan guard untuk agen yang Anda pakai. Kata sandi tetap di vault komando, dan agen tidak pernah mendapatkannya dari sana.
 
 Agen menemukan komando lewat dua cara:
 
@@ -25,7 +25,7 @@ Script, dan Anda di terminal sendiri, tidak diperlakukan sebagai agen. Agen yang
 
 - Menjalankan perintah komando. Saat agen menjalankan komando lewat pipe, agen mendapat satu objek JSON, bukan teks ([Hasil dan error](output.md#read-a-result)).
 - Membaca secara bawaan. `db query`, `cache run`, dan `cluster run` hanya membaca kecuali `--write` ditambahkan ([Keamanan](safety.md#the-seatbelts)).
-- Membaca file yang merupakan secret menurut namanya, seperti `.env`, dengan `fs cat`. Nilai secret-nya tampil sebagai `[hidden]`.
+- Membaca file yang merupakan secret menurut namanya, seperti `.env`, dengan `fs cat`. Nilai secret yang dikenali komando tampil sebagai `[hidden]`.
 - Menaruh secret di server tanpa melihatnya. `fs replace` dengan `{{secret:NAME}}` di `--new` menulis nilai dari vault, setelah Anda mengizinkannya di jendela di bawah.
 - Mengganti nama secret dengan `secret rename`, tanpa melihatnya. Setiap rujukan ikut berganti.
 
@@ -42,9 +42,10 @@ Beberapa perintah hanya dijalankan orang, di terminalnya sendiri: `secret set` d
 
 Selengkapnya di [Keamanan](safety.md#seatbelts-for-ai-agents).
 
-## Yang tidak pernah dilihat agen
+## Yang tidak didapat agen
 
-- Kata sandi, key, dan token di output apa pun tampil sebagai `[hidden]`. Anda dan script Anda melihat nilai sebenarnya.
+- Nilai di vault tidak pernah ditampilkan ke agen.
+- Di output dari server, file, dan database, komando menyembunyikan kata sandi, key, dan token yang dikenalinya sebagai `[hidden]`. Anda dan script Anda melihat nilai sebenarnya. Penyamaran ini bersifat upaya terbaik: secret dengan nama tak lazim, atau yang sangat pendek, masih bisa lolos. Lihat [batasannya](safety.md#limits) di halaman Keamanan.
 - `secret show --reveal` hanya untuk orang. Agen AI tidak pernah bisa.
 - Agen tidak bisa menyalin file yang merupakan secret menurut namanya (`.env`, private key, `credentials`) ke komputer ini.
 - Saat perintah menerima file lokal, komando tidak membaca `~/.komando`, private key, credential store, atau file yang merupakan secret menurut namanya untuk agen.
