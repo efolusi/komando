@@ -144,3 +144,38 @@ func TestSwitchAndAlternates(t *testing.T) {
 		t.Errorf("without twin:\n%s", without)
 	}
 }
+
+func TestEverySlugOfSectionsIsListedOnce(t *testing.T) {
+	seen := map[string]string{}
+	for _, s := range sections {
+		if len(s.slugs) == 0 {
+			t.Fatalf("section %q is empty", s.name)
+		}
+		for _, slug := range s.slugs {
+			if other, dup := seen[slug]; dup {
+				t.Fatalf("%q is in both %q and %q", slug, other, s.name)
+			}
+			seen[slug] = s.name
+		}
+	}
+}
+
+func TestPlaceOrdersPagesBySectionAndNamesTheirGroup(t *testing.T) {
+	var pages []*page
+	for i := len(sections) - 1; i >= 0; i-- { // reversed on purpose
+		for j := len(sections[i].slugs) - 1; j >= 0; j-- {
+			pages = append(pages, &page{slug: sections[i].slugs[j]})
+		}
+	}
+	placed := place(pages)
+	if len(placed) != len(pages) {
+		t.Fatalf("placed %d pages, want %d", len(placed), len(pages))
+	}
+	if placed[0].slug != sections[0].slugs[0] || placed[0].group != sections[0].name {
+		t.Fatalf("first page = %s in %q, want %s in %q", placed[0].slug, placed[0].group, sections[0].slugs[0], sections[0].name)
+	}
+	last := sections[len(sections)-1]
+	if got := placed[len(placed)-1]; got.slug != last.slugs[len(last.slugs)-1] || got.group != last.name {
+		t.Fatalf("last page = %s in %q", got.slug, got.group)
+	}
+}

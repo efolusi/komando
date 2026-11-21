@@ -40,8 +40,49 @@ import (
 // The komando repository's docs on GitHub, for links to files that are not built here.
 const repoBlob = "https://github.com/sgnd/komando/blob/main/docs/features/"
 
-// sitePages lists this site's own pages (in <out>/src), first on the docs home, in this order.
-var sitePages = []string{"getting-started", "switch-from-termius"}
+// sitePages lists this site's own pages (in <out>/src).
+var sitePages = []string{"getting-started", "switch-from-termius", "cloud-plan"}
+
+// sections is the command line docs grouped for the docs home and the side navigation, in order. Every page is in
+// exactly one section; a page that is in none stops the build, so a new feature page is placed on purpose.
+var sections = []struct {
+	name  string
+	slugs []string
+}{
+	{"Start here", []string{"getting-started", "install", "switch-from-termius"}},
+	{"What komando manages", []string{"servers", "databases", "caches", "queues", "storage", "files", "cluster", "registry", "vpn", "cloud", "tunnels", "windows", "targets", "system", "health"}},
+	{"Safety and secrets", []string{"safety", "secrets", "security-standards", "rotate"}},
+	{"Reference", []string{"commands", "output", "error-codes", "settings", "glossary", "import"}},
+	{"Cloud plan", []string{"cloud-plan"}},
+}
+
+// place puts every page in its section and in the order of sections.
+func place(pages []*page) []*page {
+	at := map[string]int{}
+	var placed []*page
+	for _, s := range sections {
+		for _, slug := range s.slugs {
+			at[slug] = len(at) + 1
+			var found *page
+			for _, p := range pages {
+				if p.slug == slug {
+					found = p
+				}
+			}
+			if found == nil {
+				fail("section %q lists %q, which is not a page", s.name, slug)
+			}
+			found.group = s.name
+			placed = append(placed, found)
+		}
+	}
+	for _, p := range pages {
+		if at[p.slug] == 0 {
+			fail("page %q is in no section of sections in scripts/docsgen/main.go", p.slug)
+		}
+	}
+	return placed
+}
 
 type page struct {
 	slug, group, title, lead string
@@ -146,7 +187,7 @@ func build(src, out string) {
 	readme := read(filepath.Join(src, "README.md"))
 	var pages []*page
 	for _, slug := range sitePages {
-		pages = append(pages, load(filepath.Join(out, "src", slug+".md"), slug, "Start here", true))
+		pages = append(pages, load(filepath.Join(out, "src", slug+".md"), slug, "", true))
 	}
 	summary := map[string]string{}
 	seen := map[string]bool{}
@@ -157,15 +198,15 @@ func build(src, out string) {
 		}
 		seen[m[2]] = true
 		summary[m[2]] = m[3]
-		pages = append(pages, load(filepath.Join(src, m[2]+".md"), m[2], "Features", false))
+		pages = append(pages, load(filepath.Join(src, m[2]+".md"), m[2], "", false))
 	}
-	// a feature page the table does not list yet still gets built, under "More"
+	// a feature page the table does not list yet is loaded too; place() stops the build if no section has it
 	files, _ := filepath.Glob(filepath.Join(src, "*.md"))
 	sort.Strings(files)
 	for _, f := range files {
 		slug := strings.TrimSuffix(filepath.Base(f), ".md")
 		if slug != "README" && !seen[slug] {
-			pages = append(pages, load(f, slug, "More", false))
+			pages = append(pages, load(f, slug, "", false))
 		}
 	}
 	slugs := map[string]bool{}
@@ -175,6 +216,7 @@ func build(src, out string) {
 		}
 		slugs[p.slug] = true
 	}
+	pages = place(pages)
 
 	ref := gitRef(src)
 	// the pages that have an Indonesian twin, in the same order
@@ -247,12 +289,9 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 	}
 	fmt.Fprintf(&b, `<p>%s %s %s <a href="getting-started/">%s</a>.</p>`, esc(l.ui("How to use komando, the free command line for your servers, databases, caches, queues and more, for people and AI agents.")),
 		esc(l.ui("One page per feature.")), esc(l.ui("New to komando? Start with")), esc(start))
-	fmt.Fprintf(&b, `<p>%s %s <code>komando &lt;command&gt; --help</code>. %s <a href="../guide/">%s</a>.</p>`,
+	fmt.Fprintf(&b, `<p>%s %s <code>komando &lt;command&gt; --help</code>.</p>`,
 		strings.Replace(esc(l.ui("Commands, flags and file paths are in {mono}.")), "{mono}", "<code>mono</code>", 1),
-		esc(l.ui("Help for any command:")), esc(l.ui("Looking for the Mac, iPhone and iPad apps? Read the")), esc(l.ui("user guide")))
-	if l.code == "id" {
-		fmt.Fprintf(&b, `<p>%s <a href="../../docs/">%s</a>.</p>`, esc(l.ui("Only some docs pages are translated so far; the rest are in English:")), esc(l.ui("all docs pages in English")))
-	}
+		esc(l.ui("Help for any command:")))
 	b.WriteString(`</div>`)
 	group := ""
 	for _, p := range pages {
@@ -271,6 +310,9 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 			esc(p.slug), esc(p.title), plain(sum, l))
 	}
 	b.WriteString("</div></section>")
+	// the apps have their own user guide, a group of the docs home
+	fmt.Fprintf(&b, `<section class="g-group" id="apps"><h2>%s</h2><div class="g-cards"><a class="g-card" href="../guide/"><span class="g-card__title">%s</span><span class="g-small g-muted">%s</span></a></div></section>`,
+		esc(l.ui("Apps")), esc(l.ui("User guide")), esc(l.ui("How to use Komando on Mac, iPhone and iPad, one page per task.")))
 	if l.code == "en" {
 		fmt.Fprintf(&b, `<p class="g-path g-small g-muted">Built from <a href="https://github.com/sgnd/komando/tree/main/docs/features">docs/features</a> in sgnd/komando%s.</p>`, refText(ref))
 	}
@@ -789,10 +831,7 @@ func sidebar(l *lang, pages []*page, current string) string {
 		fmt.Fprintf(&b, `<li><a href="%s%s/"%s>%s</a></li>`, up, p.slug, cur, esc(p.title))
 	}
 	b.WriteString("</ul>")
-	if l.code == "id" {
-		// the pages that are not translated yet are the English docs
-		fmt.Fprintf(&b, `<p class="g-side__home"><a href="%s../../docs/" hreflang="en" lang="en">%s</a></p>`, up, esc(l.ui("all docs pages in English")))
-	}
+	fmt.Fprintf(&b, `<p class="g-label g-side__group">%s</p><ul><li><a href="%s../guide/">%s</a></li></ul>`, esc(l.ui("Apps")), up, esc(l.ui("User guide")))
 	home, homeCur := up, ""
 	if current == "" {
 		home, homeCur = "./", ` aria-current="page"`

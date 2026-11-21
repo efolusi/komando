@@ -29,6 +29,14 @@ python3 -I web/deploy/test_build_dist.py && python3 -I web/deploy/build_dist.py
 
 A Meridian upgrade is a version bump in `package.json` and `pnpm-workspace.yaml`, then the same commands.
 
+## Docs groups
+
+The docs home and the side navigation group the pages in the same order, in both languages (plan: brainOS `komando/2026-11-21-docs-grouping-plan.md`):
+
+- **Command line:** the sections in `sections` in `scripts/docsgen/main.go` (Start here, What komando manages, Safety and secrets, Reference). A page in no section stops the build, so a new feature page is placed on purpose. The section names are translated in `i18n/docs.id.json`.
+- **Apps:** the user guide (`/guide/`, URLs unchanged), shown on the docs home and in the side navigation under "Apps".
+- **Cloud plan:** `docs/src/cloud-plan.md` and `.id.md`. The plan is not live: the page says so and names no price or date. Write the real pages at private beta.
+
 ## Languages
 
 English is at `/`, Indonesian at `/id/`. Same slugs, so a switch between languages is one prefix
