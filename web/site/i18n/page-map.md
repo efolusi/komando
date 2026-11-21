@@ -1,6 +1,6 @@
 # Page map
 
-The site has 55 pages (counted 2026-11-20: home 1, guide 25, docs 29). The home page, the 25 guide pages and 3 docs pages (the docs home and 2 site pages) have an Indonesian twin under `/id/` (29 pages); the 26 docs feature pages follow as their Indonesian sources are written. Paths keep the English slugs, so a switch between languages is one prefix.
+The site has 55 pages (counted 2026-11-21: home 1, guide 25, docs 29). Every page has an Indonesian twin under `/id/` (55 pages in all). Paths keep the English slugs, so a switch between languages is one prefix.
 
 | Page | English | Indonesian | Built by | Source |
 |---|---|---|---|---|
@@ -8,7 +8,7 @@ The site has 55 pages (counted 2026-11-20: home 1, guide 25, docs 29). The home 
 | User guide home | `/guide/` | `/id/guide/` | `guide/build.py` | `PAGES` in `guide/build.py`, `i18n/guide.id.json` |
 | User guide pages (24) | `/guide/<slug>/` | `/id/guide/<slug>/` | `guide/build.py` | `guide/src/<slug>.md`, `guide/src/<slug>.id.md` (the "What is coming" page: `COMING` in `guide/build.py`, `i18n/guide.id.json`) |
 | Docs home | `/docs/` | `/id/docs/` | `scripts/docsgen` | komando `docs/features/README.md`, `i18n/docs.id.json` (the Indonesian home lists the pages that have a twin) |
-| Docs feature pages (26) | `/docs/<slug>/` | `/id/docs/<slug>/` once translated | `scripts/docsgen` | komando `docs/features/<slug>.md`, Indonesian twin in `docs/src/<slug>.id.md` (none yet) |
+| Docs feature pages (26) | `/docs/<slug>/` | `/id/docs/<slug>/` | `scripts/docsgen` | komando `docs/features/<slug>.md`, Indonesian twin in `docs/src/<slug>.id.md` |
 | Docs site pages (2) | `/docs/getting-started/`, `/docs/switch-from-termius/` | `/id/docs/getting-started/`, `/id/docs/switch-from-termius/` | `scripts/docsgen` | `docs/src/<slug>.md`, `docs/src/<slug>.id.md` |
 | 404 | (Worker default) | (Worker default) | none yet | add one page per language with W01 |
 

@@ -173,7 +173,7 @@ komando user rm web1 alice --remove-home --dry-run
 ```
 
 - `user add` aman dijalankan lagi: user yang sudah ada tidak dibuat dua kali, tetapi shell, key, dan grup admin-nya disesuaikan. `--key` mengotorisasi key dari daftar key komando, `--pubkey` sebaris key, dan `--admin` menambahkan user ke grup `sudo` (Debian) atau `wheel` (RHEL, Alpine). Berikan `--key` atau `--pubkey`, tidak keduanya.
-- `user lock` mengunci kata sandi dan mengedarluwarsakan akun, sehingga SSH key juga berhenti berfungsi, tanpa menghapus apa pun. Mengunci atau menghapus `root` atau user yang dipakai komando untuk login butuh `--allow-dangerous`: komando tidak bisa login sesudahnya untuk membatalkannya, dan root adalah akun yang memperbaiki server. Hal yang sama berlaku untuk `user add --shell` dengan shell yang tidak bisa dipakai login siapa pun (`/usr/sbin/nologin`, `/bin/false`) untuk kedua akun itu.
+- `user lock` mengunci kata sandi dan membuat akun kedaluwarsa, sehingga SSH key juga berhenti berfungsi, tanpa menghapus apa pun. Mengunci atau menghapus `root` atau user yang dipakai komando untuk login butuh `--allow-dangerous`: komando tidak bisa login sesudahnya untuk membatalkannya, dan root adalah akun yang memperbaiki server. Hal yang sama berlaku untuk `user add --shell` dengan shell yang tidak bisa dipakai login siapa pun (`/usr/sbin/nologin`, `/bin/false`) untuk kedua akun itu.
 - `user list` membaca status kunci lewat sudo (`--no-sudo` menghilangkannya). `admin_group` berarti "ada di grup sudo, wheel, atau admin"; aturan di `sudoers.d` tidak dibaca.
 - `user rm` menghapus untuk selamanya: di terminal Anda komando meminta Anda mengetik nama server; agen AI atau script menambahkan `--allow-dangerous` setelah seseorang setuju. Coba `--dry-run` dulu.
 
