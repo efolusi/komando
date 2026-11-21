@@ -14,7 +14,7 @@ The static site for the free komando command line and the free Komando apps: the
 | `guide/<page>/index.html`, `id/guide/<page>/index.html` | `guide/build.py` | `guide/src/*.md` and `guide/src/*.id.md`, framed by the shell partials; the Indonesian words are in `i18n/guide.id.json` |
 | `docs/<page>/index.html`, `id/docs/<page>/index.html` | `scripts/docsgen` | komando's `docs/features` and `docs/src/*.md`, and `docs/src/*.id.md`, framed by the shell partials; the Indonesian words are in `i18n/docs.id.json` |
 | `assets/site.css` | by hand | the site's layer on Meridian's tokens, and the drawn app screens (`.kmd`) on the apps' own tokens |
-| `assets/site.js` | by hand | the theme button (Light, Dark, System; `localStorage` `efolusi-theme`, cookie `efolusi_theme`), the header menu, the Marquee pause, the Copy buttons and the folding page list, following Meridian's `ThemeToggle`, `SiteHeader` and `Marquee`. It becomes an import once Meridian 1.27.0 ships these as plain scripts (MD14) |
+| `assets/site.js` | by hand | what Meridian's plain `browser/marketing.js` does not cover: the menu and Marquee icons, the Copy buttons and the folding page list. The theme button (Light, Dark, System; `localStorage` `efolusi-theme`, cookie `efolusi_theme`), the header menu and the Marquee pause are `marketing.js`, loaded before `site.js`; `build.mjs` copies it, `theme.js` and `theme-init.js` from the package into `assets/meridian/browser/` |
 
 Build everything, in this order (the guide and the docs read the shell, so build it first). Each builder writes
 both languages:
@@ -106,8 +106,8 @@ writes to `web/dist/`:
   exactly one, and writes `sitemap.xml` (every page, with `hreflang` alternates for the pages that exist in both
   languages) and `robots.txt` (everything allowed, the sitemap's address).
 - It writes `_headers`: a Content-Security-Policy whose `script-src` is `'self'`, Cloudflare's analytics beacon and
-  the sha256 of every inline script (only Meridian's theme init script, one hash for every page), worked out at
-  each build; `frame-ancestors 'none'`, HSTS, `nosniff`, a strict referrer policy and a one-week cache for
+  the sha256 of every inline script, worked out at each build (the site has none: Meridian's `theme-init.js` is a
+  same-origin file in the head, so `'self'` covers it and no Meridian release can make a hash stale); `frame-ancestors 'none'`, HSTS, `nosniff`, a strict referrer policy and a one-week cache for
   `/assets/*`. Nothing loads from a CDN: Meridian's CSS and fonts are served from `assets/meridian/`. Styles allow
   `'unsafe-inline'` for the `style="..."` attributes on the drawn app screens and Meridian's icons.
 

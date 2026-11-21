@@ -12,7 +12,7 @@
 <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://komando.efolusi.com/share.jpg">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var s=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light',c=null,t;try{c=localStorage.getItem('efolusi-theme')}catch(e){}if(c==='light'||c==='dark')t=c;else if(c==='system')t=s;else{var m=document.cookie.match(/(?:^|;\s*)efolusi_theme=(dark|light)(?:;|$)/);t=m?m[1]:s}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme')}catch(e){}})();</script>
+<script src="../../../assets/meridian/browser/theme-init.js"></script>
 <link rel="preload" href="../../../assets/meridian/assets/fonts/Figtree-Variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../../assets/meridian/styles.css">
 <link rel="stylesheet" href="../../../assets/meridian/landing.css">
@@ -21,15 +21,39 @@
 <!-- built by guide/build.py from guide/src/; edit the source, not this file -->
 </head>
 <body>
-<a href="#top" class="ef-skip">Langsung ke konten</a><header data-slot="site-header" class="ef-site-header"><div class="ef-site-header__inner"><a class="ef-site-header__brand" href="../../../id/index.html" aria-label="Beranda Komando"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><nav class="ef-site-header__nav" aria-label="Utama"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a></nav><div class="ef-site-header__actions"><a class="ef-site-header__link" href="../../../guide/the-window/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><button type="button" data-slot="theme-toggle" data-preference="system" class="ef-theme-toggle" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<a href="#top" class="ef-skip">Langsung ke konten</a><header data-slot="site-header" class="ef-site-header"><div class="ef-site-header__inner"><a class="ef-site-header__brand" href="../../../id/index.html" aria-label="Beranda Komando"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><nav class="ef-site-header__nav" aria-label="Utama"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a></nav><div class="ef-site-header__actions"><a class="ef-site-header__link" href="../../../guide/the-window/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><button type="button" data-slot="theme-toggle" class="ef-theme-toggle" data-preference="system" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span data-theme-icon="light" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span><span data-theme-icon="system" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <rect width="20" height="14" x="2" y="3" rx="2"></rect>
   <line x1="8" x2="16" y1="21" y2="21"></line>
   <line x1="12" x2="12" y1="17" y2="21"></line>
-</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../../id/index.html#install">Instal komando</a></div><button type="button" class="ef-site-header__menu" aria-expanded="false" aria-controls="site-menu" aria-label="Menu"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+</svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="../../../id/index.html#install">Instal komando</a></div><button type="button" class="ef-site-header__menu" aria-expanded="false" aria-controls="site-menu" aria-label="Menu"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="M4 5h16"></path>
   <path d="M4 12h16"></path>
   <path d="M4 19h16"></path>
-</svg></span></button></div><div id="site-menu" class="ef-site-header__panel"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a><a class="ef-site-header__link" href="../../../guide/the-window/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><div class="ef-site-header__panel-actions"><button type="button" data-slot="theme-toggle" data-preference="system" class="ef-theme-toggle" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+</svg></span></button></div><div id="site-menu" class="ef-site-header__panel"><a class="ef-site-header__link" href="../../../id/index.html#inventory" data-nav="product">Produk</a><a class="ef-site-header__link" href="../../../id/index.html#safety" data-nav="safety">Keamanan</a><a class="ef-site-header__link" href="../../../id/index.html#agent" data-nav="agent">Agen</a><a class="ef-site-header__link" href="../../../id/index.html#editions" data-nav="editions">Edisi</a><a class="ef-site-header__link" href="../../../id/guide/" data-nav="guide">Panduan</a><a class="ef-site-header__link" href="../../../id/docs/" data-nav="docs">Dokumentasi</a><a class="ef-site-header__link" href="../../../guide/the-window/" hreflang="en" lang="en" aria-label="Read this page in English">English</a><div class="ef-site-header__panel-actions"><button type="button" data-slot="theme-toggle" class="ef-theme-toggle" data-preference="system" aria-label="Tema sistem, ganti ke tema terang" title="Tema sistem"><span data-theme-icon="light" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2"></path>
+  <path d="M12 20v2"></path>
+  <path d="m4.93 4.93 1.41 1.41"></path>
+  <path d="m17.66 17.66 1.41 1.41"></path>
+  <path d="M2 12h2"></path>
+  <path d="M20 12h2"></path>
+  <path d="m6.34 17.66-1.41 1.41"></path>
+  <path d="m19.07 4.93-1.41 1.41"></path>
+</svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+</svg></span><span data-theme-icon="system" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <rect width="20" height="14" x="2" y="3" rx="2"></rect>
   <line x1="8" x2="16" y1="21" y2="21"></line>
   <line x1="12" x2="12" y1="17" y2="21"></line>
@@ -55,35 +79,20 @@
 <h2 id="on-iphone-and-ipad">Di iPhone dan iPad</h2>
 <p>Tidak ada yang berubah di sana. Ponsel punya lima tempat: <b>Home</b>, <b>Targets</b>, <b>Recipes</b>, <b>Agent</b>, dan <b>Settings</b>. Files di ponsel menyusul. <a class="g-pill" href="../coming/#phone-files" title="Files di iPhone dan iPad: belum dibuat">Segera</a></p></div><nav class="g-pager" aria-label="Halaman sebelumnya dan berikutnya"><a class="g-pn g-pn--prev" href="../home-and-findings/"><span class="g-label g-muted">Sebelumnya</span>Home dan temuan</a><a class="g-pn g-pn--next" href="../open-a-terminal/"><span class="g-label g-muted">Berikutnya</span>Membuka terminal</a></nav><p class="g-path g-small g-muted">Link bantuan untuk halaman ini: <code>/id/guide/the-window/</code></p></article></div></main>
 <footer data-slot="site-footer" class="ef-site-footer"><div class="ef-site-footer__inner"><div class="ef-site-footer__top"><div class="ef-site-footer__brand"><a class="ef-site-footer__brand-link" href="../../../id/index.html"><span class="site-logo-wrap"><svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Komando</a><p class="ef-site-footer__tagline">Satu command line yang aman untuk pekerjaan DevOps.</p></div><nav aria-label="Command line"><h2 class="ef-site-footer__heading">Command line</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../../id/index.html#inventory">Inventaris</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#safety">Keamanan</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#install">Instal</a></li><li><a class="ef-site-footer__link" href="../../../id/docs/">Dokumentasi</a></li><li><a class="ef-site-footer__link" href="https://github.com/sgnd/komando" target="_blank" rel="noopener noreferrer">Kode sumber di GitHub<span class="ef-site-footer__sr"> (membuka tab baru)</span></a></li></ul></nav><nav aria-label="Aplikasi Komando"><h2 class="ef-site-footer__heading">Aplikasi Komando</h2><ul class="ef-site-footer__list"><li><a class="ef-site-footer__link" href="../../../id/index.html#agent">Agen</a></li><li><a class="ef-site-footer__link" href="../../../id/index.html#editions">Edisi</a></li><li><a class="ef-site-footer__link" href="../../../id/guide/">Panduan</a></li></ul></nav></div><div class="ef-site-footer__bottom"><span>© 2026 Komando</span><span>Nama produk dan logo adalah merek dagang pemiliknya.</span><a class="ef-site-footer__link" href="../../../guide/the-window/" hreflang="en" lang="en" aria-label="Read this page in English">English</a></div></div></footer>
-<template id="icon-sun"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="12" cy="12" r="4"></circle>
-  <path d="M12 2v2"></path>
-  <path d="M12 20v2"></path>
-  <path d="m4.93 4.93 1.41 1.41"></path>
-  <path d="m17.66 17.66 1.41 1.41"></path>
-  <path d="M2 12h2"></path>
-  <path d="M20 12h2"></path>
-  <path d="m6.34 17.66-1.41 1.41"></path>
-  <path d="m19.07 4.93-1.41 1.41"></path>
-</svg></span></template><template id="icon-moon"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-</svg></span></template><template id="icon-monitor"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
-  <line x1="8" x2="16" y1="21" y2="21"></line>
-  <line x1="12" x2="12" y1="17" y2="21"></line>
-</svg></span></template><template id="icon-menu"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<template id="icon-menu"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="M4 5h16"></path>
   <path d="M4 12h16"></path>
   <path d="M4 19h16"></path>
-</svg></span></template><template id="icon-x"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:20px;height:20px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+</svg></span></template><template id="icon-x"><span aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="M18 6 6 18"></path>
   <path d="m6 6 12 12"></path>
-</svg></span></template><template id="icon-play"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:16px;height:16px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+</svg></span></template><template id="icon-play"><span aria-hidden="true" data-slot="icon" data-size="16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
-</svg></span></template><template id="icon-pause"><span aria-hidden="true" data-slot="icon" style="display:inline-flex;flex:none;width:16px;height:16px;color:inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+</svg></span></template><template id="icon-pause"><span aria-hidden="true" data-slot="icon" data-size="16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <rect x="14" y="3" width="5" height="18" rx="1"></rect>
   <rect x="5" y="3" width="5" height="18" rx="1"></rect>
 </svg></span></template>
+<script type="module" src="../../../assets/meridian/browser/marketing.js"></script>
 <script type="module" src="../../../assets/site.js"></script>
 </body>
 </html>

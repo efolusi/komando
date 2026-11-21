@@ -106,3 +106,31 @@ test('an Indonesian page says nothing English about itself in its head', () => {
     assert.ok(!/ · Komando guide| · komando docs/.test(title), `${p.rel}: title ${title}`);
   }
 });
+
+const hasInlineScript = (html) => /<script(?![^>]*\ssrc=)[^>]*>/.test(html);
+
+test('no page carries an inline script, so the CSP needs no hash, and the theme script is Meridian\'s file', () => {
+  for (const p of pages) {
+    assert.ok(!hasInlineScript(p.html), `${p.rel} has an inline script`);
+    const root = '../'.repeat(p.rel.split('/').length - 1);
+    assert.ok(p.html.includes(`<script src="${root}assets/meridian/browser/theme-init.js"></script>`), `${p.rel} does not load theme-init.js`);
+    assert.ok(p.html.includes(`<script type="module" src="${root}assets/meridian/browser/marketing.js"></script>`), `${p.rel} does not load marketing.js`);
+  }
+});
+
+test('nothing built or served removes data-theme or holds the old init script', () => {
+  const served = [...pages.map((p) => [p.rel, p.html]),
+    ...['assets/site.js', 'assets/meridian/browser/theme-init.js', 'assets/meridian/browser/theme.js', 'assets/meridian/browser/marketing.js']
+      .map((f) => [f, readFileSync(join(SITE, f), 'utf8')])];
+  for (const [name, text] of served) {
+    assert.ok(!/removeAttribute\(\s*['"]data-theme['"]/.test(text), `${name} removes data-theme`);
+    assert.ok(!text.includes("if(t==='dark')document.documentElement.setAttribute"), `${name} holds the init script of Meridian 1.26`);
+  }
+});
+
+test('a missing data-theme is not treated as light anywhere in the site scripts and styles', () => {
+  for (const f of ['assets/site.js', 'assets/site.css', 'guide/guide.css', 'docs/docs.css']) {
+    const text = readFileSync(join(SITE, f), 'utf8');
+    assert.ok(!/hasAttribute\(\s*['"]data-theme/.test(text) && !/:not\(\[data-theme/.test(text), `${f} reads a missing data-theme as light`);
+  }
+});
