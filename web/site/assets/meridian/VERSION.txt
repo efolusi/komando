@@ -1,1 +1,1 @@
-@efolusi/meridian 1.31.0
+@efolusi/meridian 2.0.0
