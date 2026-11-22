@@ -1,0 +1,23 @@
+name: Site release check
+
+# The home page must name the newest komando release. This is its own workflow and not a required check: when the
+# CLI ships and the page lags, the job is red on main (push and a daily run), and no site pull request is blocked.
+# A lookup that fails only warns. Fix a red run with: python3 -I web/deploy/set_release.py vX.Y.Z
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 3 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    # The repo is public, so every job runs on a GitHub-hosted runner.
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - run: python3 -I web/deploy/check_release.py
