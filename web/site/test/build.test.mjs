@@ -38,12 +38,12 @@ test('Meridian\'s marketing.js runs before site.js, as modules', () => {
   assert.ok(marketing > 0 && marketing < home.indexOf('<script type="module" src="assets/site.js"></script>'));
 });
 
-test('the theme button is the plain markup marketing.js wires: three icons, no data-ef-react', () => {
+test('the theme button is the plain markup marketing.js wires: two icons, no data-ef-react', () => {
   const button = /<button[^>]*data-slot="theme-toggle"[^>]*>.*?<\/button>/s.exec(shell.header)[0];
   assert.doesNotMatch(shell.header, /data-ef-react/);
-  assert.deepEqual([...button.matchAll(/data-theme-icon="([a-z]+)"/g)].map((m) => m[1]).sort(), ['dark', 'light', 'system']);
-  assert.match(button, /data-preference="system"/);
-  assert.match(button, /aria-label="System theme, switch to light theme"/);
+  assert.deepEqual([...button.matchAll(/data-theme-icon="([a-z]+)"/g)].map((m) => m[1]).sort(), ['dark', 'light']);
+  assert.match(button, /data-theme-shown="light"/);
+  assert.match(button, /aria-label="Switch to dark theme"/);
 });
 
 test('nothing loads from another origin', () => {
@@ -168,4 +168,13 @@ test('the header mark and the favicon are the system komando mark, and the K-car
     }
   }
   assert.ok((home.match(/<svg class="site-logo"/g) ?? []).length >= 2, 'the home page shows the mark in the header and in the flow');
+});
+
+// W19: Meridian 1.31.0 offers light and dark only.
+test('the theme switch has two choices in both languages, and the vendored copy is 1.31.0', () => {
+  for (const page of [home, renderHome(id), shell.header]) {
+    assert.doesNotMatch(page, /data-preference|data-theme-icon="system"|system theme|tema sistem/i, 'a system theme option is still on the page');
+    assert.match(page, /data-theme-shown="(light|dark)"/);
+  }
+  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 1.31.0');
 });

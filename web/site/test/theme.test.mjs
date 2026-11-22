@@ -20,7 +20,7 @@ function run({ stored = null, cookie = '', osDark = false, blocked = false, host
     get cookie() { return page.cookie; },
     set cookie(value) { page.written = value; },
   };
-  const localStorage = { getItem() { if (blocked) throw new Error('blocked'); return stored; } };
+  const localStorage = { getItem() { if (blocked) throw new Error('blocked'); return stored; }, removeItem() { page.removed = true; } };
   const matchMedia = (query) => ({ matches: osDark && query === '(prefers-color-scheme: dark)' });
   vm.runInNewContext(INIT, { window: { matchMedia }, matchMedia, document, localStorage, location: { hostname, protocol: 'https:' } });
   return page;
@@ -60,8 +60,10 @@ test('data-theme is light or dark for every input, and the script never removes 
   assert.doesNotMatch(INIT, /removeAttribute/);
 });
 
-test('on System the cookie is rewritten to the theme shown, on .efolusi.com over https', () => {
+test('a stored "system" from before is removed once, and the device theme decides', () => {
   const page = run({ stored: 'system', osDark: true });
-  assert.match(page.written, /^efolusi_theme=dark; Domain=\.efolusi\.com; Path=\/; Max-Age=31536000; SameSite=Lax; Secure$/);
-  assert.equal(run({ stored: 'light', osDark: true }).written, undefined);
+  assert.equal(page.removed, true);
+  assert.equal(page.attributes['data-theme'], 'dark');
+  assert.equal(page.written, undefined, 'the script no longer writes a cookie');
+  assert.equal(run({ stored: 'light', osDark: true }).removed, undefined);
 });
