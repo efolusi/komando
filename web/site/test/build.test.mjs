@@ -178,3 +178,23 @@ test('the theme switch has two choices in both languages, and the vendored copy 
   }
   assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 1.31.0');
 });
+
+// W20: the social card (share.jpg) is drawn from brand/share-card.html, shows the product mark and no version number.
+function jpegSize(file) {
+  const b = readFileSync(file);
+  for (let i = 2; i < b.length;) {
+    if (b[i] !== 0xff) { i += 1; continue; }
+    const marker = b[i + 1];
+    if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) return [b.readUInt16BE(i + 7), b.readUInt16BE(i + 5)];
+    i += 2 + b.readUInt16BE(i + 2);
+  }
+  throw new Error('no size in the jpeg');
+}
+
+test('the social card is 1200 by 630 and its source shows the Komando mark and no version', () => {
+  assert.deepEqual(jpegSize(join(HERE, '..', 'share.jpg')), [1200, 630]);
+  const card = readFileSync(join(HERE, '..', 'brand', 'share-card.html'), 'utf8');
+  assert.ok(card.includes(MARK_PATH), 'the card does not draw the system mark');
+  assert.doesNotMatch(card, /\bv?\d+\.\d+\.\d+\b/, 'the card names a version number');
+  assert.doesNotMatch(card, /1659ff/i, 'the K-caret blue is on the card');
+});

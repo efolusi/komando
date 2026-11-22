@@ -29,6 +29,16 @@ python3 -I web/deploy/test_build_dist.py && python3 -I web/deploy/build_dist.py
 
 A Meridian upgrade is a version bump in `package.json` and `pnpm-workspace.yaml`, then the same commands.
 
+## Social card
+
+`share.jpg` (1200 by 630, the og and Twitter image) is drawn from `brand/share-card.html`: the Komando mark, the home headline, no version number. To change it, edit that file and render it with headless Chrome, then convert to JPEG:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars \
+  --force-device-scale-factor=1 --window-size=1200,630 --screenshot=/tmp/card.png "file://$PWD/web/site/brand/share-card.html"
+sips -s format jpeg -s formatOptions 90 /tmp/card.png --out web/site/share.jpg
+```
+
 ## Docs groups
 
 The docs home and the side navigation group the pages in the same order, in both languages (plan: brainOS `komando/2026-11-21-docs-grouping-plan.md`):
