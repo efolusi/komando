@@ -175,6 +175,23 @@ komando mengenali Claude Code, Codex, Gemini CLI, dan Cursor dari variabel lingk
 | **File secret tetap di komputer ini** | Untuk agen, komando tidak membaca `~/.komando`, private key, credential store, atau file yang merupakan secret menurut namanya saat perintah menerima file lokal (`--stdin-file`, `script FILE`, unggahan, `sync`, `fs write --from`, `db --file`, `cluster -f`) (`SENSITIVE_FILE`); unggahan folder dan `sync` memeriksa setiap file dan mengeluarkan yang itu. Itu berlaku untuk file yang sama dengan nama lain: link, hard link, atau huruf besar dan kecil yang berbeda di macOS. Anda mengizinkan secret proyek seperti `.env` dengan `--reveal`; data komando sendiri dan `/proc/PID/environ` tidak pernah ikut. Impor (`komando import kubeconfig`, `pgpass`, `docker`, ...) boleh membaca file kredensial, karena memasukkan secret ke vault komando, yang tidak pernah dilihat agen. Rujukan kata sandi `file:` atau `env:` juga tidak bisa menunjuk ke data komando, private key, credential store, atau kata sandi secret store. Tidak ada rujukan, untuk siapa pun, yang membaca key kode persetujuan (`RESERVED_SECRET`). Perintah agen juga tidak menulis ke sana: `download`, `cp`, `sync` (dan `--delete`-nya), `storage download`, `db dump --to`, `export --to`, dan `cluster cp` tidak pernah menyimpan file ke folder komando, `~/.ssh`, `~/.aws`, `~/.config/gcloud`, `~/.azure`, `~/.kube`, `~/.docker`, `~/.gnupg`, `~/.password-store`, atau keychain, juga lewat link (`SENSITIVE_FILE`, tanpa flag: Anda menjalankan perintah seperti itu di terminal Anda sendiri). |
 | **Guard di komputer ini** | `komando guide install` menambahkan guard ke Claude Code, dan ke Cursor, Gemini CLI, dan Codex di tempat agen itu dipakai. Sebelum agen membaca file atau menjalankan perintah shell, komando memeriksanya dan menghentikan pembacaan `~/.komando`, private key, file `.env`, dan credential store (`~/.kube`, `~/.aws`, keychain), mendaftar semua variabel lingkungan, mengubah atau mengosongkan variabel yang dipakai komando untuk mengenali agen (`CLAUDECODE=0`, `unset`, `env -u`, `env -i`, `read`, `sudo komando`) atau `KOMANDO_HOME`, mengatur `HOME` di depan komando, mencari atau mengarsipkan folder yang memuatnya (`grep -r ~`, `tar -C ~ ...`), dan menjalankan `ssh`/`scp` di sekitar komando. Guard membaca path relatif dari folder kerja agen, mengikuti `cd`, dan menghitung glob seperti `~/.komand?/*` sebagai path yang mungkin dicocokkannya; pola yang dikutip (`grep '.*' f`) bukan glob. Lewati dengan `--no-guard`. |
 
+### Jendela persetujuan dalam bahasa Indonesia
+
+Jendela persetujuan berbahasa Inggris atau Indonesia. `komando config set approval_language id` memilih bahasa Indonesia, `en` bahasa Inggris. Nilai bawaan, `auto`, memilih bahasa Indonesia saat bahasa sistem Anda bahasa Indonesia: di Windows bahasa tampilan; di macOS dan Linux `LC_ALL`, `LC_MESSAGES`, atau `LANG` (yang pertama diatur), dan di Mac yang tidak mengaturnya, bahasa pertama dalam daftar bahasa pilihan Anda. Pengaturan ini hanya mengubah katanya; apa yang ditanyakan dan diizinkan jendela tetap sama, jadi tidak butuh jawaban ya.
+
+| Inggris | Indonesia |
+|---|---|
+| komando needs your OK | komando minta persetujuan Anda |
+| Change web-1 / Run a command on web-1 / Run a query on web-1 | Ubah web-1 / Jalankan perintah di web-1 / Jalankan query di web-1 |
+| Asked by Claude Code | Diminta oleh Claude Code |
+| Targets: / Status: Protected | Target: / Status: Dilindungi |
+| Risk: Deletes a system folder recursively (rm -rf) | Risiko: Menghapus folder sistem secara rekursif (rm -rf) |
+| Skips: / Options: / Command: / Script: | Pengecekan dilewati: / Opsi: / Perintah: / Skrip: |
+| Deny / Allow once | Tolak / Izinkan sekali |
+| komando: allow web-1 (the Touch ID prompt) | komando: izinkan web-1 |
+
+Perintah, skrip, nama server, dan nama agen tidak pernah diterjemahkan. Aturan yang Anda tambahkan sendiri mempertahankan kata-kata Anda. Saat alasan berbahasa Inggris sebuah aturan bawaan berubah, jendela menampilkan alasan Inggris yang baru sampai kata Indonesianya ditulis ulang, sehingga terjemahan tidak pernah berkata lebih sedikit daripada aturannya.
+
 ## Menambah aturan sendiri
 
 ```bash
