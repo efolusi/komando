@@ -56,18 +56,19 @@ const MARK_PATH = readFileSync(join(HERE, 'brand', 'komando.svg'), 'utf8').match
 const LOGO = `<svg class="site-logo" viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="${MARK_PATH}"/></svg>`;
 const brand = h(React.Fragment, null, raw('span', LOGO, { className: 'site-logo-wrap' }), 'Komando');
 
-// the icons site.js swaps in when marketing.js changes a button's state; the theme button holds its three icons itself
+// the icons site.js swaps in when marketing.js changes a button's state; the theme button holds its two icons itself
 const SWAP_ICONS = ['menu', 'x', 'play', 'pause'];
 
-// Meridian's plain theme button (guidelines/theming.md, Plain HTML sites): marketing.js wires it, the CSS shows the icon
-// of data-preference. The React ThemeToggle marks itself data-ef-react and marketing.js would leave that one alone.
-const THEME_ICONS = [['light', 'sun'], ['dark', 'moon'], ['system', 'monitor']];
+// Meridian's plain theme button (guidelines/theming.md, Plain HTML sites): two choices, light and dark. marketing.js wires
+// it and the CSS shows the icon of data-theme-shown. The React ThemeToggle marks itself data-ef-react and marketing.js
+// would leave that one alone.
+const THEME_ICONS = [['light', 'sun'], ['dark', 'moon']];
 function themeToggle(lang) {
   const text = THEME_LABELS[lang];
   return h('button', {
-    type: 'button', 'data-slot': 'theme-toggle', className: 'ef-theme-toggle', 'data-preference': 'system',
-    'aria-label': `${text.system}, ${text.next} ${text.light.toLowerCase()}`, title: text.system,
-  }, THEME_ICONS.map(([preference, name]) => h(Icon, { key: preference, name, size: 20, 'data-theme-icon': preference, 'aria-hidden': 'true' })));
+    type: 'button', 'data-slot': 'theme-toggle', className: 'ef-theme-toggle', 'data-theme-shown': 'light',
+    'aria-label': `${text.next} ${text.dark.toLowerCase()}`, title: text.light,
+  }, THEME_ICONS.map(([theme, name]) => h(Icon, { key: theme, name, size: 20, 'data-theme-icon': theme, 'aria-hidden': 'true' })));
 }
 
 /** Where a link goes from a page: a home section, a site page or an outside address. */
