@@ -120,6 +120,41 @@ Saat key store ada di keychain OS, keychain juga mengingat berapa banyak perubah
 
 Dengan key di `store.key` atau passphrase, store dibandingkan hanya bila keychain menyimpan hitungan untuk folder ini: berarti itu backup dari sebelum `komando secret keychain`. Bila keychain tidak bisa menyatakan apakah ia menyimpannya (terkunci, atau tidak menjawab), komando membaca store seperti itu tetapi tidak mengubah apa pun (`KEYCHAIN_FAILED`, atau `KEYCHAIN_SLOW`): mungkin itu backup tersebut. Buka kunci keychain dan jalankan lagi. Di komputer tanpa keychain yang berfungsi, seseorang mengatur `KOMANDO_KEYCHAIN=off` (`off` milik agen AI tetap bertanya ke keychain). Bila keychain menjawab bahwa ia tidak menyimpan hitungan, tidak ada yang bisa dibandingkan, dan `komando doctor` menyatakannya.
 
+### Key yang dibuat dari key store
+
+komando membuat satu key untuk setiap keperluan dari key store (HKDF-SHA256, satu label per keperluan). Tidak ada yang dibuat dari yang lain, jadi program yang memegang salah satunya tidak bisa membuat yang lain:
+
+| Key | Menyegel atau menandatangani |
+|-----|------------------------------|
+| key baris | setiap record `store.db` dan riwayat |
+| key nilai | nilai tiap secret, di dalam recordnya |
+| key runtime | `runtime.json` |
+| key tiket | tiket yang diperiksa perintah latar belakang komando |
+| key kebijakan | MAC kebijakan atas baris keamanan (di bawah) |
+
+Key baris membuka dan menyegel record. Key itu tidak membuka nilai secret mana pun, tidak membuat tiket, dan tidak bisa mengubah baris keamanan tanpa ketahuan.
+
+### Baris keamanan
+
+Sebagian isi `store.db` menentukan apa yang boleh dilakukan agen AI oleh komando, dan komando bertanya kepada seseorang sebelum melonggarkannya. Baris keamanan ini membawa MAC kebijakan: HMAC-SHA256 dengan key kebijakan, disimpan di sampingnya. Setiap pembacaan dan penulisan store memeriksanya, dan setiap perubahan yang dibuat komando menulisnya lagi dalam langkah yang sama.
+
+| Record | Yang dicakup MAC |
+|--------|------------------|
+| server | `protected`, `forward_agent`, `proxy_command` |
+| conn | `protected`, dan program login yang dipercaya seseorang saat impor (`trusted_plugin`, `plugin_program`, `plugin_search_path`) |
+| VPN | `protected`, `mfa`, `legacy_crypto`, `allow_pap` |
+| pengaturan | `host_key_policy`, aturan deny Anda (`extra_deny_patterns`), `audit`, `audit_sql`, `audit_syslog`, `mask_personal`, `login_for`, `vpn_idle`, `approval_code`, dan langkah kode terakhir yang diambilnya |
+| host key yang di-pin | seluruhnya: key-nya, dan login-ask yang dibuat dengannya |
+| host key yang dicabut | seluruhnya |
+| CA host yang dipercaya | seluruhnya |
+| salinan tersegel baris pengaturan | seluruhnya (mode key, salt, biaya scrypt) |
+
+Nama, catatan, alamat, grup, label, dan pengaturan tampilan tidak dicakup. `--network` dan `--shell-access` milik key `ssh-gate` tidak ada di `store.db`: keduanya ada di baris key itu di `~/.ssh/authorized_keys`. Selama `extra_deny_patterns` memuat aturan, tidak ada key `--shell-access` yang membuka shell: komando tidak melihat apa yang diketik di dalamnya.
+
+Baris keamanan yang diubah oleh selain komando menghentikan setiap perintah dengan `POLICY_MAC_FAILED`, yang menyebut barisnya. Cari tahu apa yang mengubahnya, lalu kembalikan folder dari backup yang dibuat sebelum perubahan. Saat ini setiap proses komando membuat key kebijakan dari key store, jadi MAC menghentikan program yang hanya memegang key baris; program yang bisa membaca key store (keychain, `store.key`, atau passphrase) tetap bisa membuatnya.
+
+Store buatan komando yang lebih lama mendapat MAC kebijakannya sekali, saat komando ini pertama kali membukanya: setiap record disegel lagi di bawah key baris, dalam satu langkah, selagi lock store dipegang. Sesudah itu store tanpa MAC-nya berhenti dengan `POLICY_MAC_FAILED`, dan komando yang lebih lama tidak lagi membukanya (`STORE_NEWER`): update setiap komando yang memakai folder itu, dan hentikan lalu mulai lagi sesi VPN, tunnel, dan login server yang dimulai sebelum update.
+
 ### Tempat key vault berada
 
 Key store disimpan dengan salah satu dari tiga cara: di keychain OS, di `store.key`, atau dibuat dari passphrase. `komando doctor` menyatakan mana yang dipakai, dan `komando secret keychain` serta `komando secret passphrase` memindahkan dan mengubahnya (lihat [Secret](secrets.md#where-they-are-kept-and-the-key)).

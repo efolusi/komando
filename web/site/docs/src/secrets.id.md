@@ -55,6 +55,32 @@ komando fs replace web1 /srv/app/.env --old 'DB_PASSWORD=[hidden]' --new 'DB_PAS
 
 Rujukan juga bisa membaca kata sandi yang disimpan tim di tempat lain: `env:VAR`, `file:PATH`, HashiCorp Vault atau OpenBao (`vault:PATH#FIELD`), secret manager AWS, Google, dan Azure (`aws-sm:`, `gcp-sm:`, `azure-kv:`), 1Password Connect (`op://`), Bitwarden atau Vaultwarden (`bw://`), dan file KeePass (`kdbx:`). Lihat [Kata sandi dari password manager](servers.md#passwords-from-your-password-manager) untuk masing-masing dan login yang dipakainya. komando membaca nilai seperti itu hanya saat membutuhkannya dan tidak pernah menyimpannya.
 
+## Menjalankan program di komputer ini dengan secret
+
+```bash
+komando secret run --env PGPASSWORD=secret:prod-db-pass -- psql -h 10.0.0.5 -U app shop
+komando secret run -e AWS_SECRET_ACCESS_KEY=secret:aws-ci -e AWS_REGION=eu-west-1 -- terraform plan
+```
+
+`komando secret run` memulai program setelah `--` di komputer ini, dengan nilai `--env` di lingkungannya. komando membaca `secret:NAME` dari vault tepat sebelum program dimulai, jadi nilainya tidak pernah ada di baris perintah atau riwayat shell Anda. Program dimulai tanpa shell, dan mendapat lingkungan Anda tanpa variabel `KOMANDO_*` milik komando sendiri dan nilai yang membuka vault.
+
+- Nilai vault yang dicetak program tampil sebagai `[secret:NAME]`.
+- komando keluar dengan kode keluar program. Di Linux dan macOS, program yang dihentikan sinyal N membuat komando keluar dengan 128+N (143 untuk `SIGTERM`), seperti shell.
+- `SIGTERM` atau `SIGHUP` ke komando diteruskan ke program, jadi program tidak terus berjalan dengan secret. Ctrl-C di terminal sampai ke program dengan sendirinya, satu kali. Ctrl-C kedua langsung mengakhiri komando dan mengakhiri program lebih dulu. Di Windows komando mengakhiri program.
+- Di Linux program mendapat `SIGTERM` saat komando mati, juga karena `SIGKILL`. Di macOS dan Windows, komando yang dimatikan dengan cara itu meninggalkan program tetap berjalan dengan secret.
+- komando menunggu 3 detik setelah program keluar sampai outputnya berakhir. Proses latar belakang peninggalan program yang masih memegang output diputus saat itu, dan komando keluar.
+- Baris output yang lebih panjang dari 256 KiB dipotong, tetapi tidak pernah di dalam nilai tersembunyi sampai 1 MiB atau pola yang disamarkan seperti `password=...`. Private key yang terbuka di titik potong disembunyikan dari baris `BEGIN` sampai baris `END` (paling banyak 16 KiB lagi).
+- Audit log mencatat path program, nama variabel, dan nama secret, tidak pernah nilainya.
+- `--dry-run` menampilkan path program dan secret mana yang masuk ke variabel mana, dan tidak membaca nilai apa pun. Dry run tidak bertanya kepada siapa pun: persetujuan yang dibutuhkan eksekusi sungguhan ada di `meta.would_need` dan `meta.would_be_blocked`.
+- Rujukan dalam bentuk apa pun (`secret:`, `env:`, `file:`, `vault:`, `op://`, ...) di argumen program ditolak: taruh di `--env`. URL `file://` bukan rujukan dan lolos. Ini penjaga terhadap kesalahan, bukan batas keamanan: komando tidak pernah menguraikan rujukan di argumen. komando menemukan `secret:` di mana saja, tetapi bentuk lain hanya di awal argumen atau setelah `=`, jadi `-penv:PW` diteruskan apa adanya.
+- Agen AI butuh jawaban ya dari seseorang untuk setiap secret (`SECRET_DESTINATION`): program bisa mencetak nilai dalam bentuk yang tidak dikenali penyamaran. Jendela menyebut secret-nya, path lengkap program, variabel `--env` lainnya, dan menyatakan bila program Anda mana pun bisa menggantikan program itu.
+- Dalam eksekusi agen AI dengan secret, program mendapat `HOME`, `USER`, dan `LOGNAME` dari akun Anda (`USERPROFILE` di Windows), bukan dari lingkungan agen, ditambah `LANG`, `LC_*`, `TERM`, `TMPDIR`, `TZ`, folder sistem Windows, `PATH` sistem, dan nilai `--env`-nya. Pager, editor, helper askpass, atau proxy yang diatur agen bisa meneruskan nilainya.
+- Dalam eksekusi itu, nilai `--env` biasa dari agen boleh menambah variabel tetapi tidak pernah menggantikan variabel yang diatur komando (`HOME`, `PATH`, `USER`, `LANG`, `LC_*`, ..., dalam huruf besar atau kecil), dan tidak boleh mengatur apa yang menentukan kode atau pengaturan mana yang dimuat program (`USAGE`): `LD_PRELOAD`, `DYLD_*`, `NODE_OPTIONS`, `PYTHON*`, `BASH_ENV`, pager (`*PAGER`), `EDITOR`, `VISUAL`, helper askpass, file rc (`PSQLRC`, `*RC`), proxy (`*_proxy`), `GIT_*`, `SSH_*`, `XDG_*`, file konfigurasi sebuah tool (`KUBECONFIG`, `DOCKER_CONFIG`, `*_CONFIG_FILE`, `AWS_*_FILE`, `NPM_CONFIG_*`), toolchain yang memilih binary (`CC`, `CXX`, `GOFLAGS`, `GOTOOLCHAIN`, `CARGO_*`, `RUSTC_WRAPPER`, `JAVA_HOME`, `MAVEN_OPTS`, `GRADLE_OPTS`), dan sejenisnya. Variabel seperti `PGHOST`, `AWS_REGION`, atau `TF_VAR_*` lolos. Jendela menampilkan nilai `--env` biasa.
+- Di Linux, bila akun Anda tidak ada di `/etc/passwd` (hanya LDAP atau sssd yang mengenalnya), komando tidak bisa membaca `HOME` akun Anda. Program lalu mendapat `HOME` sementara yang kosong, yang dihapus komando sesudahnya, dan komando menyatakannya di stderr.
+- Bila file program berubah antara pemeriksaan dan awal eksekusi, komando berhenti (`TOOL_MISSING`) dan program tidak berjalan. Di Linux komando memulai file yang diperiksanya, lewat file yang terbuka.
+- Risiko yang diterima: program di folder yang bisa ditulis program Anda mana pun (milik Homebrew, npm, `~/.local/bin`) tidak ditolak, karena di sanalah tool seperti `wrangler` berada. Untuk agen AI, jendela menyebut path lengkapnya dan memperingatkan bahwa program itu bisa digantikan, dan seseorang yang memutuskan.
+- Secret yang dipakai server, conn, atau VPN yang dilindungi juga bertanya kepada orang di terminal, seperti perubahan pada server yang dilindungi.
+
 ## Memeriksa secret
 
 ```bash

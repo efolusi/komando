@@ -227,6 +227,24 @@ komando key edit deploy --cert ~/Downloads/deploy-cert.pub   # --unset cert kemb
 
 komando membaca sertifikat pada setiap login, jadi file yang diperbarui langsung dipakai. Sertifikat untuk key lain ditolak (`KEY_INVALID`); yang tidak valid sekarang dikeluarkan (`key add` memperingatkan), dan key saja yang ditawarkan. ssh-agent yang menyimpan sertifikat juga menawarkannya.
 
+### Server dengan sertifikat host
+
+Di tempat server punya host key yang ditandatangani certificate authority (baris `@cert-authority` di `known_hosts`), percayai CA itu sekali, tanpa mem-pin tiap server:
+
+```bash
+komando host ca add corp --key ~/corp-host-ca.pub --hosts '*.corp.example' --dry-run   # server yang cocok sekarang
+komando host ca add corp --key ~/corp-host-ca.pub --hosts '*.corp.example'
+komando host ca add corp --from ~/.ssh/known_hosts   # baris @cert-authority dan @revoked di dalamnya
+komando host ca list
+komando host ca rm corp
+komando host ca revoke --key old-host-ca.pub   # jangan percayai key ini lagi (baris @revoked)
+```
+
+Server yang namanya cocok dengan pola sebuah CA diminta sertifikat host-nya lebih dulu. Pin selalu menang: key server yang di-pin, polos atau di dalam sertifikat, harus cocok dengan pin-nya, kalau tidak koneksi berhenti dengan `HOSTKEY_MISMATCH`. Untuk server tanpa pin, sertifikat dipercaya, tanpa pin, bila CA yang menandatanganinya, nama yang dihubungi komando ada di antara namanya, sertifikat valid sekarang, dan baik key-nya maupun CA-nya tidak dicabut. Sertifikat lain kembali ke key polosnya dan pin. Dengan `host_key_policy strict`, sertifikat yang dipercaya dianggap sudah dikenal. Server `--login ask` tidak pernah dipercaya lewat CA: kata sandi yang diketik hanya pergi ke tempat yang key-nya pernah ditemui seseorang.
+
+Pola menyebut domain paling sedikit: `*.corp.example`, `web*.corp.example`, `10.1.2.*`. `*`, `*.*`, `*.com`, dan public suffix lain, seperti `*.co.uk` atau `*.github.io`, ditolak (`CA_HOSTS_INVALID`). Sertifikat yang tidak menyebut server ditolak. Nama dicocokkan apa pun huruf besar atau kecilnya dan dengan satu titik di akhir.
+Menambah CA berarti memercayai setiap server yang pernah ditandatanganinya, jadi hanya orang di terminal yang bisa menambahnya (`NEEDS_PERSON`); agen AI boleh melihat pratinjaunya dengan `--dry-run`, menghapus CA, dan mencabut key, yang hanya mempersempit kepercayaan.
+
 ### Meminjamkan ssh-agent ke jump host
 
 Sebagian pekerjaan butuh key di server itu sendiri, misalnya `git pull` di sana lewat SSH, atau hop yang tidak dibuat komando. `--forward-agent` meminjamkan key di ssh-agent ke server selama komando tersambung, seperti `ssh -A`:
