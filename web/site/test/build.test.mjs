@@ -150,3 +150,22 @@ test('the drawn screens speak Indonesian only where home.id.mjs says so', () => 
 test('no em dash in the Indonesian copy', () => {
   assert.ok(!idHome.includes('—') && !idShell.header.includes('—') && !idShell.footer.includes('—'));
 });
+
+// W18: the product mark is the one on efolusi.com (three chevrons, brand/komando.svg), never the K-caret.
+const MARK = readFileSync(join(HERE, '..', 'brand', 'komando.svg'), 'utf8');
+const MARK_PATH = MARK.match(/ d="([^"]+)"/)[1];
+
+test('the header mark and the favicon are the system komando mark, and the K-caret is gone', () => {
+  assert.match(MARK, /^<svg xmlns="http:\/\/www.w3.org\/2000\/svg" viewBox="0 0 64 64">/);
+  const favicon = readFileSync(join(HERE, '..', 'favicon.svg'), 'utf8');
+  assert.ok(favicon.includes(MARK_PATH), 'favicon.svg does not carry the system mark');
+  assert.doesNotMatch(favicon, /6090ff|linearGradient/i, 'the K-caret is still in favicon.svg');
+  for (const page of [home, renderHome(id), shell.header, shell.footer]) {
+    // the drawn app screens keep the apps' own blue; only the product mark (class site-logo) is checked
+    for (const logo of page.match(/<svg class="site-logo"[^>]*>.*?<\/svg>/g) ?? []) {
+      assert.ok(logo.includes(MARK_PATH), 'a site-logo is not the system mark');
+      assert.doesNotMatch(logo, /<rect|1659ff|1c1c1e/i, 'the K-caret is still in a site-logo');
+    }
+  }
+  assert.ok((home.match(/<svg class="site-logo"/g) ?? []).length >= 2, 'the home page shows the mark in the header and in the flow');
+});

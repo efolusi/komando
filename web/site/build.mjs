@@ -50,8 +50,10 @@ function screen(name, c) {
 const glyph = (name) => readFileSync(join(HERE, 'glyphs', `${name}.svg`), 'utf8').trim()
   .replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
 
-// the K-caret logo (the apps' design/logo.md, the white version for the web)
-const LOGO = '<svg class="site-logo" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+// the product mark: the Komando mark on efolusi.com (three chevrons), drawn on the 64 by 64 artboard of brand/komando.svg.
+// It takes the page's text colour, so it follows both themes.
+const MARK_PATH = readFileSync(join(HERE, 'brand', 'komando.svg'), 'utf8').match(/ d="([^"]+)"/)[1];
+const LOGO = `<svg class="site-logo" viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="${MARK_PATH}"/></svg>`;
 const brand = h(React.Fragment, null, raw('span', LOGO, { className: 'site-logo-wrap' }), 'Komando');
 
 // the icons site.js swaps in when marketing.js changes a button's state; the theme button holds its three icons itself
