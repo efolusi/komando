@@ -89,6 +89,18 @@ komando import mobaxterm sessions.mxtsessions
 
 Sesi SSH masuk beserta host, port, dan user-nya, dan folder tempat sebuah sesi berada menjadi grup. MobaXterm menyimpan kata sandi secara terpisah, jadi atur dengan `komando secret set` atau pakai key.
 
+### Datang dari SecureCRT
+
+Di SecureCRT, pilih **File > Export Settings** (versi lama: **Tools > Export Settings**) dan impor file `.xml` itu. Atau berikan folder `Sessions` di dalam folder konfigurasi SecureCRT (Options > Global Options > Configuration Paths menunjukkan letaknya):
+
+```bash
+komando import securecrt securecrt.xml --dry-run
+komando import securecrt securecrt.xml
+komando import securecrt ~/Library/Application\ Support/VanDyke/SecureCRT/Config/Sessions --dry-run
+```
+
+Sesi SSH2 masuk beserta host, port, user, dan file key-nya, dan folder tempat sebuah sesi berada menjadi grup. Sesi Telnet, serial, dan RDP dicantumkan. Key dalam format PuTTY (`.ppk`) dan firewall atau jump host dicantumkan beserta apa yang perlu dilakukan. komando tidak pernah membaca kata sandi dan passphrase key yang disimpan SecureCRT: atur dengan `komando secret set` atau pakai key.
+
 ### Datang dari Termius atau TablePlus
 
 Termius dan TablePlus tidak punya format ekspor terbuka. Dari Termius, ekspor host sebagai SSH config dan jalankan `komando import ssh-config FILE`. Untuk database, taruh URL-nya di file `.env` dan jalankan `komando import env FILE`.
