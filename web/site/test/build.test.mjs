@@ -170,13 +170,13 @@ test('the header mark and the favicon are the system komando mark, and the K-car
   assert.ok((home.match(/<svg class="site-logo"/g) ?? []).length >= 2, 'the home page shows the mark in the header and in the flow');
 });
 
-// W19, C277: light and dark only; the vendored copy is Meridian v2.0.0.
-test('the theme switch has two choices in both languages, and the vendored copy is 2.0.0', () => {
+// W19, C277: light and dark only; the vendored copy is Meridian v2.1.0.
+test('the theme switch has two choices in both languages, and the vendored copy is 2.1.0', () => {
   for (const page of [home, renderHome(id), shell.header]) {
     assert.doesNotMatch(page, /data-preference|data-theme-icon="system"|system theme|tema sistem/i, 'a system theme option is still on the page');
     assert.match(page, /data-theme-shown="(light|dark)"/);
   }
-  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 2.0.0');
+  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 2.1.0');
 });
 
 // W20: the social card (share.jpg) is drawn from brand/share-card.html, shows the product mark and no version number.
@@ -197,4 +197,13 @@ test('the social card is 1200 by 630 and its source shows the Komando mark and n
   assert.ok(card.includes(MARK_PATH), 'the card does not draw the system mark');
   assert.doesNotMatch(card, /\bv?\d+\.\d+\.\d+\b/, 'the card names a version number');
   assert.doesNotMatch(card, /1659ff/i, 'the K-caret blue is on the card');
+});
+
+// W26: Meridian 2.1.0 sets one gap between a label and its icon.
+test('the vendored CSS carries the label and icon gap tokens', () => {
+  const css = ['tokens/base.css', 'components.css', 'landing.css', 'styles.css'].map((f) => {
+    try { return readFileSync(join(HERE, '..', 'assets', 'meridian', f), 'utf8'); } catch { return ''; }
+  }).join('\n');
+  assert.match(css, /--gap-label-icon:\s*var\(--space-2\)/);
+  assert.match(css, /--gap-label-icon-sm:\s*var\(--space-1\)/);
 });
