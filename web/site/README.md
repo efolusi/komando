@@ -14,7 +14,7 @@ The static site for the free komando command line and the free Komando apps: the
 | `guide/<page>/index.html`, `id/guide/<page>/index.html` | `guide/build.py` | `guide/src/*.md` and `guide/src/*.id.md`, framed by the shell partials; the Indonesian words are in `i18n/guide.id.json` |
 | `docs/<page>/index.html`, `id/docs/<page>/index.html` | `scripts/docsgen` | komando's `docs/features` and `docs/src/*.md`, and `docs/src/*.id.md`, framed by the shell partials; the Indonesian words are in `i18n/docs.id.json` |
 | `assets/site.css` | by hand | the site's layer on Meridian's tokens, and the drawn app screens (`.kmd`) on the apps' own tokens |
-| `assets/site.js` | by hand | what Meridian's plain `browser/marketing.js` does not cover: the menu and Marquee icons, the Copy buttons and the folding page list. The theme button (Light, Dark, System; `localStorage` `efolusi-theme`, cookie `efolusi_theme`), the header menu and the Marquee pause are `marketing.js`, loaded before `site.js`; `build.mjs` copies it, `theme.js` and `theme-init.js` from the package into `assets/meridian/browser/` |
+| `assets/site.js` | by hand | what Meridian's plain `browser/marketing.js` does not cover: the menu and Marquee icons, the Copy buttons and the folding page list. The theme button (light and dark only; a first visit follows the device; `localStorage` `efolusi-theme`, cookie `efolusi_theme`), the header menu and the Marquee pause are `marketing.js`, loaded before `site.js`; `build.mjs` copies it, `theme.js` and `theme-init.js` from the package into `assets/meridian/browser/` |
 
 Build everything, in this order (the guide and the docs read the shell, so build it first). Each builder writes
 both languages:
