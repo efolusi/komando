@@ -1,14 +1,16 @@
 name: Site release check
 
 # The home page must name the newest komando release. This is its own workflow and not a required check: when the
-# CLI ships and the page lags, the job is red on main (push and a daily run), and no site pull request is blocked.
-# A lookup that fails only warns. Fix a red run with: python3 -I web/deploy/set_release.py vX.Y.Z
+# CLI ships and the page lags, the job is red, and no site pull request is blocked. A push to main checks the
+# committed page; the daily run and a manual run check the live site. A lookup of the newest release that fails only
+# warns. The message names the fix; the steps are "Release" in README.md.
 
 on:
   push:
     branches: [main]
   schedule:
     - cron: '17 3 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -22,4 +24,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
-      - run: python3 -I web/deploy/check_release.py
+      - if: github.event_name == 'push'
+        run: python3 -I web/deploy/check_release.py
+      - if: github.event_name != 'push'
+        run: python3 -I web/deploy/check_release.py --live
