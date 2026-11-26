@@ -18,16 +18,16 @@
 <div class="kmd-page">
 <div class="kmd-sec">
 <div class="kmd-sec__head"><b>Needs attention</b><span class="k-spacer"></span><span class="kmd-link">View all 4<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
-<div class="kmd-att" style="--c: var(--k-danger)"><span class="k-dot" style="--c: var(--k-danger)"></span><span class="kmd-att__text"><b>prod-db’s password is missing from the keychain.</b><span>komando can’t connect to prod-db until you add it.</span></span><span class="k-btn">Add Password</span></div>
-<div class="kmd-att" style="--c: var(--k-warn)"><span class="k-dot" style="--c: var(--k-warn)"></span><span class="kmd-att__text"><b>web-1 allows root to log in with a password.</b><span>Fix turns this off, so root can only log in with a key.</span></span><span class="k-btn">Fix</span></div>
+<div class="kmd-att k-c-danger"><span class="k-dot k-c-danger"></span><span class="kmd-att__text"><b>prod-db’s password is missing from the keychain.</b><span>komando can’t connect to prod-db until you add it.</span></span><span class="k-btn">Add Password</span></div>
+<div class="kmd-att k-c-warn"><span class="k-dot k-c-warn"></span><span class="kmd-att__text"><b>web-1 allows root to log in with a password.</b><span>Fix turns this off, so root can only log in with a key.</span></span><span class="k-btn">Fix</span></div>
 </div>
 <div class="k-dashed"></div>
 <div class="kmd-sec">
 <div class="kmd-sec__head"><b>Running now</b></div>
 <div class="kmd-grid3">
-<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">office</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">WireGuard</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Up</span><span class="k-meta">since 2 hours ago</span></span></div>
-<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">tailnet</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">Tailscale</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Up</span><span class="k-meta">since yesterday</span></span></div>
-<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-ok)"><svg class="ks"><use href="#s-tunnel"/></svg></span><b class="k-trunc">localhost:15432</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2 k-trunc">→ prod-db</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Open</span><span class="k-meta">since 12 minutes ago</span></span></div>
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile k-tint-vpn"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">office</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">WireGuard</span><span class="kmd-row"><span class="k-pill k-c-ok">Up</span><span class="k-meta">since 2 hours ago</span></span></div>
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile k-tint-vpn"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">tailnet</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">Tailscale</span><span class="kmd-row"><span class="k-pill k-c-ok">Up</span><span class="k-meta">since yesterday</span></span></div>
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile k-tint-ok"><svg class="ks"><use href="#s-tunnel"/></svg></span><b class="k-trunc">localhost:15432</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2 k-trunc">→ prod-db</span><span class="kmd-row"><span class="k-pill k-c-ok">Open</span><span class="k-meta">since 12 minutes ago</span></span></div>
 </div>
 <div class="kmd-row"><svg class="ks ks--12 k-t3"><use href="#s-gears"/></svg><span class="k-sub">3 background jobs</span><span class="k-meta">·</span><span class="kmd-link">View<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
 </div>
@@ -37,11 +37,11 @@
 <div>
 <div class="kmd-act"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-trunc">Ran a command on web-1 and web-2</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">2 minutes ago</span></div>
 <div class="k-rule"></div>
-<div class="kmd-act"><svg class="ks" style="color: var(--k-accent)"><use href="#s-bubble"/></svg><span class="k-trunc">Ran a read-only query on prod-db</span><span class="k-spacer"></span><span class="k-meta who">agent</span><span class="k-meta when">6 minutes ago</span></div>
+<div class="kmd-act"><svg class="ks k-accent"><use href="#s-bubble"/></svg><span class="k-trunc">Ran a read-only query on prod-db</span><span class="k-spacer"></span><span class="k-meta who">agent</span><span class="k-meta when">6 minutes ago</span></div>
 <div class="k-rule"></div>
 <div class="kmd-act"><svg class="ks k-t3"><use href="#s-tunnel"/></svg><span class="k-trunc">Opened a tunnel to prod-db</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">12 minutes ago</span></div>
 <div class="k-rule"></div>
-<div class="kmd-act"><svg class="ks k-t3"><use href="#s-chip"/></svg><span class="k-trunc">Couldn’t read a key in sessions</span><span class="k-pill" style="--c: var(--k-danger)">Failed</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">1 hour ago</span></div>
+<div class="kmd-act"><svg class="ks k-t3"><use href="#s-chip"/></svg><span class="k-trunc">Couldn’t read a key in sessions</span><span class="k-pill k-c-danger">Failed</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">1 hour ago</span></div>
 </div>
 </div>
 </div>
