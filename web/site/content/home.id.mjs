@@ -9,7 +9,7 @@ export const meta = {
   lang: 'id',
   title: 'komando, command line DevOps untuk Anda dan agen AI Anda',
   description: 'Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Gratis dan open source.',
-  ogDescription: 'Satu inventaris, hanya-baca secara default, kata sandi di luar jangkauan agen. Gratis dan open source. Aplikasi Komando gratis untuk Mac, iPhone, dan iPad menyusul.',
+  ogDescription: 'Satu inventaris, hanya-baca secara default, kata sandi di luar jangkauan agen. Gratis dan open source. Aplikasi Komando gratis untuk Mac, iPhone, dan iPad sudah dibuat dan sedang diuji.',
 };
 
 export const shell = {
@@ -50,7 +50,7 @@ export const shell = {
 export const hero = {
   releaseLabel: 'Rilis komando terbaru:',
   title: 'Command line DevOps untuk Anda dan agen AI Anda',
-  sub: 'Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Command line-nya, komando, gratis dan open source. Aplikasi Komando (K besar) untuk Mac, iPhone, dan iPad yang menjalankannya juga gratis dan segera hadir.',
+  sub: 'Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Command line-nya, komando, gratis dan open source. Aplikasi Komando (K besar) untuk Mac, iPhone, dan iPad yang menjalankannya juga gratis. Aplikasinya sudah dibuat dan sedang diuji.',
   primary: 'Instal komando',
   secondary: 'Baca panduan',
 };
@@ -112,7 +112,7 @@ export const safety = {
     ['Tanya dulu', 'target yang dilindungi'],
     ['Cek catatannya', '<code>komando audit verify</code>'],
   ],
-  link: 'Lihat apa yang gratis dan apa yang menyusul',
+  link: 'Lihat apa yang gratis dan apa yang akan datang',
 };
 
 export const features = {
@@ -137,7 +137,7 @@ export const agent = {
 
 export const editions = {
   title: 'Gratis sekarang, upgrade nanti',
-  lede: 'Aplikasi Komando untuk Mac, iPhone, dan iPad menyusul dan akan gratis, sama seperti command line-nya. Aplikasinya menjalankan komando di mesin Anda sendiri, tanpa akun dan tanpa masa uji coba.',
+  lede: 'Aplikasi Komando untuk Mac, iPhone, dan iPad sudah dibuat dan sedang diuji, tetapi belum ada link unduh dan belum ada tanggal. Aplikasinya akan gratis, sama seperti command line-nya, dan menjalankan komando di mesin Anda sendiri, tanpa akun dan tanpa masa uji coba.',
   free: { head: ['Gratis, semuanya lokal', 'Di mana'], rows: [
     ['Setiap perintah, dalam teks atau JSON', 'komando'],
     ['Tab terminal, klien database, port forwarding', 'Mac'],
