@@ -1,0 +1,15 @@
+{
+  "note": "The draft pages of row W28 (efolusi/komando#53). They are switched OFF: no navigation link, no sitemap entry, not in web/deploy/build_dist.py. web/deploy/check_download.py reads this file. Switching on is a review decision, see web/site/README.md, section Draft pages.",
+  "switchedOn": false,
+  "downloadHost": "download.invalid",
+  "feedPath": "/updates/mac/{channel}/feed.json",
+  "archivePath": "/updates/mac/{channel}/Komando-{version}.zip",
+  "channels": ["stable", "beta"],
+  "minMacOS": "15",
+  "macApp": {
+    "released": false,
+    "version": null,
+    "sha256": null,
+    "releaseNotesUrl": null
+  }
+}
