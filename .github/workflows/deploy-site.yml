@@ -37,9 +37,17 @@ jobs:
         with:
           node-version: 26.13.1
           package-manager-cache: false
+      # A commit whose home page names an older komando release than the newest
+      # one does not deploy (fix: set_release.py, README.md "Release").
+      - name: Refuse a page that names an older komando release
+        run: python3 -I web/deploy/check_release.py
       - run: python3 -I web/deploy/test_build_dist.py
       - run: python3 -I web/deploy/build_dist.py
       - run: npx --yes wrangler@4.164.0 deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      # From outside: the live home pages serve this commit and name the newest
+      # komando release.
+      - name: Check the live site
+        run: python3 -I web/deploy/check_release.py --live --sha "$GITHUB_SHA"
