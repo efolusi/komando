@@ -1,7 +1,7 @@
 {
-  "note": "The draft pages of row W28 (efolusi/komando#53). They are switched OFF: no navigation link, no sitemap entry, not in web/deploy/build_dist.py. web/deploy/check_download.py reads this file. Switching on is a review decision, see web/site/README.md, section Draft pages.",
+  "note": "The draft pages of rows W28 and W32 (efolusi/komando#53, #58). They are switched OFF: no navigation link, no sitemap entry, not in web/deploy/build_dist.py. web/deploy/check_download.py reads this file. The download host is the product domain komando.efolusi.com (O19, decided 2026-11-27); the feed and the archives live at feedPath and archivePath on it (rows M21 and M38). Switching on is a review decision, see web/site/README.md, section Draft pages.",
   "switchedOn": false,
-  "downloadHost": "download.invalid",
+  "downloadHost": "komando.efolusi.com",
   "feedPath": "/updates/mac/{channel}/feed.json",
   "archivePath": "/updates/mac/{channel}/Komando-{version}.zip",
   "channels": ["stable", "beta"],

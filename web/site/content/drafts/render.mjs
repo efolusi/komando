@@ -31,21 +31,18 @@ function block(b) {
   throw new Error(`unknown block ${JSON.stringify(b)}`);
 }
 
-/** The download page's blocks from the copy and the state in config.json. */
+/** The download page's blocks from the copy and the state in config.json. While the Mac app is not released the page
+ *  says only that: no date, no link, no version, no checksum, no host. */
 export function downloadBlocks(c, config) {
   const app = config.macApp;
   const d = c.download;
-  const out = [];
-  if (!app.released) {
-    out.push({ h: d.notReleased.title }, ...d.notReleased.body, d.notReleased.link);
-  } else {
-    const file = config.archivePath.replace('{channel}', 'stable').replace('{version}', app.version);
-    const url = `https://${config.downloadHost}${file}`;
-    out.push({ h: d.released.title }, d.released.lead.replace('{version}', app.version),
-      { ul: [`[${d.released.get}](${url})`] }, { h3: d.released.checkTitle }, d.released.checkBody.replace('{sha}', app.sha256),
-      { pre: `shasum -a 256 Komando-${app.version}.zip` });
-    if (app.releaseNotesUrl) out.push(`[${d.released.notes}](${app.releaseNotesUrl})`);
-  }
+  if (!app.released) return [{ h: d.notReleased.title }, ...d.notReleased.body];
+  const file = config.archivePath.replace('{channel}', 'stable').replace('{version}', app.version);
+  const url = `https://${config.downloadHost}${file}`;
+  const out = [{ h: d.released.title }, d.released.lead.replace('{version}', app.version),
+    { ul: [`[${d.released.get}](${url})`] }, { h3: d.released.checkTitle }, d.released.checkBody.replace('{sha}', app.sha256),
+    { pre: `shasum -a 256 Komando-${app.version}.zip` }];
+  if (app.releaseNotesUrl) out.push(`[${d.released.notes}](${app.releaseNotesUrl})`);
   out.push({ h: d.requirements.title }, { ul: d.requirements.items.map((i) => i.replace('{macos}', config.minMacOS)) });
   out.push({ h: d.signing.title }, ...d.signing.body);
   out.push({ h: d.updates.title }, d.updates.body, { pre: d.updates.convention.replace('{path}', config.feedPath).replace('{archive}', config.archivePath) });

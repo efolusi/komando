@@ -12,12 +12,10 @@ export const download = {
   description: 'Draft of the Komando for Mac download page.',
   h1: 'Komando for Mac',
   notReleased: {
-    title: 'The Mac app is not released yet',
+    title: 'Not available yet',
     body: [
-      'There is no Mac download yet, and this page names no version and no checksum until there is one.',
-      'The command line, komando, is free and available today. The install line and the checksum check are on the home page.',
+      'The Komando apps are built and in testing. They cannot be downloaded until an Apple Developer account exists.',
     ],
-    link: '[Install komando from the home page](../../../../index.html#install)',
   },
   released: {
     title: 'Download',
@@ -33,7 +31,7 @@ export const download = {
   },
   signing: {
     title: 'Signed and notarized',
-    body: ['The Mac app is signed with a Developer ID certificate and notarized by Apple, so macOS opens it without a warning about an unknown developer. This holds once a release ships; there is none yet.'],
+    body: ['The Mac app is signed with a Developer ID certificate and notarized by Apple, so macOS opens it without a warning about an unknown developer. This holds once a release ships.'],
   },
   updates: {
     title: 'Updates',
@@ -41,9 +39,8 @@ export const download = {
     convention: 'feed:    {path}\narchive: {archive}',
   },
   open: [
-    { todo: ' Host name: set `downloadHost` in `content/drafts/config.json` once the host of row O19 exists.' },
     { todo: ' Whether the build runs on Apple silicon only or on Intel too (system requirements).' },
-    { todo: ' Release notes address (`releaseNotesUrl`), and the feed format and paths, which row M38 builds and confirms.' },
+    { todo: ' Release notes address (`releaseNotesUrl`), and the feed format and paths on komando.efolusi.com, which row M38 builds and confirms.' },
   ],
 };
 
@@ -134,7 +131,7 @@ export const pricing = {
     'The Komando apps for Mac, iPhone and iPad are free today. A paid upgrade is planned and not built. It would add services that need our server, such as sync between devices. This page will list the price when the owner has decided it.',
     { h: 'Before you buy: the command line cannot sync' },
     'Sync works between the Komando apps. The command line on Linux and Windows is not a sync device, so if you only use the command line there, a paid plan gives you nothing to sync.',
-    'Your own free path stays: save your list with `komando export --sealed --to FILE`, copy the file to the other computer, and read it there with `komando import komando FILE`. Komando asks for a passphrase of 15 characters or more, and the file opens only with it.',
+    'The free path stays. On one computer run `komando export --sealed --to move.kmdseal`, copy the file to the other computer, and run `komando import komando move.kmdseal` there. komando asks for a passphrase of 15 characters or more, and the file opens only with it.',
     { h: 'What always stays free' },
     { ul: [
       'Everything the CLI does today and adds later. The CLI has no paid features and never will.',

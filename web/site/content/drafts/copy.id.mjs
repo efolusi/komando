@@ -11,12 +11,10 @@ export const download = {
   description: 'Draf halaman unduh Komando untuk Mac.',
   h1: 'Komando untuk Mac',
   notReleased: {
-    title: 'Aplikasi Mac belum dirilis',
+    title: 'Belum tersedia',
     body: [
-      'Belum ada unduhan untuk Mac. Halaman ini tidak menyebut versi atau checksum sampai ada rilisnya.',
-      'Baris perintah, komando, gratis dan sudah bisa dipakai. Baris pemasangan dan cara memeriksa checksum ada di halaman utama.',
+      'Aplikasi Komando sudah dibuat dan sedang diuji. Aplikasi ini belum bisa diunduh sampai akun Apple Developer tersedia.',
     ],
-    link: '[Pasang komando dari halaman utama](../../../../id/index.html#install)',
   },
   released: {
     title: 'Unduh',
@@ -32,7 +30,7 @@ export const download = {
   },
   signing: {
     title: 'Bertanda tangan dan dinotarisasi',
-    body: ['Aplikasi Mac ditandatangani dengan sertifikat Developer ID dan dinotarisasi oleh Apple, sehingga macOS membukanya tanpa peringatan pengembang tidak dikenal. Ini berlaku setelah rilis terbit; saat ini belum ada.'],
+    body: ['Aplikasi Mac ditandatangani dengan sertifikat Developer ID dan dinotarisasi oleh Apple, sehingga macOS membukanya tanpa peringatan pengembang tidak dikenal. Ini berlaku setelah rilis terbit.'],
   },
   updates: {
     title: 'Pembaruan',
@@ -40,9 +38,8 @@ export const download = {
     convention: 'feed:    {path}\narsip:   {archive}',
   },
   open: [
-    { todo: ' Nama host: isi `downloadHost` di `content/drafts/config.json` setelah host untuk baris O19 tersedia.' },
     { todo: ' Apakah build hanya untuk Apple silicon atau juga Intel (kebutuhan sistem).' },
-    { todo: ' Alamat catatan rilis (`releaseNotesUrl`), serta format dan jalur feed, yang dibuat dan dipastikan baris M38.' },
+    { todo: ' Alamat catatan rilis (`releaseNotesUrl`), serta format dan jalur feed di komando.efolusi.com, yang dibuat dan dipastikan baris M38.' },
   ],
 };
 
@@ -133,7 +130,7 @@ export const pricing = {
     'Aplikasi Komando untuk Mac, iPhone, dan iPad gratis saat ini. Peningkatan berbayar direncanakan dan belum dibuat. Peningkatan itu akan menambah layanan yang membutuhkan server kami, seperti sinkronisasi antarperangkat. Halaman ini akan memuat harganya setelah pemilik memutuskannya.',
     { h: 'Sebelum membeli: baris perintah tidak bisa sinkron' },
     'Sinkronisasi bekerja antaraplikasi Komando. Baris perintah di Linux dan Windows bukan perangkat sinkronisasi, jadi jika Anda hanya memakai baris perintah di sana, paket berbayar tidak memberi Anda apa pun untuk disinkronkan.',
-    'Jalur gratis Anda tetap ada: simpan daftar Anda dengan `komando export --sealed --to FILE`, salin berkasnya ke komputer lain, lalu baca di sana dengan `komando import komando FILE`. Komando meminta kata sandi sepanjang lima belas karakter atau lebih, dan berkas hanya terbuka dengan kata sandi itu.',
+    'Jalur gratis tetap ada. Di satu komputer jalankan `komando export --sealed --to move.kmdseal`, salin berkasnya ke komputer lain, lalu jalankan `komando import komando move.kmdseal` di sana. komando meminta passphrase sepanjang lima belas karakter atau lebih, dan berkas hanya terbuka dengan passphrase itu.',
     { h: 'Yang selalu tetap gratis' },
     { ul: [
       'Semua yang dilakukan CLI hari ini dan yang ditambahkan kelak. CLI tidak punya fitur berbayar dan tidak akan pernah punya.',
