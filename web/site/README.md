@@ -31,18 +31,18 @@ A Meridian upgrade is a version bump in `package.json` and `pnpm-workspace.yaml`
 
 ## Draft pages (switched off)
 
-Row W28 (efolusi/komando#53). The Mac download, privacy, support and pricing pages are drafts in `content/drafts/`, in both languages. They are not in the navigation, not in the sitemap and not deployed: `build_dist.py` copies an allowlist and `content/` is not on it. `node build.mjs` renders them to `content/drafts/out/<lang>/<page>.html`, only so a reviewer can open them (noindex, a visible "Draft" banner, every open point shown as TODO).
+Rows W28 and W32 (efolusi/komando#53, #58). The Mac download, privacy, support and pricing pages are drafts in `content/drafts/`, in both languages. They are not in the navigation, not in the sitemap and not deployed: `build_dist.py` copies an allowlist and `content/` is not on it. `node build.mjs` renders them to `content/drafts/out/<lang>/<page>.html`, only so a reviewer can open them (noindex, a visible "Draft" banner, every open point shown as TODO).
 
 | File | Holds |
 |---|---|
-| `content/drafts/config.json` | One place for the state: `switchedOn`, `downloadHost` (the placeholder `download.invalid`; the real host of row O19 is one change here), `feedPath` and `archivePath` (the path convention, built by row M38), `minMacOS`, and `macApp` (`released`, `version`, `sha256`, `releaseNotesUrl`) |
+| `content/drafts/config.json` | One place for the state: `switchedOn`, `downloadHost` (`komando.efolusi.com`, the product domain, row O19), `feedPath` and `archivePath` (the path convention on that host, rows M21 and M38), `minMacOS`, and `macApp` (`released`, `version`, `sha256`, `releaseNotesUrl`) |
 | `content/drafts/copy.en.mjs`, `copy.id.mjs` | The copy, block for block in both languages |
 | `content/drafts/render.mjs` | The renderer `build.mjs` calls |
 | `web/deploy/check_download.py` | The CI check: while off, nothing names the drafts and no fake version or checksum is in `config.json`; once switched on, the version, checksum, host, an empty TODO list and a real archive with the named sha256 are required |
 
-Until the Mac app is released the download page says so and points to the command line install. The privacy text is copied from the apps repo's `PRIVACY.md`; the pricing text from `plans.md` ("What always stays free"). No price is named (row O03 is open).
+Until the apps can be downloaded the download page says only that they are built and in testing and need an Apple Developer account first: no date, no link. The privacy text is copied from the apps repo's `PRIVACY.md`; the pricing text from `plans.md` ("What always stays free"). No price is named (row O03 is open).
 
-To switch on, after review: fill `config.json` (host, released, version, sha256, release notes), clear every TODO, add the pages to `build_dist.py`'s allowlist and to the navigation, then run `python3 -I web/deploy/check_download.py`.
+To switch on, after review: fill `config.json` (released, version, sha256, release notes), clear every TODO, add the pages to `build_dist.py`'s allowlist and to the navigation, then run `python3 -I web/deploy/check_download.py`.
 
 ## Social card
 
