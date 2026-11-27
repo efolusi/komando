@@ -75,7 +75,7 @@ CSP = [
     # Cloudflare injects its Web Analytics beacon on the zone; it loads from static.cloudflareinsights.com
     # and reports to cloudflareinsights.com. The inline script hashes are added here as well.
     ("script-src", ["'self'", "https://static.cloudflareinsights.com"]),
-    # no 'unsafe-inline': the drawn app screens take colour from classes (W34) and Meridian 2.2.0 writes no style
+    # no 'unsafe-inline': the drawn app screens take colour from classes (W34) and Meridian 2.4.0 writes no style
     # attribute; refuse_inline_style() stops the build when a page brings one back
     ("style-src", ["'self'"]),
     ("font-src", ["'self'"]),  # Meridian's fonts are served from assets/meridian/assets/fonts/
@@ -297,10 +297,13 @@ def version_assets(out):
 
         def stamp(match):
             link = match.group(2)
-            # a link from the site root ("/assets/x.js") is the not-found pages' way; every other page links relative
-            target = (root / link.lstrip("/") if link.startswith("/") else page.parent / link).resolve()
+            # Cloudflare serves 404.html at any depth, so only the not-found pages link from the root ("/assets/x.js")
+            from_root = link.startswith("/")
+            if from_root and rel.name != "404.html":
+                fail(f"{rel.as_posix()} links {link} from the site root; only 404.html may, every other page links relative to itself")
+            target = (root / link.lstrip("/") if from_root else page.parent / link).resolve()
             if root not in target.parents or not target.is_file():
-                fail(f"{rel.as_posix()} links {link}, which is not a file of the output (use a link relative to the page)")
+                fail(f"{rel.as_posix()} links {link}, which is not a file of the output (404.html links from the site root, every other page relative to itself)")
             digest = hashlib.sha256(target.read_bytes()).hexdigest()[:10]
             return f"{match.group(1)}{match.group(2)}?v={digest}{match.group(3)}"
 

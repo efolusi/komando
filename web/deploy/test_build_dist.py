@@ -11,6 +11,7 @@ Each test builds a small stand-in site in a temporary folder, so the real web/si
 import importlib.util
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -113,10 +114,15 @@ class SymlinkTests(unittest.TestCase):
         self.assertNotIn("404", xml)
 
     def test_a_missing_not_found_page_stops_the_build(self):
-        (self.site / "id" / "404.html").unlink()
-        with self.assertRaises(SystemExit) as stop:
-            build_dist.main()
-        self.assertIn("id/404.html", str(stop.exception))
+        for rel in ("404.html", "id/404.html"):
+            with self.subTest(rel=rel):
+                kept = (self.site / rel).read_text()
+                (self.site / rel).unlink()
+                with self.assertRaises(SystemExit) as stop:
+                    build_dist.main()
+                self.assertIn(rel, str(stop.exception))
+                (self.site / rel).write_text(kept)
+                shutil.rmtree(self.out, ignore_errors=True)  # the stopped build left a half-written folder
 
     def test_a_missing_indonesian_home_stops_the_build(self):
         (self.site / "id" / "index.html").unlink()
@@ -323,6 +329,16 @@ class SymlinkTests(unittest.TestCase):
         build_dist.main()
         text = (self.out / "id" / "404.html").read_text()
         self.assertRegex(text, r'href="/assets/site\.css\?v=[0-9a-f]{10}"')
+
+    def test_a_root_link_in_any_other_page_stops_the_build(self):
+        # only the not-found pages may link from "/"; every other page stays relative, even to a file that exists
+        (self.site / "assets" / "site.css").write_text("css")
+        (self.site / "docs" / "install" / "index.html").write_text(
+            page("x").replace("</head>", '<link rel="stylesheet" href="/assets/site.css">\n</head>'))
+        with self.assertRaises(SystemExit) as stop:
+            build_dist.main()
+        self.assertIn("docs/install/index.html", str(stop.exception))
+        self.assertIn("404.html", str(stop.exception))
 
     def test_a_root_link_to_a_missing_script_stops_the_build(self):
         (self.site / "404.html").write_text(page("n").replace("</head>", '<script src="/assets/gone.js"></script>\n</head>'))
