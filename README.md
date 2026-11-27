@@ -56,6 +56,17 @@ Checklist for each komando release (CLI tag `vX.Y.Z` in sgnd/komando), the same 
    ```bash
    python3 -I web/deploy/check_release.py --live
    ```
+6. After the deploy, check the live not-found pages (the `_headers` rules apply to their body): an unknown path at the
+   root and one under `/id/` must answer `404` with the page of its language and carry the `Content-Security-Policy`
+   header.
+
+   ```bash
+   curl -s -D - -o /dev/null https://komando.efolusi.com/no-such-page | grep -iE '^(HTTP|content-security-policy)'
+   curl -s -D - -o /dev/null https://komando.efolusi.com/id/no-such-page | grep -iE '^(HTTP|content-security-policy)'
+   ```
+
+Every January, rebuild the site (`web/site/README.md`, "How the pages are made") and release it: the footer year comes from the clock of
+the build, so the committed pages keep last year's until then.
 
 "Site release check" (`.github/workflows/site-release-check.yml`, not a required check) runs the same script: on each
 push to `main` it checks the committed release; every day, and by hand (`gh workflow run site-release-check.yml`), it

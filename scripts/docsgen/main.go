@@ -262,7 +262,7 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 		}
 		ids[p.slug] = headingIDs(heads)
 		var b strings.Builder
-		b.WriteString(head(p.title+" · "+l.ui("komando docs"), p.lead, path, l, l.code == "id" || twin[p.slug]))
+		b.WriteString(head(p.title+" · "+l.ui("Docs")+" · "+productName, p.lead, path, l, l.code == "id" || twin[p.slug]))
 		fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, p.slug))
 		trail := []crumb{{l.ui("Docs"), "../"}, {l.group(p.group), "../#" + anchor(p.group)}, {p.title, ""}}
 		fmt.Fprintf(&b, `<article class="g-article">%s`, breadcrumb(l, trail))
@@ -279,7 +279,7 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 
 	// the docs home: one card per page, under its group
 	var b strings.Builder
-	b.WriteString(head(l.ui("komando docs"), l.ui("How to use the komando command line, one page per feature."), "docs/", l, true))
+	b.WriteString(head(l.ui("Docs")+" · "+productName, l.ui("How to use the komando command line, one page per feature."), "docs/", l, true))
 	fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, ""))
 	fmt.Fprintf(&b, `<article class="g-article g-article--index"><h1>%s</h1><div class="g-body g-intro">`, esc(l.ui("komando docs")))
 	start, agent := "Getting started", ""
@@ -733,6 +733,9 @@ func (r *renderer) href(target string) string {
 
 // siteURL is where the site is served (owner, 2026-11-18: a Cloudflare Worker on a subdomain of efolusi.com)
 const siteURL = "https://komando.efolusi.com/"
+
+// productName ends every page title: "<Page> · Docs · Komando" (row W45).
+const productName = "Komando"
 
 // shellDir holds the page shell partials web/site/build.mjs renders with Meridian, relative to -out; one folder per language
 const shellDir = "../_shell"

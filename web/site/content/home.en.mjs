@@ -7,7 +7,7 @@ export const installSha = '9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22
 
 export const meta = {
   lang: 'en',
-  title: 'komando: a DevOps command line for you and your AI agent',
+  title: 'Komando · a DevOps command line for you and your AI agent',
   description: 'Free, open-source command line for servers, databases, caches, storage and VPNs, with free Komando apps for Mac, iPhone and iPad built and in testing.',
   ogDescription: 'One inventory, read-only by default, passwords out of the agent’s reach. Free and open source. The free Komando apps for Mac, iPhone and iPad are built and in testing.',
 };
@@ -42,9 +42,23 @@ export const shell = {
         { label: 'User guide', page: 'guide/' },
       ] },
     ],
-    rights: '© 2026 Komando',
+    // {year} is worked out by build.mjs. The three links are efolusi.com's and show only once the draft pages are on.
+    rights: '© {year} PT Efolusi Dunia Teknologi. All rights reserved.',
+    legal: [
+      { label: 'Platform terms', href: 'https://efolusi.com/en/terms' },
+      { label: 'Privacy notice', href: 'https://efolusi.com/en/privacy' },
+      { label: 'Status', href: 'https://stats.uptimerobot.com/SrVLCmD6V7' },
+    ],
     trademarks: 'Product names and logos are trademarks of their owners.',
   },
+};
+
+// The not-found page (row W43): a title, one sentence, two links.
+export const notFound = {
+  title: 'Page not found',
+  sub: 'The address may be mistyped, or the page has moved.',
+  home: 'Home',
+  docs: 'Docs',
 };
 
 export const hero = {

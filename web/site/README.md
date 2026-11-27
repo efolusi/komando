@@ -8,7 +8,7 @@ The static site for the free komando command line and the free Komando apps: the
 
 | Part | Made by | From |
 |---|---|---|
-| `index.html`, `id/index.html` | `build.mjs` (Node 26.13.1, pnpm 11.24.0) | `content/home.en.mjs` and `content/home.id.mjs` (the copy) and `content/screens/*.html` (the drawn app screens, shared), rendered with Meridian's marketing components (`Hero`, `Section`, `SectionHead`, `FeatureGrid`, `FeatureCard`, `Marquee`, `SiteHeader`, `SiteFooter`, `ThemeToggle`) through `renderToStaticMarkup` |
+| `index.html`, `id/index.html`, `404.html`, `id/404.html` | `build.mjs` (Node 26.13.1, pnpm 11.24.0) | `content/home.en.mjs` and `content/home.id.mjs` (the copy, `notFound` for the 404 pages) and `content/screens/*.html` (the drawn app screens, shared), rendered with Meridian's marketing components (`Hero`, `Section`, `SectionHead`, `FeatureGrid`, `FeatureCard`, `Marquee`, `SiteHeader`, `SiteFooter`, `ThemeToggle`) through `renderToStaticMarkup` |
 | `_shell/en/` and `_shell/id/`: `head.html`, `header.html`, `footer.html` | `build.mjs` | the same components; `{{root}}` is the way up to `web/site/`, `{{switch}}` the address of the page in the other language, `data-nav="ID"` marks a link the builder sets `aria-current` on |
 | `assets/meridian/` | `build.mjs` | copied from the pinned `@efolusi/meridian` package: `styles.css`, `components.css`, `landing.css`, `tokens/`, the fonts and the licence |
 | `guide/<page>/index.html`, `id/guide/<page>/index.html` | `guide/build.py` | `guide/src/*.md` and `guide/src/*.id.md`, framed by the shell partials; the Indonesian words are in `i18n/guide.id.json` |
@@ -45,6 +45,8 @@ Until the apps can be downloaded the download page says only that they are built
 The links inside the drafts (the home page, the guide and docs, the language switch) are relative and written for the current depth, `content/drafts/out/<lang>/`. They work when you open the built files there, and break if a page moves to another folder, so check them again when the pages are switched on and given their real addresses.
 
 To switch on, after review: fill `config.json` (released, version, sha256, release notes), clear every TODO, add the pages to `build_dist.py`'s allowlist and to the navigation, then run `python3 -I web/deploy/check_download.py`.
+
+From then on the footer also shows efolusi.com's Platform terms, Privacy notice and Status (`content/home.*.mjs`, `shell.footer.legal`).
 
 ## Social card
 
@@ -109,12 +111,16 @@ English is at `/`, Indonesian at `/id/`. Same slugs, so a switch between languag
 2. **Downloads for the apps**: where Komando for Mac comes from (Developer ID outside the store, as the sync design
    says) and the App Store link for iPhone and iPad. The page has no download link for either yet.
 3. **Privacy policy and terms**, before the page collects anything (an email form, a checkout).
-4. **Footer owner name**: `© 2026 Komando`, or the company (PT Efolusi Dunia Teknologi).
-5. **Marketing fonts**: the move to Meridian replaces Instrument Sans and DM Mono (owner, 2026-11-13) with
+4. **Marketing fonts**: the move to Meridian replaces Instrument Sans and DM Mono (owner, 2026-11-13) with
    Meridian's Figtree, Bricolage Grotesque and JetBrains Mono. Keep Meridian's, or keep the old pair as a brand
    override (`guidelines/theming.md`).
 
 ## Decided
+
+- **Page titles** (sweep row W45, 2026-11-27): the home page is `Komando · <tagline>`; every other page is `<Page> · Komando`, and a docs or guide page puts its section before the product (`Servers · Docs · Komando`, `Servers · User guide · Komando`), because the two parts share page names. The docs home is `Docs · Komando`, the guide home `User guide · Komando`. Indonesian: `Dokumentasi`, `Panduan pengguna`.
+- **Footer** (W48): `© <year> PT Efolusi Dunia Teknologi. All rights reserved.` (Indonesian `Hak cipta dilindungi.`), as efolusi.com. The year is worked out by `build.mjs` (`YEAR`); the pages are committed, so rebuild in January. Platform terms, Privacy notice and Status (efolusi.com's pages and status page) show in the footer only when `content/drafts/config.json` has `switchedOn: true`.
+- **Not-found pages** (W43): `404.html` and `id/404.html`, with `"not_found_handling": "404-page"` in `wrangler.jsonc`. Cloudflare serves the nearest one up the path, so `/id/...` gets the Indonesian page. Every address in them starts at the root, they carry `noindex` and are not in the sitemap.
+- **Button sizes** (W44): Meridian's, none of our own. Header action `md`, hero main action `xl` and second action `lg`, Copy `md`. The pill shape comes with Meridian 2.5.0's root setting; it is not drawn here.
 
 - **Fonts** (owner, 2026-11-13): the app screens drawn on the page (`.kmd`) use the system fonts like the apps
   (`-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif` and `ui-monospace, "SF Mono", Menlo,
@@ -136,11 +142,11 @@ The site lives in `efolusi/komando`, under `web/site/`. It deploys as a Cloudfla
 `main` (`.github/workflows/deploy-site.yml`). Never serve `web/site` itself; serve what `web/deploy/build_dist.py`
 writes to `web/dist/`:
 
-- It copies only what a visitor needs (an allowlist: `index.html`, `favicon.svg`, `share.jpg`, `assets/`,
-  the guide and the docs pages and their CSS, and the same pages under `id/`). `build.mjs`, `content/`, `_shell/`, `glyphs/` (inlined into the pages at build time), `test/`, `node_modules/` and the
+- It copies only what a visitor needs (an allowlist: `index.html`, `404.html`, `favicon.svg`, `share.jpg`, `assets/`,
+  the guide and the docs pages and their CSS, and the same pages under `id/`, `id/404.html` among them). `build.mjs`, `content/`, `_shell/`, `glyphs/` (inlined into the pages at build time), `test/`, `node_modules/` and the
   notes stay behind. Hidden files and symbolic links are refused.
 - It puts the release marker in the head of every page (see "Where the facts come from"), checks that each page has
-  exactly one, and writes `sitemap.xml` (every page, with `hreflang` alternates for the pages that exist in both
+  exactly one, and writes `sitemap.xml` (every page but the two not-found pages, with `hreflang` alternates for the pages that exist in both
   languages) and `robots.txt` (everything allowed, the sitemap's address).
 - It writes `_headers`: a Content-Security-Policy whose `script-src` is `'self'`, Cloudflare's analytics beacon and
   the sha256 of every inline script, worked out at each build (the site has none: Meridian's `theme-init.js` is a

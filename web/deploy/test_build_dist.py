@@ -11,6 +11,7 @@ Each test builds a small stand-in site in a temporary folder, so the real web/si
 import importlib.util
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -46,6 +47,7 @@ class SymlinkTests(unittest.TestCase):
         self.secret.write_text("PRIVATE KEY STAND-IN\n")
         for rel, text in {
             "index.html": page("t").replace("</head>", "<script>1</script>\n</head>"),
+            "404.html": page("n"),
             "favicon.svg": "<svg/>",
             "share.jpg": "jpg",
             "glyphs/a.svg": "<svg/>",  # a build input, never published
@@ -57,6 +59,7 @@ class SymlinkTests(unittest.TestCase):
             "docs/docs.css": "pre{}",
             "docs/install/index.html": page("i"),
             "id/index.html": page("t", "id"),
+            "id/404.html": page("n", "id"),
             "id/guide/index.html": page("g", "id"),
             "id/guide/start/index.html": page("s", "id"),
             "id/docs/index.html": page("d", "id"),
@@ -101,6 +104,25 @@ class SymlinkTests(unittest.TestCase):
         served = {p.relative_to(self.out).as_posix() for p in self.published()}
         for rel in ("id/index.html", "id/guide/index.html", "id/guide/start/index.html", "id/docs/index.html", "id/docs/start/index.html"):
             self.assertIn(rel, served)
+
+    def test_the_not_found_pages_are_published_and_not_listed(self):
+        # W43: Cloudflare serves the nearest 404.html up the path, so both languages ship one; a sitemap names real pages only
+        build_dist.main()
+        served = {p.relative_to(self.out).as_posix() for p in self.published()}
+        self.assertLessEqual({"404.html", "id/404.html"}, served)
+        xml = (self.out / "sitemap.xml").read_text(encoding="utf-8")
+        self.assertNotIn("404", xml)
+
+    def test_a_missing_not_found_page_stops_the_build(self):
+        for rel in ("404.html", "id/404.html"):
+            with self.subTest(rel=rel):
+                kept = (self.site / rel).read_text()
+                (self.site / rel).unlink()
+                with self.assertRaises(SystemExit) as stop:
+                    build_dist.main()
+                self.assertIn(rel, str(stop.exception))
+                (self.site / rel).write_text(kept)
+                shutil.rmtree(self.out, ignore_errors=True)  # the stopped build left a half-written folder
 
     def test_a_missing_indonesian_home_stops_the_build(self):
         (self.site / "id" / "index.html").unlink()
@@ -295,6 +317,31 @@ class SymlinkTests(unittest.TestCase):
     def test_a_link_to_a_missing_script_stops_the_build(self):
         (self.site / "docs" / "install" / "index.html").write_text(
             page("x").replace("</head>", '<script src="../../assets/gone.js"></script>\n</head>'))
+        with self.assertRaises(SystemExit) as stop:
+            build_dist.main()
+        self.assertIn("gone.js", str(stop.exception))
+
+    def test_the_not_found_page_links_its_assets_from_the_site_root(self):
+        # W43: Cloudflare serves 404.html at any depth, so its links start at "/"; they get a version like any other
+        (self.site / "assets" / "site.css").write_text("css")
+        (self.site / "id" / "404.html").write_text(
+            page("n", "id").replace("</head>", '<link rel="stylesheet" href="/assets/site.css">\n</head>'))
+        build_dist.main()
+        text = (self.out / "id" / "404.html").read_text()
+        self.assertRegex(text, r'href="/assets/site\.css\?v=[0-9a-f]{10}"')
+
+    def test_a_root_link_in_any_other_page_stops_the_build(self):
+        # only the not-found pages may link from "/"; every other page stays relative, even to a file that exists
+        (self.site / "assets" / "site.css").write_text("css")
+        (self.site / "docs" / "install" / "index.html").write_text(
+            page("x").replace("</head>", '<link rel="stylesheet" href="/assets/site.css">\n</head>'))
+        with self.assertRaises(SystemExit) as stop:
+            build_dist.main()
+        self.assertIn("docs/install/index.html", str(stop.exception))
+        self.assertIn("404.html", str(stop.exception))
+
+    def test_a_root_link_to_a_missing_script_stops_the_build(self):
+        (self.site / "404.html").write_text(page("n").replace("</head>", '<script src="/assets/gone.js"></script>\n</head>'))
         with self.assertRaises(SystemExit) as stop:
             build_dist.main()
         self.assertIn("gone.js", str(stop.exception))
@@ -502,6 +549,9 @@ class WorkerConfigTests(unittest.TestCase):
         self.assertEqual(self.config["assets"]["directory"], "./web/dist")
         self.assertEqual(Path(self.config["assets"]["directory"]).resolve(strict=False).name,
                          build_dist.DEFAULT_OUT.name)
+
+    def test_an_unknown_address_gets_the_404_page(self):
+        self.assertEqual(self.config["assets"]["not_found_handling"], "404-page")
 
     def test_assets_only(self):
         self.assertNotIn("main", self.config)  # no script: _headers is honoured and nothing runs code

@@ -9,7 +9,7 @@
   "assets": {
     "directory": "./web/dist",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "none"
+    "not_found_handling": "404-page"
   },
   // The custom domain only (owner's yes for the cut-over, 2026-11-19); no workers.dev URL.
   "routes": [{ "pattern": "komando.efolusi.com", "custom_domain": true }],

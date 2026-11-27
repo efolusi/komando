@@ -7,7 +7,7 @@ export { release, installSha } from './home.en.mjs';
 
 export const meta = {
   lang: 'id',
-  title: 'komando, command line DevOps untuk Anda dan agen AI Anda',
+  title: 'Komando · command line DevOps untuk Anda dan agen AI Anda',
   description: 'Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Gratis dan open source.',
   ogDescription: 'Satu inventaris, hanya-baca secara default, kata sandi di luar jangkauan agen. Gratis dan open source. Aplikasi Komando gratis untuk Mac, iPhone, dan iPad sudah dibuat dan sedang diuji.',
 };
@@ -42,9 +42,23 @@ export const shell = {
         { label: 'Panduan', page: 'guide/' },
       ] },
     ],
-    rights: '© 2026 Komando',
+    // {year} dihitung oleh build.mjs. Ketiga link-nya milik efolusi.com dan baru tampil setelah halaman draf dinyalakan.
+    rights: '© {year} PT Efolusi Dunia Teknologi. Hak cipta dilindungi.',
+    legal: [
+      { label: 'Ketentuan platform', href: 'https://efolusi.com/id/terms' },
+      { label: 'Pemberitahuan privasi', href: 'https://efolusi.com/id/privacy' },
+      { label: 'Status', href: 'https://stats.uptimerobot.com/SrVLCmD6V7' },
+    ],
     trademarks: 'Nama produk dan logo adalah merek dagang pemiliknya.',
   },
+};
+
+// Halaman tidak ditemukan (baris W43): judul, satu kalimat, dua link.
+export const notFound = {
+  title: 'Halaman tidak ditemukan',
+  sub: 'Alamatnya mungkin salah ketik, atau halamannya sudah dipindahkan.',
+  home: 'Beranda',
+  docs: 'Dokumentasi',
 };
 
 export const hero = {

@@ -103,7 +103,17 @@ test('one h1, unique ids, no em dash', () => {
 test('an Indonesian page says nothing English about itself in its head', () => {
   for (const p of pages.filter((x) => x.id)) {
     const title = /<title>([^<]*)<\/title>/.exec(p.html)[1];
-    assert.ok(!/ · Komando guide| · komando docs/.test(title), `${p.rel}: title ${title}`);
+    assert.ok(!/ · (User guide|Docs) · Komando/.test(title), `${p.rel}: title ${title}`);
+  }
+});
+
+// W45: one title pattern. Home is "Komando · <tagline>"; every other page is "<Page> · Komando", with the section
+// ("Docs", "User guide") before the product when the page is a docs or guide page.
+test('every page title follows the Page · Komando pattern', () => {
+  for (const p of pages) {
+    const title = /<title>([^<]*)<\/title>/.exec(p.html)[1];
+    const home = p.rel === 'index.html' || p.rel === 'id/index.html';
+    assert.ok(home ? title.startsWith('Komando · ') : title.endsWith(' · Komando'), `${p.rel}: title ${title}`);
   }
 });
 

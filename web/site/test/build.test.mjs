@@ -170,13 +170,13 @@ test('the header mark and the favicon are the system komando mark, and the K-car
   assert.ok((home.match(/<svg class="site-logo"/g) ?? []).length >= 2, 'the home page shows the mark in the header and in the flow');
 });
 
-// W19, C277: light and dark only; the vendored copy is Meridian v2.2.0.
-test('the theme switch has two choices in both languages, and the vendored copy is 2.2.0', () => {
+// W19, C277: light and dark only; the vendored copy is Meridian v2.4.0.
+test('the theme switch has two choices in both languages, and the vendored copy is 2.4.0', () => {
   for (const page of [home, renderHome(id), shell.header]) {
     assert.doesNotMatch(page, /data-preference|data-theme-icon="system"|system theme|tema sistem/i, 'a system theme option is still on the page');
     assert.match(page, /data-theme-shown="(light|dark)"/);
   }
-  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 2.2.0');
+  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 2.4.0');
 });
 
 // W20: the social card (share.jpg) is drawn from brand/share-card.html, shows the product mark and no version number.
@@ -206,4 +206,36 @@ test('the vendored CSS carries the label and icon gap tokens', () => {
   }).join('\n');
   assert.match(css, /--gap-label-icon:\s*var\(--space-2\)/);
   assert.match(css, /--gap-label-icon-sm:\s*var\(--space-1\)/);
+});
+
+// W48: the footer's year is computed, the owner is the company, and efolusi.com's legal links wait for the draft pages.
+test('the footer reads © <year> PT Efolusi Dunia Teknologi, with the year from the build and Indonesian "Hak cipta dilindungi"', () => {
+  const year = new Date().getFullYear();
+  assert.ok(renderShell(en).footer.includes(`© ${year} PT Efolusi Dunia Teknologi. All rights reserved.`));
+  assert.ok(renderShell(id).footer.includes(`© ${year} PT Efolusi Dunia Teknologi. Hak cipta dilindungi.`));
+  for (const c of [en, id]) assert.doesNotMatch(c.shell.footer.rights, /\b20\d\d\b/, 'the year is not typed in the copy');
+});
+
+test('Platform terms, Privacy notice and Status appear in the footer only when the draft pages are on', () => {
+  const words = { en: ['Platform terms', 'Privacy notice', 'Status'], id: ['Ketentuan platform', 'Pemberitahuan privasi', 'Status'] };
+  for (const [lang, c] of [['en', en], ['id', id]]) {
+    const off = renderShell(c, false).footer;
+    const on = renderShell(c, true).footer;
+    for (const w of words[lang]) {
+      assert.ok(!off.includes(`>${w}</a>`), `${lang}: ${w} shown while the drafts are off`);
+      assert.ok(on.includes(`>${w}</a>`), `${lang}: ${w} missing once the drafts are on`);
+    }
+  }
+  assert.ok(renderShell(en, true).footer.includes('href="https://efolusi.com/en/terms"'));
+  assert.ok(renderShell(id, true).footer.includes('href="https://efolusi.com/id/privacy"'));
+});
+
+// W44: the sizes are Meridian's. Header action md, hero primary xl and secondary lg, Copy md.
+test('buttons take Meridian sizes: header md, hero primary xl and secondary lg, Copy md', () => {
+  assert.match(shell.header, /ef-btn ef-btn--primary ef-btn--md/);
+  const hero = /<section[^>]*id="hero"[\s\S]*?<\/section>/.exec(home)[0];
+  assert.match(hero, /ef-btn ef-btn--primary ef-btn--xl/);
+  assert.match(hero, /ef-btn ef-btn--secondary ef-btn--lg/);
+  assert.equal(home.match(/<button[^>]*data-copy[^>]*>/g).every((b) => b.includes('ef-btn--md')), true);
+  assert.doesNotMatch(home + shell.header, /ef-btn--sm/);
 });

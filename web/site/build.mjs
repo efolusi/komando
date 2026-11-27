@@ -1,9 +1,10 @@
-// Render the home page and the page shell with Meridian's marketing components, to static HTML, in English and Indonesian.
+// Render the home page, the not-found page and the page shell with Meridian's marketing components, to static HTML, in
+// English and Indonesian.
 //
 //   cd web/site && pnpm install && node build.mjs
 //
-// Writes index.html and id/index.html, the shell partials _shell/{en,id}/{head,header,footer}.html that guide/build.py and
-// scripts/docsgen read, and copies Meridian's CSS, fonts and plain browser scripts (browser/theme-init.js, theme.js and
+// Writes index.html, 404.html, id/index.html, id/404.html, the shell partials _shell/{en,id}/{head,header,footer}.html
+// that guide/build.py and scripts/docsgen read, and copies Meridian's CSS, fonts and plain browser scripts (browser/theme-init.js, theme.js and
 // marketing.js) from the pinned package into assets/meridian/. Every output is
 // committed, so serving the site needs no build step. Decision: brainOS 05-Knowledge/.../komando/2026-11-20-site-on-meridian-decision.md.
 //
@@ -35,6 +36,12 @@ const raw = (tag, html, props = {}) => h(tag, { ...props, dangerouslySetInnerHTM
 const LANGS = { en, id };
 // the folder a language lives in, under the site's root
 const BASE = { en: '', id: 'id/' };
+
+// The year in the footer is worked out at build time (row W48); the pages are committed, so rebuild in January.
+const YEAR = new Date().getFullYear();
+// Platform terms, Privacy notice and Status are efolusi.com's pages. They are in the footer only once the draft pages
+// are switched on (content/drafts/config.json, README "Draft pages").
+const DRAFTS_ON = JSON.parse(readFileSync(join(HERE, 'content', 'drafts', 'config.json'), 'utf8')).switchedOn === true;
 
 /** A drawn app screen. Indonesian swaps in its screen-reader description and the lines home.id.mjs names. */
 function screen(name, c) {
@@ -94,7 +101,7 @@ function header(c, root, home, switchHref) {
   const links = c.shell.nav.map((l) => ({ href: target(l, root, home, lang), label: l.label, 'data-nav': l.id }));
   const actions = h(React.Fragment, null,
     themeToggle(lang),
-    h('a', { className: 'ef-btn ef-btn--primary ef-btn--sm', href: target({ section: 'install' }, root, home, lang) }, c.shell.install));
+    h('a', { className: 'ef-btn ef-btn--primary ef-btn--md', href: target({ section: 'install' }, root, home, lang) }, c.shell.install));
   let html = renderToStaticMarkup(h(SiteHeader, {
     brand, brandHref: home ? './' : `${root}${BASE[lang]}index.html`, brandLabel: c.shell.brandLabel, links, actions,
     languageSwitch: switchLink(c, switchHref), labels: { skip: c.shell.skip },
@@ -110,14 +117,15 @@ function header(c, root, home, switchHref) {
   return lowerHreflang(html);
 }
 
-function footer(c, root, home, switchHref) {
+function footer(c, root, home, switchHref, legalOn = DRAFTS_ON) {
   const lang = c.meta.lang;
   const columns = c.shell.footer.columns.map((col) => ({
     heading: col.heading,
     links: col.links.map((l) => ({ label: l.label, href: target(l, root, home, lang) })),
   }));
   const s = switchLink(c, switchHref);
-  const bottom = h(React.Fragment, null, h('span', null, c.shell.footer.rights), h('span', null, c.shell.footer.trademarks),
+  const legal = legalOn ? c.shell.footer.legal.map((l) => h('a', { key: l.href, className: 'ef-site-footer__link', href: l.href }, l.label)) : [];
+  const bottom = h(React.Fragment, null, h('span', null, c.shell.footer.rights.replace('{year}', YEAR)), h('span', null, c.shell.footer.trademarks), ...legal,
     h('a', { className: 'ef-site-footer__link', href: s.href, hrefLang: s.hrefLang, lang: s.hrefLang, 'aria-label': s.ariaLabel }, s.label));
   const icons = SWAP_ICONS.map((name) => `<template id="icon-${name}">${renderToStaticMarkup(h(Icon, { name, size: name === 'play' || name === 'pause' ? 16 : 20, 'aria-hidden': 'true' }))}</template>`).join('');
   return lowerHreflang(renderToStaticMarkup(h(SiteFooter, {
@@ -144,13 +152,14 @@ function headShared(root) {
 
 function homeBody(c, root) {
   const r = c.release;
-  const btn = (kind, href, label) => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--lg`, href }, label);
+  // sizes are Meridian's: the hero's main action xl, its second action and the closing action lg
+  const btn = (kind, href, label, size = 'lg') => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--${size}`, href }, label);
 
   const hero = h(Hero, {
     id: 'hero', className: 'site-hero', align: 'start', 'aria-labelledby': 'hero-h',
     title: h('span', { id: 'hero-h' }, c.hero.title),
     sub: c.hero.sub,
-    actions: h(React.Fragment, null, btn('primary', '#install', c.hero.primary), btn('secondary', 'guide/', c.hero.secondary)),
+    actions: h(React.Fragment, null, btn('primary', '#install', c.hero.primary, 'xl'), btn('secondary', 'guide/', c.hero.secondary)),
     proof: h('span', null, `${c.hero.releaseLabel} `, h('span', { 'data-release': '' }, r)),
   }, raw('div', screen('home', c), { className: 'site-stage' }));
 
@@ -283,8 +292,43 @@ ${footer(c, root, true, twin)}
 `;
 }
 
-export function renderShell(c = en) {
-  return { head: headShared('{{root}}'), header: header(c, '{{root}}', false, '{{switch}}'), footer: footer(c, '{{root}}', false, '{{switch}}') };
+/**
+ * The not-found page (row W43). Cloudflare serves it for any unknown address, at any depth, and takes the nearest
+ * 404.html up the path, so /id/... gets id/404.html. Every address in it is therefore from the site's root.
+ */
+export function renderNotFound(c = en) {
+  const lang = c.meta.lang;
+  const root = '/';
+  const twin = lang === 'en' ? '/id/' : '/';
+  const title = `${c.notFound.title} · Komando`;
+  const btn = (kind, href, label, size = 'lg') => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--${size}`, href }, label);
+  const body = renderToStaticMarkup(h('main', { id: 'top', tabIndex: -1 },
+    h(Hero, {
+      id: 'not-found', align: 'center', 'aria-labelledby': 'not-found-h',
+      title: h('span', { id: 'not-found-h' }, c.notFound.title),
+      sub: c.notFound.sub,
+      actions: h(React.Fragment, null, btn('primary', `${root}${BASE[lang]}`, c.notFound.home, 'xl'), btn('secondary', `${root}${BASE[lang]}docs/`, c.notFound.docs)),
+    })));
+  return `<!doctype html>
+<html lang="${lang}">
+<head>
+<meta charset="utf-8">
+<title>${title}</title>
+<meta name="robots" content="noindex">
+${headShared(root)}
+<!-- built by web/site/build.mjs from content/; edit the source, not this file -->
+</head>
+<body>
+${header(c, root, false, twin)}
+${body}
+${footer(c, root, false, twin)}
+</body>
+</html>
+`;
+}
+
+export function renderShell(c = en, legalOn = DRAFTS_ON) {
+  return { head: headShared('{{root}}'), header: header(c, '{{root}}', false, '{{switch}}'), footer: footer(c, '{{root}}', false, '{{switch}}', legalOn) };
 }
 
 function copyMeridian() {
@@ -308,12 +352,13 @@ function main() {
     const home = join(HERE, BASE[lang], 'index.html');
     mkdirSync(dirname(home), { recursive: true });
     writeFileSync(home, renderHome(c));
+    writeFileSync(join(HERE, BASE[lang], '404.html'), renderNotFound(c));
     const dir = join(HERE, '_shell', lang);
     mkdirSync(dir, { recursive: true });
     for (const [name, html] of Object.entries(renderShell(c))) writeFileSync(join(dir, `${name}.html`), `${html}\n`);
   }
   const drafts = renderDrafts();
-  console.log(`build.mjs: ${drafts} draft pages (switched off) written to content/drafts/out/, index.html, id/index.html and _shell/{en,id}/ written with @efolusi/meridian ${version}`);
+  console.log(`build.mjs: ${drafts} draft pages (switched off) written to content/drafts/out/, index.html, 404.html, id/index.html, id/404.html and _shell/{en,id}/ written with @efolusi/meridian ${version}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
