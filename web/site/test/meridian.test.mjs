@@ -70,3 +70,8 @@ test('a "Coming" marker is a Meridian warning Badge and an agent name is a Merid
 test('a link in a list item or table cell of the page text has no site rule; Meridian underlines it', () => {
   assert.doesNotMatch(read('guide/guide.css'), /\.g-body (li|td) a/);
 });
+
+test('the side navigation is a navigation list, so its links stay plain although Meridian underlines classless links in li', () => {
+  assert.match(read('guide/guide.css'), /\n\.g-side li a \{ text-decoration: none; \}/);
+  assert.doesNotMatch(read('guide/guide.css'), /\n\.g-side a \{[^}]*text-decoration/, 'the home link in a paragraph stays underlined');
+});
