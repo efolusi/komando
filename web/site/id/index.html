@@ -53,7 +53,7 @@
 </svg></span><span data-theme-icon="dark" aria-hidden="true" data-slot="icon" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
 </svg></span></button><a class="ef-btn ef-btn--primary ef-btn--sm" href="#install">Instal komando</a></div></div></header>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<svg class="k-defs" width="0" height="0" aria-hidden="true" focusable="false">
 <symbol id="s-house" viewBox="0 0 16 16"><path d="M2.3 7.6 8 2.6l5.7 5"/><path d="M3.8 6.4v6.8c0 .5.4.8.8.8h2.4v-3.6h2V14h2.4c.4 0 .8-.3.8-.8V6.4"/></symbol>
 <symbol id="s-server" viewBox="0 0 16 16"><rect x="2" y="2.5" width="12" height="4.5" rx="1.2"/><rect x="2" y="9" width="12" height="4.5" rx="1.2"/><path d="M4.6 4.75h.01M4.6 11.25h.01"/></symbol>
 <symbol id="s-db" viewBox="0 0 16 16"><ellipse cx="8" cy="3.8" rx="5.5" ry="2"/><path d="M2.5 3.8v8.4c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V3.8M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2"/></symbol>
@@ -104,16 +104,16 @@
 <div class="kmd-page">
 <div class="kmd-sec">
 <div class="kmd-sec__head"><b>Needs attention</b><span class="k-spacer"></span><span class="kmd-link">View all 4<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
-<div class="kmd-att" style="--c: var(--k-danger)"><span class="k-dot" style="--c: var(--k-danger)"></span><span class="kmd-att__text"><b>prod-db’s password is missing from the keychain.</b><span>komando can’t connect to prod-db until you add it.</span></span><span class="k-btn">Add Password</span></div>
-<div class="kmd-att" style="--c: var(--k-warn)"><span class="k-dot" style="--c: var(--k-warn)"></span><span class="kmd-att__text"><b>web-1 allows root to log in with a password.</b><span>Fix turns this off, so root can only log in with a key.</span></span><span class="k-btn">Fix</span></div>
+<div class="kmd-att k-c-danger"><span class="k-dot k-c-danger"></span><span class="kmd-att__text"><b>prod-db’s password is missing from the keychain.</b><span>komando can’t connect to prod-db until you add it.</span></span><span class="k-btn">Add Password</span></div>
+<div class="kmd-att k-c-warn"><span class="k-dot k-c-warn"></span><span class="kmd-att__text"><b>web-1 allows root to log in with a password.</b><span>Fix turns this off, so root can only log in with a key.</span></span><span class="k-btn">Fix</span></div>
 </div>
 <div class="k-dashed"></div>
 <div class="kmd-sec">
 <div class="kmd-sec__head"><b>Running now</b></div>
 <div class="kmd-grid3">
-<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">office</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">WireGuard</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Up</span><span class="k-meta">since 2 hours ago</span></span></div>
-<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">tailnet</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">Tailscale</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Up</span><span class="k-meta">since yesterday</span></span></div>
-<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile" style="--t: var(--k-ok)"><svg class="ks"><use href="#s-tunnel"/></svg></span><b class="k-trunc">localhost:15432</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2 k-trunc">→ prod-db</span><span class="kmd-row"><span class="k-pill" style="--c: var(--k-ok)">Open</span><span class="k-meta">since 12 minutes ago</span></span></div>
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile k-tint-vpn"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">office</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">WireGuard</span><span class="kmd-row"><span class="k-pill k-c-ok">Up</span><span class="k-meta">since 2 hours ago</span></span></div>
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile k-tint-vpn"><svg class="ks"><use href="#s-vpn"/></svg></span><b class="k-trunc">tailnet</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2">Tailscale</span><span class="kmd-row"><span class="k-pill k-c-ok">Up</span><span class="k-meta">since yesterday</span></span></div>
+<div class="kmd-run"><div class="kmd-run__top"><span class="k-tile k-tint-ok"><svg class="ks"><use href="#s-tunnel"/></svg></span><b class="k-trunc">localhost:15432</b><span class="k-spacer"></span><span class="k-dot"></span></div><span class="k-mono k-t2 k-trunc">→ prod-db</span><span class="kmd-row"><span class="k-pill k-c-ok">Open</span><span class="k-meta">since 12 minutes ago</span></span></div>
 </div>
 <div class="kmd-row"><svg class="ks ks--12 k-t3"><use href="#s-gears"/></svg><span class="k-sub">3 background jobs</span><span class="k-meta">·</span><span class="kmd-link">View<svg class="ks ks--8"><use href="#s-chev-r"/></svg></span></div>
 </div>
@@ -123,11 +123,11 @@
 <div>
 <div class="kmd-act"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-trunc">Ran a command on web-1 and web-2</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">2 minutes ago</span></div>
 <div class="k-rule"></div>
-<div class="kmd-act"><svg class="ks" style="color: var(--k-accent)"><use href="#s-bubble"/></svg><span class="k-trunc">Ran a read-only query on prod-db</span><span class="k-spacer"></span><span class="k-meta who">agent</span><span class="k-meta when">6 minutes ago</span></div>
+<div class="kmd-act"><svg class="ks k-accent"><use href="#s-bubble"/></svg><span class="k-trunc">Ran a read-only query on prod-db</span><span class="k-spacer"></span><span class="k-meta who">agent</span><span class="k-meta when">6 minutes ago</span></div>
 <div class="k-rule"></div>
 <div class="kmd-act"><svg class="ks k-t3"><use href="#s-tunnel"/></svg><span class="k-trunc">Opened a tunnel to prod-db</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">12 minutes ago</span></div>
 <div class="k-rule"></div>
-<div class="kmd-act"><svg class="ks k-t3"><use href="#s-chip"/></svg><span class="k-trunc">Couldn’t read a key in sessions</span><span class="k-pill" style="--c: var(--k-danger)">Failed</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">1 hour ago</span></div>
+<div class="kmd-act"><svg class="ks k-t3"><use href="#s-chip"/></svg><span class="k-trunc">Couldn’t read a key in sessions</span><span class="k-pill k-c-danger">Failed</span><span class="k-spacer"></span><span class="k-meta who">you</span><span class="k-meta when">1 hour ago</span></div>
 </div>
 </div>
 </div>
@@ -141,9 +141,9 @@
 <div class="kfrag__chips"><span class="on">All 5</span><span>production</span><span>staging</span><span>Protected</span></div>
 <p class="khosts__group">Produksi</p>
 <div class="kfrag__list">
-<div><b>web-1</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.4</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-<div><b>web-2</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.5</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-<div><b>bastion</b><span class="k-mono k-t2 k-trunc">ops@203.0.113.10</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+<div><b>web-1</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.4</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+<div><b>web-2</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.5</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+<div><b>bastion</b><span class="k-mono k-t2 k-trunc">ops@203.0.113.10</span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
 </div>
 <p class="khosts__group">Staging</p>
 <div class="kfrag__list">
@@ -151,7 +151,7 @@
 <div><b>staging-2</b><span class="k-mono k-t2 k-trunc">deploy@10.1.0.5</span><span class="k-spacer"></span></div>
 </div>
 <div class="kfrag kalert">
-<span class="k-tile" style="--ts: 40px; --t: var(--k-warn)"><svg class="ks" style="width: 20px; height: 20px"><use href="#s-lock"/></svg></span>
+<span class="k-tile k-tile--lg k-tint-warn"><svg class="ks ks--20"><use href="#s-lock"/></svg></span>
 <b class="kalert__title">This target is protected</b>
 <span class="k-sub">This restarts nginx on web-1, which is protected, so komando asks you first.</span>
 <span class="k-approval__code">komando svc restart <span class="nw">web-1</span> nginx <span class="nw">--yes</span></span>
@@ -165,12 +165,12 @@
 </svg></span></span><h3 class="ef-feature-card__title">Keychain komando menyimpan setiap rahasia</h3><p class="ef-feature-card__body">Kata sandi tetap di keychain terenkripsi milik komando atau di password manager Anda sendiri. Agen yang dikenali komando mendapat hasilnya, tidak pernah rahasianya.</p><div class="site-panel"><div class="kmd kfrag" role="img" aria-label="Keychain Komando: empat rahasia dan dua SSH key, masing-masing terkunci, masing-masing dengan keterangan apa yang memakainya">
 <div class="kfrag__head"><svg class="ks"><use href="#s-key"/></svg>Keychain</div>
 <div class="kfrag__list">
-  <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-cache)"><svg class="ks"><use href="#s-chip"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:sessions-pass</span><span class="k-meta">used by sessions</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-  <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks"><use href="#s-db"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:staging-db-pass</span><span class="k-meta">used by staging-db</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-  <div class="kfrag__row2"><span class="k-tile" style="--t: #ae731d"><svg class="ks"><use href="#s-server"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:registry-pass</span><span class="k-meta">used by registry</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-  <div class="kfrag__row2"><span class="k-tile" style="--t: #0d8e81"><svg class="ks"><use href="#s-archive"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:assets-pass</span><span class="k-meta">used by assets</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-  <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-key"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">deploy</span><span class="k-meta">ed25519 · used by 4 hosts</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-  <div class="kfrag__row2"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-key"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">ops</span><span class="k-meta">ed25519 · used by 1 host</span></span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile k-tint-cache"><svg class="ks"><use href="#s-chip"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:sessions-pass</span><span class="k-meta">used by sessions</span></span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile k-tint-db"><svg class="ks"><use href="#s-db"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:staging-db-pass</span><span class="k-meta">used by staging-db</span></span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile k-tint-amber"><svg class="ks"><use href="#s-server"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:registry-pass</span><span class="k-meta">used by registry</span></span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile k-tint-teal"><svg class="ks"><use href="#s-archive"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">secret:assets-pass</span><span class="k-meta">used by assets</span></span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile k-tint-servers"><svg class="ks"><use href="#s-key"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">deploy</span><span class="k-meta">ed25519 · used by 4 hosts</span></span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+  <div class="kfrag__row2"><span class="k-tile k-tint-servers"><svg class="ks"><use href="#s-key"/></svg></span><span class="kmd-two"><span class="k-mono k-trunc">ops</span><span class="k-meta">ed25519 · used by 1 host</span></span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
 </div>
 </div></div></div><div data-slot="feature-card" class="ef-feature-card site-feature"><span class="ef-feature-card__icon" aria-hidden="true"><span data-slot="icon" aria-hidden="true" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="m16 18 6-6-6-6"></path>
@@ -195,12 +195,12 @@
 <div class="kfrag__head"><svg class="ks"><use href="#s-audit"/></svg>Audit Log</div>
 <div class="kfrag__chips"><span class="on">All</span><span>Changes</span><span>Failed</span><span>Agent</span></div>
 <div class="kfrag__list">
-<div><span class="k-meta">10:20:14</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">exec · web-1, web-2</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
-<div><span class="k-meta">10:16:40</span><span class="k-mono">agent</span><span class="k-mono k-trunc k-t2">db.query · prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
-<div><span class="k-meta">10:10:05</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">tunnel.start · prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
-<div><span class="k-meta">09:41:20</span><span class="k-mono">agent</span><span class="k-mono k-trunc k-t2">exec · web-1</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span></div>
-<div><span class="k-meta">09:20:31</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">cache.get · sessions</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-danger)">Failed</span></div>
-<div><span class="k-meta">Nov 7 18:02</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">exec · web-1</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-warn)">Blocked</span></div>
+<div><span class="k-meta">10:20:14</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">exec · web-1, web-2</span><span class="k-spacer"></span><span class="k-pill k-c-ok">Done</span></div>
+<div><span class="k-meta">10:16:40</span><span class="k-mono">agent</span><span class="k-mono k-trunc k-t2">db.query · prod-db</span><span class="k-spacer"></span><span class="k-pill k-c-ok">Done</span></div>
+<div><span class="k-meta">10:10:05</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">tunnel.start · prod-db</span><span class="k-spacer"></span><span class="k-pill k-c-ok">Done</span></div>
+<div><span class="k-meta">09:41:20</span><span class="k-mono">agent</span><span class="k-mono k-trunc k-t2">exec · web-1</span><span class="k-spacer"></span><span class="k-pill k-c-ok">Done</span></div>
+<div><span class="k-meta">09:20:31</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">cache.get · sessions</span><span class="k-spacer"></span><span class="k-pill k-c-danger">Failed</span></div>
+<div><span class="k-meta">Nov 7 18:02</span><span class="k-mono">you</span><span class="k-mono k-trunc k-t2">exec · web-1</span><span class="k-spacer"></span><span class="k-pill k-c-warn">Blocked</span></div>
 </div>
 </div></div></div><div data-slot="feature-card" class="ef-feature-card site-feature"><span class="ef-feature-card__icon" aria-hidden="true"><span data-slot="icon" aria-hidden="true" data-size="20"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path>
@@ -210,9 +210,9 @@
 </svg></span></span><h3 class="ef-feature-card__title">Satu binary komando, klien sudah di dalamnya</h3><p class="ef-feature-card__body">Klien SSH, database, dan VPN-nya sendiri sudah terpasang, dalam satu file.</p><div class="site-panel"><div class="kmd kfrag" role="img" aria-label="Klien di dalam komando: SSH, database, dan VPN, semuanya sudah terpasang">
 <div class="kfrag__head"><svg class="ks"><use href="#s-terminal"/></svg>komando</div>
 <div class="kfrag__list">
-<div><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks"><use href="#s-server"/></svg></span><b>SSH client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
-<div><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks"><use href="#s-db"/></svg></span><b>Database client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
-<div><span class="k-tile" style="--t: var(--k-tint-vpn)"><svg class="ks"><use href="#s-vpn"/></svg></span><b>VPN client</b><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Built in</span></div>
+<div><span class="k-tile k-tint-servers"><svg class="ks"><use href="#s-server"/></svg></span><b>SSH client</b><span class="k-spacer"></span><span class="k-pill k-c-ok">Built in</span></div>
+<div><span class="k-tile k-tint-db"><svg class="ks"><use href="#s-db"/></svg></span><b>Database client</b><span class="k-spacer"></span><span class="k-pill k-c-ok">Built in</span></div>
+<div><span class="k-tile k-tint-vpn"><svg class="ks"><use href="#s-vpn"/></svg></span><b>VPN client</b><span class="k-spacer"></span><span class="k-pill k-c-ok">Built in</span></div>
 </div>
 </div></div></div></div></div></section><section id="agent" aria-labelledby="agent-h" data-slot="section" data-tone="band" class="ef-section"><div class="ef-section__inner"><div class="site-split site-split--head"><div data-slot="section-head" data-align="start" class="ef-section-head"><h2 class="ef-section-head__title"><span id="agent-h">Agen yang menjalankan komando dan bertanya dulu</span></h2></div><div class="site-stack"><p class="site-lede">Tekan ⌘J di Mac, atau buka tab Agent di iPhone, lalu jelaskan masalahnya. Agen menjalankan komando, menampilkan setiap perintah, dan bertanya sebelum mengubah apa pun, dengan Claude Opus 5.5 dan API key Anthropic milik Anda sendiri.</p><p><a class="site-link" href="#editions">Lihat apa yang dilakukan aplikasinya</a></p></div></div><div class="site-app"><div class="app kmd kmd--dark" role="img" aria-label="Agen Komando di samping terminal web-1: agen memeriksa kunci di prod-db, menemukan query 48213 menahan tabel orders, dan bertanya dulu sebelum membatalkannya di prod-db yang dilindungi">
 <div class="app__pane app__pane--list">
@@ -232,19 +232,19 @@ Filesystem      Size  Used Avail Use% Mounted on
 <span class="d">09:14:09 INFO </span> GET /orders 200 1204ms
 <span class="g">deploy@web-1</span>:<span class="b">~</span>$ <span class="cur"></span></div>
 </div>
-<div class="app__pane app__pane--open" style="background: var(--k-panel)">
+<div class="app__pane app__pane--open k-panel">
 <div class="k-toolbar"><span class="k-mark"><svg class="ks"><use href="#s-bubble"/></svg></span><b>Agent</b><span class="k-spacer"></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks ks--12"><use href="#s-new"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks ks--12"><use href="#s-x"/></svg></span></div>
 <!-- the conversation stacks up from the composer (column-reverse, newest first in the source); on a short screen
 the older turns are left out whole (page CSS), so nothing is cut through its text -->
 <div class="k-conv">
 <div class="k-approval">
-<div class="kmd-row" style="align-items: flex-start"><svg class="ks" style="color: var(--k-warn)"><use href="#s-warn"/></svg><span class="kmd-two"><b>Cancel query 48213 on prod-db?</b><span class="k-sub">prod-db is protected, and this stops a running query.</span></span></div>
+<div class="kmd-row k-top"><svg class="ks k-warn"><use href="#s-warn"/></svg><span class="kmd-two"><b>Cancel query 48213 on prod-db?</b><span class="k-sub">prod-db is protected, and this stops a running query.</span></span></div>
 <div class="k-approval__code">komando db kill prod-db 48213</div>
 <div class="k-approval__act"><span class="k-btn k-btn--ghost">Don’t Run</span><span class="k-btn">Allow Once</span></div>
 </div>
 <div class="k-msg"><span class="k-mark"><svg class="ks"><use href="#s-bubble"/></svg></span><div class="k-msg__body">
 <p>Aplikasi di web-1 sedang menunggu prod-db.</p>
-<div class="k-tool"><div class="k-tool__head"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-mono k-trunc">komando db locks prod-db</span><span class="k-spacer"></span><span class="k-pill" style="--c: var(--k-ok)">Done</span><span class="k-meta">1.1 s</span></div></div>
+<div class="k-tool"><div class="k-tool__head"><svg class="ks k-t3"><use href="#s-terminal"/></svg><span class="k-mono k-trunc">komando db locks prod-db</span><span class="k-spacer"></span><span class="k-pill k-c-ok">Done</span><span class="k-meta">1.1 s</span></div></div>
 <p>Query 48213 sudah menahan tabel orders selama 14 menit.</p>
 </div></div>
 <div class="k-turn">
@@ -254,9 +254,9 @@ the older turns are left out whole (page CSS), so nothing is cut through its tex
 </div>
 <div class="k-foot">
 <div class="k-composer">
-<div class="kmd-row"><span class="k-ctx"><span class="k-tile" style="--t: var(--k-tint-servers)"><svg class="ks ks--12"><use href="#s-server"/></svg></span>web-1</span><span class="k-ctx"><span class="k-tile" style="--t: var(--k-tint-db)"><svg class="ks ks--12"><use href="#s-db"/></svg></span>prod-db</span></div>
+<div class="kmd-row"><span class="k-ctx"><span class="k-tile k-tint-servers"><svg class="ks ks--12"><use href="#s-server"/></svg></span>web-1</span><span class="k-ctx"><span class="k-tile k-tint-db"><svg class="ks ks--12"><use href="#s-db"/></svg></span>prod-db</span></div>
 <span class="k-t3">Ask about your servers, or tell the agent what to do…</span>
-<div class="kmd-row"><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-at"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-clip"/></svg></span><span class="k-check"><span class="k-check__box"><svg class="ks ks--12" style="stroke-width:2"><use href="#s-check"/></svg></span>Allow changes</span><span class="k-meta" style="color: var(--k-warn)">Each change asks first</span><span class="k-spacer"></span><span class="k-send"><svg class="ks ks--12"><use href="#s-up"/></svg></span></div>
+<div class="kmd-row"><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-at"/></svg></span><span class="k-btn k-btn--ghost k-btn--icon"><svg class="ks"><use href="#s-clip"/></svg></span><span class="k-check"><span class="k-check__box"><svg class="ks ks--12 ks--bold"><use href="#s-check"/></svg></span>Allow changes</span><span class="k-meta k-warn">Each change asks first</span><span class="k-spacer"></span><span class="k-send"><svg class="ks ks--12"><use href="#s-up"/></svg></span></div>
 </div>
 <span class="k-contract">Runs as you, with komando’s seatbelts. Every command it runs goes to the audit log.</span>
 </div>
@@ -264,13 +264,13 @@ the older turns are left out whole (page CSS), so nothing is cut through its tex
 </div></div></div></section><section id="editions" aria-labelledby="editions-h" data-slot="section" data-tone="default" data-ruled="" class="ef-section"><div class="ef-section__inner"><div class="site-split"><div class="site-stack"><div data-slot="section-head" data-align="start" class="ef-section-head"><h2 class="ef-section-head__title"><span id="editions-h">Gratis sekarang, upgrade nanti</span></h2><p class="ef-section-head__lede">Aplikasi Komando untuk Mac, iPhone, dan iPad sudah dibuat dan sedang diuji, tetapi belum ada link unduh dan belum ada tanggal. Aplikasinya akan gratis, sama seperti command line-nya, dan menjalankan komando di mesin Anda sendiri, tanpa akun dan tanpa masa uji coba.</p></div><ul class="site-rows site-rows--table"><li class="site-rows__head"><span>Gratis, semuanya lokal</span><span>Di mana</span></li><li><span class="site-rows__name">Setiap perintah, dalam teks atau JSON</span><span class="site-rows__value">komando</span></li><li><span class="site-rows__name">Tab terminal, klien database, port forwarding</span><span class="site-rows__value">Mac</span></li><li><span class="site-rows__name">Perbaikan sekali klik, agen, menu bar</span><span class="site-rows__value">Mac</span></li><li><span class="site-rows__name">Perbaikan, cek cepat, dan agen saat bepergian</span><span class="site-rows__value">iPhone dan iPad</span></li><li class="site-rows__head site-rows__head--next"><span>Upgrade, nanti</span><span>Belum dibuat</span></li><li><span class="site-rows__name">Sinkronisasi antar perangkat</span><span class="site-rows__value">Segera</span></li><li><span class="site-rows__name">Tim</span><span class="site-rows__value">Segera</span></li><li><span class="site-rows__name">AI bawaan, tanpa API key sendiri</span><span class="site-rows__value">Segera</span></li><li><span class="site-rows__name">Setujui perubahan dari ponsel</span><span class="site-rows__value">Segera</span></li></ul></div><div class="site-frame site-frame--plain"><div class="kmd kfrag ksheet" role="img" aria-label="Lembar Upgrade Komando: Komando gratis. Semua di Mac ini gratis, seperti command line komando; upgrade nanti menambah layanan yang butuh server. Empat fitur bertanda Coming: sinkronisasi antar perangkat, tim, AI bawaan, setujui dari ponsel. Belum ada yang bisa dibeli.">
 <div class="ksheet__head">
 <svg class="kc" viewBox="0 0 100 100" aria-hidden="true"><rect x=".5" y=".5" width="99" height="99" rx="25" fill="#ffffff" stroke="#e4e4e1"/><rect x="25" y="24.5" width="14" height="51" rx="7" fill="#1659ff"/><path d="M70.5 31 51.5 50 70.5 69" fill="none" stroke="#1c1c1e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
-<span class="kmd-two"><span class="kmd-row"><b class="ksheet__title">Komando</b><span class="k-pill" style="--c: var(--k-ok)">Free</span></span><span class="k-sub">Everything on this Mac is free, like the komando command line. An upgrade will add services that need a server.</span></span>
+<span class="kmd-two"><span class="kmd-row"><b class="ksheet__title">Komando</b><span class="k-pill k-c-ok">Free</span></span><span class="k-sub">Everything on this Mac is free, like the komando command line. An upgrade will add services that need a server.</span></span>
 </div>
 <div class="ksheet__rows">
-<div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-sync"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Sync between devices</b><span class="k-pill">Coming</span></span><span class="k-sub">Your servers and settings on every device, encrypted on the device before they leave it.</span></span></div>
-<div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-people"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Teams</b><span class="k-pill">Coming</span></span><span class="k-sub">Share servers with your team, and take access away when someone leaves.</span></span></div>
-<div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-bubble"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Built-in AI</b><span class="k-pill">Coming</span></span><span class="k-sub">The agent without an Anthropic key of your own.</span></span></div>
-<div><span class="k-tile" style="--t: var(--k-text3)"><svg class="ks"><use href="#s-face"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Approve from your phone</b><span class="k-pill">Coming</span></span><span class="k-sub">Approve a protected change from your phone, with Face ID.</span></span></div>
+<div><span class="k-tile k-tint-text3"><svg class="ks"><use href="#s-sync"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Sync between devices</b><span class="k-pill">Coming</span></span><span class="k-sub">Your servers and settings on every device, encrypted on the device before they leave it.</span></span></div>
+<div><span class="k-tile k-tint-text3"><svg class="ks"><use href="#s-people"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Teams</b><span class="k-pill">Coming</span></span><span class="k-sub">Share servers with your team, and take access away when someone leaves.</span></span></div>
+<div><span class="k-tile k-tint-text3"><svg class="ks"><use href="#s-bubble"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Built-in AI</b><span class="k-pill">Coming</span></span><span class="k-sub">The agent without an Anthropic key of your own.</span></span></div>
+<div><span class="k-tile k-tint-text3"><svg class="ks"><use href="#s-face"/></svg></span><span class="kmd-two"><span class="kmd-row"><b>Approve from your phone</b><span class="k-pill">Coming</span></span><span class="k-sub">Approve a protected change from your phone, with Face ID.</span></span></div>
 </div>
 <span class="k-meta ksheet__note">Belum ada yang bisa dibeli. Komando akan mengabarkannya di sini saat upgrade siap.</span>
 <span class="ksheet__act"><span class="k-btn">Close</span></span>
