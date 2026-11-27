@@ -7,7 +7,7 @@ export { release, installSha } from './home.en.mjs';
 
 export const meta = {
   lang: 'id',
-  title: 'komando, command line DevOps untuk Anda dan agen AI Anda',
+  title: 'Komando · command line DevOps untuk Anda dan agen AI Anda',
   description: 'Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Gratis dan open source.',
   ogDescription: 'Satu inventaris, hanya-baca secara default, kata sandi di luar jangkauan agen. Gratis dan open source. Aplikasi Komando gratis untuk Mac, iPhone, dan iPad sudah dibuat dan sedang diuji.',
 };

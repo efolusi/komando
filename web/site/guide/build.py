@@ -378,6 +378,8 @@ def render(md, page):
 
 # where the site is served (owner, 2026-11-18: a Cloudflare Worker on a subdomain of efolusi.com)
 SITE_URL = "https://komando.efolusi.com/"
+# Every page title ends in the product name: "<Page> · <Section> · Komando" (row W45).
+PRODUCT = "Komando"
 
 
 def shell(name, root, lang, switch, current=None):
@@ -532,7 +534,7 @@ def build_language(lang, english_ids):
     bodies["coming"] = (coming_body(pages_by_id, cp), [])
     pages["coming"] = cp
 
-    guide_title = lang.ui("Komando guide")
+    guide_title = lang.ui("User guide")
     for _, slug, _, _ in PAGES:
         body, headings = bodies[slug]
         page = pages[slug]
@@ -542,7 +544,7 @@ def build_language(lang, english_ids):
         if page.coming and slug != "coming":
             badge = (f'<p class="g-status">{pill(lang)} {lang.ui("Parts of this page are not built yet; they are marked.")} '
                      f'<a href="../coming/">{lang.ui("What is coming")}</a></p>')
-        doc = (head(f"{title} · {guide_title}", summary, slug, lang)
+        doc = (head(f"{title} · {guide_title} · {PRODUCT}", summary, slug, lang)
                + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(slug, lang)}'
                + f'<article class="g-article">{breadcrumb(trail_head(slug, lang) + [(title, None)], lang)}'
                + f'<h1>{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{app_status("../../" + ("../" if lang.code == "id" else ""), lang)}{badge}{toc(headings, lang)}'
@@ -576,7 +578,7 @@ def build_language(lang, english_ids):
              f"{lang.ui('A {pill} pill marks a part that is not built yet;').replace('{pill}', pill(lang))} "
              f'<a href="coming/">{lang.ui("What is coming")}</a> {lang.ui("lists them all.")}</p>')
     index_title = lang.ui("Komando apps")
-    doc = (head(index_title, lang.ui("Komando for Mac, iPhone and iPad runs the komando command line for you. The apps are built and in testing, with no download link yet. This guide describes them."), None, lang)
+    doc = (head(f'{lang.ui("User guide")} · {PRODUCT}', lang.ui("Komando for Mac, iPhone and iPad runs the komando command line for you. The apps are built and in testing, with no download link yet. This guide describes them."), None, lang)
            + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(None, lang)}'
            + f'<article class="g-article g-article--index">{breadcrumb(trail_head(None, lang), lang)}<h1>{index_title}</h1><div class="g-body g-intro">{intro}</div>'
            + "".join(cards)

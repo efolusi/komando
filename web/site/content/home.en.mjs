@@ -7,7 +7,7 @@ export const installSha = '9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22
 
 export const meta = {
   lang: 'en',
-  title: 'komando: a DevOps command line for you and your AI agent',
+  title: 'Komando · a DevOps command line for you and your AI agent',
   description: 'Free, open-source command line for servers, databases, caches, storage and VPNs, with free Komando apps for Mac, iPhone and iPad built and in testing.',
   ogDescription: 'One inventory, read-only by default, passwords out of the agent’s reach. Free and open source. The free Komando apps for Mac, iPhone and iPad are built and in testing.',
 };
