@@ -37,6 +37,12 @@ const LANGS = { en, id };
 // the folder a language lives in, under the site's root
 const BASE = { en: '', id: 'id/' };
 
+// The year in the footer is worked out at build time (row W48); the pages are committed, so rebuild in January.
+const YEAR = new Date().getFullYear();
+// Platform terms, Privacy notice and Status are efolusi.com's pages. They are in the footer only once the draft pages
+// are switched on (content/drafts/config.json, README "Draft pages").
+const DRAFTS_ON = JSON.parse(readFileSync(join(HERE, 'content', 'drafts', 'config.json'), 'utf8')).switchedOn === true;
+
 /** A drawn app screen. Indonesian swaps in its screen-reader description and the lines home.id.mjs names. */
 function screen(name, c) {
   let html = readFileSync(join(HERE, 'content', 'screens', `${name}.html`), 'utf8').trim();
@@ -111,14 +117,15 @@ function header(c, root, home, switchHref) {
   return lowerHreflang(html);
 }
 
-function footer(c, root, home, switchHref) {
+function footer(c, root, home, switchHref, legalOn = DRAFTS_ON) {
   const lang = c.meta.lang;
   const columns = c.shell.footer.columns.map((col) => ({
     heading: col.heading,
     links: col.links.map((l) => ({ label: l.label, href: target(l, root, home, lang) })),
   }));
   const s = switchLink(c, switchHref);
-  const bottom = h(React.Fragment, null, h('span', null, c.shell.footer.rights), h('span', null, c.shell.footer.trademarks),
+  const legal = legalOn ? c.shell.footer.legal.map((l) => h('a', { key: l.href, className: 'ef-site-footer__link', href: l.href }, l.label)) : [];
+  const bottom = h(React.Fragment, null, h('span', null, c.shell.footer.rights.replace('{year}', YEAR)), h('span', null, c.shell.footer.trademarks), ...legal,
     h('a', { className: 'ef-site-footer__link', href: s.href, hrefLang: s.hrefLang, lang: s.hrefLang, 'aria-label': s.ariaLabel }, s.label));
   const icons = SWAP_ICONS.map((name) => `<template id="icon-${name}">${renderToStaticMarkup(h(Icon, { name, size: name === 'play' || name === 'pause' ? 16 : 20, 'aria-hidden': 'true' }))}</template>`).join('');
   return lowerHreflang(renderToStaticMarkup(h(SiteFooter, {
@@ -319,8 +326,8 @@ ${footer(c, root, false, twin)}
 `;
 }
 
-export function renderShell(c = en) {
-  return { head: headShared('{{root}}'), header: header(c, '{{root}}', false, '{{switch}}'), footer: footer(c, '{{root}}', false, '{{switch}}') };
+export function renderShell(c = en, legalOn = DRAFTS_ON) {
+  return { head: headShared('{{root}}'), header: header(c, '{{root}}', false, '{{switch}}'), footer: footer(c, '{{root}}', false, '{{switch}}', legalOn) };
 }
 
 function copyMeridian() {

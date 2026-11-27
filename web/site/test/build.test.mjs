@@ -207,3 +207,26 @@ test('the vendored CSS carries the label and icon gap tokens', () => {
   assert.match(css, /--gap-label-icon:\s*var\(--space-2\)/);
   assert.match(css, /--gap-label-icon-sm:\s*var\(--space-1\)/);
 });
+
+// W48: the footer's year is computed, the owner is the company, and efolusi.com's legal links wait for the draft pages.
+test('the footer reads © <year> PT Efolusi Dunia Teknologi, with the year from the build and Indonesian "Hak cipta dilindungi"', () => {
+  const year = new Date().getFullYear();
+  assert.ok(renderShell(en).footer.includes(`© ${year} PT Efolusi Dunia Teknologi. All rights reserved.`));
+  assert.ok(renderShell(id).footer.includes(`© ${year} PT Efolusi Dunia Teknologi. Hak cipta dilindungi.`));
+  for (const c of [en, id]) assert.doesNotMatch(c.shell.footer.rights, /\b20\d\d\b/, 'the year is not typed in the copy');
+});
+
+test('Platform terms, Privacy notice and Status appear in the footer only when the draft pages are on', () => {
+  const words = { en: ['Platform terms', 'Privacy notice', 'Status'], id: ['Ketentuan platform', 'Pemberitahuan privasi', 'Status'] };
+  for (const [lang, c] of [['en', en], ['id', id]]) {
+    const off = renderShell(c, false).footer;
+    const on = renderShell(c, true).footer;
+    for (const w of words[lang]) {
+      assert.ok(!off.includes(`>${w}</a>`), `${lang}: ${w} shown while the drafts are off`);
+      assert.ok(on.includes(`>${w}</a>`), `${lang}: ${w} missing once the drafts are on`);
+    }
+  }
+  assert.ok(renderShell(en, true).footer.includes('href="https://efolusi.com/en/terms"'));
+  assert.ok(renderShell(id, true).footer.includes('href="https://efolusi.com/id/privacy"'));
+});
+

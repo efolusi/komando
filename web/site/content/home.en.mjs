@@ -42,7 +42,13 @@ export const shell = {
         { label: 'User guide', page: 'guide/' },
       ] },
     ],
-    rights: '© 2026 Komando',
+    // {year} is worked out by build.mjs. The three links are efolusi.com's and show only once the draft pages are on.
+    rights: '© {year} PT Efolusi Dunia Teknologi. All rights reserved.',
+    legal: [
+      { label: 'Platform terms', href: 'https://efolusi.com/en/terms' },
+      { label: 'Privacy notice', href: 'https://efolusi.com/en/privacy' },
+      { label: 'Status', href: 'https://stats.uptimerobot.com/SrVLCmD6V7' },
+    ],
     trademarks: 'Product names and logos are trademarks of their owners.',
   },
 };

@@ -42,7 +42,13 @@ export const shell = {
         { label: 'Panduan', page: 'guide/' },
       ] },
     ],
-    rights: '© 2026 Komando',
+    // {year} dihitung oleh build.mjs. Ketiga link-nya milik efolusi.com dan baru tampil setelah halaman draf dinyalakan.
+    rights: '© {year} PT Efolusi Dunia Teknologi. Hak cipta dilindungi.',
+    legal: [
+      { label: 'Ketentuan platform', href: 'https://efolusi.com/id/terms' },
+      { label: 'Pemberitahuan privasi', href: 'https://efolusi.com/id/privacy' },
+      { label: 'Status', href: 'https://stats.uptimerobot.com/SrVLCmD6V7' },
+    ],
     trademarks: 'Nama produk dan logo adalah merek dagang pemiliknya.',
   },
 };
