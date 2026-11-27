@@ -7,6 +7,7 @@
 .ef-agentrun__step--done .ef-agentrun__dot{background:var(--accent);border-color:var(--accent);color:var(--accent-contrast)}
 .ef-agentrun__step--active .ef-agentrun__dot{border-color:var(--accent);color:var(--accent)}
 .ef-agentrun__step--error .ef-agentrun__dot{background:var(--status-danger-bg);border-color:var(--status-danger-solid);color:var(--status-danger-text)}
+.ef-agentrun__pip{display:inline-block;width:5px;height:5px;border-radius:var(--radius-full);background:currentColor}
 .ef-agentrun__spin{display:inline-flex;animation:ef-agentrun-spin .9s linear infinite}
 @keyframes ef-agentrun-spin{to{transform:rotate(360deg)}}
 .ef-agentrun__line{width:1px;flex:1;background:var(--border-default);margin:var(--space-1) 0}
@@ -129,12 +130,13 @@
 .ef-doccard__btn:hover{color:var(--text-primary);background:var(--surface-subtle)}
 .ef-doccard__btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .ef-doccard__btn--open{transform:rotate(180deg)}
-.ef-doccard__win{position:relative;overflow:hidden;transition:height var(--dur-slow) var(--ease-enter)}
+.ef-doccard__win{position:relative;overflow:hidden;height:var(--ef-doccard-h,200px);transition:height var(--dur-slow) var(--ease-enter)}
 .ef-doccard__content{padding:0 var(--space-4) var(--space-4);font-size:var(--text-md);line-height:1.7;color:var(--text-secondary)}
 .ef-doccard__content h1,.ef-doccard__content h2,.ef-doccard__content h3{color:var(--text-primary);font-family:var(--font-display,var(--font-sans));margin:.2em 0 .4em}
 .ef-doccard__content p{margin:0 0 .8em}
 .ef-doccard__fade{position:absolute;inset-inline:0;bottom:0;height:72px;background:linear-gradient(to top,var(--surface-card),transparent);pointer-events:none;transition:opacity var(--dur-base) var(--ease-enter)}
 .ef-doccard--open .ef-doccard__fade{opacity:0}
+.ef-doccard--open .ef-doccard__win{height:var(--ef-doccard-h,auto)}
 @media (pointer:coarse){.ef-doccard__btn{min-width:var(--tap-min);min-height:var(--tap-min)}}
 /* Reduced motion: nothing moves or resizes; the end state is shown at once. */
 @media (prefers-reduced-motion:reduce){.ef-doccard__win{transition:none}}
@@ -224,6 +226,7 @@
 .ef-modelsel__item{display:flex;align-items:center;gap:var(--space-3);width:100%;padding:var(--space-2) var(--space-3);border:none;border-radius:var(--radius-sm);background:none;cursor:pointer;text-align:start;font-family:var(--font-sans);transition:background var(--dur-fast) var(--ease-enter)}
 .ef-modelsel__item:hover{background:var(--surface-sunken)}
 .ef-modelsel__item:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.ef-modelsel__text{min-width:0}
 .ef-modelsel__name{font-size:var(--text-md);font-weight:500;color:var(--text-primary)}
 .ef-modelsel__hint{font-size:var(--text-xs);color:var(--text-muted);margin-top:1px}
 .ef-modelsel__badge{margin-inline-start:auto;flex:none;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-subtle-fg);background:var(--accent-subtle);border-radius:var(--radius-sm);padding:var(--space-0-5) var(--space-2)}
@@ -338,7 +341,8 @@
 @media (pointer:coarse){.ef-sandbox__tab{min-height:var(--tap-min)}}
 /* components/ai/SelectionQuote.jsx */
 .ef-selq{position:relative}
-.ef-selq__bar{position:absolute;z-index:30;display:inline-flex;align-items:center;gap:var(--space-0-5);padding:var(--space-1);border:1px solid var(--border-default);border-radius:var(--radius-md);background:var(--surface-card);box-shadow:var(--shadow-lg);user-select:none}
+.ef-selq__bar{position:absolute;z-index:30;display:inline-flex;align-items:center;gap:var(--space-0-5);padding:var(--space-1);border:1px solid var(--border-default);border-radius:var(--radius-md);background:var(--surface-card);box-shadow:var(--shadow-lg);user-select:none;visibility:hidden}
+.ef-selq__bar[data-placed]{visibility:visible}
 .ef-selq__btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-1) var(--space-3);border:none;background:none;cursor:pointer;border-radius:var(--radius-sm);font-family:var(--font-sans);font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--text-secondary);transition:color var(--dur-fast) var(--ease-enter),background var(--dur-fast) var(--ease-enter)}
 .ef-selq__btn:hover{color:var(--text-primary);background:var(--surface-subtle)}
 .ef-selq__btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
@@ -438,7 +442,7 @@ a.ef-sourcecard:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .ef-transcript__auto{display:inline-flex;align-items:center;gap:var(--space-2);border:1px solid var(--border-default);background:none;cursor:pointer;padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-family:var(--font-sans);font-size:var(--text-xs);color:var(--text-muted);transition:color var(--dur-fast) var(--ease-enter),border-color var(--dur-fast) var(--ease-enter)}
 .ef-transcript__auto--on{color:var(--text-primary);border-color:var(--border-strong)}
 .ef-transcript__auto:focus-visible{outline:none;box-shadow:var(--focus-ring)}
-.ef-transcript__scroll{overflow-y:auto;padding:var(--space-1)}
+.ef-transcript__scroll{height:var(--ef-transcript-h,280px);overflow-y:auto;padding:var(--space-1)}
 .ef-transcript__item{display:flex;gap:var(--space-3);padding:var(--space-2) var(--space-3);border-radius:var(--radius-sm);transition:background var(--dur-fast) var(--ease-enter)}
 .ef-transcript__item--active{background:var(--surface-sunken)}
 .ef-transcript__time{flex:none;border:none;background:none;padding:0;cursor:pointer;font-family:var(--font-mono);font-size:var(--text-2xs);color:var(--text-muted);font-variant-numeric:tabular-nums;line-height:1.9;transition:color var(--dur-fast) var(--ease-enter)}
@@ -457,7 +461,7 @@ a.ef-sourcecard:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .ef-usage__label{font-size:var(--text-sm);font-weight:600;color:var(--text-primary)}
 .ef-usage__figures{margin-inline-start:auto;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted)}
 .ef-usage__track{height:6px;border-radius:var(--radius-full);background:var(--surface-sunken);overflow:hidden}
-.ef-usage__fill{height:100%;border-radius:var(--radius-full);background:var(--accent);transition:width var(--dur-progress) linear}
+.ef-usage__fill{display:block;width:0;height:100%;border-radius:var(--radius-full);background:var(--accent);transition:width var(--dur-progress) linear}
 .ef-usage--warn .ef-usage__fill{background:var(--status-warning-solid)}
 .ef-usage--over .ef-usage__fill{background:var(--status-danger-solid)}
 .ef-usage__foot{display:flex;gap:var(--space-2);font-size:var(--text-xs);color:var(--text-muted)}
@@ -919,7 +923,9 @@ a.ef-sourcecard:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 /* components/display/Resizable.jsx */
 .ef-resizable{display:flex;width:100%;height:100%;min-height:0;min-width:0}
 .ef-resizable[data-orientation="vertical"]{flex-direction:column}
-.ef-resizable__pane{min-width:0;min-height:0;overflow:auto}
+/* Before hydration a pane has no flex-basis yet, so the panes split the space equally; once the size is written, data-sized turns the fallback off. */
+.ef-resizable__pane{flex:1 1 0;min-width:0;min-height:0;overflow:auto}
+.ef-resizable__pane[data-sized]{flex-grow:0;flex-shrink:0}
 .ef-resizable__handle{flex:none;position:relative;background:transparent;border:none;padding:0;cursor:col-resize;touch-action:none}
 .ef-resizable[data-orientation="horizontal"]>.ef-resizable__handle{width:9px}
 .ef-resizable[data-orientation="vertical"]>.ef-resizable__handle{height:9px;cursor:row-resize}
@@ -1047,12 +1053,13 @@ a.ef-sourcecard:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 @media (pointer:coarse){.ef-banner__action{min-height:var(--tap-min)}}
 /* components/feedback/Dialog.jsx */
 .ef-dialog__overlay{position:fixed;inset:0;z-index:var(--z-overlay);display:flex;align-items:center;justify-content:center;padding:var(--space-6);background:var(--overlay-scrim);animation:ef-fade var(--dur-base) var(--ease-enter)}
+:where(.ef-dialog__content){position:relative}
 .ef-dialog__content{width:100%;max-width:440px;max-height:min(85vh,720px);overflow:auto;border:1px solid var(--border-default);border-radius:var(--radius-lg);background:var(--surface-card);box-shadow:var(--shadow-xl);animation:ef-pop var(--dur-slow) var(--ease-emphasised)}
 .ef-dialog__content:focus{outline:none}.ef-dialog__close{position:absolute;inset-block-start:var(--space-3);inset-inline-end:var(--space-3)}
 .ef-dialog__header{display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-6) var(--space-6) 0;padding-inline-end:calc(var(--space-3) + var(--control-h-sm) + var(--space-4))}
 .ef-dialog__title{margin:0;font-family:var(--font-display);font-size:var(--text-xl);font-weight:var(--weight-bold);line-height:var(--leading-tight);letter-spacing:var(--tracking-tight);color:var(--text-primary)}
 .ef-dialog__description{font-size:var(--text-md);line-height:var(--leading-relaxed);color:var(--text-secondary)}
-.ef-dialog__body{padding:var(--space-4) var(--space-6) var(--space-6)}.ef-dialog__footer{display:flex;flex-direction:column-reverse;gap:var(--space-2);padding:var(--space-4) var(--space-6);border-top:1px solid var(--border-default);background:var(--surface-subtle)}
+.ef-dialog__body{padding:var(--space-4) var(--space-6) var(--space-6)}.ef-dialog__typed{margin-top:var(--space-4)}.ef-dialog__footer{display:flex;flex-direction:column-reverse;gap:var(--space-2);padding:var(--space-4) var(--space-6);border-top:1px solid var(--border-default);background:var(--surface-subtle)}
 @media(min-width:480px){.ef-dialog__footer{flex-direction:row;justify-content:flex-end}}
 @keyframes ef-fade{from{opacity:0}}@keyframes ef-pop{from{opacity:0;transform:scale(.96) translateY(6px)}}
 @media (prefers-reduced-motion:reduce){.ef-dialog__overlay,.ef-dialog__content{--ef-motion-guard:var(--dur-fast);animation-name:ef-reduce-fade}}
@@ -1213,6 +1220,7 @@ a.ef-sourcecard:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .ef-btn__spin{display:inline-flex;animation:ef-spin .7s linear infinite}
 /* Touch: fixed-size targets grow to --tap-min; small glyph buttons keep their look and get a centred --tap-min hit area instead. */
 @media (pointer:coarse){.ef-btn--xs{height:var(--tap-min)}.ef-btn--icon-xs{width:var(--tap-min);height:var(--tap-min)}}
+.ef-btn--full{width:100%}
 /* components/forms/ButtonGroup.jsx */
 .ef-btn-group{display:flex;width:fit-content;align-items:stretch;isolation:isolate}
 .ef-btn-group[data-orientation="horizontal"]>*:not(:first-child){border-start-start-radius:0!important;border-end-start-radius:0!important;border-inline-start-width:0!important}
@@ -1227,7 +1235,7 @@ a.ef-sourcecard:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .ef-btn-group__separator{position:relative!important;align-self:stretch!important;margin:0!important;background:var(--border-strong)!important}
 .ef-btn-group__separator[data-orientation="vertical"]{height:auto!important}
 /* components/forms/ButtonTile.jsx */
-.ef-tilegroup{display:grid;gap:var(--space-3)}
+.ef-tilegroup{display:grid;grid-template-columns:repeat(var(--ef-tile-columns,3),1fr);gap:var(--space-3)}
 .ef-tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-2);padding:var(--space-4);border:1px solid var(--border-strong);border-radius:var(--radius-md);background:var(--surface-card);cursor:pointer;text-align:start;font-family:var(--font-sans);color:var(--text-primary);transition:border-color var(--dur-fast) var(--ease-enter),background var(--dur-fast) var(--ease-enter)}
 .ef-tile:hover:not(:disabled){border-color:var(--sand-400)}
 .ef-tile:focus-visible{outline:none;box-shadow:var(--focus-ring)}
@@ -1711,6 +1719,7 @@ a.ef-feature-card:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .ef-pagination__link:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .ef-pagination__previous svg,.ef-pagination__next svg{transition:transform var(--dur-fast) var(--ease-enter)}
 [dir="rtl"] .ef-pagination__previous svg,[dir="rtl"] .ef-pagination__next svg{transform:scaleX(-1)}
+.ef-pagination__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .ef-pagination__ellipsis{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;color:var(--text-muted)}
 /* coarse pointers get the 44px touch target, like form controls do through --control-h-* */
 @media (pointer:coarse){.ef-pagination__link{min-width:var(--tap-min);height:var(--tap-min)}}
@@ -1763,7 +1772,7 @@ a.ef-feature-card:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .ef-sidebar-menu-badge{position:absolute;inset-block-start:7px;inset-inline-end:8px;min-width:20px;padding-inline:var(--space-1);border-radius:var(--radius-full);background:var(--surface-sunken);color:var(--text-muted);font-size:10px;line-height:18px;text-align:center;pointer-events:none}
 .ef-sidebar-menu-sub{margin-inline-start:var(--space-4);padding:var(--space-1) 0 var(--space-1) var(--space-3);border-inline-start:1px solid var(--border-default)}.ef-sidebar-menu-sub-button{min-height:28px;padding:var(--space-1) var(--space-2);font-size:var(--text-xs)}
 .ef-sidebar-input{width:100%;height:32px;padding-inline:var(--space-3);border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-sunken);color:var(--text-primary);font:inherit;font-size:var(--text-sm)}.ef-sidebar-input:focus-visible{outline:0;box-shadow:var(--focus-ring)}
-.ef-sidebar-separator{height:1px;margin:var(--space-1) var(--space-2);border:0;background:var(--border-default)}.ef-sidebar-skeleton{height:32px;border-radius:var(--radius-sm);background:var(--surface-sunken)}
+.ef-sidebar-separator{height:1px;margin:var(--space-1) var(--space-2);border:0;background:var(--border-default)}.ef-sidebar-skeleton{width:72%;height:32px;border-radius:var(--radius-sm);background:var(--surface-sunken)}.ef-sidebar-skeleton--icon{width:84%}
 .ef-sidebar-inset{position:relative;display:flex;min-width:0;flex:1;flex-direction:column;background:var(--surface-page)}.ef-sidebar-trigger{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border:0;border-radius:var(--radius-sm);background:transparent;color:var(--text-secondary);cursor:pointer}.ef-sidebar-trigger:hover{background:var(--surface-sunken);color:var(--text-primary)}
 .ef-sidebar-rail{position:absolute;inset-block:0;inset-inline-end:-6px;z-index:40;width:12px;border:0;background:transparent;cursor:ew-resize}.ef-sidebar-rail:hover:after{content:"";position:absolute;inset-block:0;inset-inline-start:5px;width:2px;background:var(--border-strong)}
 .ef-sidebar[data-side=right] .ef-sidebar-rail{inset-inline-end:auto;inset-inline-start:-6px}
