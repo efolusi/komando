@@ -315,6 +315,21 @@ class SymlinkTests(unittest.TestCase):
             build_dist.main()
         self.assertIn("gone.js", str(stop.exception))
 
+    def test_the_not_found_page_links_its_assets_from_the_site_root(self):
+        # W43: Cloudflare serves 404.html at any depth, so its links start at "/"; they get a version like any other
+        (self.site / "assets" / "site.css").write_text("css")
+        (self.site / "id" / "404.html").write_text(
+            page("n", "id").replace("</head>", '<link rel="stylesheet" href="/assets/site.css">\n</head>'))
+        build_dist.main()
+        text = (self.out / "id" / "404.html").read_text()
+        self.assertRegex(text, r'href="/assets/site\.css\?v=[0-9a-f]{10}"')
+
+    def test_a_root_link_to_a_missing_script_stops_the_build(self):
+        (self.site / "404.html").write_text(page("n").replace("</head>", '<script src="/assets/gone.js"></script>\n</head>'))
+        with self.assertRaises(SystemExit) as stop:
+            build_dist.main()
+        self.assertIn("gone.js", str(stop.exception))
+
     def test_sitemap_lists_every_page_with_its_other_language(self):
         build_dist.main()
         xml = (self.out / "sitemap.xml").read_text(encoding="utf-8")

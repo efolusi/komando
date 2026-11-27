@@ -296,9 +296,11 @@ def version_assets(out):
         text = page.read_text(encoding="utf-8")
 
         def stamp(match):
-            target = (page.parent / match.group(2)).resolve()
+            link = match.group(2)
+            # a link from the site root ("/assets/x.js") is the not-found pages' way; every other page links relative
+            target = (root / link.lstrip("/") if link.startswith("/") else page.parent / link).resolve()
             if root not in target.parents or not target.is_file():
-                fail(f"{rel.as_posix()} links {match.group(2)}, which is not a file of the output (use a link relative to the page)")
+                fail(f"{rel.as_posix()} links {link}, which is not a file of the output (use a link relative to the page)")
             digest = hashlib.sha256(target.read_bytes()).hexdigest()[:10]
             return f"{match.group(1)}{match.group(2)}?v={digest}{match.group(3)}"
 
