@@ -7,10 +7,10 @@ Run it from the repository root:
 
 Only these parts of web/site are copied (an allowlist):
 
-    index.html, favicon.svg, share.jpg, assets/,
+    index.html, 404.html, favicon.svg, share.jpg, assets/,
     guide/index.html, guide/<page>/index.html, guide/guide.css,
     docs/index.html, docs/<page>/index.html, docs/docs.css,
-    id/index.html, id/guide/index.html, id/guide/<page>/index.html, id/docs/index.html, id/docs/<page>/index.html
+    id/index.html, id/404.html, id/guide/index.html, id/guide/<page>/index.html, id/docs/index.html, id/docs/<page>/index.html
     (the Indonesian pages; they share guide.css, docs.css and assets/ with the English ones)
 
 Hidden files (.DS_Store, .taste-skill/ ...) are never copied. A symbolic link anywhere in what is copied stops the
@@ -26,7 +26,7 @@ Three things are written at build time, never committed, so they cannot drift fr
   check from outside which commit is live (as GET /healthz does for the APIs). The sha is GITHUB_SHA (in CI, on a v*
   tag it is the tag's commit) or `git rev-parse HEAD` of the checkout. It must be 40 hex digits. A committed page that
   already has one is refused, and the build checks the result: exactly one marker on every page.
-- sitemap.xml: every page, with the hreflang alternates of the pages that exist in both languages.
+- sitemap.xml: every page but the two not-found pages, with the hreflang alternates of the pages that exist in both languages.
 - robots.txt: everything allowed, and the sitemap's address.
 
 The _headers file (Cloudflare Workers static assets read it; wrangler.jsonc serves this folder) sets the Content-Security-Policy and a few other
@@ -55,12 +55,13 @@ DEFAULT_OUT = REPO / "web" / "dist"
 
 SITE_URL = "https://komando.efolusi.com/"
 
-TOP_FILES = ["index.html", "favicon.svg", "share.jpg"]
+# 404.html and id/404.html are the not-found pages (wrangler.jsonc: "404-page"): Cloudflare serves the nearest one up the path
+TOP_FILES = ["index.html", "404.html", "favicon.svg", "share.jpg"]
 TOP_DIRS = ["assets"]
 GUIDE_FILES = ["guide/index.html", "guide/guide.css"]
 DOCS_FILES = ["docs/index.html", "docs/docs.css"]
 # the Indonesian tree: the homes of the three parts; its pages are found like the English ones
-ID_FILES = ["id/index.html", "id/guide/index.html", "id/docs/index.html"]
+ID_FILES = ["id/index.html", "id/404.html", "id/guide/index.html", "id/docs/index.html"]
 
 SHA = re.compile(r"[0-9a-f]{40}")
 RELEASE_META = '<meta name="release" content="{sha}">'
@@ -309,8 +310,8 @@ def page_url(rel):
 
 
 def write_sitemap(out):
-    """sitemap.xml: every page, and for a page that exists in both languages its hreflang alternates."""
-    rels = pages_of(out)
+    """sitemap.xml: every page but the not-found pages, and for a page that exists in both languages its hreflang alternates."""
+    rels = [r for r in pages_of(out) if r.name != "404.html"]
     known = {r.as_posix() for r in rels}
     entries = []
     for rel in rels:

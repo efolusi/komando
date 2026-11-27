@@ -46,6 +46,7 @@ class SymlinkTests(unittest.TestCase):
         self.secret.write_text("PRIVATE KEY STAND-IN\n")
         for rel, text in {
             "index.html": page("t").replace("</head>", "<script>1</script>\n</head>"),
+            "404.html": page("n"),
             "favicon.svg": "<svg/>",
             "share.jpg": "jpg",
             "glyphs/a.svg": "<svg/>",  # a build input, never published
@@ -57,6 +58,7 @@ class SymlinkTests(unittest.TestCase):
             "docs/docs.css": "pre{}",
             "docs/install/index.html": page("i"),
             "id/index.html": page("t", "id"),
+            "id/404.html": page("n", "id"),
             "id/guide/index.html": page("g", "id"),
             "id/guide/start/index.html": page("s", "id"),
             "id/docs/index.html": page("d", "id"),
@@ -101,6 +103,20 @@ class SymlinkTests(unittest.TestCase):
         served = {p.relative_to(self.out).as_posix() for p in self.published()}
         for rel in ("id/index.html", "id/guide/index.html", "id/guide/start/index.html", "id/docs/index.html", "id/docs/start/index.html"):
             self.assertIn(rel, served)
+
+    def test_the_not_found_pages_are_published_and_not_listed(self):
+        # W43: Cloudflare serves the nearest 404.html up the path, so both languages ship one; a sitemap names real pages only
+        build_dist.main()
+        served = {p.relative_to(self.out).as_posix() for p in self.published()}
+        self.assertLessEqual({"404.html", "id/404.html"}, served)
+        xml = (self.out / "sitemap.xml").read_text(encoding="utf-8")
+        self.assertNotIn("404", xml)
+
+    def test_a_missing_not_found_page_stops_the_build(self):
+        (self.site / "id" / "404.html").unlink()
+        with self.assertRaises(SystemExit) as stop:
+            build_dist.main()
+        self.assertIn("id/404.html", str(stop.exception))
 
     def test_a_missing_indonesian_home_stops_the_build(self):
         (self.site / "id" / "index.html").unlink()
@@ -502,6 +518,9 @@ class WorkerConfigTests(unittest.TestCase):
         self.assertEqual(self.config["assets"]["directory"], "./web/dist")
         self.assertEqual(Path(self.config["assets"]["directory"]).resolve(strict=False).name,
                          build_dist.DEFAULT_OUT.name)
+
+    def test_an_unknown_address_gets_the_404_page(self):
+        self.assertEqual(self.config["assets"]["not_found_handling"], "404-page")
 
     def test_assets_only(self):
         self.assertNotIn("main", self.config)  # no script: _headers is honoured and nothing runs code

@@ -1,9 +1,10 @@
-// Render the home page and the page shell with Meridian's marketing components, to static HTML, in English and Indonesian.
+// Render the home page, the not-found page and the page shell with Meridian's marketing components, to static HTML, in
+// English and Indonesian.
 //
 //   cd web/site && pnpm install && node build.mjs
 //
-// Writes index.html and id/index.html, the shell partials _shell/{en,id}/{head,header,footer}.html that guide/build.py and
-// scripts/docsgen read, and copies Meridian's CSS, fonts and plain browser scripts (browser/theme-init.js, theme.js and
+// Writes index.html, 404.html, id/index.html, id/404.html, the shell partials _shell/{en,id}/{head,header,footer}.html
+// that guide/build.py and scripts/docsgen read, and copies Meridian's CSS, fonts and plain browser scripts (browser/theme-init.js, theme.js and
 // marketing.js) from the pinned package into assets/meridian/. Every output is
 // committed, so serving the site needs no build step. Decision: brainOS 05-Knowledge/.../komando/2026-11-20-site-on-meridian-decision.md.
 //
@@ -283,6 +284,41 @@ ${footer(c, root, true, twin)}
 `;
 }
 
+/**
+ * The not-found page (row W43). Cloudflare serves it for any unknown address, at any depth, and takes the nearest
+ * 404.html up the path, so /id/... gets id/404.html. Every address in it is therefore from the site's root.
+ */
+export function renderNotFound(c = en) {
+  const lang = c.meta.lang;
+  const root = '/';
+  const twin = lang === 'en' ? '/id/' : '/';
+  const title = `${c.notFound.title} · Komando`;
+  const btn = (kind, href, label) => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--lg`, href }, label);
+  const body = renderToStaticMarkup(h('main', { id: 'top', tabIndex: -1 },
+    h(Hero, {
+      id: 'not-found', align: 'center', 'aria-labelledby': 'not-found-h',
+      title: h('span', { id: 'not-found-h' }, c.notFound.title),
+      sub: c.notFound.sub,
+      actions: h(React.Fragment, null, btn('primary', `${root}${BASE[lang]}`, c.notFound.home), btn('secondary', `${root}${BASE[lang]}docs/`, c.notFound.docs)),
+    })));
+  return `<!doctype html>
+<html lang="${lang}">
+<head>
+<meta charset="utf-8">
+<title>${title}</title>
+<meta name="robots" content="noindex">
+${headShared(root)}
+<!-- built by web/site/build.mjs from content/; edit the source, not this file -->
+</head>
+<body>
+${header(c, root, false, twin)}
+${body}
+${footer(c, root, false, twin)}
+</body>
+</html>
+`;
+}
+
 export function renderShell(c = en) {
   return { head: headShared('{{root}}'), header: header(c, '{{root}}', false, '{{switch}}'), footer: footer(c, '{{root}}', false, '{{switch}}') };
 }
@@ -308,12 +344,13 @@ function main() {
     const home = join(HERE, BASE[lang], 'index.html');
     mkdirSync(dirname(home), { recursive: true });
     writeFileSync(home, renderHome(c));
+    writeFileSync(join(HERE, BASE[lang], '404.html'), renderNotFound(c));
     const dir = join(HERE, '_shell', lang);
     mkdirSync(dir, { recursive: true });
     for (const [name, html] of Object.entries(renderShell(c))) writeFileSync(join(dir, `${name}.html`), `${html}\n`);
   }
   const drafts = renderDrafts();
-  console.log(`build.mjs: ${drafts} draft pages (switched off) written to content/drafts/out/, index.html, id/index.html and _shell/{en,id}/ written with @efolusi/meridian ${version}`);
+  console.log(`build.mjs: ${drafts} draft pages (switched off) written to content/drafts/out/, index.html, 404.html, id/index.html, id/404.html and _shell/{en,id}/ written with @efolusi/meridian ${version}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

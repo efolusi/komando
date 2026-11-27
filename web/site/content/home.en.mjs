@@ -47,6 +47,14 @@ export const shell = {
   },
 };
 
+// The not-found page (row W43): a title, one sentence, two links.
+export const notFound = {
+  title: 'Page not found',
+  sub: 'The address may be mistyped, or the page has moved.',
+  home: 'Home',
+  docs: 'Docs',
+};
+
 export const hero = {
   releaseLabel: 'Latest komando release:',
   title: 'DevOps command line for you and your AI agent',

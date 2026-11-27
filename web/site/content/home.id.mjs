@@ -47,6 +47,14 @@ export const shell = {
   },
 };
 
+// Halaman tidak ditemukan (baris W43): judul, satu kalimat, dua link.
+export const notFound = {
+  title: 'Halaman tidak ditemukan',
+  sub: 'Alamatnya mungkin salah ketik, atau halamannya sudah dipindahkan.',
+  home: 'Beranda',
+  docs: 'Dokumentasi',
+};
+
 export const hero = {
   releaseLabel: 'Rilis komando terbaru:',
   title: 'Command line DevOps untuk Anda dan agen AI Anda',
