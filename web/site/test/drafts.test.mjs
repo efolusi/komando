@@ -147,3 +147,13 @@ test('no committed page, shell part or content file names a draft page, and buil
   const deploy = readFileSync(join(SITE, '..', 'deploy', 'build_dist.py'), 'utf8');
   assert.doesNotMatch(deploy, /drafts/);
 });
+
+// Same rule as the site pages (W34): a style attribute needs 'unsafe-inline' in the CSP, so the drafts use classes.
+test('no built draft page and no draft renderer carries a style attribute', () => {
+  const STYLE_ATTR = /<[a-z][^>]*\sstyle\s*=/i;
+  for (const lang of ['en', 'id']) {
+    for (const page of PAGES) assert.doesNotMatch(renderDraft(lang, page, CONFIG, shell), STYLE_ATTR, `${lang}/${page}`);
+  }
+  for (const f of walk(join(SITE, 'content', 'drafts', 'out'))) assert.doesNotMatch(readFileSync(f, 'utf8'), STYLE_ATTR, relative(SITE, f));
+  assert.doesNotMatch(readFileSync(join(SITE, 'content', 'drafts', 'render.mjs'), 'utf8'), /\sstyle="/);
+});

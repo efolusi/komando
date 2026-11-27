@@ -68,13 +68,13 @@ export function renderDraft(lang, page, config = CONFIG, shell = null) {
 <meta name="description" content="${esc(p.description)}">
 <meta name="robots" content="noindex, nofollow">
 ${fill(parts.head)}
-<style>.draft-banner,.draft-todo{border:1px solid currentColor;border-radius:.5rem;padding:.75rem 1rem}.draft-todo strong::after{content:':'}.draft-todo strong{margin-inline-end:.25rem}</style>
+<style>.draft-wrap{max-width:46rem;margin:0 auto;padding:2rem 1rem}.draft-banner,.draft-todo{border:1px solid currentColor;border-radius:.5rem;padding:.75rem 1rem}.draft-todo strong::after{content:':'}.draft-todo strong{margin-inline-end:.25rem}</style>
 <!-- DRAFT of row W28, switched off. Built by web/site/build.mjs from content/drafts/; edit the source, not this file -->
 </head>
 <body>
 ${fill(parts.header)}
 <main id="top" tabindex="-1" class="ef-section">
-<div class="draft-wrap" style="max-width:46rem;margin:0 auto;padding:2rem 1rem">
+<div class="draft-wrap">
 <p class="draft-banner" role="note"><strong>${esc(c.banner.label)}</strong> ${esc(c.banner.text)}</p>
 <h1>${esc(p.h1)}</h1>
 ${blocksOf(page, c, config).map(block).join('\n')}
