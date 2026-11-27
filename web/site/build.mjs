@@ -21,6 +21,7 @@ import { Hero } from '@efolusi/meridian/marketing/Hero.js';
 import { Section, SectionHead } from '@efolusi/meridian/marketing/Section.js';
 import { FeatureCard, FeatureGrid } from '@efolusi/meridian/marketing/FeatureCard.js';
 import { Marquee } from '@efolusi/meridian/marketing/Marquee.js';
+import { Tag } from '@efolusi/meridian/display/Tag.js';
 import { SiteHeader } from '@efolusi/meridian/marketing/SiteHeader.js';
 import { SiteFooter } from '@efolusi/meridian/marketing/SiteFooter.js';
 import { LABELS as THEME_LABELS } from '@efolusi/meridian/theme';
@@ -173,8 +174,8 @@ function homeBody(c, root) {
     h('div', { className: 'site-agents' },
       raw('p', c.oneCommand.agentsHtml, { id: 'agents-l', className: 'site-small' }),
       h('ul', { className: 'site-chips', 'aria-labelledby': 'agents-l' },
-        c.oneCommand.agents.map(([icon, name]) => h('li', { key: icon, className: 'site-chip' },
-          h('img', { src: `${root}assets/icons/${icon}.svg`, alt: '', width: 22, height: 22, loading: 'lazy' }), name)))));
+        c.oneCommand.agents.map(([icon, name]) => h('li', { key: icon },
+          h(Tag, null, h('img', { src: `${root}assets/icons/${icon}.svg`, alt: '', width: 16, height: 16, loading: 'lazy' }), name))))));
 
   const node = ([icon, label, sub, tint]) => h('li', { key: label, className: 'site-node', 'data-tint': tint },
     raw('span', glyph(icon), { className: 'site-node__icon' }),
@@ -183,7 +184,7 @@ function homeBody(c, root) {
     h('div', { className: 'site-split site-split--head' },
       h(SectionHead, { title: h('span', { id: 'inventory-h' }, c.inventory.title) }),
       h('div', { className: 'site-stack' }, h('p', { className: 'site-lede' }, c.inventory.lede),
-        h('p', null, h('a', { className: 'site-link', href: '#features' }, c.inventory.link)))),
+        h('p', null, h('a', { href: '#features' }, c.inventory.link)))),
     h('figure', { className: 'site-flow', 'aria-label': c.inventory.alt },
       h('ul', { className: 'site-flow__col', 'aria-label': c.inventory.sourcesLabel }, c.inventory.sources.map((s) => node([...s, s[0] === 'text-bubble' ? 'agent' : 'plain']))),
       h('div', { className: 'site-flow__core', 'aria-hidden': 'true' }, raw('span', LOGO), c.inventory.core),
@@ -195,7 +196,7 @@ function homeBody(c, root) {
         h(SectionHead, { title: h('span', { id: 'safety-h' }, c.safety.title), lede: c.safety.lede }),
         h('ul', { className: 'site-rows' }, c.safety.rows.map(([name, value]) => h('li', { key: name },
           h('span', { className: 'site-rows__name' }, name), raw('span', value, { className: 'site-rows__value' })))),
-        h('p', null, h('a', { className: 'site-link', href: '#editions' }, c.safety.link))),
+        h('p', null, h('a', { href: '#editions' }, c.safety.link))),
       raw('div', screen('safety', c), { className: 'site-frame site-frame--ink' })));
 
   const features = h(Section, { id: 'features', 'aria-labelledby': 'features-h', ruled: true },
@@ -208,7 +209,7 @@ function homeBody(c, root) {
     h('div', { className: 'site-split site-split--head' },
       h(SectionHead, { title: h('span', { id: 'agent-h' }, c.agent.title) }),
       h('div', { className: 'site-stack' }, h('p', { className: 'site-lede' }, c.agent.lede),
-        h('p', null, h('a', { className: 'site-link', href: '#editions' }, c.agent.link)))),
+        h('p', null, h('a', { href: '#editions' }, c.agent.link)))),
     raw('div', screen('agent', c), { className: 'site-app' }));
 
   const rows = (group, next) => [
@@ -268,7 +269,7 @@ export function renderHome(c = en) {
   const root = lang === 'en' ? '' : '../';
   const twin = lang === 'en' ? 'id/' : '../';
   return `<!doctype html>
-<html lang="${lang}">
+<html lang="${lang}" data-shape="pill">
 <head>
 <meta charset="utf-8">
 <title>${c.meta.title}</title>
@@ -310,7 +311,7 @@ export function renderNotFound(c = en) {
       actions: h(React.Fragment, null, btn('primary', `${root}${BASE[lang]}`, c.notFound.home, 'xl'), btn('secondary', `${root}${BASE[lang]}docs/`, c.notFound.docs)),
     })));
   return `<!doctype html>
-<html lang="${lang}">
+<html lang="${lang}" data-shape="pill">
 <head>
 <meta charset="utf-8">
 <title>${title}</title>

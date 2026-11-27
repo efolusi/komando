@@ -19,7 +19,7 @@ const esc = (s) => String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').re
 // plain text with `code` and [label](href) inline
 const inline = (s) => esc(s)
   .replace(/`([^`]+)`/g, '<code>$1</code>')
-  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="site-link" href="$2">$1</a>');
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 
 function block(b) {
   if (typeof b === 'string') return `<p>${inline(b)}</p>`;
@@ -61,7 +61,7 @@ export function renderDraft(lang, page, config = CONFIG, shell = null) {
   const fill = (s) => s.replaceAll('{{root}}', root).replaceAll('{{switch}}', `../${OTHER[lang]}/${page}.html`);
   const p = c[page];
   return `<!doctype html>
-<html lang="${lang}">
+<html lang="${lang}" data-shape="pill">
 <head>
 <meta charset="utf-8">
 <title>${esc(p.title)}</title>

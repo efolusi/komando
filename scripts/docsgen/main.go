@@ -266,7 +266,7 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 		fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, p.slug))
 		trail := []crumb{{l.ui("Docs"), "../"}, {l.group(p.group), "../#" + anchor(p.group)}, {p.title, ""}}
 		fmt.Fprintf(&b, `<article class="g-article">%s`, breadcrumb(l, trail))
-		fmt.Fprintf(&b, `<h1>%s</h1><p class="g-lead">%s</p>%s`, inline(p.title, p.slug, own, l), inline(p.lead, p.slug, own, l), toc(l, heads))
+		fmt.Fprintf(&b, `<h1 class="ef-page-title">%s</h1><p class="g-lead">%s</p>%s`, inline(p.title, p.slug, own, l), inline(p.lead, p.slug, own, l), toc(l, heads))
 		fmt.Fprintf(&b, `<div class="g-body">%s</div>%s`, body, pager(l, pages, i))
 		fmt.Fprintf(&b, `<p class="g-path g-small g-muted">%s</p></article></div></main>`+"\n", source(l, p, ref))
 		b.WriteString(foot(l, path, l.code == "id" || twin[p.slug]))
@@ -281,7 +281,7 @@ func writeLang(l *lang, pages []*page, all, twin map[string]bool, summary map[st
 	var b strings.Builder
 	b.WriteString(head(l.ui("Docs")+" · "+productName, l.ui("How to use the komando command line, one page per feature."), "docs/", l, true))
 	fmt.Fprintf(&b, `<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">%s`, sidebar(l, pages, ""))
-	fmt.Fprintf(&b, `<article class="g-article g-article--index"><h1>%s</h1><div class="g-body g-intro">`, esc(l.ui("komando docs")))
+	fmt.Fprintf(&b, `<article class="g-article g-article--index"><h1 class="ef-page-title">%s</h1><div class="g-body g-intro">`, esc(l.ui("komando docs")))
 	start, agent := "Getting started", ""
 	for _, p := range pages {
 		switch p.slug {
@@ -800,7 +800,7 @@ func head(title, description, path string, l *lang, hasTwin bool) string {
 	description = html.UnescapeString(tagRe.ReplaceAllString(inline(description, "", nil, l), ""))
 	switchTo := switchHref(path, l, hasTwin)
 	return fmt.Sprintf(`<!doctype html>
-<html lang="%s">
+<html lang="%s" data-shape="pill">
 <head>
 <meta charset="utf-8">
 <title>%s</title>

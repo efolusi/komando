@@ -172,7 +172,7 @@ export const install = {
   title: 'Install komando on macOS, Linux or Windows',
   copy: 'Copy command',
   // {release} is the tag; the link keeps data-release so set_release.py finds it
-  ledeHtml: 'One line installs release <a class="site-link" href="https://github.com/sgnd/komando/releases/tag/{release}" data-release>{release}</a>. Then run <code>komando version</code> to check it. The source is on <a class="site-link" href="https://github.com/sgnd/komando">GitHub</a>.',
+  ledeHtml: 'One line installs release <a href="https://github.com/sgnd/komando/releases/tag/{release}" data-release>{release}</a>. Then run <code>komando version</code> to check it. The source is on <a href="https://github.com/sgnd/komando">GitHub</a>.',
   unix: {
     title: 'macOS, Linux and Windows',
     body: 'Open a terminal and run this line. On Windows, komando runs through WSL: open a WSL terminal and run the same line.',
