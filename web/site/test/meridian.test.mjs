@@ -39,8 +39,9 @@ test('every generator and every committed page sets data-shape="pill" on the htm
 test('the site draws no pill, no ember token, no link underline, no forced-colors focus and no 16 px phone rule', () => {
   assert.doesNotMatch(ownCss, /--ember-/, 'ember tokens are removed in 2.5.0');
   assert.doesNotMatch(ownCss, /radius-full|999px/, 'the pill shape is data-shape="pill"');
-  // the breadcrumb and the contents list are navigation lists, not running text, so they underline their links themselves
-  const underlined = ownCss.split('\n').filter((l) => /text-decoration:\s*underline/.test(l) && !/^\.g-(crumbs|toc) /.test(l));
+  // the breadcrumb and the contents list are navigation lists, not running text, so they underline their links themselves;
+  // Meridian covers p, dd, blockquote and figcaption, so a link in a list item or table cell of the page text keeps one rule
+  const underlined = ownCss.split('\n').filter((l) => /text-decoration:\s*underline/.test(l) && !/^\.g-(crumbs|toc) /.test(l) && !/^\.g-body (li|td) a:not/.test(l));
   assert.deepEqual(underlined, [], 'links in running text are underlined by Meridian');
   assert.doesNotMatch(ownCss, /forced-colors/, 'one focus rule in Meridian base.css');
   assert.doesNotMatch(ownCss, /(input|textarea|select)[^{}]*\{[^}]*font-size/, 'text controls are 16 px at phone width in Meridian');
@@ -64,4 +65,8 @@ test('the guide and docs page titles are .ef-page-title, one per page, and the h
 test('a "Coming" marker is a Meridian warning Badge and an agent name is a Meridian Tag', () => {
   assert.match(read('guide/index.html'), /class="ef-badge ef-badge--warning"/);
   assert.match(read('index.html'), /<li><span class="ef-tag"><img /);
+});
+
+test('a link in a list item or table cell of the page text is underlined by one site rule, until Meridian covers li and td', () => {
+  assert.match(read('guide/guide.css'), /\.g-body li a:not\(\[class\]\), \.g-body td a:not\(\[class\]\) \{ text-decoration: underline;/);
 });
