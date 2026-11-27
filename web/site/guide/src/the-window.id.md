@@ -42,4 +42,4 @@ Untuk menghapus set tab yang tersimpan, tekan ⌘K, klik kanan workspace lalu pi
 
 ## Di iPhone dan iPad
 
-Tidak ada yang berubah di sana. Ponsel punya lima tempat: **Home**, **Targets**, **Recipes**, **Agent**, dan **Settings**. Files di ponsel menyusul. {coming:phone-files}
+Tidak ada yang berubah di sana. Ponsel punya lima tempat: **Home**, **Targets**, **Recipes**, **Agent**, dan **Settings**. Files di ponsel akan datang. {coming:phone-files}

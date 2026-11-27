@@ -2,7 +2,7 @@
 // A field named *Html holds a little inline markup (code, links, strong); every other field is plain text.
 // The Indonesian twin is home.id.mjs (from i18n/home.id.md); build.mjs renders both.
 
-export const release = 'v0.17.0';
+export const release = 'v0.17.4';
 export const installSha = '9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af';
 
 export const meta = {
@@ -138,7 +138,7 @@ export const agent = {
 };
 
 export const editions = {
-  title: 'Free now, an upgrade later',
+  title: 'Free, with an upgrade later',
   lede: 'The Komando apps for Mac, iPhone and iPad are built and in testing, with no download link and no date yet. They will be free, like the command line, and run komando on your own machines, with no account and no trial.',
   free: { head: ['Free, everything local', 'Where'], rows: [
     ['Every command, as text or JSON', 'komando'],

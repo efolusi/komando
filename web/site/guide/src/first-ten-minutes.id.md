@@ -16,11 +16,11 @@ Komando untuk Mac membutuhkan macOS. Aplikasi iPhone dan iPad dijelaskan di [Kom
 
 Buka Komando. Jika komando belum ada di Mac ini, jendelanya menampilkan "Install the komando command line".
 
-1. Buka aplikasi Terminal, tempel baris ini, lalu tekan Return. Baris ini mengunduh skrip instal komando untuk rilis v0.17.0, lalu skrip itu menginstal rilis tersebut:
-   `curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/sgnd/komando/v0.17.0/install.sh | KOMANDO_VERSION=v0.17.0 sh`
+1. Buka aplikasi Terminal, tempel baris ini, lalu tekan Return. Baris ini mengunduh skrip instal komando untuk rilis v0.17.4, lalu skrip itu menginstal rilis tersebut:
+   `curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/sgnd/komando/v0.17.4/install.sh | KOMANDO_VERSION=v0.17.4 sh`
 2. Kembali ke Komando, klik **Check Again**.
 
-> Jika mau, periksa dulu: unduh skripnya, baca, lalu jalankan. Di Terminal, jalankan `curl --proto '=https' --tlsv1.2 -fsSLO https://raw.githubusercontent.com/sgnd/komando/v0.17.0/install.sh`, lalu `shasum -a 256 install.sh`. Hasilnya harus `9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af`. Baca skripnya dengan `less install.sh`, lalu jalankan dengan `KOMANDO_VERSION=v0.17.0 sh install.sh`. Installer memeriksa bahwa rilis itu ditandatangani dengan key proyek komando (pemeriksaan yang sama dengan `komando update`), dan tidak menginstal apa pun jika gagal.
+> Jika mau, periksa dulu: unduh skripnya, baca, lalu jalankan. Di Terminal, jalankan `curl --proto '=https' --tlsv1.2 -fsSLO https://raw.githubusercontent.com/sgnd/komando/v0.17.4/install.sh`, lalu `shasum -a 256 install.sh`. Hasilnya harus `9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af`. Baca skripnya dengan `less install.sh`, lalu jalankan dengan `KOMANDO_VERSION=v0.17.4 sh install.sh`. Installer memeriksa bahwa rilis itu ditandatangani dengan key proyek komando (pemeriksaan yang sama dengan `komando update`), dan tidak menginstal apa pun jika gagal.
 
 Jika komando terinstal di folder yang tidak dicari Komando, klik **Choose komando…** lalu pilih program komando.
 
