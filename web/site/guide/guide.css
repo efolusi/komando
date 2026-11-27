@@ -47,10 +47,6 @@
 .g-body h2 { font-size: clamp(var(--text-2xl), 1vw + 1.1rem, var(--text-3xl)); margin-top: var(--space-10); }
 .g-body h3 { font-size: var(--text-xl); margin-top: var(--space-8); }
 .g-body h2 + *, .g-body h3 + * { margin-top: var(--space-3); }
-/* Meridian underlines classless links in p, dd, blockquote and figcaption only; the same links in a list item or a table
-   cell of the page text need it too (WCAG 1.4.1). Open: ask Meridian to cover li and td, then delete these two rules. */
-.g-body li a:not([class]), .g-body td a:not([class]) { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
-.g-body li a:not([class]):hover, .g-body td a:not([class]):hover { text-decoration-thickness: 2px; }
 .g-body b { font-weight: var(--weight-semibold); }
 .g-body code, .g-path code, .g-intro code { font-family: var(--font-mono); font-size: 0.88em; padding: 1px 5px; border-radius: var(--radius-xs);
   background: var(--surface-code); color: var(--text-code); border: 1px solid var(--border-code); overflow-wrap: anywhere; }

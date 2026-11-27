@@ -1,4 +1,4 @@
-// W44 and W42 (second bump): Meridian 2.5.0 does the pill shape, the page title, the link underline, the 16 px phone
+// W44, W42 and W52: Meridian 2.5.1 does the pill shape, the page title, the link underline (also in li and td), the 16 px phone
 // fields and the forced-colors focus, so the site draws none of them. The drawn Komando screens (.kmd) keep the
 // apps' own pill.
 import { test } from 'node:test';
@@ -25,9 +25,9 @@ function pagesIn(dir, out = []) {
 }
 const pages = pagesIn('.');
 
-test('the package is pinned to exactly 2.5.0 and only that version is excluded from the release age', () => {
-  assert.equal(JSON.parse(read('package.json')).dependencies['@efolusi/meridian'], '2.5.0');
-  assert.match(read('pnpm-workspace.yaml'), /^minimumReleaseAgeExclude:\n {2}- '@efolusi\/meridian@2\.5\.0'\n$/);
+test('the package is pinned to exactly 2.5.1 and only that version is excluded from the release age', () => {
+  assert.equal(JSON.parse(read('package.json')).dependencies['@efolusi/meridian'], '2.5.1');
+  assert.match(read('pnpm-workspace.yaml'), /^minimumReleaseAgeExclude:\n {2}- '@efolusi\/meridian@2\.5\.1'\n$/);
 });
 
 test('every generator and every committed page sets data-shape="pill" on the html element', () => {
@@ -40,8 +40,8 @@ test('the site draws no pill, no ember token, no link underline, no forced-color
   assert.doesNotMatch(ownCss, /--ember-/, 'ember tokens are removed in 2.5.0');
   assert.doesNotMatch(ownCss, /radius-full|999px/, 'the pill shape is data-shape="pill"');
   // the breadcrumb and the contents list are navigation lists, not running text, so they underline their links themselves;
-  // Meridian covers p, dd, blockquote and figcaption, so a link in a list item or table cell of the page text keeps one rule
-  const underlined = ownCss.split('\n').filter((l) => /text-decoration:\s*underline/.test(l) && !/^\.g-(crumbs|toc) /.test(l) && !/^\.g-body (li|td) a:not/.test(l));
+  // Meridian underlines classless links in p, li, td, dd, blockquote, figcaption, caption and label
+  const underlined = ownCss.split('\n').filter((l) => /text-decoration:\s*underline/.test(l) && !/^\.g-(crumbs|toc) /.test(l));
   assert.deepEqual(underlined, [], 'links in running text are underlined by Meridian');
   assert.doesNotMatch(ownCss, /forced-colors/, 'one focus rule in Meridian base.css');
   assert.doesNotMatch(ownCss, /(input|textarea|select)[^{}]*\{[^}]*font-size/, 'text controls are 16 px at phone width in Meridian');
@@ -67,6 +67,6 @@ test('a "Coming" marker is a Meridian warning Badge and an agent name is a Merid
   assert.match(read('index.html'), /<li><span class="ef-tag"><img /);
 });
 
-test('a link in a list item or table cell of the page text is underlined by one site rule, until Meridian covers li and td', () => {
-  assert.match(read('guide/guide.css'), /\.g-body li a:not\(\[class\]\), \.g-body td a:not\(\[class\]\) \{ text-decoration: underline;/);
+test('a link in a list item or table cell of the page text has no site rule; Meridian underlines it', () => {
+  assert.doesNotMatch(read('guide/guide.css'), /\.g-body (li|td) a/);
 });

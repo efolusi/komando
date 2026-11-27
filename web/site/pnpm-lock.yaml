@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@efolusi/meridian':
-        specifier: 2.5.0
-        version: 2.5.0(react-dom@18.3.1(react@18.3.1))(react-is@19.3.1)(react@18.3.1)(redux@5.0.1)
+        specifier: 2.5.1
+        version: 2.5.1(react-dom@18.3.1(react@18.3.1))(react-is@19.3.1)(react@18.3.1)(redux@5.0.1)
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -20,8 +20,8 @@ importers:
 
 packages:
 
-  '@efolusi/meridian@2.5.0':
-    resolution: {integrity: sha512-rMrDSRnIi0P5mjpMbJ0qudOPydXOQDM/CIXM7/Y7Sx/+SWdKYScxbm5PRa7yIASc183F4qi7woYXkzGvLf2ZHg==}
+  '@efolusi/meridian@2.5.1':
+    resolution: {integrity: sha512-RoBsDWYZ4pDAy07gVrIcb22Ss9tSeLjkGgInxLp+c489YE3nmB6eQjuqwxJxXg7rLtwsOQeGtRaV9II8Ck+HzA==}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
@@ -210,7 +210,7 @@ packages:
 
 snapshots:
 
-  '@efolusi/meridian@2.5.0(react-dom@18.3.1(react@18.3.1))(react-is@19.3.1)(react@18.3.1)(redux@5.0.1)':
+  '@efolusi/meridian@2.5.1(react-dom@18.3.1(react@18.3.1))(react-is@19.3.1)(react@18.3.1)(redux@5.0.1)':
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
