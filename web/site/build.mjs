@@ -101,7 +101,7 @@ function header(c, root, home, switchHref) {
   const links = c.shell.nav.map((l) => ({ href: target(l, root, home, lang), label: l.label, 'data-nav': l.id }));
   const actions = h(React.Fragment, null,
     themeToggle(lang),
-    h('a', { className: 'ef-btn ef-btn--primary ef-btn--sm', href: target({ section: 'install' }, root, home, lang) }, c.shell.install));
+    h('a', { className: 'ef-btn ef-btn--primary ef-btn--md', href: target({ section: 'install' }, root, home, lang) }, c.shell.install));
   let html = renderToStaticMarkup(h(SiteHeader, {
     brand, brandHref: home ? './' : `${root}${BASE[lang]}index.html`, brandLabel: c.shell.brandLabel, links, actions,
     languageSwitch: switchLink(c, switchHref), labels: { skip: c.shell.skip },
@@ -152,13 +152,14 @@ function headShared(root) {
 
 function homeBody(c, root) {
   const r = c.release;
-  const btn = (kind, href, label) => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--lg`, href }, label);
+  // sizes are Meridian's: the hero's main action xl, its second action and the closing action lg
+  const btn = (kind, href, label, size = 'lg') => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--${size}`, href }, label);
 
   const hero = h(Hero, {
     id: 'hero', className: 'site-hero', align: 'start', 'aria-labelledby': 'hero-h',
     title: h('span', { id: 'hero-h' }, c.hero.title),
     sub: c.hero.sub,
-    actions: h(React.Fragment, null, btn('primary', '#install', c.hero.primary), btn('secondary', 'guide/', c.hero.secondary)),
+    actions: h(React.Fragment, null, btn('primary', '#install', c.hero.primary, 'xl'), btn('secondary', 'guide/', c.hero.secondary)),
     proof: h('span', null, `${c.hero.releaseLabel} `, h('span', { 'data-release': '' }, r)),
   }, raw('div', screen('home', c), { className: 'site-stage' }));
 
@@ -300,13 +301,13 @@ export function renderNotFound(c = en) {
   const root = '/';
   const twin = lang === 'en' ? '/id/' : '/';
   const title = `${c.notFound.title} · Komando`;
-  const btn = (kind, href, label) => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--lg`, href }, label);
+  const btn = (kind, href, label, size = 'lg') => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--${size}`, href }, label);
   const body = renderToStaticMarkup(h('main', { id: 'top', tabIndex: -1 },
     h(Hero, {
       id: 'not-found', align: 'center', 'aria-labelledby': 'not-found-h',
       title: h('span', { id: 'not-found-h' }, c.notFound.title),
       sub: c.notFound.sub,
-      actions: h(React.Fragment, null, btn('primary', `${root}${BASE[lang]}`, c.notFound.home), btn('secondary', `${root}${BASE[lang]}docs/`, c.notFound.docs)),
+      actions: h(React.Fragment, null, btn('primary', `${root}${BASE[lang]}`, c.notFound.home, 'xl'), btn('secondary', `${root}${BASE[lang]}docs/`, c.notFound.docs)),
     })));
   return `<!doctype html>
 <html lang="${lang}">
