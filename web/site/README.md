@@ -42,6 +42,8 @@ Rows W28 and W32 (efolusi/komando#53, #58). The Mac download, privacy, support a
 
 Until the apps can be downloaded the download page says only that they are built and in testing and need an Apple Developer account first: no date, no link. The privacy text is copied from the apps repo's `PRIVACY.md`; the pricing text from `plans.md` ("What always stays free"). No price is named (row O03 is open).
 
+The links inside the drafts (the home page, the guide and docs, the language switch) are relative and written for the current depth, `content/drafts/out/<lang>/`. They work when you open the built files there, and break if a page moves to another folder, so check them again when the pages are switched on and given their real addresses.
+
 To switch on, after review: fill `config.json` (released, version, sha256, release notes), clear every TODO, add the pages to `build_dist.py`'s allowlist and to the navigation, then run `python3 -I web/deploy/check_download.py`.
 
 ## Social card

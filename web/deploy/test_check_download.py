@@ -7,6 +7,7 @@ Run from the repository root:
 
 import importlib.util
 import json
+import shutil
 import sys
 import tempfile
 import unittest
@@ -31,8 +32,10 @@ def drafts(**changes):
     config["macApp"].update(app)
     (folder / "config.json").write_text(json.dumps(config))
     (folder / "copy.en.mjs").write_text("export const x = 'done';\n")
-    (folder / "out" / "en").mkdir(parents=True)
-    (folder / "out" / "en" / "download.html").write_text('<meta name="robots" content="noindex, nofollow">')
+    for lang in check_download.LANGS:
+        (folder / "out" / lang).mkdir(parents=True)
+        for page in check_download.PAGES:
+            (folder / "out" / lang / f"{page}.html").write_text('<meta name="robots" content="noindex, nofollow">')
     return folder
 
 
@@ -67,6 +70,44 @@ class CheckDownload(unittest.TestCase):
         code, messages = check_download.check(folder, [], never)
         self.assertEqual(code, 1)
         self.assertIn("noindex", messages[0])
+
+    def test_an_empty_out_folder_fails(self):
+        folder = drafts()
+        for page in (folder / "out").glob("*/*.html"):
+            page.unlink()
+        code, messages = check_download.check(folder, [], never)
+        self.assertEqual(code, 1)
+        self.assertEqual(len(messages), 8, messages)
+        self.assertIn("missing", messages[0])
+
+    def test_no_out_folder_fails(self):
+        folder = drafts()
+        shutil.rmtree(folder / "out")
+        code, messages = check_download.check(folder, [], never)
+        self.assertEqual(code, 1)
+        self.assertIn("missing", messages[0])
+
+    def test_one_missing_page_is_named(self):
+        folder = drafts()
+        (folder / "out" / "id" / "pricing.html").unlink()
+        code, messages = check_download.check(folder, [], never)
+        self.assertEqual(code, 1)
+        self.assertEqual(len(messages), 1, messages)
+        self.assertIn("id/pricing.html", messages[0])
+
+    def test_a_missing_shipping_file_fails(self):
+        gone = Path(tempfile.mkdtemp()) / "header.html"
+        code, messages = check_download.check(drafts(), [gone], never)
+        self.assertEqual(code, 1)
+        self.assertIn("header.html", messages[0])
+        self.assertIn("does not exist", messages[0])
+
+    def test_switched_on_with_a_missing_page_fails(self):
+        folder = drafts(**LIVE)
+        (folder / "out" / "en" / "support.html").unlink()
+        code, messages = check_download.check(folder, [], lambda url: SHA)
+        self.assertEqual(code, 1)
+        self.assertIn("en/support.html", messages[0])
 
     def test_switched_on_with_a_matching_download_passes(self):
         code, messages = check_download.check(drafts(**LIVE), [], lambda url: SHA)

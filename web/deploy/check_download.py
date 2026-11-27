@@ -21,6 +21,12 @@ When "switchedOn" is true it also requires everything a visitor will rely on:
   404 or a different checksum is an error. A lookup that cannot reach the host at all only warns (an outage must
   not block a site change), as check_release.py does.
 
+This check guards the committed files; it is not the proof that the pages are not deployed. That proof is the
+allowlist in web/deploy/build_dist.py, tested by web/deploy/test_build_dist.py (content/ is never copied) and by the
+dist test in web/site/test/drafts.test.mjs (it runs build_dist.py into a scratch folder and looks for the pages, their
+sitemap entries and links). The check fails closed: all eight built pages (PAGES x LANGS) must exist, and every
+SHIPPING file must exist, so a renamed or deleted file is an error, never a silent pass.
+
 Tests: web/deploy/test_check_download.py.
 """
 
@@ -36,6 +42,9 @@ sys.dont_write_bytecode = True
 REPO = Path(__file__).resolve().parents[2]
 SITE = REPO / "web" / "site"
 DRAFTS = SITE / "content" / "drafts"
+# the pages web/site/content/drafts/render.mjs builds, in these languages: all of them must be there
+PAGES = ["download", "privacy", "support", "pricing"]
+LANGS = ["en", "id"]
 TAG = re.compile(r"^v\d+\.\d+\.\d+$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 # files that must never name the drafts while they are off
@@ -67,6 +76,15 @@ def check(drafts, shipping, lookup):
 
     if not app["released"] and (app["version"] or app["sha256"]):
         errors.append("config.json names a version or a checksum while the Mac app is not released (released: false)")
+
+    # fail closed: every built page must exist (an empty or missing out folder is an error, not "nothing to check")
+    built = [drafts / "out" / lang / f"{page}.html" for lang in LANGS for page in PAGES]
+    for page in built:
+        if not page.is_file():
+            errors.append(f"the draft page {page.relative_to(drafts)} is missing: run node build.mjs in web/site")
+    for path in shipping:
+        if not path.exists():
+            errors.append(f"{path} does not exist: the check cannot prove it does not name the drafts (renamed or deleted?)")
 
     if not config["switchedOn"]:
         for path in shipping:
