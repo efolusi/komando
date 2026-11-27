@@ -178,14 +178,14 @@ main code, .ef-site-footer code { font-family: var(--font-mono); font-size: 0.9e
 
 .kmd { --k-window: #f3f3f1; --k-panel: #ffffff; --k-card: #ffffff; --k-hover: #f7f7f5; --k-subtle: #f4f4f2; --k-border: #e4e4e1; --k-edge: #8c8c91;
   --k-text: #1c1c1e; --k-text2: #505056; --k-text3: #6e6e75; --k-accent: #1659ff; --k-on-accent: #ffffff; --k-primary: #1c1c1e; --k-on-primary: #ffffff;
-  --k-ok: #247a43; --k-warn: #b24a00; --k-danger: #ca282e; --k-tint-servers: #2f6bff; --k-tint-db: #808086; --k-tint-vpn: #247a43; --k-tint-cache: #dc502b;
+  --k-ok: #247a43; --k-warn: #b24a00; --k-danger: #ca282e; --k-tint-servers: #2f6bff; --k-tint-db: #808086; --k-tint-vpn: #247a43; --k-tint-cache: #dc502b; --k-tint-registries: #ae731d; --k-tint-storage: #0d8e81;
   --k-term-bg: #fbfbfa; --a-green: #237a42; --a-blue: #1659ff; --a-yellow: #8a6100; --a-red: #c4262c; --a-dim: #6e6e75;
   --k-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
   --k-mono: ui-monospace, "SF Mono", Menlo, monospace;
   font-family: var(--k-sans); font-size: 13px; line-height: 16px; color: var(--k-text); text-align: left; letter-spacing: 0; }
 .kmd--dark, [data-theme="dark"] .kmd { --k-window: #0f1115; --k-panel: #17191f; --k-card: #1d2028; --k-hover: #242833; --k-subtle: #20232c; --k-border: #2a2e39; --k-edge: #6d717d;
   --k-text: #ecedf1; --k-text2: #b3b7c4; --k-text3: #8a8e9c; --k-accent: #6090ff; --k-on-accent: #111216; --k-primary: #ecedf1; --k-on-primary: #111216;
-  --k-ok: #45c46a; --k-warn: #f2a445; --k-danger: #f36368; --k-tint-servers: #5b8cff; --k-tint-db: #8a90a6; --k-tint-vpn: #45c46a; --k-tint-cache: #ff7a59;
+  --k-ok: #45c46a; --k-warn: #f2a445; --k-danger: #f36368; --k-tint-servers: #5b8cff; --k-tint-db: #8a90a6; --k-tint-vpn: #45c46a; --k-tint-cache: #ff7a59; --k-tint-registries: #e0a35b; --k-tint-storage: #2ec4b6;
   --k-term-bg: #0f1115; --a-green: #5fd27f; --a-blue: #7aa5ff; --a-yellow: #f2c14e; --a-red: #ff7a7a; --a-dim: #8a8e9c; }
 .kmd * { box-sizing: border-box; }
 .kmd b { font-weight: 600; }
@@ -211,7 +211,7 @@ main code, .ef-site-footer code { font-family: var(--font-mono); font-size: 0.9e
 .kmd .k-c-ok { --c: var(--k-ok); } .kmd .k-c-warn { --c: var(--k-warn); } .kmd .k-c-danger { --c: var(--k-danger); }
 .kmd .k-tint-servers { --t: var(--k-tint-servers); } .kmd .k-tint-vpn { --t: var(--k-tint-vpn); } .kmd .k-tint-db { --t: var(--k-tint-db); }
 .kmd .k-tint-cache { --t: var(--k-tint-cache); } .kmd .k-tint-text3 { --t: var(--k-text3); } .kmd .k-tint-ok { --t: var(--k-ok); }
-.kmd .k-tint-warn { --t: var(--k-warn); } .kmd .k-tint-amber { --t: #ae731d; } .kmd .k-tint-teal { --t: #0d8e81; }
+.kmd .k-tint-warn { --t: var(--k-warn); } .kmd .k-tint-registries { --t: var(--k-tint-registries); } .kmd .k-tint-storage { --t: var(--k-tint-storage); }
 .kmd .k-warn { color: var(--k-warn); } .kmd .k-accent { color: var(--k-accent); }
 .kmd .k-panel { background: var(--k-panel); } .kmd .k-top { align-items: flex-start; }
 .kmd .k-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 28px; padding: 0 12px; border-radius: 6px; font-size: 13px; font-weight: 500; white-space: nowrap; flex: none;

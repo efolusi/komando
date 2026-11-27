@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from html.parser import HTMLParser
 from pathlib import Path
 
 sys.dont_write_bytecode = True  # leave no __pycache__ beside the deploy scripts
@@ -140,6 +141,58 @@ class SymlinkTests(unittest.TestCase):
         headers = (self.out / "_headers").read_text()
         self.assertRegex(headers, r"script-src 'self' https://static\.cloudflareinsights\.com( 'sha256-[^']+')*;")
         self.assertIn("connect-src 'self' https://cloudflareinsights.com;", headers)
+
+    def test_csp_is_exactly_the_policy_with_style_src_self_only(self):
+        # W34: no 'unsafe-inline' anywhere; every other directive stays as it was
+        build_dist.main()
+        headers = (self.out / "_headers").read_text()
+        csp = re.search(r"^  Content-Security-Policy: (.*)$", headers, re.M).group(1)
+        csp = re.sub(r"'sha256-[A-Za-z0-9+/=]+'", "'sha256-HASH'", csp)  # the one <script>1</script> of index.html
+        self.assertEqual(csp, "default-src 'self'; "
+                              "script-src 'self' https://static.cloudflareinsights.com 'sha256-HASH'; "
+                              "style-src 'self'; font-src 'self'; img-src 'self' data:; "
+                              "connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; "
+                              "form-action 'self'; object-src 'none'")
+        self.assertNotIn("unsafe-inline", headers)
+
+    def assert_inline_style_refused(self, rel, text):
+        p = self.site / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(text)
+        with self.assertRaises(SystemExit) as stop:
+            build_dist.main()
+        self.assertIn(rel, str(stop.exception))
+        self.assertIn("inline style", str(stop.exception))
+
+    def test_a_style_attribute_stops_the_build(self):
+        # style-src 'self' makes the browser ignore it, so the page would look wrong in production only
+        for rel in ("index.html", "id/index.html", "guide/start/index.html", "id/guide/start/index.html",
+                    "docs/install/index.html", "id/docs/start/index.html"):
+            with self.subTest(rel=rel):
+                original = (self.site / rel).read_text()
+                self.assert_inline_style_refused(rel, page("x").replace("<body></body>", '<body><p style="color:red">x</p></body>'))
+                (self.site / rel).write_text(original)
+                __import__("shutil").rmtree(self.out)  # the stopped build left a half-written output behind
+
+    def test_a_style_attribute_on_an_inline_svg_or_a_self_closing_tag_stops_the_build(self):
+        self.assert_inline_style_refused("docs/install/index.html", page("x").replace(
+            "<body></body>", '<body><svg><path d="M0 0" style="fill:red"/></svg></body>'))
+
+    def test_a_style_element_stops_the_build(self):
+        self.assert_inline_style_refused("guide/start/index.html", page("x").replace("</head>", "<style>p{}</style>\n</head>"))
+
+    def test_a_fragment_under_assets_with_inline_style_stops_the_build(self):
+        # fragments under assets/ are pasted into a page, so their style attributes would land in it
+        self.assert_inline_style_refused("assets/part.html", '<div style="--c: red">x</div>')
+
+    def test_the_brand_folder_is_not_published(self):
+        # brand/share-card.html draws the share picture with a <style> block; it is a source, never served
+        p = self.site / "brand" / "share-card.html"
+        p.parent.mkdir(parents=True)
+        p.write_text(page("card").replace("</head>", "<style>body{}</style>\n</head>"))
+        build_dist.main()
+        self.assertFalse((self.out / "brand").exists())
+        self.assertFalse(any(q.name == "share-card.html" for q in self.published()))
 
     def pages_out(self):
         return [p for p in sorted(self.out.rglob("*.html")) if p.relative_to(self.out).parts[0] != "assets"]
@@ -301,6 +354,110 @@ class SymlinkTests(unittest.TestCase):
         (self.site / "assets").rename(real)
         os.symlink(real, self.site / "assets")
         self.assert_refused("assets")
+
+
+class InlineStyleScan(HTMLParser):
+    """The test's own scan (not build_dist's): style attributes, <style> elements, and how each SVG file is used."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.styles = []
+        self.svg_uses = []  # (tag, attribute, value) for every attribute that names an .svg file
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "style":
+            self.styles.append("<style>")
+        for name, value in attrs:
+            if name == "style":
+                self.styles.append(f"<{tag} style=...>")
+            if value and re.search(r"\.svg(?:[?#]|$)", value):
+                self.svg_uses.append((tag, name, value))
+
+
+class RealSiteTests(unittest.TestCase):
+    """Builds the real web/site and proves that nothing in it needs inline style (style-src 'self', W34)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.out = Path(cls.tmp.name) / "dist"
+        saved = (sys.argv, os.environ.get("GITHUB_SHA"))
+        sys.argv = ["build_dist.py", str(cls.out)]
+        os.environ["GITHUB_SHA"] = SHA
+        try:
+            build_dist.main()
+        finally:
+            sys.argv = saved[0]
+            if saved[1] is None:
+                os.environ.pop("GITHUB_SHA", None)
+            else:
+                os.environ["GITHUB_SHA"] = saved[1]
+        cls.html = {p.relative_to(cls.out).as_posix(): p.read_text(encoding="utf-8") for p in sorted(cls.out.rglob("*.html"))}
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def scan(self, text):
+        s = InlineStyleScan()
+        s.feed(text)
+        s.close()
+        return s
+
+    def test_every_page_is_scanned_home_guide_and_docs_in_both_languages(self):
+        names = set(self.html)
+        for want in ("index.html", "id/index.html", "guide/index.html", "id/guide/index.html", "docs/index.html", "id/docs/index.html"):
+            self.assertIn(want, names)
+        for prefix in ("guide/", "id/guide/", "docs/", "id/docs/"):
+            inner = [n for n in names if n.startswith(prefix) and n.count("/") == prefix.count("/") + 1]
+            self.assertTrue(inner, f"no {prefix}<page>/index.html in the build")
+
+    def test_no_page_has_a_style_attribute_or_a_style_element(self):
+        found = {name: s.styles for name, text in self.html.items() if (s := self.scan(text)).styles}
+        self.assertEqual(found, {})
+
+    def test_the_csp_has_style_src_self_only(self):
+        headers = (self.out / "_headers").read_text()
+        self.assertIn("; style-src 'self'; ", headers)
+        self.assertNotIn("unsafe-inline", headers)
+
+    def test_the_share_card_source_is_not_served(self):
+        # web/site/brand/share-card.html has a <style> block; the build's allowlist leaves brand/ behind
+        self.assertTrue((build_dist.SITE / "brand" / "share-card.html").is_file())
+        self.assertFalse((self.out / "brand").exists())
+        self.assertFalse(any(p.name == "share-card.html" for p in self.out.rglob("*")))
+
+    def test_an_svg_with_inline_style_is_only_ever_an_image(self):
+        # assets/icons/gemini.svg carries style attributes (the vendor's own drawing). Loaded with <img src> the
+        # SVG is an image: the page's CSP does not apply inside it and it runs no script. Inlined, or put in
+        # <object>, <embed> or <iframe>, it would be a document under the CSP and its styles would be dropped.
+        styled = set()
+        for svg in self.out.rglob("*.svg"):
+            text = svg.read_text(encoding="utf-8")
+            if re.search(r"<style|\sstyle=", text):
+                styled.add(svg.name)
+        self.assertIn("gemini.svg", styled)  # the known one; the check below covers any other
+        for name, text in self.html.items():
+            for tag, attr, value in self.scan(text).svg_uses:
+                if Path(value.split("?")[0].split("#")[0]).name in styled:
+                    self.assertEqual((tag, attr), ("img", "src"), f"{name} uses {value} as <{tag} {attr}>, not as an image")
+
+    def test_no_script_writes_a_style_attribute(self):
+        # CSSOM writes (el.style.setProperty, el.style.x = ...) are allowed under style-src 'self';
+        # a style attribute, a cssText string or a new <style> element is not
+        bad = re.compile(r"setAttribute\(\s*['\"`]style['\"`]|\.cssText\b|createElement\(\s*['\"`]style['\"`]"
+                         r"|\.style\s*=[^=]|insertAdjacentHTML|\.innerHTML\s*=|\.outerHTML\s*=")
+        scripts = sorted(self.out.rglob("*.js"))
+        self.assertTrue(scripts)
+        for js in scripts:
+            hits = bad.findall(js.read_text(encoding="utf-8"))
+            self.assertEqual(hits, [], f"{js.relative_to(self.out)} writes inline style")
+
+    def test_pages_load_only_their_own_scripts(self):
+        # the Cloudflare beacon is injected at the edge, not written in a page; every script a page names is ours
+        for name, text in self.html.items():
+            for src in re.findall(r'<script[^>]*\ssrc="([^"]+)"', text):
+                self.assertNotIn("//", src, f"{name} loads {src}")
 
 
 class WorkerConfigTests(unittest.TestCase):
