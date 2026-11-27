@@ -170,13 +170,13 @@ test('the header mark and the favicon are the system komando mark, and the K-car
   assert.ok((home.match(/<svg class="site-logo"/g) ?? []).length >= 2, 'the home page shows the mark in the header and in the flow');
 });
 
-// W19, C277: light and dark only; the vendored copy is Meridian v2.2.0.
-test('the theme switch has two choices in both languages, and the vendored copy is 2.2.0', () => {
+// W19, C277: light and dark only; the vendored copy is Meridian v2.4.0.
+test('the theme switch has two choices in both languages, and the vendored copy is 2.4.0', () => {
   for (const page of [home, renderHome(id), shell.header]) {
     assert.doesNotMatch(page, /data-preference|data-theme-icon="system"|system theme|tema sistem/i, 'a system theme option is still on the page');
     assert.match(page, /data-theme-shown="(light|dark)"/);
   }
-  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 2.2.0');
+  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 2.4.0');
 });
 
 // W20: the social card (share.jpg) is drawn from brand/share-card.html, shows the product mark and no version number.
