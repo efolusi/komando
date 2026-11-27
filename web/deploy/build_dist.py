@@ -33,6 +33,9 @@ The _headers file (Cloudflare Workers static assets read it; wrangler.jsonc serv
 safety headers. script-src lists the sha256 hash of every inline <script> in the copied pages, worked out
 now, so a later page edit gets the right hash at the next build. The site has no inline script (Meridian's
 theme-init.js and marketing.js are same-origin files, covered by 'self'), so today the list is empty.
+style-src is 'self' only: no page carries a style="..." attribute or a <style> element, and the build stops
+when one does (the browser would ignore it under this policy, so the page would look wrong in production only).
+Scripts may still set styles through the CSSOM (element.style.setProperty), which the policy allows.
 """
 
 import base64
@@ -71,10 +74,9 @@ CSP = [
     # Cloudflare injects its Web Analytics beacon on the zone; it loads from static.cloudflareinsights.com
     # and reports to cloudflareinsights.com. The inline script hashes are added here as well.
     ("script-src", ["'self'", "https://static.cloudflareinsights.com"]),
-    # 'unsafe-inline': the drawn app screens carry about 40 style="..." attributes (CSS custom properties), and
-    # Meridian's icons set an inline style. Hashes cannot cover style attributes
-    # in every browser. Scripts stay locked to 'self' and hashes, which is where the danger is.
-    ("style-src", ["'self'", "'unsafe-inline'"]),
+    # no 'unsafe-inline': the drawn app screens take colour from classes (W34) and Meridian 2.2.0 writes no style
+    # attribute; refuse_inline_style() stops the build when a page brings one back
+    ("style-src", ["'self'"]),
     ("font-src", ["'self'"]),  # Meridian's fonts are served from assets/meridian/assets/fonts/
     ("img-src", ["'self'", "data:"]),
     # the release number is written in at release time (set_release.py); the beacon reports to Cloudflare
@@ -97,8 +99,8 @@ OTHER_HEADERS = [
     ("Cross-Origin-Opener-Policy", "same-origin"),
 ]
 
-# the asset file names carry no version, so a year-long "immutable" cache would keep an old script after
-# a change; one week, then the browser checks again (and may use the old copy while it does)
+# the asset file names carry no version, so a long cache ("immutable", or a week) would keep an old script after
+# a change: /assets/* is sent no-cache, so the browser asks again on every use.
 # Files under /assets/ keep their names across releases, and pages import other files (a script imports
 # theme.js, a stylesheet @imports its tokens) without any version in the link. A week-long cache therefore kept
 # an old file beside a new page (the old theme.js reset the theme to dark). no-cache makes the browser ask each
@@ -197,6 +199,31 @@ class PageScan(HTMLParser):
     def handle_data(self, data):
         if self._code is not None:
             self._code.append(data)
+
+
+class StyleScan(HTMLParser):
+    """Collects every style="..." attribute and every <style> element (style-src 'self' blocks both)."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=False)
+        self.found = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "style":
+            self.found.append("<style>")
+        if any(name.lower() == "style" for name, _ in attrs):
+            self.found.append(f"<{tag} style=...>")
+
+
+def refuse_inline_style(out):
+    """Stop the build when a page, or a fragment under assets/ that is pasted into one, has inline style."""
+    for page in sorted(out.rglob("*.html")):
+        scan = StyleScan()
+        scan.feed(page.read_text(encoding="utf-8"))
+        scan.close()
+        if scan.found:
+            fail(f"{page.relative_to(out).as_posix()} has inline style, which the CSP (style-src 'self') blocks; "
+                 f"use a class in a stylesheet instead: {sorted(set(scan.found))}")
 
 
 def script_hashes(out):
@@ -360,6 +387,7 @@ def main():
     check_output(out)
     mark_release(out, sha)
     version_assets(out)
+    refuse_inline_style(out)
     hashes = script_hashes(out)
     write_headers(out, hashes)
     write_sitemap(out)
