@@ -26,6 +26,7 @@ import { LABELS as THEME_LABELS } from '@efolusi/meridian/theme';
 import { Icon } from '@efolusi/meridian/icons/Icon.js';
 import * as en from './content/home.en.mjs';
 import * as id from './content/home.id.mjs';
+import { renderDrafts } from './content/drafts/render.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SITE_URL = 'https://komando.efolusi.com/';
@@ -311,7 +312,8 @@ function main() {
     mkdirSync(dir, { recursive: true });
     for (const [name, html] of Object.entries(renderShell(c))) writeFileSync(join(dir, `${name}.html`), `${html}\n`);
   }
-  console.log(`build.mjs: index.html, id/index.html and _shell/{en,id}/ written with @efolusi/meridian ${version}`);
+  const drafts = renderDrafts();
+  console.log(`build.mjs: ${drafts} draft pages (switched off) written to content/drafts/out/, index.html, id/index.html and _shell/{en,id}/ written with @efolusi/meridian ${version}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
