@@ -16,11 +16,11 @@ Komando for Mac needs macOS. The iPhone and iPad app is described in [Komando on
 
 Open Komando. If komando is not on this Mac yet, the window says "Install the komando command line".
 
-1. Open the Terminal app, paste this line and press Return. It downloads komando's install script for release v0.17.0, and the script installs that release:
-   `curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/sgnd/komando/v0.17.0/install.sh | KOMANDO_VERSION=v0.17.0 sh`
+1. Open the Terminal app, paste this line and press Return. It downloads komando's install script for release v0.17.4, and the script installs that release:
+   `curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/sgnd/komando/v0.17.4/install.sh | KOMANDO_VERSION=v0.17.4 sh`
 2. Back in Komando, click **Check Again**.
 
-> Check it first, if you like: download the script, read it, then run it. In Terminal, run `curl --proto '=https' --tlsv1.2 -fsSLO https://raw.githubusercontent.com/sgnd/komando/v0.17.0/install.sh`, then `shasum -a 256 install.sh`. The result should be `9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af`. Read the script with `less install.sh`, then run it with `KOMANDO_VERSION=v0.17.0 sh install.sh`. The installer checks that the release is signed with the komando project's key (the check `komando update` makes) and installs nothing otherwise.
+> Check it first, if you like: download the script, read it, then run it. In Terminal, run `curl --proto '=https' --tlsv1.2 -fsSLO https://raw.githubusercontent.com/sgnd/komando/v0.17.4/install.sh`, then `shasum -a 256 install.sh`. The result should be `9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af`. Read the script with `less install.sh`, then run it with `KOMANDO_VERSION=v0.17.4 sh install.sh`. The installer checks that the release is signed with the komando project's key (the check `komando update` makes) and installs nothing otherwise.
 
 If komando is installed in a folder Komando does not look in, click **Choose komando…** and pick the komando program.
 

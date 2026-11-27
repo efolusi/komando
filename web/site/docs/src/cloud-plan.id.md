@@ -1,6 +1,6 @@
 # Paket cloud
 
-Command line komando gratis dan open source, dan aplikasi Komando untuk Mac, iPhone, dan iPad juga akan gratis. Halaman ini tentang paket berbayar yang menyusul nanti. Paket itu belum tersedia.
+Command line komando gratis dan open source, dan aplikasi Komando untuk Mac, iPhone, dan iPad juga akan gratis. Halaman ini tentang paket berbayar yang akan datang. Paket itu belum tersedia.
 
 ## Yang gratis sekarang
 
@@ -9,7 +9,7 @@ Command line komando gratis dan open source, dan aplikasi Komando untuk Mac, iPh
 
 ## Gratis saat aplikasinya dirilis
 
-Aplikasinya belum dirilis. Saat dirilis, aplikasi gratis tanpa masa uji coba:
+Aplikasinya sudah dibangun dan sedang diuji. Saat dirilis, aplikasi gratis tanpa masa uji coba:
 
 - Tab terminal, klien database, dan port forwarding.
 - Perbaikan sekali klik, agen, dan menu bar.

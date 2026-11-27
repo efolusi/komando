@@ -9,7 +9,7 @@ The komando command line is free and open source, and the Komando apps for Mac, 
 
 ## Free when the apps ship
 
-The apps are not out yet. When they ship, they are free with no trial:
+The apps are built and in testing. When they ship, they are free with no trial:
 
 - Terminal tabs, database clients and port forwarding.
 - One-click fixes, the agent and the menu bar.
