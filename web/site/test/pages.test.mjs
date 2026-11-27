@@ -48,7 +48,7 @@ test('every guide source with an Indonesian twin has an Indonesian page, and so 
 });
 
 test('an Indonesian page is lang id and an English page is lang en', () => {
-  for (const p of pages) assert.match(p.html, new RegExp(`^<!doctype html>\\n<html lang="${p.id ? 'id' : 'en'}">`), p.rel);
+  for (const p of pages) assert.match(p.html, new RegExp(`^<!doctype html>\\n<html lang="${p.id ? 'id' : 'en'}" data-shape="pill">`), p.rel);
 });
 
 test('every page names its own address as canonical', () => {

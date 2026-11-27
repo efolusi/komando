@@ -21,7 +21,8 @@
 .g-side__home { margin-bottom: var(--space-4); }
 
 .g-article { max-width: 720px; min-width: 0; }
-/* breadcrumb: Docs > Apps > Page, a list that wraps on a narrow screen; the last step is the page and not a link */
+/* breadcrumb: Docs > Apps > Page, a list that wraps on a narrow screen; the last step is the page and not a link.
+   The crumbs and the contents list underline their links themselves: Meridian underlines links in running text only. */
 .g-crumbs { margin-bottom: var(--space-3); font-size: var(--text-sm); color: var(--text-secondary); }
 .g-crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-2); margin: 0; padding: 0; list-style: none; }
 .g-crumbs li { min-width: 0; overflow-wrap: anywhere; }
@@ -29,11 +30,11 @@
 .g-crumbs a { display: inline-block; padding-block: var(--space-1); color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px; }
 .g-crumbs a:hover { text-decoration-thickness: 2px; }
 .g-crumbs [aria-current="page"] { padding-block: var(--space-1); color: var(--text-primary); font-weight: var(--weight-medium); }
-.g-status a, .g-path a { color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px; }
-.g-article h1 { font-size: clamp(var(--text-4xl), 2vw + 1.4rem, var(--text-5xl)); line-height: var(--leading-tight); margin-bottom: var(--space-4); }
+.g-status a, .g-path a { color: var(--text-primary); }
+.g-article .ef-page-title { margin-bottom: var(--space-4); }
 .g-lead { font-size: var(--text-lg); line-height: var(--leading-relaxed); color: var(--text-secondary); max-width: 60ch; margin-bottom: var(--space-5); }
 .g-status { font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: var(--space-5); }
-.g-status .g-pill { margin-right: var(--space-2); }
+.g-status .ef-badge { margin-right: var(--space-2); }
 
 .g-toc { border: 1px solid var(--border-default); border-radius: var(--radius-lg); background: var(--surface-card); padding: var(--space-4) var(--space-5); margin-bottom: var(--space-6); }
 .g-toc ul { display: grid; gap: var(--space-1); margin: var(--space-2) 0 0; padding: 0; list-style: none; font-size: var(--text-sm); }
@@ -46,8 +47,6 @@
 .g-body h2 { font-size: clamp(var(--text-2xl), 1vw + 1.1rem, var(--text-3xl)); margin-top: var(--space-10); }
 .g-body h3 { font-size: var(--text-xl); margin-top: var(--space-8); }
 .g-body h2 + *, .g-body h3 + * { margin-top: var(--space-3); }
-.g-body a, .g-intro a { color: var(--text-link); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
-.g-body a:hover, .g-intro a:hover { text-decoration-color: currentColor; }
 .g-body b { font-weight: var(--weight-semibold); }
 .g-body code, .g-path code, .g-intro code { font-family: var(--font-mono); font-size: 0.88em; padding: 1px 5px; border-radius: var(--radius-xs);
   background: var(--surface-code); color: var(--text-code); border: 1px solid var(--border-code); overflow-wrap: anywhere; }
@@ -57,11 +56,7 @@
 .g-list li::marker { color: var(--text-secondary); }
 .g-note { border: 1px solid var(--accent-subtle-border); background: var(--accent-subtle); border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4); }
 
-/* "Coming": a part that is not built yet; it links to its entry on the What is coming page */
-.g-pill { display: inline-block; vertical-align: 0.1em; font: var(--weight-medium) 12px/1 var(--font-sans); padding: 4px 8px; border-radius: var(--radius-full);
-  color: var(--text-primary); background: var(--warning-100); border: 1px solid var(--warning-300); text-decoration: none !important; white-space: nowrap; }
-[data-theme="dark"] .g-pill { color: var(--warning-on-dark); background: transparent; }
-a.g-pill:hover { border-color: currentColor; }
+/* "Coming": a part that is not built yet is a Meridian warning Badge; it links to its entry on the What is coming page */
 .g-coming { border-top: 1px solid var(--border-default); padding-top: var(--space-5); }
 .g-coming h2 { margin-top: 0; }
 
@@ -88,7 +83,7 @@ a.g-pill:hover { border-color: currentColor; }
   border: 1px solid var(--border-default); border-radius: var(--radius-lg); color: var(--text-primary); }
 .g-card:hover { border-color: var(--border-strong); color: var(--text-primary); }
 .g-card__title { font-weight: var(--weight-semibold); }
-.g-card .g-pill { justify-self: start; }
+.g-card .ef-badge { justify-self: start; }
 
 @media (max-width: 1023px) {
   .g-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }

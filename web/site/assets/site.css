@@ -20,10 +20,6 @@ button:disabled { cursor: not-allowed; }
 .site-stack { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
 main code, .ef-site-footer code { font-family: var(--font-mono); font-size: 0.9em; }
 
-/* a link that reads as one: underlined, never only colour */
-.site-link { color: var(--text-link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
-.site-link:hover { color: var(--text-link-hover); text-decoration-thickness: 2px; }
-
 /* the K-caret logo beside the name, in the header and the footer */
 .site-logo-wrap { display: inline-flex; }
 .site-logo { width: 28px; height: 28px; flex: none; }
@@ -60,8 +56,6 @@ main code, .ef-site-footer code { font-family: var(--font-mono); font-size: 0.9e
 .site-swap code::before, .site-cmd code::before { content: "$ "; color: var(--text-link); }
 .site-agents { display: grid; gap: var(--space-4); margin-top: var(--space-10); }
 .site-chips { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
-.site-chip { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-4);
-  border: 1px solid var(--border-default); border-radius: var(--radius-full); background: var(--surface-card); font-weight: var(--weight-medium); }
 @media (max-width: 899px) { .site-swap { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 639px) { .site-swap li { flex-direction: column; gap: var(--space-1); } .site-swap__was { width: auto; } }
 
@@ -140,7 +134,7 @@ main code, .ef-site-footer code { font-family: var(--font-mono); font-size: 0.9e
 /* ---------------------------------------------------------------- #agent: the band, with the app's dark screen */
 
 #agent .site-lede { color: var(--text-on-brand-muted); }
-#agent .site-link { color: var(--text-on-brand); }
+#agent p a { color: var(--text-on-brand); }
 .site-app { min-height: 560px; display: flex; }
 .site-app > .app { flex: 1 1 auto; }
 

@@ -169,7 +169,7 @@ export const editions = {
 export const install = {
   title: 'Instal komando di macOS, Linux, atau Windows',
   copy: 'Salin perintah',
-  ledeHtml: 'Satu baris menginstal rilis <a class="site-link" href="https://github.com/sgnd/komando/releases/tag/{release}" data-release>{release}</a>. Lalu jalankan <code>komando version</code> untuk memeriksanya. Kode sumbernya ada di <a class="site-link" href="https://github.com/sgnd/komando">GitHub</a>.',
+  ledeHtml: 'Satu baris menginstal rilis <a href="https://github.com/sgnd/komando/releases/tag/{release}" data-release>{release}</a>. Lalu jalankan <code>komando version</code> untuk memeriksanya. Kode sumbernya ada di <a href="https://github.com/sgnd/komando">GitHub</a>.',
   unix: {
     title: 'macOS, Linux, dan Windows',
     body: 'Buka terminal dan jalankan baris ini. Di Windows, komando berjalan lewat WSL: buka terminal WSL dan jalankan baris yang sama.',

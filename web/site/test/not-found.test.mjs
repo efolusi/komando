@@ -13,7 +13,7 @@ const notFound = { en: read('404.html'), id: read('id/404.html') };
 
 test('both languages have a not-found page with a title, one sentence and two links, home and docs', () => {
   for (const [lang, html] of Object.entries(notFound)) {
-    assert.match(html, new RegExp(`<html lang="${lang}">`));
+    assert.match(html, new RegExp(`<html lang="${lang}" data-shape="pill">`));
     assert.equal(html.match(/<h1[\s>]/g).length, 1, `${lang}: one h1`);
     const main = /<main[\s\S]*<\/main>/.exec(html)[0];
     assert.equal(main.match(/<a /g).length, 2, `${lang}: two links in the page body`);

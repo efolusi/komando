@@ -270,7 +270,7 @@ def inline(text, page):
             page.coming.append(cid)
         href = guide_href(page.slug, f"coming#{cid}")
         title = html.escape(f"{lang.coming(cid)[0]}: {lang.ui('not built yet')}")
-        return f'<a class="g-pill" href="{href}" title="{title}">{lang.ui("Coming")}</a>'
+        return f'<a data-slot="badge" class="ef-badge ef-badge--warning" href="{href}" title="{title}">{lang.ui("Coming")}</a>'
 
     text = re.sub(r"\{coming:([a-z0-9-]+)\}", coming, text)
     text = re.sub(r"\x00(\d+)\x00", lambda m: f"<code>{html.escape(codes[int(m.group(1))])}</code>", text)
@@ -401,7 +401,7 @@ def head(title, description, slug, lang):
     path = guide_path(slug)
     switch = root + ("" if lang.code == "id" else "id/") + path
     return f"""<!doctype html>
-<html lang="{lang.code}">
+<html lang="{lang.code}" data-shape="pill">
 <head>
 <meta charset="utf-8">
 <title>{html.escape(title)}</title>
@@ -482,11 +482,11 @@ def prev_next(slug, lang):
 
 
 def pill(lang):
-    return f'<span class="g-pill g-pill--static">{lang.ui("Coming")}</span>'
+    return f'<span data-slot="badge" class="ef-badge ef-badge--warning">{lang.ui("Coming")}</span>'
 
 
 def app_status(root, lang):
-    return (f'<p class="g-status"><span class="g-pill g-pill--static">{lang.ui("In testing")}</span> '
+    return (f'<p class="g-status"><span data-slot="badge" class="ef-badge ef-badge--warning">{lang.ui("In testing")}</span> '
             f'{lang.ui("The Komando apps are built and in testing. They have no download link and no date yet. This guide describes them.")} '
             f'{lang.ui("The command line works today: see")} '
             f'<a href="{root}{lang.base}docs/getting-started/">{lang.ui("Getting started")}</a>.</p>')
@@ -547,7 +547,7 @@ def build_language(lang, english_ids):
         doc = (head(f"{title} · {guide_title} · {PRODUCT}", summary, slug, lang)
                + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(slug, lang)}'
                + f'<article class="g-article">{breadcrumb(trail_head(slug, lang) + [(title, None)], lang)}'
-               + f'<h1>{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{app_status("../../" + ("../" if lang.code == "id" else ""), lang)}{badge}{toc(headings, lang)}'
+               + f'<h1 class="ef-page-title">{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{app_status("../../" + ("../" if lang.code == "id" else ""), lang)}{badge}{toc(headings, lang)}'
                + f'<div class="g-body">{body}</div>{prev_next(slug, lang)}'
                + f'<p class="g-path g-small g-muted">{lang.ui("Help link for this page")}: <code>/{lang.base}guide/{slug}/</code></p>'
                + '</article></div></main>\n' + foot(slug, lang))
@@ -563,7 +563,7 @@ def build_language(lang, english_ids):
                 cards.append("</div></section>")
             cards.append(f'<section class="g-group" id="{slugify(g)}"><h2>{html.escape(lang.group(g))}</h2><div class="g-cards">')
             group = g
-        parts = f' <span class="g-pill g-pill--static">{lang.ui("Parts coming")}</span>' if pages[slug].coming and slug != "coming" else ""
+        parts = f' <span data-slot="badge" class="ef-badge ef-badge--warning">{lang.ui("Parts coming")}</span>' if pages[slug].coming and slug != "coming" else ""
         cards.append(f'<a class="g-card" href="{slug}/"><span class="g-card__title">{html.escape(lang.title(slug))}</span>{parts}'
                      f'<span class="g-small g-muted">{html.escape(lang.summary(slug))}</span></a>')
     cards.append("</div></section>")
@@ -580,7 +580,7 @@ def build_language(lang, english_ids):
     index_title = lang.ui("Komando apps")
     doc = (head(f'{lang.ui("User guide")} · {PRODUCT}', lang.ui("Komando for Mac, iPhone and iPad runs the komando command line for you. The apps are built and in testing, with no download link yet. This guide describes them."), None, lang)
            + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(None, lang)}'
-           + f'<article class="g-article g-article--index">{breadcrumb(trail_head(None, lang), lang)}<h1>{index_title}</h1><div class="g-body g-intro">{intro}</div>'
+           + f'<article class="g-article g-article--index">{breadcrumb(trail_head(None, lang), lang)}<h1 class="ef-page-title">{index_title}</h1><div class="g-body g-intro">{intro}</div>'
            + "".join(cards)
            + f'<p class="g-path g-small g-muted">{lang.ui("Help link for this page")}: <code>/{lang.base}guide/</code></p></article></div></main>\n'
            + foot(None, lang))
