@@ -1,4 +1,4 @@
-// W44, W42 and W52: Meridian 2.5.1 does the pill shape, the page title, the link underline (also in li and td), the 16 px phone
+// W44, W42 and W52: Meridian 2.5.2 does the pill shape, the page title, the link underline (also in li and td), the 16 px phone
 // fields and the forced-colors focus, so the site draws none of them. The drawn Komando screens (.kmd) keep the
 // apps' own pill.
 import { test } from 'node:test';
@@ -25,9 +25,9 @@ function pagesIn(dir, out = []) {
 }
 const pages = pagesIn('.');
 
-test('the package is pinned to exactly 2.5.1 and only that version is excluded from the release age', () => {
-  assert.equal(JSON.parse(read('package.json')).dependencies['@efolusi/meridian'], '2.5.1');
-  assert.match(read('pnpm-workspace.yaml'), /^minimumReleaseAgeExclude:\n {2}- '@efolusi\/meridian@2\.5\.1'\n$/);
+test('the package is pinned to exactly 2.5.2 and only that version is excluded from the release age', () => {
+  assert.equal(JSON.parse(read('package.json')).dependencies['@efolusi/meridian'], '2.5.2');
+  assert.match(read('pnpm-workspace.yaml'), /^minimumReleaseAgeExclude:\n {2}- '@efolusi\/meridian@2\.5\.2'\n$/);
 });
 
 test('every generator and every committed page sets data-shape="pill" on the html element', () => {
@@ -71,7 +71,8 @@ test('a link in a list item or table cell of the page text has no site rule; Mer
   assert.doesNotMatch(read('guide/guide.css'), /\.g-body (li|td) a/);
 });
 
-test('the side navigation is a navigation list, so its links stay plain although Meridian underlines classless links in li', () => {
-  assert.match(read('guide/guide.css'), /\n\.g-side li a \{ text-decoration: none; \}/);
+test('the side navigation sits in a nav element and has no site rule; Meridian 2.5.2 keeps classless links in a nav plain', () => {
+  assert.doesNotMatch(read('guide/guide.css'), /\.g-side li a/);
   assert.doesNotMatch(read('guide/guide.css'), /\n\.g-side a \{[^}]*text-decoration/, 'the home link in a paragraph stays underlined');
+  assert.match(read('guide/build.py'), /<nav class="g-side"/);
 });

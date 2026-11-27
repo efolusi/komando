@@ -15,8 +15,6 @@
 .g-side summary { display: none; }
 .g-side ul { display: grid; gap: 2px; margin: 0 0 var(--space-4); padding: 0; list-style: none; }
 .g-side a { display: block; padding: var(--space-1) var(--space-2); margin-left: calc(-1 * var(--space-2)); border-radius: var(--radius-sm); color: var(--text-secondary); }
-/* a navigation list: Meridian underlines classless links in li, the side navigation stays plain (its home link, in a p, keeps the underline) */
-.g-side li a { text-decoration: none; }
 .g-side a:hover { color: var(--text-primary); background: var(--surface-sunken); }
 .g-side a[aria-current="page"] { color: var(--text-primary); background: var(--surface-sunken); font-weight: var(--weight-medium); box-shadow: inset 2px 0 0 var(--text-link); }
 .g-side__group { margin: 0 0 var(--space-2); }
