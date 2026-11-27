@@ -386,6 +386,8 @@ class RealSiteTests(unittest.TestCase):
         os.environ["GITHUB_SHA"] = SHA
         try:
             build_dist.main()
+        except SystemExit as stop:  # a stopped build is a test error, not the end of the whole run
+            raise AssertionError(f"the real site does not build: {stop}") from None
         finally:
             sys.argv = saved[0]
             if saved[1] is None:
