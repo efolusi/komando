@@ -4,9 +4,9 @@
 <div class="kfrag__chips"><span class="on">All 5</span><span>production</span><span>staging</span><span>Protected</span></div>
 <p class="khosts__group">Production</p>
 <div class="kfrag__list">
-<div><b>web-1</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.4</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-<div><b>web-2</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.5</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
-<div><b>bastion</b><span class="k-mono k-t2 k-trunc">ops@203.0.113.10</span><span class="k-spacer"></span><svg class="ks ks--12" style="color: var(--k-warn)"><use href="#s-lock"/></svg></div>
+<div><b>web-1</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.4</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+<div><b>web-2</b><span class="k-mono k-t2 k-trunc">deploy@10.0.0.5</span><span class="k-meta">via bastion</span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
+<div><b>bastion</b><span class="k-mono k-t2 k-trunc">ops@203.0.113.10</span><span class="k-spacer"></span><svg class="ks ks--12 k-warn"><use href="#s-lock"/></svg></div>
 </div>
 <p class="khosts__group">Staging</p>
 <div class="kfrag__list">
@@ -14,7 +14,7 @@
 <div><b>staging-2</b><span class="k-mono k-t2 k-trunc">deploy@10.1.0.5</span><span class="k-spacer"></span></div>
 </div>
 <div class="kfrag kalert">
-<span class="k-tile" style="--ts: 40px; --t: var(--k-warn)"><svg class="ks" style="width: 20px; height: 20px"><use href="#s-lock"/></svg></span>
+<span class="k-tile k-tile--lg k-tint-warn"><svg class="ks ks--20"><use href="#s-lock"/></svg></span>
 <b class="kalert__title">This target is protected</b>
 <span class="k-sub">This restarts nginx on web-1, which is protected, so komando asks you first.</span>
 <span class="k-approval__code">komando svc restart <span class="nw">web-1</span> nginx <span class="nw">--yes</span></span>

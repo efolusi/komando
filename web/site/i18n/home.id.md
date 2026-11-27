@@ -17,7 +17,7 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 - Install, "macOS, Linux and Windows": Instal, "macOS, Linux, dan Windows"
 - Komando apps: Aplikasi Komando
 - Agent, "Runs komando, asks first": Agen, "Menjalankan komando, bertanya dulu"
-- Editions, "Free now, an upgrade later": Edisi, "Gratis sekarang, upgrade nanti"
+- Editions, "Free, with an upgrade later": Edisi, "Gratis, dengan upgrade nanti"
 - User guide, "How to use Komando, one page per task": Panduan, "Cara memakai Komando, satu halaman per tugas"
 - Safety / Agent / Editions / Guide / Docs: Keamanan / Agen / Edisi / Panduan / Dokumentasi
 - Install komando: Instal komando
@@ -67,7 +67,7 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 
 ## Editions
 
-- h2: Gratis sekarang, upgrade nanti
+- h2: Gratis, dengan upgrade nanti
 - p: Aplikasi Komando untuk Mac, iPhone, dan iPad sudah dibuat dan sedang diuji, tetapi belum ada link unduh dan belum ada tanggal. Aplikasinya akan gratis, sama seperti command line-nya, dan menjalankan komando di mesin Anda sendiri, tanpa akun dan tanpa masa uji coba.
 - free list: Gratis, semuanya lokal / Setiap perintah, dalam teks atau JSON / Tab terminal, klien database, port forwarding / Perbaikan sekali klik, agen, menu bar / Perbaikan, cek cepat, dan agen saat bepergian
 - upgrade list: Upgrade, nanti / Sinkronisasi antar perangkat / Tim / AI bawaan, tanpa API key sendiri / Setujui perubahan dari ponsel

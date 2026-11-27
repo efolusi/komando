@@ -118,6 +118,25 @@ test('no page carries an inline script, so the CSP needs no hash, and the theme 
   }
 });
 
+// A style attribute needs 'unsafe-inline' in the CSP's style-src. The drawn app screens take their colours from classes in assets/site.css.
+const STYLE_ATTR = /<[a-z][^>]*\sstyle\s*=/i;
+
+test('no built page carries a style attribute', () => {
+  assert.ok(pages.length > 0, 'no built pages found');
+  for (const p of pages) {
+    const hit = STYLE_ATTR.exec(p.html);
+    assert.ok(!hit, `${p.rel} has a style attribute: ${hit?.[0].slice(0, 120)}`);
+  }
+});
+
+test('no drawn screen source carries a style attribute', () => {
+  const dir = join(SITE, 'content', 'screens');
+  for (const f of readdirSync(dir)) {
+    const hit = STYLE_ATTR.exec(readFileSync(join(dir, f), 'utf8'));
+    assert.ok(!hit, `content/screens/${f} has a style attribute: ${hit?.[0].slice(0, 120)}`);
+  }
+});
+
 test('nothing built or served removes data-theme or holds the old init script', () => {
   const served = [...pages.map((p) => [p.rel, p.html]),
     ...['assets/site.js', 'assets/meridian/browser/theme-init.js', 'assets/meridian/browser/theme.js', 'assets/meridian/browser/marketing.js']

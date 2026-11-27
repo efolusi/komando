@@ -136,7 +136,7 @@ export const agent = {
 };
 
 export const editions = {
-  title: 'Gratis sekarang, upgrade nanti',
+  title: 'Gratis, dengan upgrade nanti',
   lede: 'Aplikasi Komando untuk Mac, iPhone, dan iPad sudah dibuat dan sedang diuji, tetapi belum ada link unduh dan belum ada tanggal. Aplikasinya akan gratis, sama seperti command line-nya, dan menjalankan komando di mesin Anda sendiri, tanpa akun dan tanpa masa uji coba.',
   free: { head: ['Gratis, semuanya lokal', 'Di mana'], rows: [
     ['Setiap perintah, dalam teks atau JSON', 'komando'],
