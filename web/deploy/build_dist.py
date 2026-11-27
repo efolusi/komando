@@ -99,8 +99,8 @@ OTHER_HEADERS = [
     ("Cross-Origin-Opener-Policy", "same-origin"),
 ]
 
-# the asset file names carry no version, so a year-long "immutable" cache would keep an old script after
-# a change; one week, then the browser checks again (and may use the old copy while it does)
+# the asset file names carry no version, so a long cache ("immutable", or a week) would keep an old script after
+# a change: /assets/* is sent no-cache, so the browser asks again on every use.
 # Files under /assets/ keep their names across releases, and pages import other files (a script imports
 # theme.js, a stylesheet @imports its tokens) without any version in the link. A week-long cache therefore kept
 # an old file beside a new page (the old theme.js reset the theme to dark). no-cache makes the browser ask each

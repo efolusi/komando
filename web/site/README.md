@@ -144,8 +144,8 @@ writes to `web/dist/`:
   languages) and `robots.txt` (everything allowed, the sitemap's address).
 - It writes `_headers`: a Content-Security-Policy whose `script-src` is `'self'`, Cloudflare's analytics beacon and
   the sha256 of every inline script, worked out at each build (the site has none: Meridian's `theme-init.js` is a
-  same-origin file in the head, so `'self'` covers it and no Meridian release can make a hash stale); `frame-ancestors 'none'`, HSTS, `nosniff`, a strict referrer policy and a one-week cache for
-  `/assets/*`. Nothing loads from a CDN: Meridian's CSS and fonts are served from `assets/meridian/`. `style-src` is
+  same-origin file in the head, so `'self'` covers it and no Meridian release can make a hash stale); `frame-ancestors 'none'`, HSTS, `nosniff`, a strict referrer policy and `Cache-Control: no-cache` for
+  `/assets/*` (the browser asks on every use; an unchanged file costs a 304). Nothing loads from a CDN: Meridian's CSS and fonts are served from `assets/meridian/`. `style-src` is
   `'self'` only: no page has a `style="..."` attribute or a `<style>` element, and the build stops when one does.
 
 Check it locally with `npx wrangler@4.164.0 dev` after `build_dist.py`.

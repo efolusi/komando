@@ -274,7 +274,7 @@ class SymlinkTests(unittest.TestCase):
         self.assertNotIn("immutable", block)
 
     def test_local_scripts_and_styles_carry_a_version_from_their_content(self):
-        # assets are cached for a week under one name; the link changes when the file does
+        # assets keep one name and are sent no-cache; the link in the page changes when the file does
         (self.site / "assets" / "site.js").write_text("one")
         (self.site / "assets" / "site.css").write_text("css")
         page_text = page("x").replace("</head>", '<link rel="stylesheet" href="../../assets/site.css">\n'
@@ -444,16 +444,42 @@ class RealSiteTests(unittest.TestCase):
                 if Path(value.split("?")[0].split("#")[0]).name in styled:
                     self.assertEqual((tag, attr), ("img", "src"), f"{name} uses {value} as <{tag} {attr}>, not as an image")
 
+    # Every way a script can put markup or a style attribute into the page as a string. The CSSOM writes
+    # (el.style.setProperty, el.style.x = ...) are allowed under style-src 'self'; these are not.
+    UNSAFE_DOM_WRITE = re.compile(
+        r"setAttribute\(\s*['\"`]style['\"`]|setAttributeNS\(\s*[^,()]+,\s*['\"`]style['\"`]"
+        r"|\.cssText\b|createElement\(\s*['\"`]style['\"`]"
+        r"|\.style\s*=[^=]|insertAdjacentHTML|\.innerHTML\s*=|\.outerHTML\s*="
+        r"|document\.write(?:ln)?\s*\(|createContextualFragment|\bDOMParser\b")
+
+    def test_the_unsafe_write_pattern_catches_every_form(self):
+        # one sample per form, so a later edit of the pattern cannot quietly drop one
+        samples = [
+            "el.setAttribute('style', 'color:red')",
+            "el.setAttributeNS(null, 'style', 'color:red')",
+            "el.style.cssText = 'x'",
+            "document.createElement('style')",
+            "el.style = 'x'",
+            "el.insertAdjacentHTML('beforeend', s)",
+            "el.innerHTML = s",
+            "el.outerHTML = s",
+            "document.write(s)",
+            "document.writeln(s)",
+            "range.createContextualFragment(s)",
+            "new DOMParser().parseFromString(s, 'text/html')",
+        ]
+        for sample in samples:
+            self.assertTrue(self.UNSAFE_DOM_WRITE.search(sample), f"not caught: {sample}")
+        for fine in ["el.style.setProperty('--x', '1')", "el.style.width = '1px'", "el.setAttribute('class', 'a')",
+                     "el.setAttribute('aria-label', 'style')", "el.textContent = s"]:
+            self.assertFalse(self.UNSAFE_DOM_WRITE.search(fine), f"wrongly caught: {fine}")
+
     def test_no_script_writes_a_style_attribute(self):
-        # CSSOM writes (el.style.setProperty, el.style.x = ...) are allowed under style-src 'self';
-        # a style attribute, a cssText string or a new <style> element is not
-        bad = re.compile(r"setAttribute\(\s*['\"`]style['\"`]|\.cssText\b|createElement\(\s*['\"`]style['\"`]"
-                         r"|\.style\s*=[^=]|insertAdjacentHTML|\.innerHTML\s*=|\.outerHTML\s*=")
         scripts = sorted(self.out.rglob("*.js"))
         self.assertTrue(scripts)
         for js in scripts:
-            hits = bad.findall(js.read_text(encoding="utf-8"))
-            self.assertEqual(hits, [], f"{js.relative_to(self.out)} writes inline style")
+            hits = self.UNSAFE_DOM_WRITE.findall(js.read_text(encoding="utf-8"))
+            self.assertEqual(hits, [], f"{js.relative_to(self.out)} writes markup or an inline style as a string")
 
     def test_pages_load_only_their_own_scripts(self):
         # the Cloudflare beacon is injected at the edge, not written in a page; every script a page names is ours
