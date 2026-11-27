@@ -483,16 +483,16 @@ def pill(lang):
     return f'<span class="g-pill g-pill--static">{lang.ui("Coming")}</span>'
 
 
-def unreleased(root, lang):
-    return (f'<p class="g-status"><span class="g-pill g-pill--static">{lang.ui("Not released")}</span> '
-            f'{lang.ui("The Komando apps are not released yet. This guide describes them as they will ship.")} '
+def app_status(root, lang):
+    return (f'<p class="g-status"><span class="g-pill g-pill--static">{lang.ui("In testing")}</span> '
+            f'{lang.ui("The Komando apps are built and in testing. They have no download link and no date yet. This guide describes them.")} '
             f'{lang.ui("The command line works today: see")} '
             f'<a href="{root}{lang.base}docs/getting-started/">{lang.ui("Getting started")}</a>.</p>')
 
 
 def coming_body(pages_by_id, page):
     lang = page.lang
-    out = [f"<p>{lang.ui('These parts of Komando are designed but not built yet.')} "
+    out = [f"<p>{lang.ui('The apps are built and in testing. These parts of Komando are not built yet.')} "
            f"{lang.ui('The guide marks each one with a {pill} pill where it would be.').replace('{pill}', pill(lang))} "
            f"{lang.ui('Until then, each page says what to do today.')}</p>"]
     for cid in COMING:
@@ -545,7 +545,7 @@ def build_language(lang, english_ids):
         doc = (head(f"{title} · {guide_title}", summary, slug, lang)
                + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(slug, lang)}'
                + f'<article class="g-article">{breadcrumb(trail_head(slug, lang) + [(title, None)], lang)}'
-               + f'<h1>{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{unreleased("../../" + ("../" if lang.code == "id" else ""), lang)}{badge}{toc(headings, lang)}'
+               + f'<h1>{html.escape(title)}</h1><p class="g-lead">{html.escape(summary)}</p>{app_status("../../" + ("../" if lang.code == "id" else ""), lang)}{badge}{toc(headings, lang)}'
                + f'<div class="g-body">{body}</div>{prev_next(slug, lang)}'
                + f'<p class="g-path g-small g-muted">{lang.ui("Help link for this page")}: <code>/{lang.base}guide/{slug}/</code></p>'
                + '</article></div></main>\n' + foot(slug, lang))
@@ -569,14 +569,14 @@ def build_language(lang, english_ids):
     begin = "".join(f'<li><a href="{slug}/">{html.escape(lang.title(slug))}</a>. {html.escape(lang.summary(slug))}</li>'
                     for slug in START)
     intro = (f"<p>{lang.ui('Komando runs the komando command line for you, as a free app: Komando for Mac, and Komando for iPhone and iPad.')}</p>"
-             + unreleased("../" + ("../" if lang.code == "id" else ""), lang)
+             + app_status("../" + ("../" if lang.code == "id" else ""), lang)
              + f'<p>{lang.ui("Where to begin:")}</p><ul class="g-list g-list--ul">{begin}</ul>'
              f"<p>{lang.ui(BUTTON_NAMES).replace('{bold}', bold)} "
              f"{lang.ui('Commands, addresses and file paths are in {mono}.').replace('{mono}', '<code>mono</code>')} "
              f"{lang.ui('A {pill} pill marks a part that is not built yet;').replace('{pill}', pill(lang))} "
              f'<a href="coming/">{lang.ui("What is coming")}</a> {lang.ui("lists them all.")}</p>')
     index_title = lang.ui("Komando apps")
-    doc = (head(index_title, lang.ui("Komando for Mac, iPhone and iPad runs the komando command line for you. The apps are not out yet; this guide describes them."), None, lang)
+    doc = (head(index_title, lang.ui("Komando for Mac, iPhone and iPad runs the komando command line for you. The apps are built and in testing, with no download link yet. This guide describes them."), None, lang)
            + f'<main id="top" class="g-main" tabindex="-1"><div class="g-wrap g-grid">{sidebar(None, lang)}'
            + f'<article class="g-article g-article--index">{breadcrumb(trail_head(None, lang), lang)}<h1>{index_title}</h1><div class="g-body g-intro">{intro}</div>'
            + "".join(cards)
