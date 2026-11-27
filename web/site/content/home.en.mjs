@@ -8,8 +8,8 @@ export const installSha = '9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22
 export const meta = {
   lang: 'en',
   title: 'komando: a DevOps command line for you and your AI agent',
-  description: 'Free, open-source command line for servers, databases, caches, storage and VPNs, with free Komando apps for Mac, iPhone and iPad coming next.',
-  ogDescription: 'One inventory, read-only by default, passwords out of the agent’s reach. Free and open source. Free Komando apps for Mac, iPhone and iPad come next.',
+  description: 'Free, open-source command line for servers, databases, caches, storage and VPNs, with free Komando apps for Mac, iPhone and iPad built and in testing.',
+  ogDescription: 'One inventory, read-only by default, passwords out of the agent’s reach. Free and open source. The free Komando apps for Mac, iPhone and iPad are built and in testing.',
 };
 
 export const shell = {
@@ -50,7 +50,7 @@ export const shell = {
 export const hero = {
   releaseLabel: 'Latest komando release:',
   title: 'DevOps command line for you and your AI agent',
-  sub: 'Servers, databases, caches, storage and VPNs in one inventory, read-only until you say otherwise. The command line, komando, is free and open source. Komando with a capital K, the free app for Mac, iPhone and iPad that runs it, comes next.',
+  sub: 'Servers, databases, caches, storage and VPNs in one inventory, read-only until you say otherwise. The command line, komando, is free and open source. Komando with a capital K, the free app for Mac, iPhone and iPad that runs it, is built and in testing.',
   primary: 'Install komando',
   secondary: 'Read the user guide',
 };
@@ -114,7 +114,7 @@ export const safety = {
     ['Ask first', 'protected targets'],
     ['Check the record', '<code>komando audit verify</code>'],
   ],
-  link: 'See what is free and what comes next',
+  link: 'See what is free and what is coming',
 };
 
 export const features = {
@@ -139,7 +139,7 @@ export const agent = {
 
 export const editions = {
   title: 'Free now, an upgrade later',
-  lede: 'The Komando apps for Mac, iPhone and iPad come next and will be free, like the command line. They will run komando on your own machines, with no account and no trial.',
+  lede: 'The Komando apps for Mac, iPhone and iPad are built and in testing, with no download link and no date yet. They will be free, like the command line, and run komando on your own machines, with no account and no trial.',
   free: { head: ['Free, everything local', 'Where'], rows: [
     ['Every command, as text or JSON', 'komando'],
     ['Terminal tabs, database client, forwards', 'Mac'],

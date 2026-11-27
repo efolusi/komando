@@ -26,7 +26,7 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 ## Hero
 
 - h1: Command line DevOps untuk Anda dan agen AI Anda
-- lede: Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Command line-nya, komando, gratis dan open source. Aplikasi Komando (K besar) untuk Mac, iPhone, dan iPad yang menjalankannya juga gratis dan segera hadir.
+- lede: Server, database, cache, storage, dan VPN dalam satu inventaris, hanya-baca sampai Anda izinkan. Command line-nya, komando, gratis dan open source. Aplikasi Komando (K besar) untuk Mac, iPhone, dan iPad yang menjalankannya juga gratis. Aplikasinya sudah dibuat dan sedang diuji.
 - button: Baca panduan
 
 ## One command (statement)
@@ -47,7 +47,7 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 - h2: Setiap target mulai dalam mode hanya-baca
 - p: Perintah berbahaya diblokir. Target produksi bisa dilindungi, jadi komando bertanya dulu. Log audit lengkap mencatat apa yang dijalankan dan oleh siapa.
 - steps: Lihat dulu / Tanya dulu / Cek catatannya
-- link: Lihat apa yang gratis dan apa yang menyusul
+- link: Lihat apa yang gratis dan apa yang akan datang
 - labels: Produksi / Staging
 
 ## Features
@@ -68,7 +68,7 @@ The Indonesian copy of `index.html`, in its order. Each block names the English 
 ## Editions
 
 - h2: Gratis sekarang, upgrade nanti
-- p: Aplikasi Komando untuk Mac, iPhone, dan iPad menyusul dan akan gratis, sama seperti command line-nya. Aplikasinya menjalankan komando di mesin Anda sendiri, tanpa akun dan tanpa masa uji coba.
+- p: Aplikasi Komando untuk Mac, iPhone, dan iPad sudah dibuat dan sedang diuji, tetapi belum ada link unduh dan belum ada tanggal. Aplikasinya akan gratis, sama seperti command line-nya, dan menjalankan komando di mesin Anda sendiri, tanpa akun dan tanpa masa uji coba.
 - free list: Gratis, semuanya lokal / Setiap perintah, dalam teks atau JSON / Tab terminal, klien database, port forwarding / Perbaikan sekali klik, agen, menu bar / Perbaikan, cek cepat, dan agen saat bepergian
 - upgrade list: Upgrade, nanti / Sinkronisasi antar perangkat / Tim / AI bawaan, tanpa API key sendiri / Setujui perubahan dari ponsel
 - note: Belum ada yang bisa dibeli. Komando akan mengabarkannya di sini saat upgrade siap.
