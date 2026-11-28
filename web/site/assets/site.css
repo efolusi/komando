@@ -29,6 +29,12 @@ main code, .ef-site-footer code { font-family: var(--font-mono); font-size: 0.9e
 /* the language switch (ID or EN) is two letters: keep it a square touch target */
 .ef-site-header__link[hreflang] { min-width: var(--tap-min); justify-content: center; }
 
+/* Meridian 2.5.2 gives the theme toggle no border and no background, so the browser draws its grey outset button.
+   Size and focus ring stay Meridian's. This block stays until Meridian 2.6.0 (MD132). */
+.ef-theme-toggle { border: 0; background: transparent; }
+.ef-theme-toggle:hover { background: transparent; color: var(--text-secondary); }
+@media (hover: hover) { .ef-theme-toggle:hover { background: var(--surface-sunken); color: var(--text-primary); } }
+
 /* ---------------------------------------------------------------- hero: the words, then the Home screen at its true size */
 
 .site-hero .ef-hero__title { max-width: 16ch; }
