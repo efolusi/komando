@@ -129,6 +129,20 @@ func read(path string) string {
 	return strings.ReplaceAll(string(b), "\r\n", "\n")
 }
 
+var rangeRe = regexp.MustCompile(`(\d)–(\d)`)
+
+// noDashes keeps the rendered text free of en and em dashes (row W60). A number range such as 4–43 reads "4 to 43"
+// (to is "sampai" in Indonesian); any other dash is an error that names its line, so the source gets rewritten.
+func noDashes(text, to string) (string, error) {
+	text = rangeRe.ReplaceAllString(text, "$1 "+to+" $2")
+	for i, line := range strings.Split(text, "\n") {
+		if strings.ContainsAny(line, "–—") {
+			return "", fmt.Errorf("line %d has an en or em dash: %q", i+1, line)
+		}
+	}
+	return text, nil
+}
+
 // ---------------------------------------------------------------- the pages
 
 var rowRe = regexp.MustCompile(`^\|\s*\[([^\]]+)\]\(([a-z0-9-]+)\.md\)\s*\|\s*([^|]+?)\s*\|`)
@@ -343,7 +357,15 @@ func headingIDs(heads []heading) []string {
 
 // load reads a page and splits off its title (the "# " line) and its lead (the first paragraph).
 func load(path, slug, group string, site bool) *page {
-	lines := strings.Split(read(path), "\n")
+	to := "to"
+	if strings.HasSuffix(path, ".id.md") {
+		to = "sampai"
+	}
+	text, err := noDashes(read(path), to)
+	if err != nil {
+		fail("%s: %v", path, err)
+	}
+	lines := strings.Split(text, "\n")
 	p := &page{slug: slug, group: group, site: site}
 	i := 0
 	for i < len(lines) && strings.TrimSpace(lines[i]) == "" {

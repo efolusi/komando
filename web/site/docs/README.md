@@ -30,4 +30,6 @@ A page with an Indonesian twin, `src/<slug>.id.md`, is also built at `/id/docs/<
 The Indonesian docs home lists only those pages and points to the English docs for the rest; a link to a page without a
 twin goes to the English page. The same command builds both languages, and the check covers both trees.
 
+A source with an en or em dash stops the build with its line number, except a number range (`4–43`), which is written `4 to 43` (`4 sampai 43` in Indonesian).
+
 `docs.css` adds code blocks, tables and `####` headings to the guide's reading layout (`guide/guide.css`).
