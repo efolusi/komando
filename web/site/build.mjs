@@ -312,20 +312,32 @@ ${footer(c, root, true, twin)}
 
 /**
  * The not-found page (rows W43 and W68). It is Meridian 2.6.0's shared 404.html (MD110, guidelines/frameworks.md "A 404
- * page on a static site"), one language per file: the mark, the product name in the title and the home link are the three
- * things changed. Cloudflare serves it for any unknown address, at any depth, and takes the nearest 404.html up the path,
- * so /id/... gets id/404.html. Every address in it is therefore from the site's root. It holds one stylesheet, no script,
- * no <style> and no style attribute, and follows the system's light or dark (a saved theme needs the theme script).
+ * page on a static site"), both languages in it as the shared file has them: the mark, the product name in the title and
+ * the home links are the things changed. The page's own language comes first (h1), the other second (h2). One language
+ * alone is not used: Meridian's grid is two columns from 880 px, so a single section sits off centre (found in W68).
+ * Cloudflare serves it for any unknown address, at any depth, and takes the nearest 404.html up the path, so /id/... gets
+ * id/404.html. Every address in it is therefore from the site's root. It holds one stylesheet, no script, no <style>
+ * and no style attribute, and follows the system's light or dark (a saved theme needs the theme script).
  */
 export function renderNotFound(c = en) {
   const lang = c.meta.lang;
-  const nf = c.notFound;
+  const order = [lang, ...Object.keys(LANGS).filter((l) => l !== lang)];
+  const sections = order.map((l, i) => {
+    const nf = LANGS[l].notFound;
+    const heading = i === 0 ? 'h1' : 'h2';
+    return `    <section class="ef-notfound__lang" lang="${l}" aria-labelledby="not-found-${l}">
+      <${heading} class="ef-page-title" id="not-found-${l}">${nf.title}</${heading}>
+      <p>${nf.sub}</p>
+      <a class="ef-notfound__home" href="/${BASE[l]}">${nf.home}</a>
+    </section>`;
+  }).join('\n');
+  const titles = order.map((l) => LANGS[l].notFound.title).join(' · ');
   return `<!doctype html>
 <html lang="${lang}" data-shape="pill">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${nf.title} · Komando</title>
+<title>${titles} · Komando</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/assets/meridian/styles.css">
@@ -336,11 +348,7 @@ export function renderNotFound(c = en) {
   <img class="ef-notfound__mark" src="/favicon.svg" alt="" width="40" height="40">
   <p class="ef-notfound__code">404</p>
   <div class="ef-notfound__langs">
-    <section class="ef-notfound__lang" lang="${lang}" aria-labelledby="not-found-h">
-      <h1 class="ef-page-title" id="not-found-h">${nf.title}</h1>
-      <p>${nf.sub}</p>
-      <a class="ef-notfound__home" href="/${BASE[lang]}">${nf.home}</a>
-    </section>
+${sections}
   </div>
 </main>
 </body>

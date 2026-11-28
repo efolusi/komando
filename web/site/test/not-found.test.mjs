@@ -1,4 +1,4 @@
-// W43 and W68: the not-found pages (Meridian 2.6.0's shared 404.html, one language per file). Cloudflare serves the nearest 404.html for an unknown address, at any depth, so every
+// W43 and W68: the not-found pages (Meridian 2.6.0's shared 404.html, both languages in each file, the page's own first). Cloudflare serves the nearest 404.html for an unknown address, at any depth, so every
 // address in the page is from the site's root, and a search engine is told to leave it out.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -11,22 +11,27 @@ const pages = { en: 'index.html', id: 'id/index.html' };
 const read = (rel) => readFileSync(join(SITE, rel), 'utf8');
 const notFound = { en: read('404.html'), id: read('id/404.html') };
 
-test('both languages have a not-found page with a title, one sentence and one link home, as Meridian 404.html', () => {
+test('both languages have a not-found page with a title, one sentence and one link home per language, as Meridian 404.html', () => {
   for (const [lang, html] of Object.entries(notFound)) {
+    const other = lang === 'en' ? 'id' : 'en';
+    const home = { en: '/', id: '/id/' };
     assert.match(html, new RegExp(`<html lang="${lang}" data-shape="pill">`));
     assert.equal(html.match(/<h1[\s>]/g).length, 1, `${lang}: one h1`);
     assert.match(html, /<main class="ef-notfound">/);
     assert.match(html, /class="ef-notfound__mark"/);
     const main = /<main[\s\S]*<\/main>/.exec(html)[0];
-    assert.equal(main.match(/<a /g).length, 1, `${lang}: one link in the page body`);
-    assert.ok(main.includes(`href="${lang === 'en' ? '/' : '/id/'}"`), `${lang}: link to home`);
-    assert.match(html, new RegExp(`<section class="ef-notfound__lang" lang="${lang}"`), `${lang}: only its own language section`);
+    assert.equal(main.match(/<a /g).length, 2, `${lang}: one link home in each of the two languages`);
+    for (const l of [lang, other]) assert.ok(main.includes(`href="${home[l]}"`), `${lang}: link to ${l} home`);
+    const order = [...main.matchAll(/<section class="ef-notfound__lang" lang="(\w+)"/g)].map((m) => m[1]);
+    assert.deepEqual(order, [lang, other], `${lang}: its own language first, the other second`);
+    assert.match(main, new RegExp(`<h1 class="ef-page-title" id="not-found-${lang}">`), `${lang}: the h1 is its own language`);
+    assert.match(main, new RegExp(`<h2 class="ef-page-title" id="not-found-${other}">`), `${lang}: the other language is an h2`);
   }
 });
 
 test('the title follows the Page · Komando pattern and the page is kept out of search', () => {
-  assert.match(notFound.en, /<title>Page not found · Komando<\/title>/);
-  assert.match(notFound.id, /<title>Halaman tidak ditemukan · Komando<\/title>/);
+  assert.match(notFound.en, /<title>Page not found · Halaman tidak ditemukan · Komando<\/title>/);
+  assert.match(notFound.id, /<title>Halaman tidak ditemukan · Page not found · Komando<\/title>/);
   for (const html of Object.values(notFound)) {
     assert.match(html, /<meta name="robots" content="noindex">/);
     assert.ok(!html.includes('rel="canonical"'), 'a not-found page has no canonical address');
