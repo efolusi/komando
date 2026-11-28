@@ -15,8 +15,8 @@ export const meta = {
 export const shell = {
   brandLabel: 'Komando home',
   skip: 'Skip to content',
-  // the link to the other language, named in that language
-  switch: { hrefLang: 'id', label: 'Bahasa Indonesia', ariaLabel: 'Baca halaman ini dalam bahasa Indonesia' },
+  // label is the name in full (the footer link), short the code the header switch shows
+  switch: { hrefLang: 'id', label: 'Bahasa Indonesia', short: 'ID', ariaLabel: 'Baca halaman ini dalam bahasa Indonesia' },
   nav: [
     { id: 'product', label: 'Product', section: 'inventory' },
     { id: 'safety', label: 'Safety', section: 'safety' },

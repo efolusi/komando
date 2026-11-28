@@ -91,12 +91,12 @@ test('an Indonesian page keeps the anchors of its English page', () => {
   }
 });
 
-test('one h1, unique ids, no em dash', () => {
+test('one h1, unique ids, no en or em dash', () => {
   for (const p of pages) {
     assert.equal(p.html.match(/<h1[\s>]/g).length, 1, `${p.rel} h1`);
     const ids = [...p.html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
     assert.deepEqual(ids.filter((id, i) => ids.indexOf(id) !== i), [], `${p.rel} ids`);
-    assert.ok(!p.html.includes('—'), `${p.rel} has an em dash`);
+    assert.ok(!/[–—]/.test(p.html.replace(/<(script|style)[\s\S]*?<\/\1>/g, '')), `${p.rel} has an en or em dash`);
   }
 });
 
@@ -241,4 +241,27 @@ test('the home pages and the docs home have no breadcrumb', () => {
   for (const rel of ['index.html', 'id/index.html', 'docs/index.html', 'id/docs/index.html']) {
     assert.equal(crumbNavs(pages.find((p) => p.rel === rel).html).length, 0, rel);
   }
+});
+
+// W46: one switch in the header, the short code of the other language, a 44 px target.
+test('the header switch of every page is ID or EN, named in the language it goes to, with the code first in its name', () => {
+  for (const p of pages) {
+    const to = p.id ? 'en' : 'id';
+    const header = p.html.slice(p.html.indexOf('<header'), p.html.indexOf('</header>'));
+    const links = [...header.matchAll(new RegExp(`<a [^>]*hreflang="${to}"[^>]*>([^<]*)</a>`, 'g'))];
+    assert.ok(links.length >= 1, p.rel);
+    for (const m of links) {
+      assert.equal(m[1], to.toUpperCase(), `${p.rel}: header switch text`);
+      assert.match(m[0], new RegExp(`aria-label="${to.toUpperCase()}: `), `${p.rel}: the visible code is not the start of the name`);
+      assert.match(m[0], new RegExp(`lang="${to}"`), p.rel);
+    }
+  }
+});
+
+// W58: the page list at the left is a touch target of at least 44 px on a coarse pointer.
+test('the side list links are at least the touch size under a coarse pointer', () => {
+  const css = readFileSync(join(SITE, 'guide', 'guide.css'), 'utf8');
+  const block = /@media \(pointer: coarse\) \{([^}]*\{[^}]*\}[^}]*)\}/.exec(css);
+  assert.ok(block, 'no @media (pointer: coarse) block in guide.css');
+  assert.match(block[1], /\.g-side a\s*\{[^}]*min-height:\s*var\(--tap-min\)/);
 });

@@ -232,3 +232,26 @@ func TestBreadcrumbEscapesTheTitleAndNamesItselfInTheLanguage(t *testing.T) {
 		t.Fatalf("breadcrumb = %s", got)
 	}
 }
+
+func TestNumberRangesReadAsWordsInTheLanguageOfThePage(t *testing.T) {
+	got, err := noDashes("in lines 4–43; pages 2–3.", "to")
+	if err != nil || got != "in lines 4 to 43; pages 2 to 3." {
+		t.Fatalf("english = %q, %v", got, err)
+	}
+	got, err = noDashes("baris 4–43", "sampai")
+	if err != nil || got != "baris 4 sampai 43" {
+		t.Fatalf("indonesian = %q, %v", got, err)
+	}
+}
+
+func TestAnyOtherEnOrEmDashStopsTheBuildWithItsLine(t *testing.T) {
+	for _, text := range []string{"fast — and safe", "a – b", "ok\nsecond — line"} {
+		if _, err := noDashes(text, "to"); err == nil {
+			t.Errorf("%q: no error", text)
+		}
+	}
+	_, err := noDashes("ok\nsecond — line", "to")
+	if err == nil || !strings.Contains(err.Error(), "line 2") {
+		t.Errorf("error = %v, want it to name line 2", err)
+	}
+}

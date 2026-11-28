@@ -26,6 +26,8 @@ main code, .ef-site-footer code { font-family: var(--font-mono); font-size: 0.9e
 
 /* the header's install button stays on the bar from a tablet up; on a phone it is in the menu panel */
 .ef-site-header__actions .ef-btn { white-space: nowrap; }
+/* the language switch (ID or EN) is two letters: keep it a square touch target */
+.ef-site-header__link[hreflang] { min-width: var(--tap-min); justify-content: center; }
 
 /* ---------------------------------------------------------------- hero: the words, then the Home screen at its true size */
 

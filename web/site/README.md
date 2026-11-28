@@ -78,7 +78,8 @@ English is at `/`, Indonesian at `/id/`. Same slugs, so a switch between languag
   without a twin is not built under `/id/`. A link to it from an Indonesian page goes to the English page. Its own
   language switch goes to the Indonesian docs home, which says the other pages are English.
 - **Every page** has `<html lang>`, a canonical link, and `hreflang` links: `en` and `x-default` (the English page), and
-  `id` when the twin exists. The shell header and footer carry the language switch, named in the language it goes to.
+  `id` when the twin exists. The shell header carries one language switch, the short code of the other language (`ID` or `EN`, a 44 px target); the footer
+  keeps the full name as a text link. Both are named in the language they go to and carry `hreflang` (row W46).
 - **Anchors.** An Indonesian page keeps its English page's heading anchors, heading by heading, so a link such as
   `/guide/log-in/#make-or-import-a-key` works in both languages. The build stops if the two sources have a different
   number of headings. Keep every Indonesian source heading for heading with its English page.
@@ -87,7 +88,8 @@ English is at `/`, Indonesian at `/id/`. Same slugs, so a switch between languag
   that is missing stops the build: an Indonesian page never falls back to English.
 - **Stays as it is** in both languages: product names, commands, flags, file names, error codes, and the app's own button
   and menu names (the drawn app screens are the app's English interface; only their description for screen readers and
-  the few lines `content/home.id.mjs` names are Indonesian).
+  the few lines `content/home.id.mjs` names are Indonesian. The Upgrade sheet is drawn wholly in Indonesian on the
+  Indonesian page, because the app has no such screen yet: its words are the editions table's, row W59).
 - **Releases.** `set_release.py` writes the tag and the install script's sha256 into both home pages and both first guide
   pages. Check the version numbers in the Indonesian copy against the release (`i18n/page-map.md`).
 - A new language is a new folder beside `id/`, its `_shell/<lang>/` and word files; nothing else is hard-wired to two.
@@ -124,6 +126,10 @@ English is at `/`, Indonesian at `/id/`. Same slugs, so a switch between languag
 - **Meridian 2.5.0** (W44 and the second W42 bump, 2026-11-27): `data-shape="pill"` is on the `html` element of every page (the four builders and the drafts renderer), so buttons, tags and badges are pills and fields are 16 px; the site draws none of that. Page titles of the guide and the docs are `ef-page-title`, the "Coming" and "In testing" markers are Meridian's warning Badge, the agent names are Meridian's Tag, links in running text are Meridian's classless anchors (underlined by Meridian). The site has no `--ember-*` token, no text field and no forced-colors rule. Stays: the underline of the breadcrumb and the contents list (navigation lists, not running text) and the drawn app screens (`.kmd`) with the apps' own pill and blue.
 - **Meridian 2.5.1** (W52, 2026-11-28): classless links in `li`, `td`, `caption`, `label` and the Alert description are underlined by Meridian too, so the site's own `li` and `td` underline rule in `guide.css` is deleted. The site has no `Input`, so the password reveal change does not apply.
 - **Meridian 2.5.2** (W55, 2026-11-28): the link underline no longer reaches classless links inside `nav`, `role=navigation`, `menu`, `menubar`, `tablist` and `toolbar` (a defect of 2.5.1). The side navigation sits in a `nav`, so the site's `.g-side li a` rule is deleted. Links in running text are still underlined.
+- **Language switch** (W46, 2026-11-28): Meridian 2.5.2 has no language switch component, only `SiteHeader`'s `languageSwitch` link, so the header link shows `shell.switch.short` (`ID`, `EN`) and `site.css` makes it a 44 px wide target. Its accessible name starts with the visible code (`ID: Baca halaman ini dalam bahasa Indonesia`, WCAG 2.5.3). Undo: set `short` to the full name. The footer link stays the full name.
+- **Footer** (W48, 2026-11-28): checked, nothing left to build: wording, entity and the computed year are in `build.mjs`; efolusi.com's legal links stay behind the draft pages switch, as the row says.
+- **Side list** (W58, 2026-11-28): under `pointer: coarse` each link of the page list is at least `--tap-min` (44 px) high, at every width; a mouse keeps the compact list.
+- **Dashes** (W60, 2026-11-28): `scripts/docsgen` writes a number range such as `4–43` as `4 to 43` (`sampai` on an Indonesian page) and stops on any other en or em dash in a source, naming its line.
 
 - **Fonts** (owner, 2026-11-13): the app screens drawn on the page (`.kmd`) use the system fonts like the apps
   (`-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif` and `ui-monospace, "SF Mono", Menlo,

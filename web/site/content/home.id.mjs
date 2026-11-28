@@ -15,8 +15,8 @@ export const meta = {
 export const shell = {
   brandLabel: 'Beranda Komando',
   skip: 'Langsung ke konten',
-  // the link to the other language, named in that language
-  switch: { hrefLang: 'en', label: 'English', ariaLabel: 'Read this page in English' },
+  // label adalah nama lengkap (link di footer), short kode yang tampil di tombol bahasa pada header
+  switch: { hrefLang: 'en', label: 'English', short: 'EN', ariaLabel: 'Read this page in English' },
   nav: [
     { id: 'product', label: 'Produk', section: 'inventory' },
     { id: 'safety', label: 'Keamanan', section: 'safety' },
@@ -209,7 +209,20 @@ export const screens = {
     ],
   },
   upgrade: {
-    label: 'Lembar Upgrade Komando: Komando gratis. Semua di Mac ini gratis, seperti command line komando; upgrade nanti menambah layanan yang butuh server. Empat fitur bertanda Coming: sinkronisasi antar perangkat, tim, AI bawaan, setujui dari ponsel. Belum ada yang bisa dibeli.',
-    replace: [['Nothing to buy yet. Komando says so here when the upgrade is ready.', 'Belum ada yang bisa dibeli. Komando akan mengabarkannya di sini saat upgrade siap.']],
+    label: 'Lembar Upgrade Komando: Komando gratis. Semua di Mac ini gratis, seperti command line komando; upgrade nanti menambah layanan yang butuh server. Empat fitur bertanda Segera: sinkronisasi antar perangkat, tim, AI bawaan, setujui dari ponsel. Belum ada yang bisa dibeli.',
+    replace: [
+      ['<span class="k-pill k-c-ok">Free</span>', '<span class="k-pill k-c-ok">Gratis</span>'],
+      ['Everything on this Mac is free, like the komando command line. An upgrade will add services that need a server.', 'Semua di Mac ini gratis, seperti command line komando. Upgrade nanti menambah layanan yang butuh server.'],
+      ['<b>Sync between devices</b><span class="k-pill">Coming</span>', '<b>Sinkronisasi antar perangkat</b><span class="k-pill">Segera</span>'],
+      ['Your servers and settings on every device, encrypted on the device before they leave it.', 'Server dan pengaturan Anda di setiap perangkat, dienkripsi di perangkat itu sebelum dikirim.'],
+      ['<b>Teams</b><span class="k-pill">Coming</span>', '<b>Tim</b><span class="k-pill">Segera</span>'],
+      ['Share servers with your team, and take access away when someone leaves.', 'Bagikan server ke tim Anda, dan cabut akses saat seseorang keluar.'],
+      ['<b>Built-in AI</b><span class="k-pill">Coming</span>', '<b>AI bawaan</b><span class="k-pill">Segera</span>'],
+      ['The agent without an Anthropic key of your own.', 'Agen tanpa API key Anthropic milik Anda sendiri.'],
+      ['<b>Approve from your phone</b><span class="k-pill">Coming</span>', '<b>Setujui perubahan dari ponsel</b><span class="k-pill">Segera</span>'],
+      ['Approve a protected change from your phone, with Face ID.', 'Setujui perubahan yang dilindungi dari ponsel Anda, dengan Face ID.'],
+      ['Nothing to buy yet. Komando says so here when the upgrade is ready.', 'Belum ada yang bisa dibeli. Komando akan mengabarkannya di sini saat upgrade siap.'],
+      ['<span class="k-btn">Close</span>', '<span class="k-btn">Tutup</span>'],
+    ],
   },
 };
