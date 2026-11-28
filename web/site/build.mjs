@@ -91,9 +91,13 @@ function target(link, root, home, lang) {
 // React writes the prop hrefLang as hrefLang; the attribute is hreflang
 const lowerHreflang = (html) => html.replaceAll(' hrefLang=', ' hreflang=');
 
-/** The language switch: a link to this page's twin, named in the language it goes to. */
-function switchLink(c, href) {
+/**
+ * The language switch: a link to this page's twin, named in the language it goes to. The header takes the short code
+ * (ID, EN) and starts its name with it, so the visible text is in the name (WCAG 2.5.3); the footer keeps the full name.
+ */
+function switchLink(c, href, short = false) {
   const s = c.shell.switch;
+  if (short) return { href, hrefLang: s.hrefLang, label: s.short, ariaLabel: `${s.short}: ${s.ariaLabel}` };
   return { href, hrefLang: s.hrefLang, label: s.label, ariaLabel: s.ariaLabel };
 }
 
@@ -105,7 +109,7 @@ function header(c, root, home, switchHref) {
     h('a', { className: 'ef-btn ef-btn--primary ef-btn--md', href: target({ section: 'install' }, root, home, lang) }, c.shell.install));
   let html = renderToStaticMarkup(h(SiteHeader, {
     brand, brandHref: home ? './' : `${root}${BASE[lang]}index.html`, brandLabel: c.shell.brandLabel, links, actions,
-    languageSwitch: switchLink(c, switchHref), labels: { skip: c.shell.skip },
+    languageSwitch: switchLink(c, switchHref, true), labels: { skip: c.shell.skip },
     lang, skipHref: '#top',
   }));
   // SiteHeader names its menu panel with React's useId; give it a stable name

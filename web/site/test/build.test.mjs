@@ -120,10 +120,16 @@ test('the Indonesian page keeps its root: assets and links resolve from /id/', (
   assert.match(idHome, /href="\.\.\/id\/guide\/"/);
 });
 
-test('the language switch names the other language in that language and goes to the twin', () => {
-  assert.match(home, /<a class="ef-site-header__link" href="id\/" hreflang="id" lang="id" aria-label="Baca halaman ini dalam bahasa Indonesia">Bahasa Indonesia<\/a>/);
-  assert.match(idHome, /<a class="ef-site-header__link" href="\.\.\/" hreflang="en" lang="en" aria-label="Read this page in English">English<\/a>/);
-  assert.match(idHome, /<a class="ef-site-footer__link" href="\.\.\/" hreflang="en" lang="en"/);
+test('the header switch is one short control, ID or EN, and the footer keeps the full name', () => {
+  // W46: the header says the code of the other language, named by it; the name in full stays in the footer only
+  assert.match(home, /<a class="ef-site-header__link" href="id\/" hreflang="id" lang="id" aria-label="ID: Baca halaman ini dalam bahasa Indonesia">ID<\/a>/);
+  assert.match(idHome, /<a class="ef-site-header__link" href="\.\.\/" hreflang="en" lang="en" aria-label="EN: Read this page in English">EN<\/a>/);
+  assert.match(home, /<a class="ef-site-footer__link" href="id\/" hreflang="id" lang="id" aria-label="Baca halaman ini dalam bahasa Indonesia">Bahasa Indonesia<\/a>/);
+  assert.match(idHome, /<a class="ef-site-footer__link" href="\.\.\/" hreflang="en" lang="en" aria-label="Read this page in English">English<\/a>/);
+  for (const page of [home, idHome]) {
+    const header = page.slice(page.indexOf('<header'), page.indexOf('</header>'));
+    assert.doesNotMatch(header, />(?:Bahasa Indonesia|English)</, 'the full language name is in the header');
+  }
   assert.doesNotMatch(home + idHome, / hrefLang=/);
 });
 
@@ -143,6 +149,7 @@ test('the drawn screens speak Indonesian only where home.id.mjs says so', () => 
   assert.match(idHome, /<p class="khosts__group">Produksi<\/p>/);
   assert.match(idHome, /Belum ada yang bisa dibeli\./);
   assert.doesNotMatch(idHome, /Nothing to buy yet/);
+  assert.match(home, /<span class="k-pill k-c-ok">Free<\/span>/);
   assert.match(home, /aria-label="Komando’s Hosts page:/);
   assert.match(home, /<p class="khosts__group">Production<\/p>/);
 });
@@ -238,4 +245,19 @@ test('buttons take Meridian sizes: header md, hero primary xl and secondary lg, 
   assert.match(hero, /ef-btn ef-btn--secondary ef-btn--lg/);
   assert.equal(home.match(/<button[^>]*data-copy[^>]*>/g).every((b) => b.includes('ef-btn--md')), true);
   assert.doesNotMatch(home + shell.header, /ef-btn--sm/);
+});
+
+// W59: the Upgrade sheet drawn on the Indonesian page reads Indonesian, with the words the guide and the editions table use.
+test('the Upgrade sheet on the Indonesian page has no English label, and the English page keeps its own', () => {
+  const sheet = (page) => /<div class="kmd kfrag ksheet"[\s\S]*?<span class="ksheet__act">[\s\S]*?<\/div>/.exec(page)[0];
+  const text = sheet(idHome).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  for (const english of ['Coming', 'Free', 'Sync between devices', 'Teams', 'Built-in AI', 'Approve from your phone', 'Everything on this Mac', 'Close']) {
+    assert.ok(!text.includes(english), `"${english}" is still English on the Indonesian page`);
+  }
+  assert.equal(idHome.match(/<span class="k-pill">Segera<\/span>/g).length, 4);
+  assert.match(idHome, /<span class="k-pill k-c-ok">Gratis<\/span>/);
+  for (const word of ['Sinkronisasi antar perangkat', 'Tim', 'AI bawaan', 'Setujui perubahan dari ponsel']) assert.ok(text.includes(word), word);
+  assert.match(idHome, /Empat fitur bertanda Segera/);
+  assert.doesNotMatch(idHome, /bertanda Coming/);
+  assert.equal(sheet(home).match(/<span class="k-pill">Coming<\/span>/g).length, 4);
 });

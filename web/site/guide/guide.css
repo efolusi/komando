@@ -94,6 +94,10 @@
   .g-side__fold > :not(summary) { padding-inline: var(--space-4); }
   .g-side a { margin-left: 0; padding-block: var(--space-2); }
 }
+/* a finger needs a 44 px row; a mouse keeps the compact list */
+@media (pointer: coarse) {
+  .g-side a { display: flex; align-items: center; min-height: var(--tap-min); }
+}
 @media (max-width: 639px) {
   .g-wrap { padding-inline: 18px; }
   .g-main { padding-top: var(--space-6); }
