@@ -2,7 +2,7 @@
 // A field named *Html holds a little inline markup (code, links, strong); every other field is plain text.
 // The Indonesian twin is home.id.mjs (from i18n/home.id.md); build.mjs renders both.
 
-export const release = 'v0.17.4';
+export const release = 'v0.17.5';
 export const installSha = '9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af';
 
 export const meta = {
