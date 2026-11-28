@@ -170,14 +170,14 @@ function headShared(root) {
 
 function homeBody(c, root) {
   const r = c.release;
-  // sizes are Meridian's: the hero's main action xl, its second action and the closing action lg
+  // sizes are Meridian's: both hero actions xl (buttons in one row are one size, as efolusi.com's hero pair), the closing action lg
   const btn = (kind, href, label, size = 'lg') => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--${size}`, href }, label);
 
   const hero = h(Hero, {
     id: 'hero', className: 'site-hero', align: 'start', 'aria-labelledby': 'hero-h',
     title: h('span', { id: 'hero-h' }, c.hero.title),
     sub: c.hero.sub,
-    actions: h(React.Fragment, null, btn('primary', '#install', c.hero.primary, 'xl'), btn('secondary', 'guide/', c.hero.secondary)),
+    actions: h(React.Fragment, null, btn('primary', '#install', c.hero.primary, 'xl'), btn('secondary', 'guide/', c.hero.secondary, 'xl')),
     proof: h('span', null, `${c.hero.releaseLabel} `, h('span', { 'data-release': '' }, r)),
   }, raw('div', screen('home', c), { className: 'site-stage' }));
 

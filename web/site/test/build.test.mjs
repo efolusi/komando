@@ -241,12 +241,13 @@ test('Platform terms, Privacy notice and Status appear in the footer only when t
   assert.ok(renderShell(id, true).footer.includes('href="https://efolusi.com/id/privacy"'));
 });
 
-// W44: the sizes are Meridian's. Header action md, hero primary xl and secondary lg, Copy md.
-test('buttons take Meridian sizes: header md, hero primary xl and secondary lg, Copy md', () => {
+// W44 and W68: the sizes are Meridian's. Header action md, both hero actions xl (one row, one size), Copy md.
+test('buttons take Meridian sizes: header md, both hero actions xl, Copy md', () => {
   assert.match(shell.header, /ef-btn ef-btn--primary ef-btn--md/);
   const hero = /<section[^>]*id="hero"[\s\S]*?<\/section>/.exec(home)[0];
   assert.match(hero, /ef-btn ef-btn--primary ef-btn--xl/);
-  assert.match(hero, /ef-btn ef-btn--secondary ef-btn--lg/);
+  assert.match(hero, /ef-btn ef-btn--secondary ef-btn--xl/);
+  assert.doesNotMatch(hero, /ef-btn--lg/, 'two buttons in one row are one size');
   assert.equal(home.match(/<button[^>]*data-copy[^>]*>/g).every((b) => b.includes('ef-btn--md')), true);
   assert.doesNotMatch(home + shell.header, /ef-btn--sm/);
 });
