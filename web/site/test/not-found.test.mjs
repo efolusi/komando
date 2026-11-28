@@ -1,4 +1,4 @@
-// W43: the not-found pages. Cloudflare serves the nearest 404.html for an unknown address, at any depth, so every
+// W43 and W68: the not-found pages (Meridian 2.6.0's shared 404.html, one language per file). Cloudflare serves the nearest 404.html for an unknown address, at any depth, so every
 // address in the page is from the site's root, and a search engine is told to leave it out.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -11,15 +11,16 @@ const pages = { en: 'index.html', id: 'id/index.html' };
 const read = (rel) => readFileSync(join(SITE, rel), 'utf8');
 const notFound = { en: read('404.html'), id: read('id/404.html') };
 
-test('both languages have a not-found page with a title, one sentence and two links, home and docs', () => {
+test('both languages have a not-found page with a title, one sentence and one link home, as Meridian 404.html', () => {
   for (const [lang, html] of Object.entries(notFound)) {
     assert.match(html, new RegExp(`<html lang="${lang}" data-shape="pill">`));
     assert.equal(html.match(/<h1[\s>]/g).length, 1, `${lang}: one h1`);
+    assert.match(html, /<main class="ef-notfound">/);
+    assert.match(html, /class="ef-notfound__mark"/);
     const main = /<main[\s\S]*<\/main>/.exec(html)[0];
-    assert.equal(main.match(/<a /g).length, 2, `${lang}: two links in the page body`);
-    const prefix = lang === 'en' ? '/' : '/id/';
-    assert.ok(main.includes(`href="${prefix}"`), `${lang}: link to home`);
-    assert.ok(main.includes(`href="${prefix}docs/"`), `${lang}: link to docs`);
+    assert.equal(main.match(/<a /g).length, 1, `${lang}: one link in the page body`);
+    assert.ok(main.includes(`href="${lang === 'en' ? '/' : '/id/'}"`), `${lang}: link to home`);
+    assert.match(html, new RegExp(`<section class="ef-notfound__lang" lang="${lang}"`), `${lang}: only its own language section`);
   }
 });
 
@@ -44,13 +45,10 @@ test('every local address in a not-found page starts at the root, so it works at
   }
 });
 
-test('the not-found pages carry the same header and footer as the home pages, and no inline script or style', () => {
-  for (const [lang, rel] of Object.entries(pages)) {
-    const home = read(rel);
-    for (const part of ['site-header', 'site-footer']) {
-      assert.ok(home.includes(`data-slot="${part}"`) && notFound[lang].includes(`data-slot="${part}"`), `${lang}: ${part}`);
-    }
-    assert.ok(!/<script(?![^>]*\ssrc=)[^>]*>/.test(notFound[lang]), `${lang}: inline script`);
+test('the not-found pages hold one stylesheet, no script, no style and no em dash (a strict CSP renders them)', () => {
+  for (const lang of Object.keys(pages)) {
+    assert.equal(notFound[lang].match(/<link rel="stylesheet"/g).length, 1, `${lang}: one stylesheet`);
+    assert.ok(!/<script/.test(notFound[lang]), `${lang}: script`);
     assert.ok(!/<style|\sstyle="/.test(notFound[lang]), `${lang}: inline style`);
     assert.ok(!notFound[lang].includes('—'), `${lang}: em dash`);
   }

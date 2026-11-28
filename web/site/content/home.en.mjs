@@ -53,12 +53,11 @@ export const shell = {
   },
 };
 
-// The not-found page (row W43): a title, one sentence, two links.
+// The not-found page (rows W43, W68): a title, one sentence, one link home (Meridian 404.html).
 export const notFound = {
   title: 'Page not found',
-  sub: 'The address may be mistyped, or the page has moved.',
-  home: 'Home',
-  docs: 'Docs',
+  sub: 'The link may be old, or the page was renamed. Go back to the home page and look from there.',
+  home: 'Back to home',
 };
 
 export const hero = {
