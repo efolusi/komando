@@ -53,12 +53,11 @@ export const shell = {
   },
 };
 
-// Halaman tidak ditemukan (baris W43): judul, satu kalimat, dua link.
+// Halaman tidak ditemukan (baris W43, W68): judul, satu kalimat, satu link ke beranda (404.html Meridian).
 export const notFound = {
   title: 'Halaman tidak ditemukan',
-  sub: 'Alamatnya mungkin salah ketik, atau halamannya sudah dipindahkan.',
-  home: 'Beranda',
-  docs: 'Dokumentasi',
+  sub: 'Tautannya mungkin sudah usang, atau halamannya berganti nama. Kembali ke beranda.',
+  home: 'Kembali ke beranda',
 };
 
 export const hero = {

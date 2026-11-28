@@ -120,15 +120,19 @@ test('the Indonesian page keeps its root: assets and links resolve from /id/', (
   assert.match(idHome, /href="\.\.\/id\/guide\/"/);
 });
 
-test('the header switch is one short control, ID or EN, and the footer keeps the full name', () => {
-  // W46: the header says the code of the other language, named by it; the name in full stays in the footer only
-  assert.match(home, /<a class="ef-site-header__link" href="id\/" hreflang="id" lang="id" aria-label="ID: Baca halaman ini dalam bahasa Indonesia">ID<\/a>/);
-  assert.match(idHome, /<a class="ef-site-header__link" href="\.\.\/" hreflang="en" lang="en" aria-label="EN: Read this page in English">EN<\/a>/);
+test('the header switch is Meridian\'s LanguageSwitch, EN and ID, and the footer keeps the full name', () => {
+  // W68: the page's own language is marked and not a link; the other is a link named in its own language, the code in the name
+  assert.match(home, /<nav aria-label="Language" data-slot="language-switch" data-size="md" class="ef-language-switch">/);
+  assert.match(home, /<span class="ef-language-switch__item" role="link" aria-disabled="true" aria-current="true" lang="en" aria-label="English \(EN\)">EN<\/span>/);
+  assert.match(home, /<a class="ef-language-switch__item" href="id\/" hreflang="id" lang="id" aria-label="Bahasa Indonesia \(ID\)">ID<\/a>/);
+  assert.match(idHome, /<nav aria-label="Bahasa" data-slot="language-switch"/);
+  assert.match(idHome, /<a class="ef-language-switch__item" href="\.\.\/" hreflang="en" lang="en" aria-label="English \(EN\)">EN<\/a>/);
+  assert.match(idHome, /<span class="ef-language-switch__item" role="link" aria-disabled="true" aria-current="true" lang="id" aria-label="Bahasa Indonesia \(ID\)">ID<\/span>/);
   assert.match(home, /<a class="ef-site-footer__link" href="id\/" hreflang="id" lang="id" aria-label="Baca halaman ini dalam bahasa Indonesia">Bahasa Indonesia<\/a>/);
   assert.match(idHome, /<a class="ef-site-footer__link" href="\.\.\/" hreflang="en" lang="en" aria-label="Read this page in English">English<\/a>/);
   for (const page of [home, idHome]) {
     const header = page.slice(page.indexOf('<header'), page.indexOf('</header>'));
-    assert.doesNotMatch(header, />(?:Bahasa Indonesia|English)</, 'the full language name is in the header');
+    assert.doesNotMatch(header, />(?:Bahasa Indonesia|English)</, 'the full language name is in the header text');
   }
   assert.doesNotMatch(home + idHome, / hrefLang=/);
 });
@@ -177,13 +181,13 @@ test('the header mark and the favicon are the system komando mark, and the K-car
   assert.ok((home.match(/<svg class="site-logo"/g) ?? []).length >= 2, 'the home page shows the mark in the header and in the flow');
 });
 
-// W19, C277: light and dark only; the vendored copy is Meridian v2.5.2.
-test('the theme switch has two choices in both languages, and the vendored copy is 2.5.2', () => {
+// W19, C277: light and dark only; the vendored copy is Meridian v2.6.0.
+test('the theme switch has two choices in both languages, and the vendored copy is 2.6.0', () => {
   for (const page of [home, renderHome(id), shell.header]) {
     assert.doesNotMatch(page, /data-preference|data-theme-icon="system"|system theme|tema sistem/i, 'a system theme option is still on the page');
     assert.match(page, /data-theme-shown="(light|dark)"/);
   }
-  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 2.5.2');
+  assert.equal(readFileSync(join(HERE, '..', 'assets', 'meridian', 'VERSION.txt'), 'utf8').trim(), '@efolusi/meridian 2.6.0');
 });
 
 // W20: the social card (share.jpg) is drawn from brand/share-card.html, shows the product mark and no version number.
@@ -237,12 +241,13 @@ test('Platform terms, Privacy notice and Status appear in the footer only when t
   assert.ok(renderShell(id, true).footer.includes('href="https://efolusi.com/id/privacy"'));
 });
 
-// W44: the sizes are Meridian's. Header action md, hero primary xl and secondary lg, Copy md.
-test('buttons take Meridian sizes: header md, hero primary xl and secondary lg, Copy md', () => {
+// W44 and W68: the sizes are Meridian's. Header action md, both hero actions xl (one row, one size), Copy md.
+test('buttons take Meridian sizes: header md, both hero actions xl, Copy md', () => {
   assert.match(shell.header, /ef-btn ef-btn--primary ef-btn--md/);
   const hero = /<section[^>]*id="hero"[\s\S]*?<\/section>/.exec(home)[0];
   assert.match(hero, /ef-btn ef-btn--primary ef-btn--xl/);
-  assert.match(hero, /ef-btn ef-btn--secondary ef-btn--lg/);
+  assert.match(hero, /ef-btn ef-btn--secondary ef-btn--xl/);
+  assert.doesNotMatch(hero, /ef-btn--lg/, 'two buttons in one row are one size');
   assert.equal(home.match(/<button[^>]*data-copy[^>]*>/g).every((b) => b.includes('ef-btn--md')), true);
   assert.doesNotMatch(home + shell.header, /ef-btn--sm/);
 });

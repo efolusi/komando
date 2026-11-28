@@ -2,7 +2,7 @@
 // A field named *Html holds a little inline markup (code, links, strong); every other field is plain text.
 // The Indonesian twin is home.id.mjs (from i18n/home.id.md); build.mjs renders both.
 
-export const release = 'v0.17.4';
+export const release = 'v0.17.5';
 export const installSha = '9089ae0c0fbe7689aaf327237c02267b6b7f39dd8060187f91b22f24b46fc4af';
 
 export const meta = {
@@ -53,12 +53,11 @@ export const shell = {
   },
 };
 
-// The not-found page (row W43): a title, one sentence, two links.
+// The not-found page (rows W43, W68): a title, one sentence, one link home (Meridian 404.html).
 export const notFound = {
   title: 'Page not found',
-  sub: 'The address may be mistyped, or the page has moved.',
-  home: 'Home',
-  docs: 'Docs',
+  sub: 'The link may be old, or the page was renamed. Go back to the home page and look from there.',
+  home: 'Back to home',
 };
 
 export const hero = {

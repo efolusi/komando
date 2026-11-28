@@ -10,6 +10,21 @@
    vendored from design-tokens, so these live here until design-tokens carries them.
    --gap-label-icon is an inline text and icon pair; --gap-label-icon-sm is the small controls (Badge, Button xs, Link). */
 :root{--gap-label-icon:var(--space-2);--gap-label-icon-sm:var(--space-1)}
+/* The accent coloured word of a heading or a script title (MD109). One alias of --accent-edge, so the dark and both
+   increased-contrast tables follow it. It sits on :root and on every [data-theme] element: a themed subtree
+   resolves its own --accent-edge, not the root's. A product deletes its own --accent-word remap. */
+:root,[data-theme]{--accent-word:var(--accent-edge)}
+/* The dimmest opacity of a loading pulse (Loader pulse, GeneratedImage status, Task, Reasoning, ToolCall). A pulse keeps
+   running under reduce (MD122), so axe or a reader can land on its dimmest frame: the text must pass there too.
+   Measured from the tokens in light and dark, on every surface (page, card, subtle, sunken, elevated): the lowest opacity
+   at which --text-muted still has 4.5:1 is .91 in light and .87 in dark (the Loader on --surface-sunken is the
+   strictest); --text-secondary .82, --text-primary .61, the GeneratedImage status on its media backdrop .62, and the
+   Reasoning glyph (a mark, 3:1) .71. One value for all, above the strictest. */
+:root{--ef-pulse-floor:.92}
+/* One turn of every rotating spinner (Spinner, the Button spinner, the glyph spinners of AgentRun, Sandbox, Todo and
+   ToolCall), always with linear (MD129; owner decision 2026-11-28: 1.4 s was too slow for a loading indicator). It waits
+   for a design-tokens row DT --dur-spin and then moves there: effects.css is vendored, so it is defined here until then. */
+:root{--dur-spin:800ms}
 /* Icons: the box and the scale sizes here, so the markup carries no style attribute (strict CSP).
    A size off the scale is set through the CSSOM by Icon. */
 [data-slot="icon"]{display:inline-flex;flex:none;color:inherit}
@@ -47,13 +62,39 @@ code,pre,kbd{font-family:var(--font-mono)}
    hidden, or keep it waiting, under reduce. Transition durations are left to the
    tokens: under reduce they swap to the 120 ms fade (design-tokens docs/motion.md).
    --ef-motion-guard is the animation duration: 0.01 ms for every element, so loops stop. Only an overlay
-   entrance sets it, to --dur-fast, together with animation-name:ef-reduce-fade (opacity only), inside its
+   entrance or exit sets it, to --dur-fast, together with animation-name:ef-reduce-fade (opacity only), inside its
    own reduce media query; a consumer must not set it on a loop.
+   Loops that signal LOADING are the exception (MD122): a spinner, a skeleton, a shimmer, an indeterminate bar and a
+   stream pulse keep running at their own duration and curve, because a frozen spinner reads as a hung page. They are
+   left out of the rule by name, and tests/md122-reduced-motion-guard.test.mjs fails an infinite animation that is
+   neither listed there nor named as not loading (a caret, a marquee, a growing ring, a scaling bar: those stop).
+   The exclusion is `:where()`, not `:is()`: `:is()` takes the specificity of its most specific argument (0,3,0 for the
+   indeterminate progress bar), which would outrank an overlay's own `--ef-motion-guard:var(--dur-fast)` in the same
+   layer and collapse its fade to .01 ms. With `:where()` the rule has no specificity and the overlay's value wins.
    A View Transition (document.startViewTransition) does not match `*`: its groups stop moving and its
    old and new snapshots cross-fade over --dur-fast. */
 @keyframes ef-reduce-fade{from{opacity:0}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{--ef-motion-guard:.01ms;animation-duration:var(--ef-motion-guard)!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-delay:0s!important;scroll-behavior:auto!important}}
+/* The exit of an overlay (MD121) is the same fade backwards: the closed state of every overlay runs ef-reduce-fade-out
+   over --dur-fast. Under reduce a closed element takes --dur-fast for the guard, so the guard below does not
+   shorten it to .01 ms; its movement exit is written by the component inside no-preference. */
+@keyframes ef-reduce-fade-out{to{opacity:0}}
+@media (prefers-reduced-motion:reduce){[data-state="closed"]{--ef-motion-guard:var(--dur-fast)}}
+@media (prefers-reduced-motion:reduce){*:not(:where(.ef-spinner,.ef-btn__spin,.ef-agentrun__spin,.ef-sandbox__spin,.ef-todo__spin,.ef-toolcall__spin,.ef-skel,.ef-table__skel,.ef-progress[data-state="indeterminate"] .ef-progress__indicator,.ef-loader--pulse,.ef-loader--shimmer,.ef-loader__dots span,.ef-attachment[data-state="uploading"] .ef-attachment__title,.ef-attachment[data-state="processing"] .ef-attachment__title,.ef-genimg__backdrop,.ef-genimg__status,.ef-reasoning--streaming .ef-reasoning__glyph,.ef-toolcall--pending .ef-toolcall__head,.ef-toolcall--streaming .ef-toolcall__row:last-child .ef-toolcall__val,.ef-task--streaming .ef-task__row:last-of-type)),*::before,*::after{--ef-motion-guard:.01ms;animation-duration:var(--ef-motion-guard)!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-delay:0s!important;scroll-behavior:auto!important}}
 @media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-image-pair(*){animation-duration:var(--ef-motion-guard)!important;animation-iteration-count:1!important}::view-transition-old(*),::view-transition-new(*){animation-duration:var(--dur-fast)!important;animation-iteration-count:1!important}}
+/* Movement is off and opacity stays (MD127). A transition that turns or scales something does not run under reduce:
+   a chevron turns at once, a tick and a dot appear at full size while their opacity fades over --dur-fast. Layered
+   !important so a component rule written after it, and a product rule, do not bring the movement back. The press
+   scale stays (Button, IconButton, Checkbox, Radio, the composer send, the slider thumb): it is brief feedback, not
+   travel. tests/md122-reduced-motion-guard.test.mjs fails a transform transition that is neither here, nor a press,
+   nor given its own reduce rule by its component. */
+@media (prefers-reduced-motion:reduce){.ef-agentrun__toggle .ef-agentrun__tchev,.ef-reasoning__chev,.ef-sandbox__chev,.ef-todo__chev,.ef-toolcall__chev,.ef-console__stackchev,.ef-diff__filechev,.ef-exception__chev,.ef-acc__chev,.ef-tree__chev,.ef-navigation-menu__chevron,.ef-pagination__previous svg,.ef-pagination__next svg{transition:none!important}.ef-check__box svg,.ef-radio__dot::after,.ef-tile__check{transition-property:opacity!important}}
+/* Theme switch (MD118). A swap changes every colour at once, and each element with a colour transition starts one,
+   so the page smears (46 transitionrun events on the docs Components page, 22 on sso web). While <html> carries
+   data-theme-switching every transition is off. ThemeToggle (and browser/marketing.js) sets the attribute, swaps the
+   theme, and removes the attribute after two animation frames. Inside the layer on purpose: a layered !important
+   outranks an unlayered one, so a product's own !important transition does not survive the swap. A product that
+   switches the theme itself calls swapTheme(), or sets the attribute for the same two frames. Delete any local copy. */
+[data-theme-switching] *,[data-theme-switching] *::before,[data-theme-switching] *::after{transition:none!important}
 /* Warm glass (design-tokens docs/glass.md). One material, four thicknesses, all from material.* tokens.
    .ef-glass--blur only where content scrolls under it (bars, sheets, popovers); at most four on screen,
    never one inside another. The tokens turn every thickness solid under reduced transparency, more
@@ -82,6 +123,24 @@ code,pre,kbd{font-family:var(--font-mono)}
    its own. Display face at --text-3xl to --text-4xl, balanced, and a long word breaks instead of overflowing. Put it
    on the h1; marketing pages use Hero and sections use SectionHead. */
 .ef-page-title{margin:0;font-family:var(--font-display);font-size:clamp(var(--text-3xl),4vw,var(--text-4xl));font-weight:var(--weight-bold);line-height:var(--leading-tight);letter-spacing:var(--tracking-display);text-wrap:balance;overflow-wrap:break-word}
+/* Not-found page (MD110): the markup of the root 404.html, which products copy. Plain HTML, no script and no style
+   attribute, so a strict CSP lets it render. It needs only this stylesheet. One mark, the status code, then the same
+   message in English and Indonesian side by side, stacked on a phone. The link is drawn like a primary Button because
+   the static stylesheet does not carry the component CSS. */
+.ef-notfound{box-sizing:border-box;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-4);padding:var(--space-16) var(--space-6);text-align:center}
+.ef-notfound__mark{display:block;width:40px;height:40px}
+.ef-notfound__code{margin:0;font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-muted)}
+.ef-notfound__langs{display:grid;gap:var(--space-8);width:100%;max-width:56rem;margin-block-start:var(--space-4)}
+.ef-notfound__lang{display:flex;flex-direction:column;align-items:center;gap:var(--space-4)}
+.ef-notfound .ef-page-title{font-size:var(--text-3xl)}
+.ef-notfound__lang p{margin:0;max-width:34ch;font-size:var(--text-lg);line-height:var(--leading-relaxed);color:var(--text-secondary)}
+.ef-notfound__lang+.ef-notfound__lang{padding-block-start:var(--space-8);border-block-start:1px solid var(--border-default)}
+.ef-notfound__home{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:var(--tap-min);margin-block-start:var(--space-2);padding:0 var(--space-5);border:1px solid var(--accent-edge);border-radius:var(--press-radius,var(--radius-sm));background:var(--accent);color:var(--accent-contrast);font-family:var(--font-sans);font-size:var(--text-md);font-weight:var(--weight-semibold);line-height:var(--leading-normal);text-decoration:none;white-space:nowrap;transition:background var(--dur-fast) var(--ease-enter)}
+@media (prefers-reduced-motion:no-preference){.ef-notfound__home{transition:background var(--dur-fast) var(--ease-enter),transform var(--dur-fast) var(--ease-enter)}}
+@media (hover:hover){.ef-notfound__home:hover{background:var(--accent-hover);text-decoration:none}}
+.ef-notfound__home:active{background:var(--accent-active);transform:scale(var(--motion-press))}
+.ef-notfound__home:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+@media (min-width:880px){.ef-notfound__langs{grid-template-columns:1fr 1fr;gap:var(--space-8)}.ef-notfound__lang+.ef-notfound__lang{padding-block-start:0;padding-inline-start:var(--space-8);border-block-start:0;border-inline-start:1px solid var(--border-default)}}
 }
 /* Phone control text (MD86): iOS Safari zooms the page when a text control takes focus while its text is under 16px,
    and Input md (14px), Input sm, Textarea, NumberInput, NativeSelect and the InputGroup control under Combobox are

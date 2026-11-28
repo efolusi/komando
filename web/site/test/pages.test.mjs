@@ -243,18 +243,20 @@ test('the home pages and the docs home have no breadcrumb', () => {
   }
 });
 
-// W46: one switch in the header, the short code of the other language, a 44 px target.
-test('the header switch of every page is ID or EN, named in the language it goes to, with the code first in its name', () => {
+// W46 and W68: the header switch is Meridian's LanguageSwitch: the other language is a link, the page's own is marked.
+test('the header switch of every page is EN and ID, the other language a link named in its own language with the code in the name', () => {
   for (const p of pages) {
     const to = p.id ? 'en' : 'id';
+    const own = p.id ? 'id' : 'en';
     const header = p.html.slice(p.html.indexOf('<header'), p.html.indexOf('</header>'));
-    const links = [...header.matchAll(new RegExp(`<a [^>]*hreflang="${to}"[^>]*>([^<]*)</a>`, 'g'))];
+    const links = [...header.matchAll(new RegExp(`<a class="ef-language-switch__item" [^>]*hreflang="${to}"[^>]*>([^<]*)</a>`, 'g'))];
     assert.ok(links.length >= 1, p.rel);
     for (const m of links) {
       assert.equal(m[1], to.toUpperCase(), `${p.rel}: header switch text`);
-      assert.match(m[0], new RegExp(`aria-label="${to.toUpperCase()}: `), `${p.rel}: the visible code is not the start of the name`);
+      assert.match(m[0], new RegExp(`aria-label="[^"]+ \\(${to.toUpperCase()}\\)"`), `${p.rel}: the visible code is not in the name`);
       assert.match(m[0], new RegExp(`lang="${to}"`), p.rel);
     }
+    assert.ok(header.includes(`aria-current="true" lang="${own}"`), `${p.rel}: the page's own language is not marked`);
   }
 });
 

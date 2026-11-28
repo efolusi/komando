@@ -24,6 +24,7 @@ import { Marquee } from '@efolusi/meridian/marketing/Marquee.js';
 import { Tag } from '@efolusi/meridian/display/Tag.js';
 import { SiteHeader } from '@efolusi/meridian/marketing/SiteHeader.js';
 import { SiteFooter } from '@efolusi/meridian/marketing/SiteFooter.js';
+import { LanguageSwitch } from '@efolusi/meridian/marketing/LanguageSwitch.js';
 import { LABELS as THEME_LABELS } from '@efolusi/meridian/theme';
 import { Icon } from '@efolusi/meridian/icons/Icon.js';
 import * as en from './content/home.en.mjs';
@@ -92,13 +93,25 @@ function target(link, root, home, lang) {
 const lowerHreflang = (html) => html.replaceAll(' hrefLang=', ' hreflang=');
 
 /**
- * The language switch: a link to this page's twin, named in the language it goes to. The header takes the short code
- * (ID, EN) and starts its name with it, so the visible text is in the name (WCAG 2.5.3); the footer keeps the full name.
+ * The language switch. The header takes Meridian's LanguageSwitch (MD112, row W68): the codes EN and ID, the page's own
+ * language marked and not a link, the other a link (hreflang, lang, its own name in its accessible name). The footer
+ * keeps a text link with the full name of the other language, named in the language it goes to.
  */
-function switchLink(c, href, short = false) {
+function switchLink(c, href) {
   const s = c.shell.switch;
-  if (short) return { href, hrefLang: s.hrefLang, label: s.short, ariaLabel: `${s.short}: ${s.ariaLabel}` };
   return { href, hrefLang: s.hrefLang, label: s.label, ariaLabel: s.ariaLabel };
+}
+
+function languageSwitch(c, switchHref) {
+  const s = c.shell.switch;
+  const lang = c.meta.lang;
+  return h(LanguageSwitch, {
+    current: lang, lang,
+    languages: [
+      { code: lang, label: lang.toUpperCase(), href: '#' },
+      { code: s.hrefLang, label: s.short, href: switchHref },
+    ].sort((x, y) => (x.code === 'en' ? -1 : y.code === 'en' ? 1 : 0)),
+  });
 }
 
 function header(c, root, home, switchHref) {
@@ -109,7 +122,7 @@ function header(c, root, home, switchHref) {
     h('a', { className: 'ef-btn ef-btn--primary ef-btn--md', href: target({ section: 'install' }, root, home, lang) }, c.shell.install));
   let html = renderToStaticMarkup(h(SiteHeader, {
     brand, brandHref: home ? './' : `${root}${BASE[lang]}index.html`, brandLabel: c.shell.brandLabel, links, actions,
-    languageSwitch: switchLink(c, switchHref, true), labels: { skip: c.shell.skip },
+    languageSwitch: languageSwitch(c, switchHref), labels: { skip: c.shell.skip },
     lang, skipHref: '#top',
   }));
   // SiteHeader names its menu panel with React's useId; give it a stable name
@@ -157,14 +170,14 @@ function headShared(root) {
 
 function homeBody(c, root) {
   const r = c.release;
-  // sizes are Meridian's: the hero's main action xl, its second action and the closing action lg
+  // sizes are Meridian's: both hero actions xl (buttons in one row are one size, as efolusi.com's hero pair), the closing action lg
   const btn = (kind, href, label, size = 'lg') => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--${size}`, href }, label);
 
   const hero = h(Hero, {
     id: 'hero', className: 'site-hero', align: 'start', 'aria-labelledby': 'hero-h',
     title: h('span', { id: 'hero-h' }, c.hero.title),
     sub: c.hero.sub,
-    actions: h(React.Fragment, null, btn('primary', '#install', c.hero.primary, 'xl'), btn('secondary', 'guide/', c.hero.secondary)),
+    actions: h(React.Fragment, null, btn('primary', '#install', c.hero.primary, 'xl'), btn('secondary', 'guide/', c.hero.secondary, 'xl')),
     proof: h('span', null, `${c.hero.releaseLabel} `, h('span', { 'data-release': '' }, r)),
   }, raw('div', screen('home', c), { className: 'site-stage' }));
 
@@ -298,35 +311,46 @@ ${footer(c, root, true, twin)}
 }
 
 /**
- * The not-found page (row W43). Cloudflare serves it for any unknown address, at any depth, and takes the nearest
- * 404.html up the path, so /id/... gets id/404.html. Every address in it is therefore from the site's root.
+ * The not-found page (rows W43 and W68). It is Meridian 2.6.0's shared 404.html (MD110, guidelines/frameworks.md "A 404
+ * page on a static site"), both languages in it as the shared file has them: the mark, the product name in the title and
+ * the home links are the things changed. The page's own language comes first (h1), the other second (h2). One language
+ * alone is not used: Meridian's grid is two columns from 880 px, so a single section sits off centre (found in W68).
+ * Cloudflare serves it for any unknown address, at any depth, and takes the nearest 404.html up the path, so /id/... gets
+ * id/404.html. Every address in it is therefore from the site's root. It holds one stylesheet, no script, no <style>
+ * and no style attribute, and follows the system's light or dark (a saved theme needs the theme script).
  */
 export function renderNotFound(c = en) {
   const lang = c.meta.lang;
-  const root = '/';
-  const twin = lang === 'en' ? '/id/' : '/';
-  const title = `${c.notFound.title} · Komando`;
-  const btn = (kind, href, label, size = 'lg') => h('a', { className: `ef-btn ef-btn--${kind} ef-btn--${size}`, href }, label);
-  const body = renderToStaticMarkup(h('main', { id: 'top', tabIndex: -1 },
-    h(Hero, {
-      id: 'not-found', align: 'center', 'aria-labelledby': 'not-found-h',
-      title: h('span', { id: 'not-found-h' }, c.notFound.title),
-      sub: c.notFound.sub,
-      actions: h(React.Fragment, null, btn('primary', `${root}${BASE[lang]}`, c.notFound.home, 'xl'), btn('secondary', `${root}${BASE[lang]}docs/`, c.notFound.docs)),
-    })));
+  const order = [lang, ...Object.keys(LANGS).filter((l) => l !== lang)];
+  const sections = order.map((l, i) => {
+    const nf = LANGS[l].notFound;
+    const heading = i === 0 ? 'h1' : 'h2';
+    return `    <section class="ef-notfound__lang" lang="${l}" aria-labelledby="not-found-${l}">
+      <${heading} class="ef-page-title" id="not-found-${l}">${nf.title}</${heading}>
+      <p>${nf.sub}</p>
+      <a class="ef-notfound__home" href="/${BASE[l]}">${nf.home}</a>
+    </section>`;
+  }).join('\n');
+  const titles = order.map((l) => LANGS[l].notFound.title).join(' · ');
   return `<!doctype html>
 <html lang="${lang}" data-shape="pill">
 <head>
 <meta charset="utf-8">
-<title>${title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${titles} · Komando</title>
 <meta name="robots" content="noindex">
-${headShared(root)}
-<!-- built by web/site/build.mjs from content/; edit the source, not this file -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/meridian/styles.css">
+<!-- built by web/site/build.mjs from content/; edit the source, not this file. Shape: Meridian 404.html (MD110) -->
 </head>
 <body>
-${header(c, root, false, twin)}
-${body}
-${footer(c, root, false, twin)}
+<main class="ef-notfound">
+  <img class="ef-notfound__mark" src="/favicon.svg" alt="" width="40" height="40">
+  <p class="ef-notfound__code">404</p>
+  <div class="ef-notfound__langs">
+${sections}
+  </div>
+</main>
 </body>
 </html>
 `;
